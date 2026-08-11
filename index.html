@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relay to Claude</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0;
+    font-family: -apple-system, system-ui, sans-serif;
+    background: #111318;
+    color: #e8e8ec;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 16px;
+    box-sizing: border-box;
+  }
+  h1 { font-size: 1.2rem; font-weight: 600; margin: 0 0 4px; }
+  p.sub { color: #9a9aa5; font-size: 0.85rem; margin: 0 0 20px; text-align: center; }
+  textarea {
+    width: 100%;
+    max-width: 480px;
+    min-height: 200px;
+    background: #1b1e26;
+    color: #e8e8ec;
+    border: 1px solid #2e323d;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+    font-family: ui-monospace, monospace;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  button {
+    margin-top: 14px;
+    width: 100%;
+    max-width: 480px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #4f7cff;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:disabled { background: #333844; color: #888; }
+  #status {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    text-align: center;
+  }
+  #status.ok { color: #6ee08a; }
+  #status.err { color: #ff6e6e; }
+</style>
+</head>
+<body>
+  <h1>Send to Claude</h1>
+  <p class="sub">Paste text below and tap Send. Claude will pick it up from the mailbox next time you talk.</p>
+  <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
+  <button id="send">Send</button>
+  <div id="status"></div>
+
+<script>
+const BIN = "shaheer-relay-wbtwbjhkk3ckryb4";
+const btn = document.getElementById('send');
+const status = document.getElementById('status');
+const note = document.getElementById('note');
+
+btn.addEventListener('click', async () => {
+  const text = note.value.trim();
+  if (!text) return;
+  btn.disabled = true;
+  status.textContent = 'Sending...';
+  status.className = '';
+  const filename = 'note-' + Date.now() + '.txt';
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://filebin.net/' + BIN + '/' + filename);
+    xhr.setRequestHeader('Content-Type', 'text/plain');
+    xhr.timeout = 30000;
+    await new Promise((resolve, reject) => {
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
+      xhr.onerror = () => reject(new Error('network error'));
+      xhr.ontimeout = () => reject(new Error('timeout'));
+      xhr.send(new Blob([text], { type: 'text/plain' }));
+    });
+    status.textContent = 'Sent. Claude will see it next.';
+    status.className = 'ok';
+    note.value = '';
+  } catch (e) {
+    status.textContent = 'Failed to send: ' + e.message + ' (try again)';
+    status.className = 'err';
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
