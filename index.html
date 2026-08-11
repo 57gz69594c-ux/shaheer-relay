@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Relay to Claude</title>
 <style>
   :root { color-scheme: dark; }
@@ -64,8 +67,16 @@
   <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
   <button id="send">Send</button>
   <div id="status"></div>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v2</p>
 
 <script>
+// Force a fresh network fetch of this page once per session, to dodge
+// aggressive mobile-browser caching of stale JS (bin id changes over time).
+if (!sessionStorage.getItem('relay_cache_bust')) {
+  sessionStorage.setItem('relay_cache_bust', '1');
+  location.replace(location.pathname + '?v=' + Date.now());
+}
+
 const BIN = "shaheer-relay-dydhytrzlufq6zwo";
 const btn = document.getElementById('send');
 const status = document.getElementById('status');
