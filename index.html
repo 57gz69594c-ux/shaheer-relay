@@ -195,7 +195,11 @@ async function loadLatest() {
     const sorted = data.files.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const latest = sorted[0];
     const fileResp = await fetch('https://filebin.net/' + OUT_BIN + '/' + encodeURIComponent(latest.filename));
+    if (!fileResp.ok) throw new Error('file HTTP ' + fileResp.status);
     const text = await fileResp.text();
+    if (/^\s*<(!DOCTYPE|html)/i.test(text)) {
+      throw new Error('got a webpage instead of the file — something on this network is intercepting the request (ad-blocker, VPN, or content filter). Try a different network or disable any content blocker.');
+    }
     recvText.value = text;
     recvStatus.textContent = 'Loaded.';
     recvStatus.className = 'ok';
