@@ -1,3 +1,4 @@
-Even Realities glasses connection:
-Host: 104.248.159.95:3456
+Even Realities glasses connection (updated, HTTPS):
+Host: 104.248.159.95.nip.io
 Token: Vt_oeToc77va0eaHIcP0y2xP_v6a4Kw5
+(if it doesn't connect, try Host: 104.248.159.95.nip.io:443)
