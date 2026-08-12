@@ -1,4 +1,11 @@
-Even Realities glasses connection (updated, HTTPS):
-Host: 104.248.159.95.nip.io
-Token: Vt_oeToc77va0eaHIcP0y2xP_v6a4Kw5
-(if it doesn't connect, try Host: 104.248.159.95.nip.io:443)
+Tailscale setup for glasses (do these in order):
+
+STEP 1 - Register this server:
+Open this link and sign in (create a free account if you don't have one - email or Google login works):
+https://login.tailscale.com/a/3d51410015dc5
+
+STEP 2 - Connect your phone:
+Install the "Tailscale" app from your phone's app store, then sign in with the SAME account you just used in Step 1.
+
+STEP 3:
+Once both are done, tell Claude "tailscale is set up" and I'll get you the new connection details for the glasses.
