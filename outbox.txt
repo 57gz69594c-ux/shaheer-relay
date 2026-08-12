@@ -1,0 +1,3 @@
+Even Realities glasses connection:
+Host: 104.248.159.95:3456
+Token: Vt_oeToc77va0eaHIcP0y2xP_v6a4Kw5

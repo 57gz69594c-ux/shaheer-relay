@@ -108,7 +108,7 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v4</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v5</p>
 
 <script>
 // Force a fresh network fetch of this page once per session, to dodge
@@ -183,27 +183,16 @@ async function loadLatest() {
   recvStatus.textContent = 'Loading...';
   recvStatus.className = '';
   try {
-    const listResp = await fetch('https://filebin.net/' + OUT_BIN, { headers: { 'Accept': 'application/json' } });
-    if (!listResp.ok) throw new Error('HTTP ' + listResp.status);
-    const data = await listResp.json();
-    if (!data.files || data.files.length === 0) {
-      recvText.value = '';
-      recvStatus.textContent = 'Nothing here yet.';
-      recvMeta.textContent = '';
-      return;
-    }
-    const sorted = data.files.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    const latest = sorted[0];
-    const fileResp = await fetch('https://filebin.net/' + OUT_BIN + '/' + encodeURIComponent(latest.filename));
-    if (!fileResp.ok) throw new Error('file HTTP ' + fileResp.status);
-    const text = await fileResp.text();
+    const resp = await fetch('./outbox.txt?t=' + Date.now(), { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
     if (/^\s*<(!DOCTYPE|html)/i.test(text)) {
-      throw new Error('got a webpage instead of the file — something on this network is intercepting the request (ad-blocker, VPN, or content filter). Try a different network or disable any content blocker.');
+      throw new Error('got a webpage instead of the file — something on this network is intercepting the request. Try a different network or disable any content blocker.');
     }
     recvText.value = text;
     recvStatus.textContent = 'Loaded.';
     recvStatus.className = 'ok';
-    recvMeta.textContent = latest.filename + ' — ' + latest.created_at_relative;
+    recvMeta.textContent = 'updated just now';
   } catch (e) {
     recvStatus.textContent = 'Failed to load: ' + e.message;
     recvStatus.className = 'err';
