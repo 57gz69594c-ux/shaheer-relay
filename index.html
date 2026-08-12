@@ -23,6 +23,28 @@
   }
   h1 { font-size: 1.2rem; font-weight: 600; margin: 0 0 4px; }
   p.sub { color: #9a9aa5; font-size: 0.85rem; margin: 0 0 20px; text-align: center; }
+  .tabs {
+    display: flex;
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 18px;
+    border: 1px solid #2e323d;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    background: #1b1e26;
+    color: #9a9aa5;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .tab.active { background: #4f7cff; color: white; }
+  .panel { width: 100%; max-width: 480px; display: none; flex-direction: column; align-items: center; }
+  .panel.active { display: flex; }
   textarea {
     width: 100%;
     max-width: 480px;
@@ -50,24 +72,43 @@
     font-weight: 600;
     cursor: pointer;
   }
+  button.secondary { background: #2e323d; color: #e8e8ec; }
   button:disabled { background: #333844; color: #888; }
-  #status {
+  #status, #recv-status {
     margin-top: 14px;
     font-size: 0.9rem;
     min-height: 1.2em;
     text-align: center;
   }
-  #status.ok { color: #6ee08a; }
-  #status.err { color: #ff6e6e; }
+  .ok { color: #6ee08a; }
+  .err { color: #ff6e6e; }
+  .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
 </style>
 </head>
 <body>
-  <h1>Send to Claude</h1>
-  <p class="sub">Paste text below and tap Send. Claude will pick it up from the mailbox next time you talk.</p>
-  <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
-  <button id="send">Send</button>
-  <div id="status"></div>
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v2</p>
+  <h1>Claude Relay</h1>
+  <p class="sub">Paste text to send, or check what Claude left for you.</p>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-send">Send to Claude</div>
+    <div class="tab" id="tab-recv">From Claude</div>
+  </div>
+
+  <div class="panel active" id="panel-send">
+    <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
+    <button id="send">Send</button>
+    <div id="status"></div>
+  </div>
+
+  <div class="panel" id="panel-recv">
+    <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
+    <button id="refresh">Refresh</button>
+    <button id="copy" class="secondary">Copy</button>
+    <div id="recv-status"></div>
+    <div class="recv-meta" id="recv-meta"></div>
+  </div>
+
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v3</p>
 
 <script>
 // Force a fresh network fetch of this page once per session, to dodge
@@ -77,7 +118,26 @@ if (!sessionStorage.getItem('relay_cache_bust')) {
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
-const BIN = "shaheer-relay-dydhytrzlufq6zwo";
+const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
+const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
+
+// --- tabs ---
+const tabSend = document.getElementById('tab-send');
+const tabRecv = document.getElementById('tab-recv');
+const panelSend = document.getElementById('panel-send');
+const panelRecv = document.getElementById('panel-recv');
+
+tabSend.addEventListener('click', () => {
+  tabSend.classList.add('active'); tabRecv.classList.remove('active');
+  panelSend.classList.add('active'); panelRecv.classList.remove('active');
+});
+tabRecv.addEventListener('click', () => {
+  tabRecv.classList.add('active'); tabSend.classList.remove('active');
+  panelRecv.classList.add('active'); panelSend.classList.remove('active');
+  loadLatest();
+});
+
+// --- send tab ---
 const btn = document.getElementById('send');
 const status = document.getElementById('status');
 const note = document.getElementById('note');
@@ -91,7 +151,7 @@ btn.addEventListener('click', async () => {
   const filename = 'note-' + Date.now() + '.txt';
   try {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://filebin.net/' + BIN + '/' + filename);
+    xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
     xhr.setRequestHeader('Content-Type', 'text/plain');
     xhr.timeout = 30000;
     await new Promise((resolve, reject) => {
@@ -108,6 +168,58 @@ btn.addEventListener('click', async () => {
     status.className = 'err';
   } finally {
     btn.disabled = false;
+  }
+});
+
+// --- receive tab ---
+const recvText = document.getElementById('recv-text');
+const recvStatus = document.getElementById('recv-status');
+const recvMeta = document.getElementById('recv-meta');
+const refreshBtn = document.getElementById('refresh');
+const copyBtn = document.getElementById('copy');
+
+async function loadLatest() {
+  refreshBtn.disabled = true;
+  recvStatus.textContent = 'Loading...';
+  recvStatus.className = '';
+  try {
+    const listResp = await fetch('https://filebin.net/' + OUT_BIN, { headers: { 'Accept': 'application/json' } });
+    if (!listResp.ok) throw new Error('HTTP ' + listResp.status);
+    const data = await listResp.json();
+    if (!data.files || data.files.length === 0) {
+      recvText.value = '';
+      recvStatus.textContent = 'Nothing here yet.';
+      recvMeta.textContent = '';
+      return;
+    }
+    const sorted = data.files.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const latest = sorted[0];
+    const fileResp = await fetch('https://filebin.net/' + OUT_BIN + '/' + encodeURIComponent(latest.filename));
+    const text = await fileResp.text();
+    recvText.value = text;
+    recvStatus.textContent = 'Loaded.';
+    recvStatus.className = 'ok';
+    recvMeta.textContent = latest.filename + ' — ' + latest.created_at_relative;
+  } catch (e) {
+    recvStatus.textContent = 'Failed to load: ' + e.message;
+    recvStatus.className = 'err';
+  } finally {
+    refreshBtn.disabled = false;
+  }
+}
+
+refreshBtn.addEventListener('click', loadLatest);
+copyBtn.addEventListener('click', async () => {
+  if (!recvText.value) return;
+  try {
+    await navigator.clipboard.writeText(recvText.value);
+    recvStatus.textContent = 'Copied to clipboard.';
+    recvStatus.className = 'ok';
+  } catch (e) {
+    recvText.select();
+    document.execCommand('copy');
+    recvStatus.textContent = 'Copied.';
+    recvStatus.className = 'ok';
   }
 });
 </script>
