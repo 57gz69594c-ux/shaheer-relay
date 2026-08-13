@@ -1,17 +1,26 @@
-VIDEO PREVIEW — All 7 FINAL Clips
+POST-PRODUCTION PROMPT — READ ✅
 Updated: Aug 13, 2026
 
-Open this link to preview all clips:
+Shaheer, I read your entire prompt. Here's what I got:
 
-https://104.248.159.95.nip.io/preview/
+✅ UNDERSTOOD — ALL 7 SECTIONS:
+1. MUSIC IS LOCKED — don't touch it, period
+2. NO SUBTITLES — no captions, no Whisper, no Roman Urdu
+3. PROFESSIONAL TOOLCHAIN — Install Remotion, ImageMagick, OpenCV, Pexels/Pixabay APIs
+4. MULTI-AGENT TEAM — Visual Director that understands MEANING, not keywords
+5. VISUAL HIERARCHY — Motion graphics FIRST, then relevant stock footage, then original footage
+6. ASTRAL PROJECTION VISUAL LANGUAGE — OBEs, consciousness, ethereal environments, portals, etc. — but ONLY when contextually appropriate
+7. MOTION GRAPHICS — Remotion animations that match what's being SAID (leaving body = translucent consciousness animation, etc.)
 
-Tap each video to play. All 7 ready:
-1. House Reading (122 MB)
-2. First Experience Age 12 (72 MB)
-3. Car Crash OBE (101 MB)
-4. Mushroom vs Astral (40 MB)
-5. Project Stargate (45 MB)
-6. Nobody Has Ever Died (60 MB)
-7. 9/11 Astral Visit (71 MB)
+⚠️ PROMPT WAS TRUNCATED
+Your prompt cut off at "8. VIDEO EDITOR AGENT" — I didn't receive the rest. There's likely more sections (Video Editor Agent details, Quality Control, rendering specs, etc.).
 
-Review them, then we fire up Google Ads.
+Can you re-send the remaining sections? Or paste the full prompt again?
+
+CURRENT CLIP STATUS:
+12 of 14 clips exist on the server:
+- 7 landscape FINAL ✅ (all 7)
+- 5 portrait REEL ✅ (01-05)
+- 2 portrait REEL missing (06, 07) — will build those too
+
+Ready to start building the pipeline as soon as I get the rest of the prompt.
