@@ -1,57 +1,27 @@
 ═══════════════════════════════════
-  GOOGLE ADS DEVELOPER TOKEN
-  APPLICATION — COPY-PASTE GUIDE
+  PREVIEW CLIP READY FOR REVIEW
 ═══════════════════════════════════
 
-Go to: ads.google.com
-→ Make sure you're in the MANAGER
-  account (157-859-6815)
-→ Tools (wrench icon) → API Center
-→ Click "Apply for token" or
-  "Fill out the form"
+Clip 04: ASTRAL vs MUSHROOMS
+(90 seconds, landscape 16:9)
 
-PASTE THESE ANSWERS:
+DOWNLOAD HERE:
+https://tmpfiles.org/dl/wqwwDqs4JPrF/04_mushroom_final.mp4
 
-Q: "How will you use the API?"
-A: Managing video ad campaigns
-   programmatically. Uploading
-   YouTube video ads, creating
-   campaigns, setting budgets,
-   and monitoring performance
-   metrics for optimization.
+What's in it:
+- Animated title card
+- Roman Urdu subtitles (LARGE)
+- "Astral Projection" in English
+- Stock footage cutaways (psychedelic + brain)
+- Lower-third banner (SHAHEER KNOWS)
+- Animated outro card (ebook CTA)
+- Background music
 
-Q: "Describe your application"
-A: Custom automation tool that
-   manages Google Ads campaigns
-   for a YouTube channel
-   (Shaheer Knows, 85K+ subs).
-   It creates video ad campaigns,
-   monitors ROAS, and adjusts
-   bids based on performance.
+Review it and let me know:
+1. Are subtitles big enough?
+2. Is the stock footage good?
+3. Any changes needed?
 
-Q: "Website URL"
-A: youtube.com/@shaheerknows
-
-Q: "How do you comply with
-    Google Ads policies?"
-A: All ads comply with Google
-   Ads policies. Content is
-   educational (astral projection
-   & meditation). No prohibited
-   content. We review all ads
-   before publishing.
-
-After submitting, check if you
-see a token string on that page
-(even if it says "test" or
-"pending"). Send it to me here.
-
-WHILE WE WAIT: I can already
-upload your clips to YouTube
-(with your approval) and create
-campaigns manually through the
-Google Ads UI. The API token
-just enables FULL automation.
-
-Clips are still building...
+NO uploads to YouTube until
+you approve.
 ═══════════════════════════════════
