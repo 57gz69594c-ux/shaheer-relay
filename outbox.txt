@@ -1,15 +1,12 @@
 ═══════════════════════════════════
-  AUTHORIZE GOOGLE ADS
+  AUTHORIZE YOUTUBE
 ═══════════════════════════════════
 
-Tap this link to authorize:
-https://tinyurl.com/22zmuvme
+Go to google.com/device on your phone.
 
-Sign in with your Google account.
-After authorizing, Google will show
-you a CODE on screen.
+Enter this code: DPQ-BFN-FLPM
 
-COPY that code and paste it below
-using the SEND tab.
+Sign in with your Google account
+and authorize. That's it!
 
 ═══════════════════════════════════
