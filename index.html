@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Relay to Claude</title>
+<title>Claude Relay</title>
 <style>
   :root { color-scheme: dark; }
   body {
@@ -39,7 +39,7 @@
     cursor: pointer;
     background: #1b1e26;
     color: #9a9aa5;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
   }
   .tab.active { background: #4f7cff; color: white; }
@@ -83,23 +83,80 @@
   .ok { color: #6ee08a; }
   .err { color: #ff6e6e; }
   .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
+
+  /* --- Clip Review Styles --- */
+  .clip-card {
+    width: 100%;
+    background: #1b1e26;
+    border: 1px solid #2e323d;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    padding: 14px;
+    box-sizing: border-box;
+  }
+  .clip-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #4f7cff;
+  }
+  .aspect-label {
+    font-size: 0.78rem;
+    color: #9a9aa5;
+    margin: 8px 0 4px;
+    font-weight: 600;
+  }
+  .clip-card video {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background: #000;
+  }
+  .approve-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .btn-vote {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    background: #2e323d;
+    color: #e8e8ec;
+  }
+  .btn-vote.approve-sel { background: #2d8a4e; color: white; }
+  .btn-vote.reject-sel { background: #8a2d2d; color: white; }
+  #review-result {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 0.95rem;
+    min-height: 1.2em;
+  }
 </style>
 </head>
 <body>
   <h1>Claude Relay</h1>
-  <p class="sub">Paste text to send, or check what Claude left for you.</p>
+  <p class="sub">Send, receive, or review clips.</p>
 
   <div class="tabs">
-    <div class="tab active" id="tab-send">Send to Claude</div>
+    <div class="tab active" id="tab-send">Send</div>
     <div class="tab" id="tab-recv">From Claude</div>
+    <div class="tab" id="tab-review">🎬 Clips</div>
   </div>
 
+  <!-- SEND TAB -->
   <div class="panel active" id="panel-send">
     <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
     <button id="send">Send</button>
     <div id="status"></div>
   </div>
 
+  <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
@@ -108,33 +165,36 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v5</p>
+  <!-- CLIP REVIEW TAB -->
+  <div class="panel" id="panel-review">
+    <p class="sub" style="margin-bottom:14px;">Watch each clip. Approve or reject. Submit when done.</p>
+    <div id="clips-container"></div>
+    <button id="submit-review">Submit Review</button>
+    <div id="review-result"></div>
+  </div>
+
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v6-review</p>
 
 <script>
-// Force a fresh network fetch of this page once per session, to dodge
-// aggressive mobile-browser caching of stale JS (bin id changes over time).
-if (!sessionStorage.getItem('relay_cache_bust')) {
-  sessionStorage.setItem('relay_cache_bust', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v6')) {
+  sessionStorage.setItem('relay_cache_bust_v6', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
+const SERVER = "http://104.248.159.95:8080";
 
 // --- tabs ---
-const tabSend = document.getElementById('tab-send');
-const tabRecv = document.getElementById('tab-recv');
-const panelSend = document.getElementById('panel-send');
-const panelRecv = document.getElementById('panel-recv');
-
-tabSend.addEventListener('click', () => {
-  tabSend.classList.add('active'); tabRecv.classList.remove('active');
-  panelSend.classList.add('active'); panelRecv.classList.remove('active');
-});
-tabRecv.addEventListener('click', () => {
-  tabRecv.classList.add('active'); tabSend.classList.remove('active');
-  panelRecv.classList.add('active'); panelSend.classList.remove('active');
-  loadLatest();
+const tabs = ['send','recv','review'];
+tabs.forEach(t => {
+  document.getElementById('tab-'+t).addEventListener('click', () => {
+    tabs.forEach(x => {
+      document.getElementById('tab-'+x).classList.toggle('active', x===t);
+      document.getElementById('panel-'+x).classList.toggle('active', x===t);
+    });
+    if (t === 'recv') loadLatest();
+  });
 });
 
 // --- send tab ---
@@ -164,7 +224,7 @@ btn.addEventListener('click', async () => {
     status.className = 'ok';
     note.value = '';
   } catch (e) {
-    status.textContent = 'Failed to send: ' + e.message + ' (try again)';
+    status.textContent = 'Failed: ' + e.message;
     status.className = 'err';
   } finally {
     btn.disabled = false;
@@ -187,14 +247,14 @@ async function loadLatest() {
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const text = await resp.text();
     if (/^\s*<(!DOCTYPE|html)/i.test(text)) {
-      throw new Error('got a webpage instead of the file — something on this network is intercepting the request. Try a different network or disable any content blocker.');
+      throw new Error('got a webpage instead of the file');
     }
     recvText.value = text;
     recvStatus.textContent = 'Loaded.';
     recvStatus.className = 'ok';
     recvMeta.textContent = 'updated just now';
   } catch (e) {
-    recvStatus.textContent = 'Failed to load: ' + e.message;
+    recvStatus.textContent = 'Failed: ' + e.message;
     recvStatus.className = 'err';
   } finally {
     refreshBtn.disabled = false;
@@ -206,13 +266,89 @@ copyBtn.addEventListener('click', async () => {
   if (!recvText.value) return;
   try {
     await navigator.clipboard.writeText(recvText.value);
-    recvStatus.textContent = 'Copied to clipboard.';
+    recvStatus.textContent = 'Copied.';
     recvStatus.className = 'ok';
   } catch (e) {
     recvText.select();
     document.execCommand('copy');
     recvStatus.textContent = 'Copied.';
     recvStatus.className = 'ok';
+  }
+});
+
+// --- clip review tab ---
+const clips = [
+  { id: "01", title: "1. House Reading", land: "01_house_reading_FINAL.mp4", port: "01_house_reading_REEL.mp4" },
+  { id: "02", title: "2. First Experience Age 12", land: "02_first_experience_FINAL.mp4", port: "02_first_experience_REEL.mp4" },
+  { id: "03", title: "3. Car Crash OBE", land: "03_car_crash_FINAL.mp4", port: "03_car_crash_REEL.mp4" },
+  { id: "04", title: "4. Mushroom vs Astral", land: "04_mushroom_FINAL.mp4", port: "04_mushroom_REEL.mp4" },
+  { id: "05", title: "5. Project Stargate", land: "05_stargate_FINAL.mp4", port: "05_stargate_REEL.mp4" },
+  { id: "06", title: "6. Nobody Has Ever Died", land: "06_nobody_died_FINAL.mp4", port: "06_nobody_died_REEL.mp4" },
+  { id: "07", title: "7. 9/11 Astral Visit", land: "07_911_astral_FINAL.mp4", port: "07_911_astral_REEL.mp4" }
+];
+
+const decisions = {};
+const container = document.getElementById('clips-container');
+
+clips.forEach(c => {
+  const card = document.createElement('div');
+  card.className = 'clip-card';
+  card.innerHTML = `
+    <div class="clip-title">${c.title}</div>
+    <div class="aspect-label">▶ Landscape (16:9)</div>
+    <video controls playsinline preload="none">
+      <source src="${SERVER}/${c.land}" type="video/mp4">
+    </video>
+    <div class="aspect-label">▶ Portrait (9:16)</div>
+    <video controls playsinline preload="none">
+      <source src="${SERVER}/${c.port}" type="video/mp4">
+    </video>
+    <div class="approve-row">
+      <button class="btn-vote" data-id="${c.id}" data-v="approved" onclick="vote(this)">✅ Approve</button>
+      <button class="btn-vote" data-id="${c.id}" data-v="rejected" onclick="vote(this)">❌ Reject</button>
+    </div>
+  `;
+  container.appendChild(card);
+});
+
+function vote(el) {
+  const id = el.dataset.id;
+  const v = el.dataset.v;
+  decisions[id] = v;
+  const row = el.parentElement;
+  row.querySelectorAll('.btn-vote').forEach(b => {
+    b.classList.remove('approve-sel','reject-sel');
+  });
+  el.classList.add(v === 'approved' ? 'approve-sel' : 'reject-sel');
+}
+
+document.getElementById('submit-review').addEventListener('click', async () => {
+  const res = document.getElementById('review-result');
+  const decided = Object.keys(decisions).length;
+  if (decided < clips.length) {
+    res.textContent = `Review all clips first (${decided}/${clips.length})`;
+    res.style.color = '#ff6e6e';
+    return;
+  }
+  const summary = clips.map(c => `${c.title}: ${decisions[c.id]}`).join('\n');
+  const payload = `CLIP REVIEW — ${new Date().toISOString()}\n\n${summary}\n`;
+  try {
+    const filename = 'review-' + Date.now() + '.txt';
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
+    xhr.setRequestHeader('Content-Type', 'text/plain');
+    xhr.timeout = 30000;
+    await new Promise((resolve, reject) => {
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
+      xhr.onerror = () => reject(new Error('network error'));
+      xhr.ontimeout = () => reject(new Error('timeout'));
+      xhr.send(new Blob([payload], { type: 'text/plain' }));
+    });
+    res.textContent = '✅ Review sent! Claude will see it.';
+    res.style.color = '#6ee08a';
+  } catch (e) {
+    res.textContent = 'Failed: ' + e.message;
+    res.style.color = '#ff6e6e';
   }
 });
 </script>
