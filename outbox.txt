@@ -1,12 +1,20 @@
 ═══════════════════════════════════
-  AUTHORIZE YOUTUBE
+  AUTHORIZE GOOGLE ADS + YOUTUBE
 ═══════════════════════════════════
 
-Go to google.com/device on your phone.
+1. Tap this link:
+   https://tinyurl.com/2bwxfu2h
 
-Enter this code: DPQ-BFN-FLPM
+2. Sign in with your Google account
 
-Sign in with your Google account
-and authorize. That's it!
+3. After authorizing, the page will
+   NOT load (that's normal!)
+
+4. Look at the ADDRESS BAR in Safari
+   It will show something like:
+   http://localhost/?code=4/XXXXX...
+
+5. COPY everything after "code="
+   and paste it here using SEND tab
 
 ═══════════════════════════════════
