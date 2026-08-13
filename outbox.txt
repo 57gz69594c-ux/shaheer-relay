@@ -1,12 +1,43 @@
-🎬 ALL 7 CLIPS — REVIEW PAGE READY
+DOWNLOAD YOUR CLIPS — READY NOW
+Updated: Aug 13, 2026
 
-Open this link to review all 7 clips
-in both aspect ratios (landscape + portrait):
+Open this link on your phone to
+watch and download all clips:
 
 http://104.248.159.95:8080/review.html
 
-- Watch each clip
-- Tap Approve or Reject
-- Hit Submit when done
+Or download individual clips directly:
 
-I'll see your decisions automatically.
+1. Mushroom vs Astral (40 MB)
+http://104.248.159.95:8080/04_mushroom_FINAL.mp4
+
+2. House Reading (122 MB)
+http://104.248.159.95:8080/01_house_reading_FINAL.mp4
+
+3. Car Crash OBE (101 MB)
+http://104.248.159.95:8080/03_car_crash_FINAL.mp4
+
+4. First Experience (72 MB)
+http://104.248.159.95:8080/02_first_experience_FINAL.mp4
+
+5. Project Stargate (45 MB)
+http://104.248.159.95:8080/05_stargate_FINAL.mp4
+
+6. Nobody Has Ever Died (60 MB)
+http://104.248.159.95:8080/06_nobody_died_FINAL.mp4
+
+
+All clips have:
+- English subtitles (big, readable)
+- Stock footage cutaway animations
+- Title card intro
+- "GET THE EBOOK" outro card
+- Background music
+- Original podcast audio
+
+
+NOTE: The 9:16 Instagram Reel versions
+need to be rebuilt. These are 16:9
+landscape versions. Start a fresh
+session and say "build the 9:16 reels"
+to get the portrait versions.
