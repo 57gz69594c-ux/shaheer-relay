@@ -1,27 +1,57 @@
 ═══════════════════════════════════
-  GOOGLE ADS — ONE MORE STEP
+  GOOGLE ADS DEVELOPER TOKEN
+  APPLICATION — COPY-PASTE GUIDE
 ═══════════════════════════════════
 
-To unlock full automation, I need
-a Manager Account (MCC). Create one:
+Go to: ads.google.com
+→ Make sure you're in the MANAGER
+  account (157-859-6815)
+→ Tools (wrench icon) → API Center
+→ Click "Apply for token" or
+  "Fill out the form"
 
-1. Go to: ads.google.com/home/tools/manager-accounts
-2. Click "Create a manager account"
-3. Use your same Google email
-4. Once created, go to:
-   Admin → API Center
-5. Copy the DEVELOPER TOKEN shown
-6. Send it here via SEND tab
+PASTE THESE ANSWERS:
 
-This is the LAST setup step.
-After this, I handle everything.
+Q: "How will you use the API?"
+A: Managing video ad campaigns
+   programmatically. Uploading
+   YouTube video ads, creating
+   campaigns, setting budgets,
+   and monitoring performance
+   metrics for optimization.
 
-Also review your clips below:
+Q: "Describe your application"
+A: Custom automation tool that
+   manages Google Ads campaigns
+   for a YouTube channel
+   (Shaheer Knows, 85K+ subs).
+   It creates video ad campaigns,
+   monitors ROAS, and adjusts
+   bids based on performance.
 
-FOLDER 1 (Clips 01,03,04,05):
-https://gofile.io/d/kCQ2hGpP
+Q: "Website URL"
+A: youtube.com/@shaheerknows
 
-FOLDER 2 (Clips 02,06,07):
-https://gofile.io/d/dFSF8NWb
+Q: "How do you comply with
+    Google Ads policies?"
+A: All ads comply with Google
+   Ads policies. Content is
+   educational (astral projection
+   & meditation). No prohibited
+   content. We review all ads
+   before publishing.
 
+After submitting, check if you
+see a token string on that page
+(even if it says "test" or
+"pending"). Send it to me here.
+
+WHILE WE WAIT: I can already
+upload your clips to YouTube
+(with your approval) and create
+campaigns manually through the
+Google Ads UI. The API token
+just enables FULL automation.
+
+Clips are still building...
 ═══════════════════════════════════
