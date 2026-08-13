@@ -1,26 +1,27 @@
-POST-PRODUCTION PROMPT — READ ✅
+FULL PROMPT RECEIVED ✅ — ALL 17 SECTIONS
 Updated: Aug 13, 2026
 
-Shaheer, I read your entire prompt. Here's what I got:
+Shaheer, I now have your complete post-production prompt. Here's what I understood:
 
-✅ UNDERSTOOD — ALL 7 SECTIONS:
-1. MUSIC IS LOCKED — don't touch it, period
-2. NO SUBTITLES — no captions, no Whisper, no Roman Urdu
-3. PROFESSIONAL TOOLCHAIN — Install Remotion, ImageMagick, OpenCV, Pexels/Pixabay APIs
-4. MULTI-AGENT TEAM — Visual Director that understands MEANING, not keywords
-5. VISUAL HIERARCHY — Motion graphics FIRST, then relevant stock footage, then original footage
-6. ASTRAL PROJECTION VISUAL LANGUAGE — OBEs, consciousness, ethereal environments, portals, etc. — but ONLY when contextually appropriate
-7. MOTION GRAPHICS — Remotion animations that match what's being SAID (leaving body = translucent consciousness animation, etc.)
+SECTIONS 1-7 (already confirmed):
+✅ Music locked, no subtitles, Remotion + toolchain
+✅ Visual Director (meaning-based), visual hierarchy
+✅ Astral projection visual language, custom motion graphics
 
-⚠️ PROMPT WAS TRUNCATED
-Your prompt cut off at "8. VIDEO EDITOR AGENT" — I didn't receive the rest. There's likely more sections (Video Editor Agent details, Quality Control, rendering specs, etc.).
+SECTIONS 8-17 (just received):
+✅ 8. VIDEO EDITOR AGENT — cuts, pacing, punch-ins, compositing, transitions
+✅ 9. CREATIVE DIRECTOR AGENT — can reject Video Editor decisions
+✅ 10. QC AGENT — 10 categories, 9.5/10 minimum, iterate until passing
+✅ 11. VISUAL DECISION PLAN — timestamp-by-timestamp reasoning
+✅ 12. PORTRAIT + LANDSCAPE = SEPARATE edits (not just cropped)
+✅ 13. PROFESSIONAL STYLE — cinematic, mysterious, premium, clean
+✅ 14. NO AUTO-PUBLISHING — you decide when/where to post
+✅ 15. RELAY REVIEW — put renders on relay page for your approval
+✅ 16. NON-DESTRUCTIVE — never overwrite originals
+✅ 17. PILOT FIRST — one clip first, wait for your approval before the rest
 
-Can you re-send the remaining sections? Or paste the full prompt again?
+ALSO SAW YOUR CLIP REVIEW:
+✅ Approved: 1, 2, 5, 6, 7
+❌ Rejected: 3 (Car Crash), 4 (Mushroom)
 
-CURRENT CLIP STATUS:
-12 of 14 clips exist on the server:
-- 7 landscape FINAL ✅ (all 7)
-- 5 portrait REEL ✅ (01-05)
-- 2 portrait REEL missing (06, 07) — will build those too
-
-Ready to start building the pipeline as soon as I get the rest of the prompt.
+PLAN: I'll build the full pipeline and run ONE pilot clip through it. Which clip do you want as the pilot? Or should I pick one?
