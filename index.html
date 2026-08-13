@@ -168,21 +168,23 @@
   <!-- CLIP REVIEW TAB -->
   <div class="panel" id="panel-review">
     <p class="sub" style="margin-bottom:14px;">Tap below to open the clip review page.</p>
-    <a href="http://104.248.159.95:8080/review.html" target="_blank" style="display:block;width:100%;max-width:480px;padding:18px;background:#4f7cff;color:white;border-radius:10px;font-size:1.1rem;font-weight:700;text-align:center;text-decoration:none;box-sizing:border-box;">🎬 Open Clip Review</a>
-    <p class="sub" style="margin-top:14px;">All 7 clips in both landscape & portrait. Approve/reject each, then submit.</p>
+    <p class="sub" style="margin-bottom:14px;">Watch each clip. Approve or reject. Submit when done.</p>
+    <div id="clips-container"></div>
+    <button id="submit-review">Submit Review</button>
+    <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v6-review</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v7-https</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v6')) {
-  sessionStorage.setItem('relay_cache_bust_v6', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v7')) {
+  sessionStorage.setItem('relay_cache_bust_v7', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
-const SERVER = "http://104.248.159.95:8080";
+const SERVER = "https://magnetic-correspondence-stuff-livestock.trycloudflare.com";
 
 // --- tabs ---
 const tabs = ['send','recv','review'];
