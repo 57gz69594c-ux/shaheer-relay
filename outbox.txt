@@ -1,35 +1,27 @@
 ═══════════════════════════════════
-  REVIEW YOUR CLIPS BEFORE POSTING
+  GOOGLE ADS — ONE MORE STEP
 ═══════════════════════════════════
 
-Download and review these clips.
-Nothing will be uploaded until
-you give the OK.
+To unlock full automation, I need
+a Manager Account (MCC). Create one:
 
-FOLDER 1 (Clips 01, 03, 04, 05):
+1. Go to: ads.google.com/home/tools/manager-accounts
+2. Click "Create a manager account"
+3. Use your same Google email
+4. Once created, go to:
+   Admin → API Center
+5. Copy the DEVELOPER TOKEN shown
+6. Send it here via SEND tab
+
+This is the LAST setup step.
+After this, I handle everything.
+
+Also review your clips below:
+
+FOLDER 1 (Clips 01,03,04,05):
 https://gofile.io/d/kCQ2hGpP
 
-FOLDER 2 (Clips 02, 06, 07):
+FOLDER 2 (Clips 02,06,07):
 https://gofile.io/d/dFSF8NWb
-
-RAW CLIPS (no edits):
-https://gofile.io/d/CCjo0bCr
-
-CLIP LIST:
-01 - House Reading (89MB)
-02 - First Experience Age 12 (63MB)
-03 - Car Crash OBE (90MB)
-04 - Mushroom vs Astral (35MB)
-05 - Project Stargate (33MB)
-06 - Nobody Has Ever Died (57MB)
-07 - 9/11 Astral Visit (60MB)
-
-All clips have:
-- Branded title card intro
-- BIG subtitles (Urdu + mixed script)
-- Stock footage cutaways
-- "GET THE EBOOK" outro card
-
-Let me know which ones are approved!
 
 ═══════════════════════════════════
