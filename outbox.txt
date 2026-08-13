@@ -1,27 +1,12 @@
-═══════════════════════════════════
-  PREVIEW CLIP READY FOR REVIEW
-═══════════════════════════════════
+🎬 ALL 7 CLIPS — REVIEW PAGE READY
 
-Clip 04: ASTRAL vs MUSHROOMS
-(90 seconds, landscape 16:9)
+Open this link to review all 7 clips
+in both aspect ratios (landscape + portrait):
 
-DOWNLOAD HERE:
-https://tmpfiles.org/dl/wqwwDqs4JPrF/04_mushroom_final.mp4
+http://104.248.159.95:8080/review.html
 
-What's in it:
-- Animated title card
-- Roman Urdu subtitles (LARGE)
-- "Astral Projection" in English
-- Stock footage cutaways (psychedelic + brain)
-- Lower-third banner (SHAHEER KNOWS)
-- Animated outro card (ebook CTA)
-- Background music
+- Watch each clip
+- Tap Approve or Reject
+- Hit Submit when done
 
-Review it and let me know:
-1. Are subtitles big enough?
-2. Is the stock footage good?
-3. Any changes needed?
-
-NO uploads to YouTube until
-you approve.
-═══════════════════════════════════
+I'll see your decisions automatically.
