@@ -184,7 +184,7 @@ if (!sessionStorage.getItem('relay_cache_bust_v7')) {
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
-const SERVER = "https://magnetic-correspondence-stuff-livestock.trycloudflare.com";
+const SERVER = "https://104.248.159.95.nip.io/preview/clips";
 
 // --- tabs ---
 const tabs = ['send','recv','review'];
@@ -279,13 +279,13 @@ copyBtn.addEventListener('click', async () => {
 
 // --- clip review tab ---
 const clips = [
-  { id: "01", title: "1. House Reading", land: "01_house_reading_FINAL.mp4", port: "01_house_reading_REEL.mp4" },
-  { id: "02", title: "2. First Experience Age 12", land: "02_first_experience_FINAL.mp4", port: "02_first_experience_REEL.mp4" },
-  { id: "03", title: "3. Car Crash OBE", land: "03_car_crash_FINAL.mp4", port: "03_car_crash_REEL.mp4" },
-  { id: "04", title: "4. Mushroom vs Astral", land: "04_mushroom_FINAL.mp4", port: "04_mushroom_REEL.mp4" },
-  { id: "05", title: "5. Project Stargate", land: "05_stargate_FINAL.mp4", port: "05_stargate_REEL.mp4" },
-  { id: "06", title: "6. Nobody Has Ever Died", land: "06_nobody_died_FINAL.mp4", port: "06_nobody_died_REEL.mp4" },
-  { id: "07", title: "7. 9/11 Astral Visit", land: "07_911_astral_FINAL.mp4", port: "07_911_astral_REEL.mp4" }
+  { id: "01", title: "1. House Reading", file: "01_house_reading_FINAL.mp4" },
+  { id: "02", title: "2. First Experience Age 12", file: "02_first_experience_FINAL.mp4" },
+  { id: "03", title: "3. Car Crash OBE", file: "03_car_crash_FINAL.mp4" },
+  { id: "04", title: "4. Mushroom vs Astral", file: "04_mushroom_FINAL.mp4" },
+  { id: "05", title: "5. Project Stargate", file: "05_stargate_FINAL.mp4" },
+  { id: "06", title: "6. Nobody Has Ever Died", file: "06_nobody_died_FINAL.mp4" },
+  { id: "07", title: "7. 9/11 Astral Visit", file: "07_911_astral_FINAL.mp4" }
 ];
 
 const decisions = {};
@@ -296,17 +296,12 @@ clips.forEach(c => {
   card.className = 'clip-card';
   card.innerHTML = `
     <div class="clip-title">${c.title}</div>
-    <div class="aspect-label">▶ Landscape (16:9)</div>
-    <video controls playsinline preload="none">
-      <source src="${SERVER}/${c.land}" type="video/mp4">
-    </video>
-    <div class="aspect-label">▶ Portrait (9:16)</div>
-    <video controls playsinline preload="none">
-      <source src="${SERVER}/${c.port}" type="video/mp4">
+    <video controls playsinline preload="metadata">
+      <source src="${SERVER}/${c.file}" type="video/mp4">
     </video>
     <div class="approve-row">
-      <button class="btn-vote" data-id="${c.id}" data-v="approved" onclick="vote(this)">✅ Approve</button>
-      <button class="btn-vote" data-id="${c.id}" data-v="rejected" onclick="vote(this)">❌ Reject</button>
+      <button class="btn-vote" data-id="${c.id}" data-v="approved" onclick="vote(this)">Approve</button>
+      <button class="btn-vote" data-id="${c.id}" data-v="rejected" onclick="vote(this)">Reject</button>
     </div>
   `;
   container.appendChild(card);
