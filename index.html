@@ -167,24 +167,24 @@
 
   <!-- CLIP REVIEW TAB -->
   <div class="panel" id="panel-review">
-    <p class="sub" style="margin-bottom:14px;">Tap below to open the clip review page.</p>
-    <p class="sub" style="margin-bottom:14px;">Watch each clip. Approve or reject. Submit when done.</p>
+    <p class="sub" style="margin-bottom:14px;">Enhanced clips — Landscape + Portrait for each.</p>
+    <p class="sub" style="margin-bottom:14px;">Watch both versions. Approve or reject. Submit when done.</p>
     <div id="clips-container"></div>
     <button id="submit-review">Submit Review</button>
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v7-https</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v8-enhanced-clips</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v7')) {
-  sessionStorage.setItem('relay_cache_bust_v7', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v8')) {
+  sessionStorage.setItem('relay_cache_bust_v8', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
-const SERVER = "https://104.248.159.95.nip.io/preview/clips";
+const SERVER = "https://104.248.159.95.nip.io/clips/enhanced";
 
 // --- tabs ---
 const tabs = ['send','recv','review'];
@@ -279,13 +279,13 @@ copyBtn.addEventListener('click', async () => {
 
 // --- clip review tab ---
 const clips = [
-  { id: "01", title: "1. House Reading", file: "01_house_reading_FINAL.mp4" },
-  { id: "02", title: "2. First Experience Age 12", file: "02_first_experience_FINAL.mp4" },
-  { id: "03", title: "3. Car Crash OBE", file: "03_car_crash_FINAL.mp4" },
-  { id: "04", title: "4. Mushroom vs Astral", file: "04_mushroom_FINAL.mp4" },
-  { id: "05", title: "5. Project Stargate", file: "05_stargate_FINAL.mp4" },
-  { id: "06", title: "6. Nobody Has Ever Died", file: "06_nobody_died_FINAL.mp4" },
-  { id: "07", title: "7. 9/11 Astral Visit", file: "07_911_astral_FINAL.mp4" }
+  { id: "01", title: "1. House Reading", mood: "Mysterious", landscape: "landscape/01_house_reading_ENHANCED.mp4", portrait: "portrait/01_house_reading_ENHANCED.mp4" },
+  { id: "02", title: "2. First Experience Age 12", mood: "Wonder", landscape: "landscape/02_first_experience_ENHANCED.mp4", portrait: "portrait/02_first_experience_ENHANCED.mp4" },
+  { id: "03", title: "3. Car Crash OBE", mood: "Dramatic", landscape: "landscape/03_car_crash_ENHANCED.mp4", portrait: "portrait/03_car_crash_ENHANCED.mp4" },
+  { id: "04", title: "4. Mushroom vs Astral", mood: "Intense", landscape: "landscape/04_mushroom_ENHANCED.mp4", portrait: "portrait/04_mushroom_ENHANCED.mp4" },
+  { id: "05", title: "5. Project Stargate", mood: "Serious", landscape: "landscape/05_stargate_ENHANCED.mp4", portrait: "portrait/05_stargate_ENHANCED.mp4" },
+  { id: "06", title: "6. Nobody Has Ever Died", mood: "Profound", landscape: "landscape/06_nobody_died_ENHANCED.mp4", portrait: "portrait/06_nobody_died_ENHANCED.mp4" },
+  { id: "07", title: "7. 9/11 Astral Visit", mood: "Solemn", landscape: "landscape/07_911_astral_ENHANCED.mp4", portrait: "portrait/07_911_astral_ENHANCED.mp4" }
 ];
 
 const decisions = {};
@@ -295,9 +295,14 @@ clips.forEach(c => {
   const card = document.createElement('div');
   card.className = 'clip-card';
   card.innerHTML = `
-    <div class="clip-title">${c.title}</div>
+    <div class="clip-title">${c.title} <span style="font-size:0.75rem;color:#9a9aa5;font-weight:400;">— ${c.mood}</span></div>
+    <div class="aspect-label">LANDSCAPE (16:9) — YouTube Ads</div>
     <video controls playsinline preload="metadata">
-      <source src="${SERVER}/${c.file}" type="video/mp4">
+      <source src="${SERVER}/${c.landscape}" type="video/mp4">
+    </video>
+    <div class="aspect-label">PORTRAIT (9:16) — Instagram Reels / Shorts</div>
+    <video controls playsinline preload="metadata">
+      <source src="${SERVER}/${c.portrait}" type="video/mp4">
     </video>
     <div class="approve-row">
       <button class="btn-vote" data-id="${c.id}" data-v="approved" onclick="vote(this)">Approve</button>
