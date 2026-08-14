@@ -1,5 +1,7 @@
-JARVIS v4 — Model fixed, voice working. Open this link:
+JARVIS v5 — NOW WITH REAL SERVER CONTROL
 
-https://104.248.159.95.nip.io/jarvis/?v=1786672239
+https://104.248.159.95.nip.io/jarvis/?v=1786672774
 
-Tap anywhere on the page once to activate the mic. It will stay always-on after that.
+Tap the glowing orb ONCE to activate mic.
+Then just talk — mic stays on forever.
+JARVIS can now run commands, read files, manage your server.
