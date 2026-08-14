@@ -174,17 +174,17 @@
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v8-enhanced-clips</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v9-fixed-urls</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v8')) {
-  sessionStorage.setItem('relay_cache_bust_v8', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v9')) {
+  sessionStorage.setItem('relay_cache_bust_v9', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
-const SERVER = "https://104.248.159.95.nip.io/clips/enhanced";
+const SERVER = "https://104.248.159.95.nip.io/preview/enhanced";
 
 // --- tabs ---
 const tabs = ['send','recv','review'];
