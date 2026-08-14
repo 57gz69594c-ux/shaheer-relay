@@ -1,20 +1,32 @@
-GET ANTHROPIC API KEY — Step by Step
+ALL 14 ENHANCED CLIPS — DONE ✅
+Updated: Aug 14, 2026
 
-Step 1: Open this link in Safari:
-https://console.anthropic.com
+All 14 clips processed through post-production pipeline:
 
-Step 2: Tap "Sign up" (or "Log in" if you already have an account). Use your Google account or email.
+LANDSCAPE (16:9) — YouTube Ads:
+1. House Reading — 124 MB (mysterious grade)
+2. First Experience — 74 MB (wonder grade)
+3. Car Crash OBE — 79 MB (dramatic grade)
+4. Mushroom vs Astral — 36 MB (intense grade)
+5. Project Stargate — 39 MB (serious grade)
+6. Nobody Has Ever Died — 54 MB (profound grade)
+7. 9/11 Astral Visit — 55 MB (solemn grade)
 
-Step 3: Once logged in, tap the gear icon (Settings) on the left sidebar.
+PORTRAIT (9:16) — Instagram Reels / Shorts:
+1. House Reading — 109 MB
+2. First Experience — 47 MB
+3. Car Crash OBE — 69 MB
+4. Mushroom vs Astral — 30 MB
+5. Project Stargate — 31 MB
+6. Nobody Has Ever Died — 34 MB
+7. 9/11 Astral Visit — 38 MB
 
-Step 4: Tap "API keys" in the menu.
+REVIEW PAGE:
+https://104.248.159.95.nip.io/enhanced/
 
-Step 5: Tap "Create Key"
+Each clip has mood-specific cinematic color grading,
+vignette, film fades, and curves adjustment.
+Audio is untouched — your music is exactly as you locked it.
+No subtitles. Originals preserved.
 
-Step 6: Name it "jarvis" and tap Create.
-
-Step 7: COPY the key (starts with sk-ant-...). It only shows ONCE.
-
-Step 8: Go back to the relay page, tap "Send" tab, paste the key, and hit Send.
-
-That's it. I'll grab it and wire it into Jarvis instantly. Response time drops from 13s to under 2s.
+Review and approve/reject each one.
