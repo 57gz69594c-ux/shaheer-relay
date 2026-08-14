@@ -1,7 +1,1 @@
-JARVIS v5 — NOW WITH REAL SERVER CONTROL
-
-https://104.248.159.95.nip.io/jarvis/?v=1786672774
-
-Tap the glowing orb ONCE to activate mic.
-Then just talk — mic stays on forever.
-JARVIS can now run commands, read files, manage your server.
+https://104.248.159.95.nip.io/jarvis/?v=1786673278
