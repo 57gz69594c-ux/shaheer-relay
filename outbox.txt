@@ -1,16 +1,20 @@
-JARVIS IS LIVE
-Updated: Aug 14, 2026
+GET ANTHROPIC API KEY — Step by Step
 
-Open this on your Vision Pro:
+Step 1: Open this link in Safari:
+https://console.anthropic.com
 
-https://104.248.159.95.nip.io/jarvis/
+Step 2: Tap "Sign up" (or "Log in" if you already have an account). Use your Google account or email.
 
-Tap the mic button and speak.
-JARVIS will respond in voice.
+Step 3: Once logged in, tap the gear icon (Settings) on the left sidebar.
 
-Features:
-- Voice input (mic)
-- Voice output (British TTS)
-- Live server stats
-- Holographic arc reactor UI
-- Text input as backup
+Step 4: Tap "API keys" in the menu.
+
+Step 5: Tap "Create Key"
+
+Step 6: Name it "jarvis" and tap Create.
+
+Step 7: COPY the key (starts with sk-ant-...). It only shows ONCE.
+
+Step 8: Go back to the relay page, tap "Send" tab, paste the key, and hit Send.
+
+That's it. I'll grab it and wire it into Jarvis instantly. Response time drops from 13s to under 2s.
