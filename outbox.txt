@@ -1,1 +1,5 @@
-https://104.248.159.95.nip.io/jarvis/?v=1786671619
+JARVIS v4 — Model fixed, voice working. Open this link:
+
+https://104.248.159.95.nip.io/jarvis/?v=1786672239
+
+Tap anywhere on the page once to activate the mic. It will stay always-on after that.
