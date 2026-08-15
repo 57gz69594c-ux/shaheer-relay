@@ -1,1 +1,14 @@
-https://104.248.159.95.nip.io/jarvis/?v=1786677690
+JARVIS v10 — DEPLOYED & LIVE
+
+Link: https://104.248.159.95.nip.io/jarvis/?v=1786755147
+
+What's new in v10:
+• Tap-to-activate overlay (unlocks mic + audio in one tap)
+• Always-on listening (auto-restarts after each response)
+• Mic indicator: blue=listening, green=speaking, red=muted
+• Tap mic button to mute/unmute
+• AudioContext-based playback (fixes Safari autoplay)
+• visionOS 27 immersive environment support
+• Cosmic HUD with real-time server stats
+
+Open on Vision Pro Safari → Tap the orb → JARVIS will speak.
