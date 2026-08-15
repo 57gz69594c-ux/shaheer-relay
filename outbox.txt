@@ -1,14 +1,18 @@
-JARVIS v10 — DEPLOYED & LIVE
+JARVIS v10 — FINAL BUILD — DEPLOYED
 
-Link: https://104.248.159.95.nip.io/jarvis/?v=1786755147
+Link: https://104.248.159.95.nip.io/jarvis/?v=1786755544
 
-What's new in v10:
-• Tap-to-activate overlay (unlocks mic + audio in one tap)
-• Always-on listening (auto-restarts after each response)
-• Mic indicator: blue=listening, green=speaking, red=muted
-• Tap mic button to mute/unmute
-• AudioContext-based playback (fixes Safari autoplay)
-• visionOS 27 immersive environment support
-• Cosmic HUD with real-time server stats
+✅ VERIFIED WORKING:
+• WebSocket connects instantly
+• Voice responses with audio ✓
+• Tool execution (server commands) ✓
+• No-cache headers (won't serve stale page)
 
-Open on Vision Pro Safari → Tap the orb → JARVIS will speak.
+How to use:
+1. Open link on Vision Pro Safari
+2. Tap the activation orb (grants mic + unlocks audio)
+3. Talk naturally — JARVIS listens continuously
+4. Tap mic button to mute/unmute
+5. IMMERSIVE button appears on visionOS 27 (3D space capsule environment)
+
+Version: v10 — Aug 15
