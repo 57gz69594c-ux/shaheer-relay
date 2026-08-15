@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Claude Relay</title>
+<title>Claude Relay v3</title>
 <style>
   :root { color-scheme: dark; }
   body {
@@ -174,11 +174,11 @@
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v11 — SYNCED CLIPS — Aug 14, 4:20pm UTC</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v12 — FAST PREVIEWS — Aug 14</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v11')) {
-  sessionStorage.setItem('relay_cache_bust_v11', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v12')) {
+  sessionStorage.setItem('relay_cache_bust_v12', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -279,13 +279,13 @@ copyBtn.addEventListener('click', async () => {
 
 // --- clip review tab ---
 const clips = [
-  { id: "01", title: "1. House Reading", mood: "Mysterious", landscape: "landscape/01_house_reading_ENHANCED.mp4", portrait: "portrait/01_house_reading_ENHANCED.mp4" },
-  { id: "02", title: "2. First Experience Age 12", mood: "Wonder", landscape: "landscape/02_first_experience_ENHANCED.mp4", portrait: "portrait/02_first_experience_ENHANCED.mp4" },
-  { id: "03", title: "3. Car Crash OBE", mood: "Dramatic", landscape: "landscape/03_car_crash_ENHANCED.mp4", portrait: "portrait/03_car_crash_ENHANCED.mp4" },
-  { id: "04", title: "4. Mushroom vs Astral", mood: "Intense", landscape: "landscape/04_mushroom_ENHANCED.mp4", portrait: "portrait/04_mushroom_ENHANCED.mp4" },
-  { id: "05", title: "5. Project Stargate", mood: "Serious", landscape: "landscape/05_stargate_ENHANCED.mp4", portrait: "portrait/05_stargate_ENHANCED.mp4" },
-  { id: "06", title: "6. Nobody Has Ever Died", mood: "Profound", landscape: "landscape/06_nobody_died_ENHANCED.mp4", portrait: "portrait/06_nobody_died_ENHANCED.mp4" },
-  { id: "07", title: "7. 9/11 Astral Visit", mood: "Solemn", landscape: "landscape/07_911_astral_ENHANCED.mp4", portrait: "portrait/07_911_astral_ENHANCED.mp4" }
+  { id: "01", title: "1. House Reading", mood: "Mysterious", landscape: "preview_landscape/01_house_reading_ENHANCED.mp4", portrait: "preview_portrait/01_house_reading_ENHANCED.mp4" },
+  { id: "02", title: "2. First Experience Age 12", mood: "Wonder", landscape: "preview_landscape/02_first_experience_ENHANCED.mp4", portrait: "preview_portrait/02_first_experience_ENHANCED.mp4" },
+  { id: "03", title: "3. Car Crash OBE", mood: "Dramatic", landscape: "preview_landscape/03_car_crash_ENHANCED.mp4", portrait: "preview_portrait/03_car_crash_ENHANCED.mp4" },
+  { id: "04", title: "4. Mushroom vs Astral", mood: "Intense", landscape: "preview_landscape/04_mushroom_ENHANCED.mp4", portrait: "preview_portrait/04_mushroom_ENHANCED.mp4" },
+  { id: "05", title: "5. Project Stargate", mood: "Serious", landscape: "preview_landscape/05_stargate_ENHANCED.mp4", portrait: "preview_portrait/05_stargate_ENHANCED.mp4" },
+  { id: "06", title: "6. Nobody Has Ever Died", mood: "Profound", landscape: "preview_landscape/06_nobody_died_ENHANCED.mp4", portrait: "preview_portrait/06_nobody_died_ENHANCED.mp4" },
+  { id: "07", title: "7. 9/11 Astral Visit", mood: "Solemn", landscape: "preview_landscape/07_911_astral_ENHANCED.mp4", portrait: "preview_portrait/07_911_astral_ENHANCED.mp4" }
 ];
 
 const decisions = {};
