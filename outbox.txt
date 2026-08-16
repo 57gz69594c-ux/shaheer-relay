@@ -1,18 +1,13 @@
-JARVIS v10 — FINAL BUILD — DEPLOYED
+Spaceship Podcast — R1 Creation — FIXED & DEPLOYED
 
-Link: https://104.248.159.95.nip.io/jarvis/?v=1786755544
+Install page (open on your phone, scan QR with R1 camera):
+https://104.248.159.95.nip.io/spaceship-podcast/install.html
 
-✅ VERIFIED WORKING:
-• WebSocket connects instantly
-• Voice responses with audio ✓
-• Tool execution (server commands) ✓
-• No-cache headers (won't serve stale page)
+Direct creation URL (what the QR encodes):
+https://104.248.159.95.nip.io/spaceship-podcast/?v=2
 
-How to use:
-1. Open link on Vision Pro Safari
-2. Tap the activation orb (grants mic + unlocks audio)
-3. Talk naturally — JARVIS listens continuously
-4. Tap mic button to mute/unmute
-5. IMMERSIVE button appears on visionOS 27 (3D space capsule environment)
+Always shows your latest Spaceship Podcast episode + newest comments + views/likes/subs.
 
-Version: v10 — Aug 15
+Fixed today: server had no route for this app (404), and old install used http:// which
+R1's webview silently blocks. Now served over the same HTTPS domain as Jarvis/Preview.
+You must rescan the new QR once — the old install won't self-update.
