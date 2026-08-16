@@ -1,11 +1,13 @@
-One more one-time step for Gmail sending
+Microsoft Mail Access — Approval Link
 
-Your approval worked, but the Gmail API itself is switched off for this
-Google Cloud project. Tap this link, then tap the blue "ENABLE" button
-(you're already logged in as the right account):
+Tap this, sign in with your hotmail account normally, and approve the
+permissions (Mail.Read, Mail.Send). This is Microsoft's real login page,
+not automation, totally safe:
 
-https://console.developers.google.com/apis/api/gmail.googleapis.com/overview?project=666743578475
+https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=https%3A%2F%2Flogin.microsoftonline.com%2Fcommon%2Foauth2%2Fnativeclient&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=consent
 
-After you tap Enable, just reply here on the relay page (Send to Claude
-tab) with "done" — takes about a minute to activate on Google's side,
-then I'll retry the test email.
+This one's easier than the Google step: after you approve, Microsoft
+shows you a page that says something like "Please copy this code and
+paste it into your app" with a code displayed right there on screen.
+Copy that code (just the code itself) and paste it into the "Send to
+Claude" tab here on the relay page. That's the last step.
