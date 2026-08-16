@@ -178,11 +178,11 @@
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v13 — FILE UPLOAD — Aug 16</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v14 — FILE UPLOAD CORS FIX — Aug 16</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v13')) {
-  sessionStorage.setItem('relay_cache_bust_v13', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v14')) {
+  sessionStorage.setItem('relay_cache_bust_v14', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -250,15 +250,19 @@ sendFileBtn.addEventListener('click', async () => {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
   const filename = 'file-' + Date.now() + '-' + safeName;
   try {
+    // filebin's CORS preflight doesn't answer non-safelisted content-types correctly,
+    // so we wrap the real bytes in a text/plain-labeled blob to skip preflight entirely
+    // (same fix as the vintage-video share flow).
+    const safeBlob = new Blob([file], { type: 'text/plain' });
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
-    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+    xhr.setRequestHeader('Content-Type', 'text/plain');
     xhr.timeout = 60000;
     await new Promise((resolve, reject) => {
       xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
       xhr.onerror = () => reject(new Error('network error'));
       xhr.ontimeout = () => reject(new Error('timeout'));
-      xhr.send(file);
+      xhr.send(safeBlob);
     });
     fileStatus.textContent = 'Sent. Claude will see it next.';
     fileStatus.className = 'ok';
