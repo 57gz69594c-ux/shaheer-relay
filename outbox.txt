@@ -1,13 +1,14 @@
-Spaceship Podcast — R1 Creation — FIXED & DEPLOYED
+Gmail Send Access — Approval Link
 
-Install page (open on your phone, scan QR with R1 camera):
-https://104.248.159.95.nip.io/spaceship-podcast/install.html
+Tap this, log in normally, and tap "Allow" (this is Google's real consent
+screen — not automation, totally safe):
 
-Direct creation URL (what the QR encodes):
-https://104.248.159.95.nip.io/spaceship-podcast/?v=2
+https://accounts.google.com/o/oauth2/v2/auth?client_id=666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send&access_type=offline&prompt=consent&login_hint=shaheerkhanmysteryperformer%40hotmail.com
 
-Always shows your latest Spaceship Podcast episode + newest comments + views/likes/subs.
-
-Fixed today: server had no route for this app (404), and old install used http:// which
-R1's webview silently blocks. Now served over the same HTTPS domain as Jarvis/Preview.
-You must rescan the new QR once — the old install won't self-update.
+After you tap Allow, your browser will try to go to a "localhost" address
+and probably show "can't connect" or "page not found" — THAT'S EXPECTED,
+ignore the error. Just copy the FULL address from your browser's address
+bar at that point (it'll look like http://localhost:8765/?code=4/0Axxxx...)
+and paste that whole thing into the "Send to Claude" tab on this same
+relay page. I'll pick it up from there and finish the setup — no more
+steps needed after that.
