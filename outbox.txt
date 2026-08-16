@@ -1,15 +1,11 @@
-Business Mailbox Access — Try This Link
+Business Mailbox Access — Try Again
 
-Tap this link. It'll ask you to choose an account, or let you type one in.
-This time sign in with partnerships@shaheerknows.com specifically (NOT
-your hotmail one), then approve the permissions:
+Same link as before, should work now that the setting's changed. Tap it,
+choose or type in partnerships@shaheerknows.com specifically, approve:
 
 https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=select_account
 
-If it works: same as before, your browser will fail to load a "localhost"
-address afterward, that's expected. Copy the full address bar URL and
-paste it into the "Send to Claude" tab here.
+After approving, browser will fail to load "localhost", that's expected.
+Copy the full address bar URL and paste it into "Send to Claude".
 
-If it DOESN'T work: it'll show an error message on screen instead of
-letting you sign in. If that happens, just copy whatever the error text
-says and send that instead, don't worry about fixing anything yourself.
+If it errors again, copy that error text and send it same as last time.
