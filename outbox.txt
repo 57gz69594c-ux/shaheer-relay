@@ -1,14 +1,11 @@
-Gmail Send Access — Approval Link
+One more one-time step for Gmail sending
 
-Tap this, log in normally, and tap "Allow" (this is Google's real consent
-screen — not automation, totally safe):
+Your approval worked, but the Gmail API itself is switched off for this
+Google Cloud project. Tap this link, then tap the blue "ENABLE" button
+(you're already logged in as the right account):
 
-https://accounts.google.com/o/oauth2/v2/auth?client_id=666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send&access_type=offline&prompt=consent&login_hint=shaheerkhanmysteryperformer%40hotmail.com
+https://console.developers.google.com/apis/api/gmail.googleapis.com/overview?project=666743578475
 
-After you tap Allow, your browser will try to go to a "localhost" address
-and probably show "can't connect" or "page not found" — THAT'S EXPECTED,
-ignore the error. Just copy the FULL address from your browser's address
-bar at that point (it'll look like http://localhost:8765/?code=4/0Axxxx...)
-and paste that whole thing into the "Send to Claude" tab on this same
-relay page. I'll pick it up from there and finish the setup — no more
-steps needed after that.
+After you tap Enable, just reply here on the relay page (Send to Claude
+tab) with "done" — takes about a minute to activate on Google's side,
+then I'll retry the test email.
