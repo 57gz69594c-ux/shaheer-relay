@@ -1,13 +1,13 @@
-Microsoft Mail Access — Approval Link
+Microsoft Mail Access — Approval Link (try #2)
 
 Tap this, sign in with your hotmail account normally, and approve the
-permissions (Mail.Read, Mail.Send). This is Microsoft's real login page,
-not automation, totally safe:
+permissions:
 
-https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=https%3A%2F%2Flogin.microsoftonline.com%2Fcommon%2Foauth2%2Fnativeclient&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=consent
+https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=consent
 
-This one's easier than the Google step: after you approve, Microsoft
-shows you a page that says something like "Please copy this code and
-paste it into your app" with a code displayed right there on screen.
-Copy that code (just the code itself) and paste it into the "Send to
-Claude" tab here on the relay page. That's the last step.
+Same as the Google step: after you approve, your browser will try to go
+to a "localhost" address and show "can't connect" or "page not found" —
+THAT'S EXPECTED, ignore the error. Copy the FULL address from your
+browser's address bar at that point (it'll look like
+http://localhost:8765/?code=M.xxxx...) and paste that whole thing into
+the "Send to Claude" tab here on the relay page.
