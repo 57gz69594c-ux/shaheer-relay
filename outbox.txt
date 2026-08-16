@@ -1,13 +1,15 @@
-Microsoft Mail Access — Approval Link (try #2)
+Business Mailbox Access — Try This Link
 
-Tap this, sign in with your hotmail account normally, and approve the
-permissions:
+Tap this link. It'll ask you to choose an account, or let you type one in.
+This time sign in with partnerships@shaheerknows.com specifically (NOT
+your hotmail one), then approve the permissions:
 
-https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=consent
+https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=select_account
 
-Same as the Google step: after you approve, your browser will try to go
-to a "localhost" address and show "can't connect" or "page not found" —
-THAT'S EXPECTED, ignore the error. Copy the FULL address from your
-browser's address bar at that point (it'll look like
-http://localhost:8765/?code=M.xxxx...) and paste that whole thing into
-the "Send to Claude" tab here on the relay page.
+If it works: same as before, your browser will fail to load a "localhost"
+address afterward, that's expected. Copy the full address bar URL and
+paste it into the "Send to Claude" tab here.
+
+If it DOESN'T work: it'll show an error message on screen instead of
+letting you sign in. If that happens, just copy whatever the error text
+says and send that instead, don't worry about fixing anything yourself.
