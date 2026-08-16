@@ -1,11 +1,33 @@
-Business Mailbox Access — Try Again
+SPONSOR REPLY ALERT — 2026-08-16 12:18 UTC
 
-Same link as before, should work now that the setting's changed. Tap it,
-choose or type in partnerships@shaheerknows.com specifically, approve:
+---
+Brand: Zong 4G
+From: customerservices@zong.com.pk
+Subject: Auto Reply
+Received: 2026-08-16T11:32:13Z
+Preview: Dear Sir / Madam,
 
-https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=387f1965-5895-4e54-880e-c40ce4ce5aa5&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+https%3A%2F%2Fgraph.microsoft.com%2FMail.Send+offline_access&prompt=select_account
+This is an AUTO-REPLY email, please do not reply to this email.
 
-After approving, browser will fail to load "localhost", that's expected.
-Copy the full address bar URL and paste it into "Send to Claude".
+Your email has been "assigned" to one of our dedicated Customer Care Representatives. Rest assured, our team will promptly reach out to you in response.
 
-If it errors again, copy that error text and send it same as last time.
+Please note
+---
+Brand: Daraz
+From: customer.pk@care.daraz.com
+Subject: Thank You for Contacting Daraz
+Received: 2026-08-16T11:29:11Z
+Preview: Dear Customer,
+
+
+Thank you for reaching out to us!
+
+
+To assist you more efficiently, we no longer use email for customer support. Instead, please contact us through one of the following channels:
+
+
+Live Chat- (Best for quick questions)
+
+Help Ce
+
+Ask me on the Send tab if you want help drafting a response to any of these.
