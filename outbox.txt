@@ -1,10 +1,9 @@
-Re-authorize Google Ads + YouTube Access
+JARVIS for Rabbit R1 — install link
 
-This restores the Ads/YouTube access that broke when I revoked the old
-Gmail permission. Tap this, sign in normally, approve:
+Paste this into rabbithole.com > Creations:
+https://57gz69594c-ux.github.io/shaheer-jarvis-r1/
 
-https://accounts.google.com/o/oauth2/v2/auth?client_id=666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8765&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fadwords+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.upload&access_type=offline&prompt=consent&login_hint=shaheerkhanmysteryperformer%40hotmail.com
+Or scan a QR code here:
+https://57gz69594c-ux.github.io/shaheer-jarvis-r1/install.html
 
-Same as always: after approving, your browser will fail to load a
-"localhost" address, that's expected. Copy the full address bar URL and
-paste it into "Send to Claude" here on the relay page.
+Hold the R1 side button to talk to Jarvis.
