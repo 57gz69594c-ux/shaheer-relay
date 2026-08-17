@@ -59,6 +59,12 @@
     box-sizing: border-box;
     resize: vertical;
   }
+  #recv-text {
+    min-height: 70vh;
+    font-size: 1.15rem;
+    word-break: break-all;
+    line-height: 1.5;
+  }
   button {
     margin-top: 14px;
     width: 100%;
@@ -178,11 +184,11 @@
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v14 — FILE UPLOAD CORS FIX — Aug 16</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v15 — BIGGER RECV BOX — Aug 17</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v14')) {
-  sessionStorage.setItem('relay_cache_bust_v14', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v15')) {
+  sessionStorage.setItem('relay_cache_bust_v15', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
