@@ -168,9 +168,10 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div class="clip-title" style="width:100%;max-width:480px;">🚀 SS-22 Star Cruiser — Preview (Seq 1 + 8)</div>
+    <div class="clip-title" style="width:100%;max-width:480px;">🚀 SS-22 Star Cruiser — FULL Documentary (13 min)</div>
+    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">Original score + 100+ sound effects. No voice — ready for your VO overlay.</p>
     <video controls playsinline preload="metadata" style="width:100%;max-width:480px;border-radius:8px;margin-bottom:14px;background:#000;">
-      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-preview.mp4" type="video/mp4">
+      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-documentary.mp4" type="video/mp4">
     </video>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
@@ -188,11 +189,11 @@
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v17 — SS22 PREVIEW — Aug 18</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v18 — SS22 FULL DOCUMENTARY — Aug 18</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v17')) {
-  sessionStorage.setItem('relay_cache_bust_v17', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v18')) {
+  sessionStorage.setItem('relay_cache_bust_v18', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
