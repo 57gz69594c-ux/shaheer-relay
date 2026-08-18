@@ -168,10 +168,10 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div class="clip-title" style="width:100%;max-width:480px;">🚀 SS-22 Star Cruiser — Full Render (13:06)</div>
-    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">FULL QUALITY RENDER — All 8 sequences, 1080p. Animation only — music/SFX still to add. You shoot your own VO separately.</p>
+    <div class="clip-title" style="width:100%;max-width:480px;">🚀 SS-22 Star Cruiser — V4 Latest (13:06)</div>
+    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">LATEST BUILD — V4 with photo backgrounds, all 8 sequences, 1080p. Music/SFX still to add. You shoot your own VO separately.</p>
     <video controls playsinline preload="metadata" style="width:100%;max-width:480px;border-radius:8px;margin-bottom:14px;background:#000;">
-      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-full.mp4" type="video/mp4">
+      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-documentary-v4.mp4" type="video/mp4">
     </video>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
@@ -189,11 +189,11 @@
     <div id="review-result"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v21 — SS22 FULL RENDER — Aug 18 12:35pm PKT</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v22 — SS22 V4 WITH BACKGROUNDS — Aug 18 12:40pm PKT</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v21')) {
-  sessionStorage.setItem('relay_cache_bust_v21', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v22')) {
+  sessionStorage.setItem('relay_cache_bust_v22', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
