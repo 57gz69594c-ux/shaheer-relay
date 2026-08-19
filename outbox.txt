@@ -1,139 +1,14 @@
-SS-22 STAR CRUISER — FULL NARRATION SCRIPT
-(The lines you read on camera / voiceover)
+SS-22 Documentary V2 Benchmark — READY FOR REVIEW
 
----
+The video is embedded at the top of this page. Tap play to watch all 19 scenes (2 min 13 sec).
 
-SEQUENCE 001 — COLD OPEN
+Code word: PARALLAX
 
-"There is something you should probably know before you watch another episode of Spaceship Podcast."
+What you're seeing:
+- 19 scenes rebuilt from scratch with editorial collage treatment
+- Paper textures, thick lines, huge typography, real cockpit photos
+- Torn paper, hand-drawn annotations, measurement arrows
+- 540p preview (full 1080p master is 29 MB, rendered and ready)
+- No audio/narration yet — visual benchmark only
 
----
-
-SEQUENCE 002 — THE PODCAST
-
-"Because when you see us sitting inside this thing… surrounded by blinking controls and screens"
-
----
-
-SEQUENCE 003 — NOT A GREEN SCREEN
-
-"you're not looking at a green screen."
-
----
-
-SEQUENCE 004 — NOT A VIRTUAL SET
-
-"You're not looking at a virtual set."
-
----
-
-SEQUENCE 005 — ACTUAL COCKPIT
-
-"You're looking at an actual cockpit."
-
----
-
-SEQUENCE 006 — 18 MONTHS
-
-"And it took about a year and a half of my life to build."
-
----
-
-SEQUENCE 007 — WHY?
-
-"Today, I want to show you why."
-
----
-
-SEQUENCE 008 — THE WINDOW
-
-"And strangely enough… the whole thing started with a window."
-
----
-
-SEQUENCE 009 — SPACESHIP AMBIENCE
-
-"Years ago, I became obsessed with a very particular kind of YouTube video."
-
----
-
-SEQUENCE 010 — NOTHING HAPPENS
-
-"There's usually no story. Nothing really happens."
-
----
-
-SEQUENCE 011 — BEDROOM NOT EARTH
-
-"pretending, even for a little while, that my bedroom wasn't really on Earth."
-
----
-
-SEQUENCE 012 — THE THOUGHT
-
-"Then one day, I looked at the large window in my room."
-
-"What if I could actually see space outside it?"
-
----
-
-SEQUENCE 013 — NOT TV / NOT VR
-
-"Not on a television."
-
-"Not through VR."
-
-"Outside the actual window."
-
----
-
-SEQUENCE 014 — PROJECTOR EXPERIMENT
-
-"So I bought a giant projector screen."
-
----
-
-SEQUENCE 015 — IT WORKED / IT LOOKED TERRIBLE
-
-"And technically… it worked."
-
-"There was just one problem."
-
-"It looked terrible."
-
----
-
-SEQUENCE 016 — DEPTH MATTERS
-
-"Depth matters."
-
-"Farther and farther away…"
-
-"Natural depth. Natural perspective. Natural parallax."
-
----
-
-SEQUENCE 017 — HOUSE PROBLEM
-
-"But now I had another problem."
-
-"The window was enormous."
-
----
-
-SEQUENCE 018 — BUILD A WALL
-
-"What if I covered parts of the window?"
-
-"what if the wood looked like a spaceship wall?"
-
----
-
-SEQUENCE 019 — OUT OF CONTROL
-
-"And this… is where things got completely out of control."
-
----
-
-END OF OPENING BENCHMARK (Sequences 001-019)
-The rest of the documentary continues after Phase 2.
+Awaiting your review before Phase 2.
