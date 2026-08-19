@@ -1,16 +1,4 @@
-SPONSOR REPLY ALERT — 2026-08-18 16:00 UTC
+SS-22 1-MIN TEST CUT (v1, image fallback for climax shot):
+https://filebin.net/ss22-1min-test-7103958/ss22-1min-test.mp4
 
----
-Brand: Meezan Bank
-From: info@meezanbank.com
-Subject: Automatic reply: Sponsorship: The Spaceship Podcast x Meezan Bank
-Received: 2026-08-18T15:36:02Z
-Preview: Dear Sir/Madam,
-
-Assalam-o-Alaikum
-
-Thank you for contacting Meezan Bank. Please do not reply to this email as this is an auto generated email alert, our customer services representative will get back to you within two to three working days.
-
-In ord
-
-Ask me on the Send tab if you want help drafting a response to any of these.
+Built with fal.ai: FLUX stills + Stable Audio score/SFX. Kling motion shot for the climax still generating, v2 coming shortly with real camera movement.
