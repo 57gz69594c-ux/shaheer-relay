@@ -1,28 +1,74 @@
-SS-22 BENCHMARK V1 — NOW EMBEDDED ON THIS PAGE
+SS-22 STAR CRUISER — NARRATION SCRIPT (Sequences 001-019)
 
-The video is right here on this page — scroll up in the "From Claude" tab and hit play.
+---
 
-2 minutes 13 seconds | 19 sequences | Zero API credits spent
+001 — COLD OPEN
+"There is something you should probably know before you watch another episode of Spaceship Podcast."
 
-All 19 opening sequences built with procedural motion graphics:
-001 Cold Open — mystery machine fragments
-002 The Podcast — real cockpit photo + callouts
-003 Not A Green Screen — strikethrough
-004 Not A Virtual Set — wireframe collapses
-005 Actual Cockpit — impact reveal
-006 18 Months — paper cutout timeline
-007 Why? — question mark to leading line
-008 The Window — recurring motif
-009 Spaceship Ambience — video card collage
-010 Nothing Happens — quiet drift
-011 Bedroom Not Earth — 3-layer parallax
-012 The Thought — WHAT IF → SPACE OUTSIDE THE WINDOW?
-013 Not TV / Not VR — X marks, window expands
-014 Projector Experiment — explanatory diagram
-015 It Worked / Terrible — comedic beat
-016 Depth Matters — screen moves in Z-space
-017 House Problem — measurement arrows
-018 Build A Wall — plywood transforms to spacecraft panels
-019 Out Of Control — fragment explosion
+002 — THE PODCAST
+"Because when you see us sitting inside this thing… surrounded by blinking controls and screens"
 
-Review and let me know your feedback.
+003 — NOT A GREEN SCREEN
+"you're not looking at a green screen."
+
+004 — NOT A VIRTUAL SET
+"You're not looking at a virtual set."
+
+005 — ACTUAL COCKPIT
+"You're looking at an actual cockpit."
+
+006 — 18 MONTHS
+"And it took about a year and a half of my life to build."
+
+007 — WHY?
+"Today, I want to show you why."
+
+008 — THE WINDOW
+"And strangely enough… the whole thing started with a window."
+
+009 — SPACESHIP AMBIENCE
+"Years ago, I became obsessed with a very particular kind of YouTube video."
+
+010 — NOTHING HAPPENS
+"There's usually no story. Nothing really happens."
+
+011 — BEDROOM NOT EARTH
+"pretending, even for a little while, that my bedroom wasn't really on Earth."
+
+012 — THE THOUGHT
+"Then one day, I looked at the large window in my room."
+"What if I could actually see space outside it?"
+
+013 — NOT TV / NOT VR
+"Not on a television."
+"Not through VR."
+"Outside the actual window."
+
+014 — PROJECTOR EXPERIMENT
+"So I bought a giant projector screen."
+
+015 — IT WORKED / TERRIBLE
+"And technically… it worked."
+"There was just one problem."
+"It looked terrible."
+
+016 — DEPTH MATTERS
+"Depth matters."
+"Farther and farther away…"
+"Natural depth. Natural perspective. Natural parallax."
+
+017 — HOUSE PROBLEM
+"But now I had another problem."
+"The window was enormous."
+
+018 — BUILD A WALL
+"What if I covered parts of the window?"
+"what if the wood looked like a spaceship wall?"
+
+019 — OUT OF CONTROL
+"And this… is where things got completely out of control."
+
+---
+
+This is the narration for the opening benchmark (Sequences 001-019).
+The rest of the documentary continues after your Phase 2 authorization.
