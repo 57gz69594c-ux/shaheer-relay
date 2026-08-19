@@ -1,4 +1,4 @@
-SS-22 1-MIN TEST — V2 (rebuilt to your full production spec):
-https://filebin.net/ss22-1min-v2-7104880/ss22-1min-v2.mp4
+SS-22 1-MIN TEST — V3 (fixes 'photo with text on it' feedback):
+https://filebin.net/ss22-1min-v3-7105320/ss22-1min-v3.mp4
 
-15 shots, fast 2-4s cuts, layered FG/BG compositing (real cutout photos over plates), native Remotion diagrams/maps, Kling motion shot on the climax, continuous 2-part Stable Audio score with action-synced SFX. This supersedes the v1 link from earlier.
+Every photo/video shot now has a designed graphic layer on top instead of just a caption: HUD viewfinder framing with corner brackets + readouts, annotation circles pointing at details with leader lines, traced light-path arrows, corkboard connector lines on the evidence board, leader-lines from labels into the rings photo. Photos now physically 'land' (scale+rotate settle) instead of sitting static. This supersedes v1 and v2.
