@@ -1,8 +1,6 @@
-SS-22 DOCUMENTARY — BENCHMARK V1 (Sequences 001-019)
+SS-22 BENCHMARK V1 — NOW EMBEDDED ON THIS PAGE
 
-TAP HERE TO WATCH: http://104.248.159.95/preview/remotion/watch.html
-
-(Opens a player page — plays right in your browser)
+The video is right here on this page — scroll up in the "From Claude" tab and hit play.
 
 2 minutes 13 seconds | 19 sequences | Zero API credits spent
 
@@ -27,4 +25,4 @@ All 19 opening sequences built with procedural motion graphics:
 018 Build A Wall — plywood transforms to spacecraft panels
 019 Out Of Control — fragment explosion
 
-This is the opening benchmark. Review and let me know your feedback.
+Review and let me know your feedback.
