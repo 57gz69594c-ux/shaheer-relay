@@ -90,11 +90,68 @@
   .err { color: #ff6e6e; }
   .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
 
+  /* Video section */
+  .video-banner {
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 20px;
+    background: #1b1e26;
+    border: 1px solid #2e323d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .video-banner .vb-header {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #0c1a2a, #1b1e26);
+    border-bottom: 2px solid #3FD0E0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .video-banner .vb-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #3FD0E0;
+    letter-spacing: 1px;
+  }
+  .video-banner .vb-code {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #C44B3F;
+    font-family: ui-monospace, monospace;
+    letter-spacing: 2px;
+  }
+  .video-banner video {
+    width: 100%;
+    display: block;
+  }
+  .video-banner .vb-info {
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    color: #9a9aa5;
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
 </head>
 <body>
   <h1>Claude Relay</h1>
   <p class="sub">Send or receive from Claude.</p>
+
+  <!-- SS-22 VIDEO PREVIEW -->
+  <div class="video-banner">
+    <div class="vb-header">
+      <span class="vb-title">SS-22 STAR CRUISER — V2</span>
+      <span class="vb-code">PARALLAX</span>
+    </div>
+    <video controls playsinline preload="auto">
+      <source src="https://104.248.159.95.nip.io/preview/ss22_preview.mp4" type="video/mp4">
+    </video>
+    <div class="vb-info">
+      <span>19 scenes &bull; 2:13 &bull; 540p preview</span>
+      <span>Visual benchmark — no audio</span>
+    </div>
+  </div>
 
   <div class="tabs">
     <div class="tab active" id="tab-send">Send</div>
@@ -120,7 +177,7 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#4f7cff;font-weight:700;letter-spacing:2px;margin-bottom:6px;">ORBIT</div>
+    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#4f7cff;font-weight:700;letter-spacing:2px;margin-bottom:6px;">PARALLAX</div>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
     <button id="copy" class="secondary">Copy</button>
@@ -129,11 +186,11 @@
   </div>
 
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v28 — ORBIT — Aug 19 2:30pm PKT</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v29 — PARALLAX — Aug 19 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v28')) {
-  sessionStorage.setItem('relay_cache_bust_v28', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v29')) {
+  sessionStorage.setItem('relay_cache_bust_v29', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
