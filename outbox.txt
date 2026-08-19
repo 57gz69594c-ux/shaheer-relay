@@ -1,4 +1,28 @@
-SS-22 1-MIN TEST — V3 (fixes 'photo with text on it' feedback):
-https://filebin.net/ss22-1min-v3-7105320/ss22-1min-v3.mp4
+SS-22 DOCUMENTARY — BENCHMARK V1 (Sequences 001-019)
 
-Every photo/video shot now has a designed graphic layer on top instead of just a caption: HUD viewfinder framing with corner brackets + readouts, annotation circles pointing at details with leader lines, traced light-path arrows, corkboard connector lines on the evidence board, leader-lines from labels into the rings photo. Photos now physically 'land' (scale+rotate settle) instead of sitting static. This supersedes v1 and v2.
+WATCH HERE: http://104.248.159.95/preview/remotion/ss22_benchmark_v1.mp4
+
+2 minutes 13 seconds | 1080p | 19 sequences | Zero API credits spent
+
+All 19 opening sequences built with procedural motion graphics:
+001 Cold Open — mystery machine fragments
+002 The Podcast — real cockpit photo + callouts
+003 Not A Green Screen — strikethrough
+004 Not A Virtual Set — wireframe collapses
+005 Actual Cockpit — impact reveal
+006 18 Months — paper cutout timeline
+007 Why? — question mark to leading line
+008 The Window — recurring motif
+009 Spaceship Ambience — video card collage
+010 Nothing Happens — quiet drift
+011 Bedroom Not Earth — 3-layer parallax
+012 The Thought — WHAT IF → SPACE OUTSIDE THE WINDOW?
+013 Not TV / Not VR — X marks, window expands
+014 Projector Experiment — explanatory diagram
+015 It Worked / Terrible — comedic beat
+016 Depth Matters — screen moves in Z-space
+017 House Problem — measurement arrows
+018 Build A Wall — plywood transforms to spacecraft panels
+019 Out Of Control — fragment explosion
+
+This is the opening benchmark. Review and let me know your feedback.
