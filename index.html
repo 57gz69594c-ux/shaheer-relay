@@ -120,10 +120,10 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div style="width:100%;max-width:480px;font-size:1rem;font-weight:700;margin-bottom:10px;color:#4f7cff;">🚀 SS-22 Star Cruiser — 1-Min Test (V4)</div>
-    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">60-second preview — V4 with real photo backgrounds, Ken Burns effects, vintage filters. Full 13:06 render coming next.</p>
+    <div style="width:100%;max-width:480px;font-size:1rem;font-weight:700;margin-bottom:10px;color:#4f7cff;">🚀 SS-22 Star Cruiser — 1-Min Test (V5)</div>
+    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">V5 — YOUR real cockpit photos + build progress + Floating Cities score. All stock images replaced with actual SS-22 photography.</p>
     <video controls playsinline preload="metadata" style="width:100%;max-width:480px;border-radius:8px;margin-bottom:14px;background:#000;">
-      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-1min-v4.mp4" type="video/mp4">
+      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-1min-v5.mp4" type="video/mp4">
     </video>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
@@ -133,11 +133,11 @@
   </div>
 
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v24 — multi-file upload + progress bar — Aug 19 3:10am PKT</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v25 — V5 real cockpit photos + Floating Cities — Aug 19 9:25am PKT</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v24')) {
-  sessionStorage.setItem('relay_cache_bust_v24', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v25')) {
+  sessionStorage.setItem('relay_cache_bust_v25', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
