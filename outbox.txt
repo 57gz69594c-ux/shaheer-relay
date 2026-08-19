@@ -1,4 +1,4 @@
-SS-22 1-MIN TEST CUT (v1, image fallback for climax shot):
-https://filebin.net/ss22-1min-test-7103958/ss22-1min-test.mp4
+SS-22 1-MIN TEST — V2 (rebuilt to your full production spec):
+https://filebin.net/ss22-1min-v2-7104880/ss22-1min-v2.mp4
 
-Built with fal.ai: FLUX stills + Stable Audio score/SFX. Kling motion shot for the climax still generating, v2 coming shortly with real camera movement.
+15 shots, fast 2-4s cuts, layered FG/BG compositing (real cutout photos over plates), native Remotion diagrams/maps, Kling motion shot on the climax, continuous 2-part Stable Audio score with action-synced SFX. This supersedes the v1 link from earlier.
