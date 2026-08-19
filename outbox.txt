@@ -1,32 +1,26 @@
-SPONSOR REPLY ALERT — 2026-08-19 20:00 UTC
+SS-22 Documentary V4 Benchmark — READY FOR REVIEW
 
----
-Brand: Jazz
-From: postmaster@jazz.com.pk
-Subject: Undeliverable: Sponsorship Inquiry: The Spaceship Podcast x Jazz
-Received: 2026-08-19T19:10:17Z
-Preview: Delivery has failed to these recipients or groups:
+V4 = "Composition-Locked Cinematic Motion Design Rebuild"
 
-marketing@jazz.com.pk
-Your message wasn't delivered. Please try resending the message.
+What changed from V2/V3 to V4:
+- Fixed ALL text-on-text collisions (explicit state machines for sequential text)
+- Fixed z-index hierarchy (beam z:50 < labels z:100 < hero text z:105)
+- Three-column layout: Projector (393) | Window (960) | Screen (1527)
+- CompositionGrid: 12-col, 8-row, 110px H / 80px V margins
+- TextProtectionZones: 80px hero, 65px major, 40px label padding
+- Single-text-node pattern for DEPTH/PERSPECTIVE/PARALLAX (Scene 016)
+- Screen repositions before TERRIBLE appears (Scene 015)
+- WINDOW label suppressed while ONE PROBLEM is visible (Scene 015)
 
+Video: Tap play at the top (19 scenes, 2:13, 540p preview)
+Contact sheet: Below the video — tap for full-res
 
+Scenes 012, 014, 015, 016 have V4 composition fixes applied.
+Scenes 001-011, 013, 017-019 retain V3 visuals (already passing).
 
+Full 1080p master: 31.8 MB, rendered and ready.
+No audio/narration yet — visual benchmark only.
 
+Score trajectory: V1 (4.5) → V2 (4.9) → V3 (5.0) → V4 (pending your review)
 
-
-
-
-Diagnostic information for administrators:
-
-Generating server: DU0PR08MB9702.eurprd08.prod.out
----
-Brand: Revolut
-From: partnerships+noreply@revolut.com
-Subject: Re: Sponsorship Inquiry: The Spaceship Podcast x Revolut
-Received: 2026-08-19T19:06:22Z
-Preview: Thank you for contacting Revolut!
-
-To apply to our affiliate programme, please fill out this form: https://app.impact.com/campaign-mediapartner-signup/Revolut.brand?execution=e1s1. Any questions related to our affiliate programme can be sent directly to
-
-Ask me on the Send tab if you want help drafting a response to any of these.
+Awaiting your review before proceeding.
