@@ -107,9 +107,15 @@
     <button id="send">Send</button>
     <div id="status"></div>
     <p class="sub" style="margin:18px 0 6px;">— or send a file/image —</p>
-    <input type="file" id="fileInput" accept="image/*,.pdf" style="width:100%;max-width:480px;color:#e8e8ec;">
-    <button id="sendFile" class="secondary">Send File</button>
+    <input type="file" id="fileInput" accept="image/*,video/*,.pdf" multiple style="width:100%;max-width:480px;color:#e8e8ec;">
+    <button id="sendFile" class="secondary">Send Files</button>
     <div id="file-status"></div>
+    <div id="file-progress" style="width:100%;max-width:480px;margin-top:8px;display:none;">
+      <div style="background:#2e323d;border-radius:6px;overflow:hidden;height:8px;">
+        <div id="progress-bar" style="background:#4f7cff;height:100%;width:0%;transition:width 0.3s;border-radius:6px;"></div>
+      </div>
+      <div id="progress-text" style="font-size:0.78rem;color:#9a9aa5;margin-top:4px;text-align:center;"></div>
+    </div>
   </div>
 
   <!-- RECEIVE TAB -->
@@ -127,11 +133,11 @@
   </div>
 
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v23 — SS22 1-min test + cleanup — Aug 19 2:50am PKT</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v24 — multi-file upload + progress bar — Aug 19 3:10am PKT</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v23')) {
-  sessionStorage.setItem('relay_cache_bust_v23', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v24')) {
+  sessionStorage.setItem('relay_cache_bust_v24', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -191,37 +197,59 @@ const sendFileBtn = document.getElementById('sendFile');
 const fileStatus = document.getElementById('file-status');
 
 sendFileBtn.addEventListener('click', async () => {
-  const file = fileInput.files[0];
-  if (!file) { fileStatus.textContent = 'Choose a file first.'; fileStatus.className = 'err'; return; }
+  const files = fileInput.files;
+  if (!files.length) { fileStatus.textContent = 'Choose files first.'; fileStatus.className = 'err'; return; }
   sendFileBtn.disabled = true;
-  fileStatus.textContent = 'Uploading...';
+  const progressDiv = document.getElementById('file-progress');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  progressDiv.style.display = 'block';
+  const total = files.length;
+  let done = 0, failed = 0;
+  fileStatus.textContent = `Uploading ${total} file${total > 1 ? 's' : ''}...`;
   fileStatus.className = '';
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const filename = 'file-' + Date.now() + '-' + safeName;
-  try {
-    // filebin's CORS preflight doesn't answer non-safelisted content-types correctly,
-    // so we wrap the real bytes in a text/plain-labeled blob to skip preflight entirely
-    // (same fix as the vintage-video share flow).
-    const safeBlob = new Blob([file], { type: 'text/plain' });
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
-    xhr.setRequestHeader('Content-Type', 'text/plain');
-    xhr.timeout = 60000;
-    await new Promise((resolve, reject) => {
-      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
-      xhr.onerror = () => reject(new Error('network error'));
-      xhr.ontimeout = () => reject(new Error('timeout'));
-      xhr.send(safeBlob);
-    });
-    fileStatus.textContent = 'Sent. Claude will see it next.';
-    fileStatus.className = 'ok';
-    fileInput.value = '';
-  } catch (e) {
-    fileStatus.textContent = 'Failed: ' + e.message;
-    fileStatus.className = 'err';
-  } finally {
-    sendFileBtn.disabled = false;
+
+  for (let i = 0; i < total; i++) {
+    const file = files[i];
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const filename = 'file-' + Date.now() + '-' + i + '-' + safeName;
+    progressText.textContent = `${i + 1} of ${total}: ${file.name}`;
+    try {
+      const safeBlob = new Blob([file], { type: 'text/plain' });
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
+      xhr.setRequestHeader('Content-Type', 'text/plain');
+      xhr.timeout = 120000;
+      await new Promise((resolve, reject) => {
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const filePct = (e.loaded / e.total) * 100;
+            const overallPct = ((i + e.loaded / e.total) / total) * 100;
+            progressBar.style.width = overallPct + '%';
+          }
+        };
+        xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
+        xhr.onerror = () => reject(new Error('network error'));
+        xhr.ontimeout = () => reject(new Error('timeout'));
+        xhr.send(safeBlob);
+      });
+      done++;
+    } catch (e) {
+      failed++;
+    }
+    progressBar.style.width = ((i + 1) / total * 100) + '%';
   }
+
+  if (failed === 0) {
+    fileStatus.textContent = `All ${done} file${done > 1 ? 's' : ''} sent. Claude will see them next.`;
+    fileStatus.className = 'ok';
+  } else {
+    fileStatus.textContent = `${done} sent, ${failed} failed.`;
+    fileStatus.className = failed === total ? 'err' : 'ok';
+  }
+  progressText.textContent = 'Done.';
+  fileInput.value = '';
+  sendFileBtn.disabled = false;
 });
 
 // --- receive tab ---
