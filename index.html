@@ -138,18 +138,31 @@
   <h1>Claude Relay</h1>
   <p class="sub">Send or receive from Claude.</p>
 
-  <!-- SS-22 VIDEO PREVIEW -->
+  <!-- SS-22 VIDEO PREVIEW — V4 -->
   <div class="video-banner">
     <div class="vb-header">
-      <span class="vb-title">SS-22 STAR CRUISER — V3</span>
-      <span class="vb-code">NEBULA</span>
+      <span class="vb-title">SS-22 STAR CRUISER — V4</span>
+      <span class="vb-code">COMPOSITION FIX</span>
     </div>
     <video controls playsinline preload="auto">
-      <source src="https://104.248.159.95.nip.io/preview/ss22_preview.mp4" type="video/mp4">
+      <source src="ss22_v4_preview.mp4" type="video/mp4">
     </video>
     <div class="vb-info">
       <span>19 scenes &bull; 2:13 &bull; 540p preview</span>
-      <span>Visual benchmark — no audio</span>
+      <span>V4 composition-locked rebuild — no audio</span>
+    </div>
+  </div>
+
+  <!-- V4 CONTACT SHEET -->
+  <div class="video-banner" style="margin-bottom:20px;">
+    <div class="vb-header">
+      <span class="vb-title">V4 CONTACT SHEET</span>
+      <span class="vb-code">19 SCENES</span>
+    </div>
+    <img src="v4_contact_phone.png" alt="V4 Contact Sheet" style="width:100%;display:block;cursor:pointer;" onclick="window.open('v4_contact_sheet.png','_blank')">
+    <div class="vb-info">
+      <span>Tap image for full-resolution version</span>
+      <span>Midpoint frames from each scene</span>
     </div>
   </div>
 
@@ -177,7 +190,7 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#4f7cff;font-weight:700;letter-spacing:2px;margin-bottom:6px;">NEBULA</div>
+    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#4f7cff;font-weight:700;letter-spacing:2px;margin-bottom:6px;">V4 COMPOSITION</div>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
     <button id="copy" class="secondary">Copy</button>
@@ -186,7 +199,7 @@
   </div>
 
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v30 — NEBULA — Aug 19 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v31 — V4 COMPOSITION — Aug 19 2026</p>
 
 <script>
 if (!sessionStorage.getItem('relay_cache_bust_v30')) {
