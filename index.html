@@ -90,69 +90,15 @@
   .err { color: #ff6e6e; }
   .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
 
-  /* --- Clip Review Styles --- */
-  .clip-card {
-    width: 100%;
-    background: #1b1e26;
-    border: 1px solid #2e323d;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    padding: 14px;
-    box-sizing: border-box;
-  }
-  .clip-title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #4f7cff;
-  }
-  .aspect-label {
-    font-size: 0.78rem;
-    color: #9a9aa5;
-    margin: 8px 0 4px;
-    font-weight: 600;
-  }
-  .clip-card video {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    background: #000;
-  }
-  .approve-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  .btn-vote {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    background: #2e323d;
-    color: #e8e8ec;
-  }
-  .btn-vote.approve-sel { background: #2d8a4e; color: white; }
-  .btn-vote.reject-sel { background: #8a2d2d; color: white; }
-  #review-result {
-    text-align: center;
-    margin-top: 14px;
-    font-size: 0.95rem;
-    min-height: 1.2em;
-  }
 </style>
 </head>
 <body>
   <h1>Claude Relay</h1>
-  <p class="sub">Send, receive, or review clips.</p>
+  <p class="sub">Send or receive from Claude.</p>
 
   <div class="tabs">
     <div class="tab active" id="tab-send">Send</div>
     <div class="tab" id="tab-recv">From Claude</div>
-    <div class="tab" id="tab-review">🎬 Clips</div>
   </div>
 
   <!-- SEND TAB -->
@@ -168,10 +114,10 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div class="clip-title" style="width:100%;max-width:480px;">🚀 SS-22 Star Cruiser — V4 Latest (13:06)</div>
-    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">LATEST BUILD — V4 with photo backgrounds, all 8 sequences, 1080p. Music/SFX still to add. You shoot your own VO separately.</p>
+    <div style="width:100%;max-width:480px;font-size:1rem;font-weight:700;margin-bottom:10px;color:#4f7cff;">🚀 SS-22 Star Cruiser — 1-Min Test (V4)</div>
+    <p class="sub" style="margin:0 0 8px;font-size:0.78rem;">60-second preview — V4 with real photo backgrounds, Ken Burns effects, vintage filters. Full 13:06 render coming next.</p>
     <video controls playsinline preload="metadata" style="width:100%;max-width:480px;border-radius:8px;margin-bottom:14px;background:#000;">
-      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-documentary-v4.mp4" type="video/mp4">
+      <source src="https://104.248.159.95.nip.io/preview/remotion/ss22-1min-v4.mp4" type="video/mp4">
     </video>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
@@ -180,20 +126,12 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <!-- CLIP REVIEW TAB -->
-  <div class="panel" id="panel-review">
-    <p class="sub" style="margin-bottom:14px;">Enhanced clips — Landscape + Portrait for each.</p>
-    <p class="sub" style="margin-bottom:14px;">Watch both versions. Approve or reject. Submit when done.</p>
-    <div id="clips-container"></div>
-    <button id="submit-review">Submit Review</button>
-    <div id="review-result"></div>
-  </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v22 — SS22 V4 WITH BACKGROUNDS — Aug 18 12:40pm PKT</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v23 — SS22 1-min test + cleanup — Aug 19 2:50am PKT</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v22')) {
-  sessionStorage.setItem('relay_cache_bust_v22', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v23')) {
+  sessionStorage.setItem('relay_cache_bust_v23', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -202,7 +140,7 @@ const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
 const SERVER = "https://104.248.159.95.nip.io/preview/enhanced";
 
 // --- tabs ---
-const tabs = ['send','recv','review'];
+const tabs = ['send','recv'];
 tabs.forEach(t => {
   document.getElementById('tab-'+t).addEventListener('click', () => {
     tabs.forEach(x => {
@@ -331,81 +269,6 @@ copyBtn.addEventListener('click', async () => {
   }
 });
 
-// --- clip review tab ---
-const clips = [
-  { id: "01", title: "1. House Reading", mood: "Mysterious", landscape: "preview_landscape/01_house_reading_ENHANCED.mp4", portrait: "preview_portrait/01_house_reading_ENHANCED.mp4" },
-  { id: "02", title: "2. First Experience Age 12", mood: "Wonder", landscape: "preview_landscape/02_first_experience_ENHANCED.mp4", portrait: "preview_portrait/02_first_experience_ENHANCED.mp4" },
-  { id: "03", title: "3. Car Crash OBE", mood: "Dramatic", landscape: "preview_landscape/03_car_crash_ENHANCED.mp4", portrait: "preview_portrait/03_car_crash_ENHANCED.mp4" },
-  { id: "04", title: "4. Mushroom vs Astral", mood: "Intense", landscape: "preview_landscape/04_mushroom_ENHANCED.mp4", portrait: "preview_portrait/04_mushroom_ENHANCED.mp4" },
-  { id: "05", title: "5. Project Stargate", mood: "Serious", landscape: "preview_landscape/05_stargate_ENHANCED.mp4", portrait: "preview_portrait/05_stargate_ENHANCED.mp4" },
-  { id: "06", title: "6. Nobody Has Ever Died", mood: "Profound", landscape: "preview_landscape/06_nobody_died_ENHANCED.mp4", portrait: "preview_portrait/06_nobody_died_ENHANCED.mp4" },
-  { id: "07", title: "7. 9/11 Astral Visit", mood: "Solemn", landscape: "preview_landscape/07_911_astral_ENHANCED.mp4", portrait: "preview_portrait/07_911_astral_ENHANCED.mp4" }
-];
-
-const decisions = {};
-const container = document.getElementById('clips-container');
-
-clips.forEach(c => {
-  const card = document.createElement('div');
-  card.className = 'clip-card';
-  card.innerHTML = `
-    <div class="clip-title">${c.title} <span style="font-size:0.75rem;color:#9a9aa5;font-weight:400;">— ${c.mood}</span></div>
-    <div class="aspect-label">LANDSCAPE (16:9) — YouTube Ads</div>
-    <video controls playsinline preload="metadata">
-      <source src="${SERVER}/${c.landscape}" type="video/mp4">
-    </video>
-    <div class="aspect-label">PORTRAIT (9:16) — Instagram Reels / Shorts</div>
-    <video controls playsinline preload="metadata">
-      <source src="${SERVER}/${c.portrait}" type="video/mp4">
-    </video>
-    <div class="approve-row">
-      <button class="btn-vote" data-id="${c.id}" data-v="approved" onclick="vote(this)">Approve</button>
-      <button class="btn-vote" data-id="${c.id}" data-v="rejected" onclick="vote(this)">Reject</button>
-    </div>
-  `;
-  container.appendChild(card);
-});
-
-function vote(el) {
-  const id = el.dataset.id;
-  const v = el.dataset.v;
-  decisions[id] = v;
-  const row = el.parentElement;
-  row.querySelectorAll('.btn-vote').forEach(b => {
-    b.classList.remove('approve-sel','reject-sel');
-  });
-  el.classList.add(v === 'approved' ? 'approve-sel' : 'reject-sel');
-}
-
-document.getElementById('submit-review').addEventListener('click', async () => {
-  const res = document.getElementById('review-result');
-  const decided = Object.keys(decisions).length;
-  if (decided < clips.length) {
-    res.textContent = `Review all clips first (${decided}/${clips.length})`;
-    res.style.color = '#ff6e6e';
-    return;
-  }
-  const summary = clips.map(c => `${c.title}: ${decisions[c.id]}`).join('\n');
-  const payload = `CLIP REVIEW — ${new Date().toISOString()}\n\n${summary}\n`;
-  try {
-    const filename = 'review-' + Date.now() + '.txt';
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
-    xhr.setRequestHeader('Content-Type', 'text/plain');
-    xhr.timeout = 30000;
-    await new Promise((resolve, reject) => {
-      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
-      xhr.onerror = () => reject(new Error('network error'));
-      xhr.ontimeout = () => reject(new Error('timeout'));
-      xhr.send(new Blob([payload], { type: 'text/plain' }));
-    });
-    res.textContent = '✅ Review sent! Claude will see it.';
-    res.style.color = '#6ee08a';
-  } catch (e) {
-    res.textContent = 'Failed: ' + e.message;
-    res.style.color = '#ff6e6e';
-  }
-});
 </script>
 </body>
 </html>
