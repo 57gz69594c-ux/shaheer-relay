@@ -1,18 +1,32 @@
-SPONSOR REPLY ALERT — 2026-08-19 15:00 UTC
+SPONSOR REPLY ALERT — 2026-08-19 20:00 UTC
 
 ---
-Brand: Insight Timer
-From: publishers@insighttimer.com
-Subject: How did we do, Shaheer?
-Received: 2026-08-19T14:22:11Z
-Preview: We wanted to check in on your experience with us.
+Brand: Jazz
+From: postmaster@jazz.com.pk
+Subject: Undeliverable: Sponsorship Inquiry: The Spaceship Podcast x Jazz
+Received: 2026-08-19T19:10:17Z
+Preview: Delivery has failed to these recipients or groups:
+
+marketing@jazz.com.pk
+Your message wasn't delivered. Please try resending the message.
 
 
-Thank you for your time. This survey should take under a minute to complete.
-
-Hi Shaheer,
 
 
-Thank you for reaching out to us recently. We'd love to hear your thoughts on how we did. If you have a
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: DU0PR08MB9702.eurprd08.prod.out
+---
+Brand: Revolut
+From: partnerships+noreply@revolut.com
+Subject: Re: Sponsorship Inquiry: The Spaceship Podcast x Revolut
+Received: 2026-08-19T19:06:22Z
+Preview: Thank you for contacting Revolut!
+
+To apply to our affiliate programme, please fill out this form: https://app.impact.com/campaign-mediapartner-signup/Revolut.brand?execution=e1s1. Any questions related to our affiliate programme can be sent directly to
 
 Ask me on the Send tab if you want help drafting a response to any of these.
