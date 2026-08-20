@@ -28,10 +28,14 @@ Will post final results + report link when complete.
 
 ---
 
-PROMPT 10E — ISOLATED CUTOUTS — DEPLOYED ✅
-2026-08-20 15:45 UTC
-CODEWORD: PARALLAX
+PROMPT 10F — ILLUSTRATED 3D OBJECTS — RENDERING
+2026-08-20 16:00 UTC
+CODEWORD: ENCYCLOPEDIA
 
-Video + 4 proof stills live on relay page.
-All white backgrounds removed. Objects float as true cutouts.
-Saturation +12% global. Vintage anatomical eye.
+Photo cutouts REVERTED to dimensional illustrated objects.
+TV: warm mustard CRT, knobs, speaker grille, antennas, feet.
+VR: dark charcoal body, dual lens housings, head strap, LED.
+Projector: cream body, lens faces RIGHT toward window ✅
+Eye: vintage anatomical, blue iris, cross-hatching, eyelashes.
+Camera: reverted to illustrated SVG.
+Saturation +12% maintained. 4 proof stills live now. Video rendering.
