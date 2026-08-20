@@ -1,84 +1,72 @@
-PROMPT 6.5 — BENCHMARK FAIRNESS AUDIT — COMPLETE — 2026-08-20 09:48 UTC
+PROMPT 7 — ML PREDICTIVE LABORATORY — COMPLETE — 2026-08-20 14:00 UTC
 
 ═══════════════════════════════════════════════════
-  ALL 16 SECTIONS COMPLETE + FINAL REPORT (A-N)
+  77 EXPERIMENTS | 295 TESTS PASSING | 81s RUNTIME
   XAU/USD AI Trading Research Platform
-  263 tests passing (29 new)
   ALLOW_HOLDOUT_EVALUATION = FALSE
 ═══════════════════════════════════════════════════
 
-FINAL REPORT ANSWERS (A-N):
+VERDICT: GOLD D1 RETURNS ARE NOT MEANINGFULLY PREDICTABLE
+WITH STANDARD ML ON THESE FEATURE FAMILIES.
 
-A. 2025 GC UNDERLYING RETURN
-   $2,629.20 → $4,370.10 = +66.21% (252 bars, data integrity PASS)
+MODEL HIERARCHY (VAL IC on 5d return):
+  Level 0 (Null):     predict-mean baseline
+  Level 1 (Linear):   elastic_net IC=0.17 ← BEST
+  Level 2 (Tree):     random_forest IC=0.11
+  Level 3 (Boosting): xgboost IC=0.13
+  Complexity DOES NOT help.
 
-B. WHY PROMPT 6 REPORTED +17.37
-   Engine stores return as MULTIPLE not percentage.
-   +17.37 = 1,737% synthetic return on $100 account.
-   This is a 66.2% gold move × 26.3x leverage = 1,741%.
-   NOT 17.37%. NEVER use unlabeled "return +17.37" again.
+TEST SET (2025 — single use):
+  Ridge:         TEST IC=0.057, DirAcc=59.1%
+  Random Forest: TEST IC=0.239, DirAcc=67.1% ← best on TEST
+  XGBoost:       TEST IC=0.142, DirAcc=60.7%
+  LightGBM:      TEST IC=0.125, DirAcc=61.5%
+  ALL models R² < 0 on TEST (negative = worse than mean)
 
-C. TRAIN PASSIVE RECONSTRUCTION
-   GC $273.90→$2,062.40 (653%), $100→$1,888.50 (1,789%)
-   Dollar P/L identical ($1,788.50) — % base differs.
+OVERFITTING CONFIRMED:
+  XGBoost:  TRAIN R²=0.24 → TEST R²=-0.16
+  LightGBM: TRAIN R²=0.25 → TEST R²=-0.22
 
-D. IMPLICIT LEVERAGE: YES
-   TRAIN: 2.74x initial → 1.09x final (de-leverages)
-   TEST: 26.29x initial → 2.37x final (dangerous)
+PERMUTATION TESTS — ALL FAIL:
+  Ridge:   p=0.50 ✗ NOT SIGNIFICANT
+  XGBoost: p=0.30 ✗ NOT SIGNIFICANT
+  LightGBM: p=0.60 ✗ NOT SIGNIFICANT
+  No model produces signal distinguishable from noise.
 
-E. ACTIVE STRATEGY LEVERAGE
-   Median when in position: 20.0x (higher than passive)
-   Multiple strategies experience near-ruin (equity → $0)
+FEATURE STABILITY:
+  Random features rank 10-22 out of 22 (good — not top-ranked)
+  LightGBM: 3 random features above median ⚠ overfitting risk
+  Top real features: gc_return_60d, gc_sma_200d_norm, gc_macd_signal
 
-F. WHY R5 ELIMINATED ZERO
-   Only SMA/EMA crossovers reached R5, all DD < 2.65%
-   R5 checks DD>90% only — no leverage/margin checks
+FEATURE FAMILIES (mean |IC| vs 5d return):
+  TREND_MOMENTUM: 0.029 (best)
+  PRICE_ONLY:     0.025
+  TECHNICAL:      0.021
+  CROSS_ASSET:    0.018
+  MARKET_STRUCTURE: 0.012
+  VOLATILITY:     0.011
+  RANDOM NOISE:   0.006
 
-G. BUGS FOUND
-   - No calculation bugs in backtest engine
-   - Benchmark leverage mismatch (design issue, not bug)
-   - R5 capital-constrained stage non-functional
-   - Return display ambiguity (% vs multiple)
+TARGET VALIDATION:
+  Zero feature-target column overlap ✓
+  Adversarial leakage detection: PASS ✓
+  1d return autocorrelation: -0.016 (near-random)
+  5d return autocorrelation: 0.795 (overlapping windows, expected)
+  No features with |corr| > 0.3 to future targets ✓
 
-H. CORRECTED PASSIVE BENCHMARKS
-   PASSIVE_ASSET_RETURN (1x): TRAIN Sharpe 0.5882, TEST 2.5967
-   vs ONE_UNIT (reported): TRAIN Sharpe 0.6418, TEST 3.30
+INFRASTRUCTURE BUILT:
+  ml/pipeline.py — Train-only scaler, NaN handling, clipping
+  ml/metrics.py — IC, DSR, calibration, permutation importance
+  ml/models.py — 14+ models in MODEL_CATALOG (4 levels)
+  ml/splits.py — Purged expanding/rolling CV
+  ml/features.py — 7 feature families + random injection
+  ml/registry.py — Append-only experiment tracking
+  run_prompt7_ml_lab.py — Full 10-step execution (770 lines)
+  tests/unit/test_ml.py — 32 tests
+  PROMPT7_ML_LAB_REPORT.md — Sections A-O (260 lines)
 
-I. CORRECTED 1X RESULTS FOR FINALISTS
-   All 19 finalists re-run under UNLEVERED_1X
-   Returns drop significantly (max leverage capped at 1.0x)
-   Many orders rejected for insufficient exposure capacity
-
-J. MATCHED RANDOM COMPARISONS
-   30 seeds per finalist, matched time-in-market + trade count
-   Most finalists at P0 vs matched random (no timing alpha)
-
-K. ACTIVE-ALPHA LEADERBOARD (EXPOSURE-ADJUSTED)
-   Best timing alpha: sma_crossover_892f (-0.047 — nearly zero)
-   ALL strategies show negative timing alpha on TRAIN
-   No strategy adds timing value beyond random long exposure
-
-L. PROMPT 6 CONCLUSIONS CHANGE?
-   Core conclusions UNCHANGED:
-   ✓ Gold's secular uptrend dominates
-   ✓ Simple beats complex
-   ✓ Walk-forward kills 63%
-   ✓ Deflated Sharpe = 0 survivors
-   Changes: passive gap narrows, R5 needs redesign
-
-M. TEST RESULTS: 263/263 passing (29 new exposure tests)
-
-N. READINESS FOR PROMPT 7
-   READY with caveats — fix R5, use fair benchmarks,
-   always separate ASSET% from PORTFOLIO% in reporting
-
-NEW CODE IMPLEMENTED:
-  src/trading_research/backtest/exposure.py — 6 exposure policies
-  tests/unit/test_exposure.py — 29 tests
-  run_benchmark_fairness_audit.py — Part 1 (Sections 1-5)
-  run_benchmark_fairness_audit_part2.py — Part 2 (Sections 6-16)
-  BENCHMARK_FAIRNESS_AUDIT.md — Section 1-5 report
-  BENCHMARK_FAIRNESS_AUDIT_FULL.md — Final report (A-N, 498 lines)
+DEFLATED SHARPE RATIO: NOT SIGNIFICANT
+  54 trials, expected max IC under null absorbs observed values.
 
 ALLOW_HOLDOUT_EVALUATION = FALSE
-DO NOT BEGIN PROMPT 7
+PROMPT 7 COMPLETE — READY FOR PROMPT 8
