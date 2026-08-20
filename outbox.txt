@@ -1,17 +1,59 @@
-SPONSOR REPLY ALERT — 2026-08-20 08:00 UTC
+PROMPT 6 — STRATEGY TOURNAMENT COMPLETE — 2026-08-20 08:55 UTC
+
+═══════════════════════════════════════════════════
+  LARGE STRATEGY TOURNAMENT — FINAL RESULTS
+  XAU/USD AI Trading Research Platform
+  GC_FUTURES Daily · 2000–2025 · Holdout BLOCKED
+═══════════════════════════════════════════════════
+
+SCALE: 1,000 strategies · 7 tiers · 34 families
+RUNTIME: 5 min 5 sec (42x speedup optimization)
+
+ELIMINATION FUNNEL:
+  R1 Cheap Screen (TRAIN)    → 694 survive (306 cut)
+  R2 Validation (2024)       → 556 survive (138 cut)
+  R3 Walk-Forward (7 windows)→ 208 survive (348 cut)
+  R4 Cost Stress (4 levels)  → 189 survive (19 cut)
+  R5 Capital-Constrained     → 189 survive (0 cut)
+  R6 TEST (2025)             → 19 finalists evaluated
+
+FAILURE LIBRARY:
+  REGIME_FRAGILE:    348 (biggest killer — walk-forward)
+  RUINED:            177 (drawdown > 50% + negative return)
+  TEST_DEGRADATION:  138 (failed on 2024 validation data)
+  TOO_FEW_TRADES:    110 (< 3 trades on 23 years)
+  COST_SENSITIVE:     39 (edge vanishes under costs)
+  NO_EDGE:            19 (worse than random)
+
+CRITICAL FINDING:
+  NO active strategy beats passive gold on TRAIN
+  Passive Gold: +17.88 return (Sharpe 0.64, $100 to $1,888)
+  Best active: SMA crossover +5.44 return (Sharpe 0.28)
+  Deflated Sharpe: 0 strategies pass multiple-testing
+
+BEST TEST (2025) PERFORMERS:
+  1. SMA crossover   Sharpe +1.53  Return +1.11
+  2. SMA crossover   Sharpe +1.03  Return +0.59
+  3. EMA crossover   Sharpe +0.82  Return +0.26
+  4. EMA crossover   Sharpe +0.48  Return +0.12
+  (Passive gold on TEST: Sharpe +3.30, Return +17.37)
+
+KEY INSIGHTS:
+  Gold's secular uptrend dominates all active strategies
+  Simple crossovers beat complex multi-factor/regime strategies
+  Walk-forward kills 63% of validation survivors
+  More complexity = worse performance (ensembles worst tier)
+  Cost sensitivity eliminates 10% of walk-forward survivors
+
+PARETO FRONTIER (5 strategies):
+  gold_yield_divergence (2 variants) — low return, low DD
+  passive_gold — highest return + Sharpe
+  gold_yield_divergence (2 variants) — minimal complexity
+
+30 FINALISTS selected for Prompt 7 ML comparison.
+Report: PROMPT6_TOURNAMENT_REPORT.md (Sections A-W)
+ALLOW_HOLDOUT_EVALUATION = FALSE
+DO NOT BEGIN PROMPT 7
 
 ---
-Brand: Khaadi
-From: welisten@khaadi.com
-Subject: Sponsorship Inquiry: The Spaceship Podcast x Khaadi
-Received: 2026-08-20T07:16:23Z
-Preview: Dear Shaheer,
-
-Thank you for contacting Khaadi. Unfortunately, at this time, we are unable to accommodate your request. We wish you the best of luck with your event.
-
-Regards,
-Khaadi
-Customer Service: https://pk.khaadi.com/help
-Website: www.khaadi.
-
-Ask me on the Send tab if you want help drafting a response to any of these.
+Previous: Khaadi replied — declined sponsorship.
