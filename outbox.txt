@@ -1,55 +1,82 @@
-PROMPT 8 — SPECIALIST INTELLIGENCE AGENTS + CLAUDE REASONING LAB — COMPLETE
-2026-08-20 14:17 UTC
+PROMPT 8.5 — REAL HISTORICAL CONTEXT + REAL CLAUDE VALIDATION — INFRASTRUCTURE COMPLETE
+2026-08-20 14:44 UTC
 
-═══════════════════════════════════════════════════
-  7 SPECIALISTS | 6 PREDICTION SYSTEMS | 328 TESTS
-  69s RUNTIME | ALLOW_HOLDOUT_EVALUATION = FALSE
-═══════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════
+  8 FRED SERIES | 46,878 MACRO ROWS | 54 CURATED EVENTS
+  138 ECONOMIC EVENTS | 273 SAMPLE TIMESTAMPS | 381 TESTS
+  17s RUNTIME | ALLOW_HOLDOUT_EVALUATION = FALSE
+═══════════════════════════════════════════════════════════
 
-CORE QUESTION: Does contextual intelligence add measurable
-out-of-sample predictive value?
+CORE QUESTION: Does REAL Claude + real historical context
+add measurable predictive value beyond quant baselines?
 
-ANSWER: NO — specialist ensemble does not reliably beat null.
+STATUS: ALL INFRASTRUCTURE BUILT — BLOCKED ON ANTHROPIC_API_KEY
 
-SYSTEM COMPARISON (VALIDATE — 2024 data):
-  ml_random_forest:     DirAcc=65.8%, IC=0.115
-  ml_lightgbm:          DirAcc=59.4%, IC=-0.029
-  ml_xgboost:           DirAcc=56.8%, IC=-0.042
-  ml_ridge:             DirAcc=52.7%, IC=-0.085
-  specialist_ensemble:  DirAcc=0.0% (all NEUTRAL — signal too weak)
-  claude_simulated:     DirAcc=0.0% (all NEUTRAL — inherits weak signals)
+PHASE 1 — FRED MACRO DATA ✅ (no API key needed — CSV fallback)
+  DFF (Fed Funds):        9,497 rows (2000-01-01 → 2025-12-31)
+  DGS2 (2Y Treasury):    6,502 rows (2000-01-03 → 2025-12-31)
+  DGS10 (10Y Treasury):  6,502 rows (2000-01-03 → 2025-12-31)
+  T10Y2Y (Yield Curve):  6,502 rows (2000-01-03 → 2025-12-31)
+  T10YIE (Breakeven):    5,753 rows (2003-01-02 → 2025-12-31)
+  DFII10 (Real Rate):    5,753 rows (2003-01-02 → 2025-12-31)
+  DTWEXBGS (USD Index):  5,013 rows (2006-01-02 → 2025-12-31)
+  NFCI (Fin Conditions): 1,356 rows (2000-01-07 → 2025-12-26)
+  ALL 8 series POINT_IN_TIME_SAFE (market-based, not revised)
+  Revised series (CPI, PCE, GDP) EXCLUDED — no vintage data
 
-KEY FINDINGS:
-1. Specialist signals are too marginal to produce directional calls
-2. Most specialist scores fall near zero → NEUTRAL → no actionable prediction
-3. ML models overfit on TRAIN (XGBoost 73.6%) but degrade on VALIDATE (56.8%)
-4. Random Forest most stable across splits (65.8% VALIDATE)
-5. Contextual reasoning adds NO measurable edge over pure quant
-6. Real Claude API: anthropic package installed, ready for subsample
+PHASE 2 — HISTORICAL NEWS ✅
+  54 curated major events (2008-2025) — historically verified
+  GDELT DOC API tested — returned non-JSON (rate-limited)
+  Deduplication: hash-based + word-overlap clustering
+  Topic tags: GOLD, FED, INFLATION, USD, RATES, GEOPOLITICS + 5 more
+  Future headline rejection: strict available_time <= T
+  Placebo news framework: wrong-date context for null tests
 
-SPECIALIST AGENTS BUILT:
-  1. Technical — trend, RSI, MACD, Bollinger (algorithmic)
-  2. Macro — DXY, yields, VIX, gold-DXY correlation
-  3. Cross-Asset — Gold/Silver ratio, DXY divergence
-  4. Volatility — vol regimes, squeeze detection
-  5. Historical Analogue — nearest-neighbor (strict past-only)
-  6. Contrarian — consensus fade, crowding risk
-  7. Meta-Synthesis — equal-weighted combination baseline
+PHASE 3 — ECONOMIC EVENT CALENDAR ✅
+  76 FOMC rate decisions (2000-2025) with actual rate values
+  31 CPI release dates (2023-2025)
+  31 NFP release dates (2023-2025)
+  162 unique event dates
+  Consensus expectations: NULL (never fabricated)
+  PIT safety: upcoming events show schedule only, no results
 
-INFRASTRUCTURE:
-  agents/specialists.py — 7 specialist implementations
-  agents/context.py — PIT-safe context packets
-  agents/claude_reasoner.py — Claude API + cache + cost tracking
-  agents/evaluator.py — direction accuracy, Brier, IC, calibration
-  run_prompt8_agents_lab.py — Full 7-phase execution
-  tests/unit/test_agents.py — 33 tests (future leakage guards)
+PHASE 4 — SAMPLE DESIGN ✅
+  273 stratified timestamps (seed=42, deterministic)
+  TRAIN: 136 | VALIDATE: 81 | TEST: 56
+  25 years covered
+  Vol quartiles: Q1=62, Q2=80, Q3=73, Q4=58
+  Trend: UP=114, RANGE=112, DOWN=47
+  Event days: 64 (23% of sample)
+  Repeat stability subset: 40 timestamps × 3 repeats
+  Sample frozen before inference (hash: b11525d2e15d2d00)
+  NO 2026 HOLDOUT timestamps (blocked)
 
-LIMITATIONS:
-  - No FRED macro data (API key not registered)
-  - No news/GDELT data (external API needed)
-  - No economic event calendar
-  - Simulated Claude for bulk historical, real API for subsample
+PHASE 5 — REAL CLAUDE ❌ BLOCKED
+  ANTHROPIC_API_KEY not configured
+  5 configurations ready:
+    CLAUDE_QUANT_ONLY (quant + ML + specialists)
+    CLAUDE_CONTEXT_ONLY (news + macro + events)
+    CLAUDE_FULL (everything)
+    CLAUDE_FULL_NO_NEWS (ablation)
+    CLAUDE_FULL_NO_MACRO (ablation)
+  Prompt v2: calibration-focused, evidence-only, JSON schema
+  Temperature: 0.0 for reproducibility
 
-328 TESTS PASSING (295 prior + 33 new)
-PROMPT 8 COMPLETE — READY FOR PROMPT 9
+INFRASTRUCTURE BUILT:
+  agents/macro.py — FRED CSV download, PIT-safe snapshots, regimes
+  agents/news.py — GDELT + curated events, dedup, topic tags, placebo
+  agents/events.py — FOMC/CPI/NFP calendar, PIT-safe lookups
+  agents/sample_design.py — stratified sampling, split assignment
+  agents/context_v2.py — enhanced packets (macro+news+events)
+  run_prompt8_5_real_claude.py — 8-phase experiment runner
+  tests/unit/test_prompt8_5.py — 53 new tests
+
+381 TESTS PASSING (328 prior + 53 new)
+
+ACTION NEEDED: Set ANTHROPIC_API_KEY to run Phase 5
+  export ANTHROPIC_API_KEY='sk-ant-...'
+  python3 run_prompt8_5_real_claude.py
+
+PROMPT 8.5 INFRASTRUCTURE COMPLETE
+REAL CLAUDE EXPERIMENT READY TO EXECUTE
 ALLOW_HOLDOUT_EVALUATION = FALSE
