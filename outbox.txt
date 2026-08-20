@@ -1,59 +1,67 @@
-PROMPT 6 — STRATEGY TOURNAMENT COMPLETE — 2026-08-20 08:55 UTC
+PRE-PROMPT-7 BENCHMARK FAIRNESS AUDIT — COMPLETE — 2026-08-20 09:35 UTC
 
 ═══════════════════════════════════════════════════
-  LARGE STRATEGY TOURNAMENT — FINAL RESULTS
+  BENCHMARK FAIRNESS AUDIT — 5 SECTIONS COMPLETE
   XAU/USD AI Trading Research Platform
-  GC_FUTURES Daily · 2000–2025 · Holdout BLOCKED
+  ALLOW_HOLDOUT_EVALUATION = FALSE
 ═══════════════════════════════════════════════════
 
-SCALE: 1,000 strategies · 7 tiers · 34 families
-RUNTIME: 5 min 5 sec (42x speedup optimization)
+SECTION 1: TEST PASSIVE GOLD RECONSTRUCTION
+  GC: $2,629.20 → $4,370.10 (66.2% actual gold move)
+  Synthetic: $100 → $1,840.90 (1,741% portfolio return)
+  Initial leverage: 26.29x — a 3.8% gold decline = RUIN
+  The reported 1,741% return is a 66.2% gold move × 26.3x leverage
 
-ELIMINATION FUNNEL:
-  R1 Cheap Screen (TRAIN)    → 694 survive (306 cut)
-  R2 Validation (2024)       → 556 survive (138 cut)
-  R3 Walk-Forward (7 windows)→ 208 survive (348 cut)
-  R4 Cost Stress (4 levels)  → 189 survive (19 cut)
-  R5 Capital-Constrained     → 189 survive (0 cut)
-  R6 TEST (2025)             → 19 finalists evaluated
+SECTION 2: TRAIN PASSIVE GOLD RECONSTRUCTION
+  GC: $273.90 → $2,062.40 (653% actual gold move)
+  Synthetic: $100 → $1,888.50 (1,789% portfolio return)
+  Leverage: 2.74x initial → 1.09x final (de-leverages as profits grow)
+  Dollar P/L identical ($1,788.50) — the difference is % base
 
-FAILURE LIBRARY:
-  REGIME_FRAGILE:    348 (biggest killer — walk-forward)
-  RUINED:            177 (drawdown > 50% + negative return)
-  TEST_DEGRADATION:  138 (failed on 2024 validation data)
-  TOO_FEW_TRADES:    110 (< 3 trades on 23 years)
-  COST_SENSITIVE:     39 (edge vanishes under costs)
-  NO_EDGE:            19 (worse than random)
+SECTION 3: FAIR BENCHMARK MODES (NEW)
+  PASSIVE_ASSET_RETURN (1x leverage, no synthetic account):
+    TRAIN: 653% return, Sharpe 0.5882, Max DD 44.36%
+    TEST:  66.2% return, Sharpe 2.5967, Max DD 8.96%
 
-CRITICAL FINDING:
-  NO active strategy beats passive gold on TRAIN
-  Passive Gold: +17.88 return (Sharpe 0.64, $100 to $1,888)
-  Best active: SMA crossover +5.44 return (Sharpe 0.28)
-  Deflated Sharpe: 0 strategies pass multiple-testing
+  PASSIVE_EQUAL_EXPOSURE (1x leverage, daily rebalance):
+    TRAIN: 653% return, Sharpe 0.5882, Max DD 44.36%
+    TEST:  66.2% return, Sharpe 2.5967, Max DD 8.96%
 
-BEST TEST (2025) PERFORMERS:
-  1. SMA crossover   Sharpe +1.53  Return +1.11
-  2. SMA crossover   Sharpe +1.03  Return +0.59
-  3. EMA crossover   Sharpe +0.82  Return +0.26
-  4. EMA crossover   Sharpe +0.48  Return +0.12
-  (Passive gold on TEST: Sharpe +3.30, Return +17.37)
+  vs ONE_UNIT_NORMALIZED (reported):
+    TRAIN: 1,789% return, Sharpe 0.6418
+    TEST:  1,741% return, Sharpe 3.30
 
-KEY INSIGHTS:
-  Gold's secular uptrend dominates all active strategies
-  Simple crossovers beat complex multi-factor/regime strategies
-  Walk-forward kills 63% of validation survivors
-  More complexity = worse performance (ensembles worst tier)
-  Cost sensitivity eliminates 10% of walk-forward survivors
+  The "unbeatable" benchmark's Sharpe drops from 0.64 to 0.59 at 1x
+  leverage. Still strong, but the gap narrows significantly.
 
-PARETO FRONTIER (5 strategies):
-  gold_yield_divergence (2 variants) — low return, low DD
-  passive_gold — highest return + Sharpe
-  gold_yield_divergence (2 variants) — minimal complexity
+SECTION 4: ACTIVE STRATEGY EXPOSURE AUDIT
+  24 strategies audited (20 R6 finalists + 4 eliminated sample)
+  Median active strategy leverage: 20.0x (when in position)
+  Many strategies hit near-ruin (equity ≈ $0, leverage → 9999x)
+  Passive gold median leverage: 1.17x
+  FINDING: Active strategies use HIGHER leverage than passive gold
+  This means the comparison is actually UNFAIR TO active strategies
 
-30 FINALISTS selected for Prompt 7 ML comparison.
-Report: PROMPT6_TOURNAMENT_REPORT.md (Sections A-W)
+SECTION 5: R5 CAPITAL-CONSTRAINED AUDIT
+  19 candidates entered R5, 0 eliminated
+  All were SMA/EMA crossovers with max DD < 2.65%
+  R5 only checks: max_drawdown > 100% (ruined) or > 90%
+  R5 does NOT check: leverage, margin, position sizing
+  FINDING: R5 was ineffective — needs leverage caps + margin checks
+
+KEY CONCLUSIONS:
+  1. Benchmark comparison was unfair due to uncontrolled leverage
+  2. At 1x leverage, passive gold Sharpe = 0.59 (not 0.64)
+  3. Active strategies face HIGHER leverage than passive gold
+  4. Relative ranking of strategies is unaffected
+  5. R5 needs to enforce leverage/margin constraints
+
+REPORT: BENCHMARK_FAIRNESS_AUDIT.md (271 lines, 5 sections)
+RAW DATA: data/benchmark_fairness_audit_raw.json
+AUDIT SCRIPT: run_benchmark_fairness_audit.py
+
 ALLOW_HOLDOUT_EVALUATION = FALSE
 DO NOT BEGIN PROMPT 7
 
 ---
-Previous: Khaadi replied — declined sponsorship.
+Previous: Prompt 6 Tournament (1,000 strategies, 6 rounds, 19 finalists)
