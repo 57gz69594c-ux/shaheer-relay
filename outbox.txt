@@ -1,18 +1,16 @@
-SPONSOR REPLY ALERT — 2026-08-20 00:00 UTC
+SPONSOR REPLY ALERT — 2026-08-20 01:00 UTC
 
 ---
-Brand: MEXC
-From: service@support.mexc.com
-Subject: Message ticket is replied in English
-Received: 2026-08-19T23:04:49Z
-Preview: Dear MEXCer, Hello
-Your work order #20260820000013#, #Sponsorship Inquiry: The Spaceship Podcast x MEXC# has been updated, you can reply to this email directly for feedback
-Latest Reply：
-Lani2026-08-20 07:04:39
+Brand: Microsoft 365
+From: MSSecurity-noreply@microsoft.com
+Subject: New recommendation available for shaheerknows com
+Received: 2026-08-20T00:28:55Z
+Preview: You have a new recommendation for shaheerknows com
 
-Dear MEXCer,
+Do not allow users to grant consent to unreliable applications
 
+See why this recommendation was generated for your tenant and how to remediate it in the Microsoft Entra admin center. Learn more.
 
-This is Lani from th
+T
 
 Ask me on the Send tab if you want help drafting a response to any of these.
