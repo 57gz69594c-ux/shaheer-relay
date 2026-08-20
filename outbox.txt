@@ -1,26 +1,18 @@
-SS-22 Documentary V4 Benchmark — READY FOR REVIEW
+SPONSOR REPLY ALERT — 2026-08-20 00:00 UTC
 
-V4 = "Composition-Locked Cinematic Motion Design Rebuild"
+---
+Brand: MEXC
+From: service@support.mexc.com
+Subject: Message ticket is replied in English
+Received: 2026-08-19T23:04:49Z
+Preview: Dear MEXCer, Hello
+Your work order #20260820000013#, #Sponsorship Inquiry: The Spaceship Podcast x MEXC# has been updated, you can reply to this email directly for feedback
+Latest Reply：
+Lani2026-08-20 07:04:39
 
-What changed from V2/V3 to V4:
-- Fixed ALL text-on-text collisions (explicit state machines for sequential text)
-- Fixed z-index hierarchy (beam z:50 < labels z:100 < hero text z:105)
-- Three-column layout: Projector (393) | Window (960) | Screen (1527)
-- CompositionGrid: 12-col, 8-row, 110px H / 80px V margins
-- TextProtectionZones: 80px hero, 65px major, 40px label padding
-- Single-text-node pattern for DEPTH/PERSPECTIVE/PARALLAX (Scene 016)
-- Screen repositions before TERRIBLE appears (Scene 015)
-- WINDOW label suppressed while ONE PROBLEM is visible (Scene 015)
+Dear MEXCer,
 
-Video: Tap play at the top (19 scenes, 2:13, 540p preview)
-Contact sheet: Below the video — tap for full-res
 
-Scenes 012, 014, 015, 016 have V4 composition fixes applied.
-Scenes 001-011, 013, 017-019 retain V3 visuals (already passing).
+This is Lani from th
 
-Full 1080p master: 31.8 MB, rendered and ready.
-No audio/narration yet — visual benchmark only.
-
-Score trajectory: V1 (4.5) → V2 (4.9) → V3 (5.0) → V4 (pending your review)
-
-Awaiting your review before proceeding.
+Ask me on the Send tab if you want help drafting a response to any of these.
