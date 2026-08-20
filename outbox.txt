@@ -1,67 +1,84 @@
-PRE-PROMPT-7 BENCHMARK FAIRNESS AUDIT — COMPLETE — 2026-08-20 09:35 UTC
+PROMPT 6.5 — BENCHMARK FAIRNESS AUDIT — COMPLETE — 2026-08-20 09:48 UTC
 
 ═══════════════════════════════════════════════════
-  BENCHMARK FAIRNESS AUDIT — 5 SECTIONS COMPLETE
+  ALL 16 SECTIONS COMPLETE + FINAL REPORT (A-N)
   XAU/USD AI Trading Research Platform
+  263 tests passing (29 new)
   ALLOW_HOLDOUT_EVALUATION = FALSE
 ═══════════════════════════════════════════════════
 
-SECTION 1: TEST PASSIVE GOLD RECONSTRUCTION
-  GC: $2,629.20 → $4,370.10 (66.2% actual gold move)
-  Synthetic: $100 → $1,840.90 (1,741% portfolio return)
-  Initial leverage: 26.29x — a 3.8% gold decline = RUIN
-  The reported 1,741% return is a 66.2% gold move × 26.3x leverage
+FINAL REPORT ANSWERS (A-N):
 
-SECTION 2: TRAIN PASSIVE GOLD RECONSTRUCTION
-  GC: $273.90 → $2,062.40 (653% actual gold move)
-  Synthetic: $100 → $1,888.50 (1,789% portfolio return)
-  Leverage: 2.74x initial → 1.09x final (de-leverages as profits grow)
-  Dollar P/L identical ($1,788.50) — the difference is % base
+A. 2025 GC UNDERLYING RETURN
+   $2,629.20 → $4,370.10 = +66.21% (252 bars, data integrity PASS)
 
-SECTION 3: FAIR BENCHMARK MODES (NEW)
-  PASSIVE_ASSET_RETURN (1x leverage, no synthetic account):
-    TRAIN: 653% return, Sharpe 0.5882, Max DD 44.36%
-    TEST:  66.2% return, Sharpe 2.5967, Max DD 8.96%
+B. WHY PROMPT 6 REPORTED +17.37
+   Engine stores return as MULTIPLE not percentage.
+   +17.37 = 1,737% synthetic return on $100 account.
+   This is a 66.2% gold move × 26.3x leverage = 1,741%.
+   NOT 17.37%. NEVER use unlabeled "return +17.37" again.
 
-  PASSIVE_EQUAL_EXPOSURE (1x leverage, daily rebalance):
-    TRAIN: 653% return, Sharpe 0.5882, Max DD 44.36%
-    TEST:  66.2% return, Sharpe 2.5967, Max DD 8.96%
+C. TRAIN PASSIVE RECONSTRUCTION
+   GC $273.90→$2,062.40 (653%), $100→$1,888.50 (1,789%)
+   Dollar P/L identical ($1,788.50) — % base differs.
 
-  vs ONE_UNIT_NORMALIZED (reported):
-    TRAIN: 1,789% return, Sharpe 0.6418
-    TEST:  1,741% return, Sharpe 3.30
+D. IMPLICIT LEVERAGE: YES
+   TRAIN: 2.74x initial → 1.09x final (de-leverages)
+   TEST: 26.29x initial → 2.37x final (dangerous)
 
-  The "unbeatable" benchmark's Sharpe drops from 0.64 to 0.59 at 1x
-  leverage. Still strong, but the gap narrows significantly.
+E. ACTIVE STRATEGY LEVERAGE
+   Median when in position: 20.0x (higher than passive)
+   Multiple strategies experience near-ruin (equity → $0)
 
-SECTION 4: ACTIVE STRATEGY EXPOSURE AUDIT
-  24 strategies audited (20 R6 finalists + 4 eliminated sample)
-  Median active strategy leverage: 20.0x (when in position)
-  Many strategies hit near-ruin (equity ≈ $0, leverage → 9999x)
-  Passive gold median leverage: 1.17x
-  FINDING: Active strategies use HIGHER leverage than passive gold
-  This means the comparison is actually UNFAIR TO active strategies
+F. WHY R5 ELIMINATED ZERO
+   Only SMA/EMA crossovers reached R5, all DD < 2.65%
+   R5 checks DD>90% only — no leverage/margin checks
 
-SECTION 5: R5 CAPITAL-CONSTRAINED AUDIT
-  19 candidates entered R5, 0 eliminated
-  All were SMA/EMA crossovers with max DD < 2.65%
-  R5 only checks: max_drawdown > 100% (ruined) or > 90%
-  R5 does NOT check: leverage, margin, position sizing
-  FINDING: R5 was ineffective — needs leverage caps + margin checks
+G. BUGS FOUND
+   - No calculation bugs in backtest engine
+   - Benchmark leverage mismatch (design issue, not bug)
+   - R5 capital-constrained stage non-functional
+   - Return display ambiguity (% vs multiple)
 
-KEY CONCLUSIONS:
-  1. Benchmark comparison was unfair due to uncontrolled leverage
-  2. At 1x leverage, passive gold Sharpe = 0.59 (not 0.64)
-  3. Active strategies face HIGHER leverage than passive gold
-  4. Relative ranking of strategies is unaffected
-  5. R5 needs to enforce leverage/margin constraints
+H. CORRECTED PASSIVE BENCHMARKS
+   PASSIVE_ASSET_RETURN (1x): TRAIN Sharpe 0.5882, TEST 2.5967
+   vs ONE_UNIT (reported): TRAIN Sharpe 0.6418, TEST 3.30
 
-REPORT: BENCHMARK_FAIRNESS_AUDIT.md (271 lines, 5 sections)
-RAW DATA: data/benchmark_fairness_audit_raw.json
-AUDIT SCRIPT: run_benchmark_fairness_audit.py
+I. CORRECTED 1X RESULTS FOR FINALISTS
+   All 19 finalists re-run under UNLEVERED_1X
+   Returns drop significantly (max leverage capped at 1.0x)
+   Many orders rejected for insufficient exposure capacity
+
+J. MATCHED RANDOM COMPARISONS
+   30 seeds per finalist, matched time-in-market + trade count
+   Most finalists at P0 vs matched random (no timing alpha)
+
+K. ACTIVE-ALPHA LEADERBOARD (EXPOSURE-ADJUSTED)
+   Best timing alpha: sma_crossover_892f (-0.047 — nearly zero)
+   ALL strategies show negative timing alpha on TRAIN
+   No strategy adds timing value beyond random long exposure
+
+L. PROMPT 6 CONCLUSIONS CHANGE?
+   Core conclusions UNCHANGED:
+   ✓ Gold's secular uptrend dominates
+   ✓ Simple beats complex
+   ✓ Walk-forward kills 63%
+   ✓ Deflated Sharpe = 0 survivors
+   Changes: passive gap narrows, R5 needs redesign
+
+M. TEST RESULTS: 263/263 passing (29 new exposure tests)
+
+N. READINESS FOR PROMPT 7
+   READY with caveats — fix R5, use fair benchmarks,
+   always separate ASSET% from PORTFOLIO% in reporting
+
+NEW CODE IMPLEMENTED:
+  src/trading_research/backtest/exposure.py — 6 exposure policies
+  tests/unit/test_exposure.py — 29 tests
+  run_benchmark_fairness_audit.py — Part 1 (Sections 1-5)
+  run_benchmark_fairness_audit_part2.py — Part 2 (Sections 6-16)
+  BENCHMARK_FAIRNESS_AUDIT.md — Section 1-5 report
+  BENCHMARK_FAIRNESS_AUDIT_FULL.md — Final report (A-N, 498 lines)
 
 ALLOW_HOLDOUT_EVALUATION = FALSE
 DO NOT BEGIN PROMPT 7
-
----
-Previous: Prompt 6 Tournament (1,000 strategies, 6 rounds, 19 finalists)
