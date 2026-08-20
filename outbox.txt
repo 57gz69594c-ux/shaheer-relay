@@ -1,281 +1,412 @@
 ═══════════════════════════════════════════════════════════════
-  PROMPT 3 — FINAL REPORT
-  Historical Data Acquisition, Provenance & Quality Audit
+  PROMPT 4 — FINAL REPORT
+  Feature Intelligence Engine
   XAU/USD AI Trading Research Platform
-  Completed: 2026-08-20 03:10 UTC
+  Completed: 2026-08-20 03:55 UTC
 ═══════════════════════════════════════════════════════════════
 
-A. DATABASE CLEANUP
-───────────────────
-✓ Created isolated test database: trading_research_test
-✓ All 40 tests now run against test DB only (conftest.py)
-✓ Verified research DB untouched after test runs (automated test)
-✓ Cleaned 22 test instruments, 11 candles, 5 predictions,
-  5 portfolios, 3 data sources, 3 macro series from research DB
-✓ Three-way proof: conftest forces TRADING_DB_NAME, fixture
-  verifies connection, test queries research DB for TEST_ rows
-
-
-B. DATA SOURCES INVESTIGATED
-─────────────────────────────
-YFINANCE (Yahoo Finance via yfinance 1.6.0):
-  ✓ 13 instruments tested across 4 intervals (1d, 1h, 5m, 1m)
-  ✓ 52 coverage tests completed
-  ✓ Daily data: 26-98 years depending on instrument
-  ✓ Hourly data: ~2 years for all instruments
-  ✓ 5m/1m: 30-60 days only (per yfinance limits)
-  Limitations: GC=F is FUTURES (not spot), no true XAU/USD spot,
-  volume is exchange volume, continuous contracts have roll artifacts
-
-FRED (Federal Reserve Economic Data):
-  ✓ 16 gold-relevant macro series identified and classified
-  ✓ Framework built, API key needed for ingestion
-  ✗ No FRED_API_KEY configured — macro ingestion pending
-  Series ready: DFF, DGS2, DGS10, T10Y2Y, T10YIE, DFII10,
-  CPIAUCSL, CPILFESL, PCEPI, PCEPILFE, UNRATE, PAYEMS,
-  DTWEXBGS, NFCI, GDP
-
-
-C. PRIMARY XAU/USD FINDING
-──────────────────────────
-NO genuine XAU/USD spot data was obtained.
-yfinance does NOT provide XAU/USD spot prices.
-
-What we have instead:
-  GC_FUTURES — COMEX gold futures continuous contract
-    Daily: 6,516 rows, 2000-08-30 → 2026-08-19 (26 years)
-    Hourly: 11,462 rows, 2024-08-20 → 2026-08-20 (2 years)
-    Grade: D (daily — 1 H<L violation), B (hourly)
-    WARNING: This is FUTURES, not spot. Continuous contract
-    has roll artifacts. Stored as GC_FUTURES, never as XAUUSD_SPOT.
-
-Tiered research plan:
-  LONG-HORIZON: GC_FUTURES daily (26 years) — proxy only
-  MEDIUM-HORIZON: GC_FUTURES hourly (2 years) — proxy only
-  SHORT-HORIZON: Await MT5/Dominion bridge (Prompt 10)
-  LIVE-SPECIFIC: Dominion Markets feed when connected
-
-True XAU/USD spot sources would require:
-  - MT5 history export from Dominion Markets
-  - Commercial data providers (LBMA, Reuters/Refinitiv)
-  - No free high-quality multi-year intraday spot source found
-
-
-D. GOLD PROXY DATA
-───────────────────
-GC_FUTURES (COMEX Gold Futures Continuous):
-  26 years daily + 2 years hourly. Roll artifacts present.
-  Grade C as spot replacement, A/B as futures context.
-
-GLD_ETF (SPDR Gold Shares):
-  21.7 years daily. US equity hours only. ETF volume.
-  Grade C as spot proxy, B as cross-reference.
-
-XAGUSD_FUTURES (Silver):
-  26 years daily + 2 years hourly. Gold/silver ratio useful.
-
-
-E. CROSS-ASSET COVERAGE
-────────────────────────
-Instrument       Type     TF    Rows    First       Last     Years
-──────────────────────────────────────────────────────────────────
-GC_FUTURES       FUTURES  D1    6,516  2000-08-30  2026-08-19  26.0
-GC_FUTURES       FUTURES  H1   11,462  2024-08-20  2026-08-20   2.0
-GLD_ETF          ETF      D1    5,471  2004-11-18  2026-08-19  21.7
-XAGUSD_FUTURES   FUTURES  D1    6,518  2000-08-30  2026-08-19  26.0
-XAGUSD_FUTURES   FUTURES  H1   11,460  2024-08-20  2026-08-20   2.0
-DXY              INDEX    D1   14,125  1971-01-04  2026-08-19  55.6
-DXY              INDEX    H1   11,936  2024-08-20  2026-08-20   2.0
-EURUSD           SPOT     D1    5,895  2003-12-01  2026-08-19  22.7
-EURUSD           SPOT     H1   12,321  2024-08-20  2026-08-20   2.0
-USDJPY           SPOT     D1    7,729  1996-10-30  2026-08-19  29.8
-USDJPY           SPOT     H1   12,253  2024-08-20  2026-08-20   2.0
-SP500            INDEX    D1   24,775  1927-12-30  2026-08-19  98.6
-NASDAQ           INDEX    D1   14,001  1971-02-05  2026-08-19  55.5
-VIX              INDEX    D1    9,226  1990-01-02  2026-08-19  36.6
-CRUDE_OIL        FUTURES  D1    6,525  2000-08-23  2026-08-19  26.0
-CRUDE_OIL        FUTURES  H1   11,308  2024-08-20  2026-08-20   2.0
-COPPER           FUTURES  D1    6,521  2000-08-30  2026-08-19  26.0
-US10Y            YIELD    D1   16,145  1962-01-02  2026-08-19  64.6
-US2Y             YIELD    D1   16,642  1960-01-04  2026-08-19  66.6
-
-Total: 210,829 candles across 19 datasets
-
-
-F. MACRO DATA COVERAGE
-───────────────────────
-Framework ready. 16 series classified:
-
-POINT_IN_TIME_SAFE (daily market data, minimal revision):
-  DFF, DGS2, DGS10, T10Y2Y, T10YIE, DFII10, DTWEXBGS, NFCI
-
-REQUIRES_VINTAGE_DATA (revised after initial release):
-  CPIAUCSL, CPILFESL, PCEPI, PCEPILFE, PAYEMS, GDP
-
-REVISION_RISK_LOW:
-  UNRATE
-
-ACTION NEEDED: Set FRED_API_KEY in /root/.trading-secrets/.env
-Register free at: https://fred.stlouisfed.org/docs/api/api_key.html
-
-
-G. NEWS DATA FINDINGS
-─────────────────────
-Evaluated but NOT ingested (per prompt — Prompt 4/5 scope):
-  GDELT: Massive archive, free, but noisy. Good timestamp coverage.
-  Alpha Vantage: Requires API key. Limited history for free tier.
-  Recommendation: GDELT for historical headlines with gold-keyword
-  filtering. Evaluate sentiment models in Prompt 4/5.
-
-
-H. QUALITY REPORT
-──────────────────
-Instrument       TF  Rows    Miss%  Dupes  H<L  Jumps  Grade
-─────────────────────────────────────────────────────────────
-EURUSD           H1  12,321   1.6%     0     0      0  A
-CRUDE_OIL        H1  11,308   9.6%     0     0     16  B
-DXY              H1  11,936   4.6%     0     0      0  B
-EURUSD           D1   5,895   0.5%     0     0     10  B
-GC_FUTURES       H1  11,462   8.4%     0     0      2  B
-USDJPY           D1   7,729   0.6%     0     0      9  B
-USDJPY           H1  12,253   2.1%     0     0      0  B
-XAGUSD_FUTURES   H1  11,460   8.4%     0     0      8  B
-DXY              D1  14,125   2.7%     0     0      0  C
-GLD_ETF          D1   5,471   3.6%     0     0     17  C
-NASDAQ           D1  14,001   3.4%     0     0     98  C
-SP500            D1  24,775   3.7%     0     0    166  C
-US10Y            D1  16,145   4.2%     0     0    243  C
-VIX              D1   9,226   3.4%     0     0   3301  C
-XAGUSD_FUTURES   D1   6,518   3.8%     0     0    213  C
-COPPER           D1   6,521   3.7%     0     0    104  D
-CRUDE_OIL        D1   6,525   3.8%     0     4    309  D
-GC_FUTURES       D1   6,516   3.8%     0     1     22  D
-US2Y             D1  16,642   4.3%     0     0   1794  D
-
-Grade distribution: A=1, B=7, C=6, D=5
-Note: D grades are due to zero/negative prices (historical
-provider artifacts) or H<L violations, not fundamental
-data problems. All issues are flagged, not deleted.
-6,312 outlier price moves flagged for review.
-
-
-I. COVERAGE MATRIX
-──────────────────
-             DAILY          HOURLY     5MIN    1MIN
-GC_FUTURES   26 years       2 years    60d     30d
-GLD_ETF      21.7 years     2 years    60d     7d
-XAGUSD_FUT   26 years       2 years    60d     7d
-DXY          55.6 years     2 years    60d     7d
-EURUSD       22.7 years     2 years    60d     7d
-USDJPY       29.8 years     2 years    60d     7d
-SP500        98.6 years     2 years    60d     7d
-NASDAQ       55.5 years     2 years    60d     7d
-VIX          36.6 years     2 years    60d     7d
-CRUDE_OIL    26 years       2 years    60d     7d
-COPPER       26 years       —          —       —
-US10Y        64.6 years     2 years    60d     7d
-US2Y         66.6 years     2 years    60d     7d
-
-(5m/1m data available but NOT ingested — too short-lived
-and would need frequent refreshing)
-
-
-J. DATASET MANIFESTS
-────────────────────
-19 manifests created. Each records:
-  source, instrument, granularity, date range, row count,
-  checksum, quality grade, ingestion timestamp, raw file path.
-
-
-K. STORAGE IMPACT
-─────────────────
-Database: 165 MB (research) + test DB
-Raw Parquet: 7 MB (19 files in data/raw/)
-Total new disk: ~175 MB
-Docker container RAM: 265 MB / 1.5 GB limit
-
-
-L. RESOURCE IMPACT
-──────────────────
-Ingestion took ~3 minutes
-Peak RAM: ~3.4 GB (server total)
-No impact on existing services
-Caddy: active | Even Terminal: active
-
-
-M. TEST RESULTS
-───────────────
-40 passed, 0 failed
-
-  Prompt 2 tests (28): all passing
-  Prompt 3 tests (12 new):
-    - Provider normalization (3)
-    - Idempotent ingestion (1)
-    - Timezone conversion (1)
-    - Bad OHLC detection (1)
-    - Gap detection (1)
-    - Manifest creation (1)
-    - Instrument separation (1)
-    - Macro PIT metadata (1)
-    - Raw data preservation (1)
-    - Revised data safety (1)
-
-
-N. PROBLEMS
-────────────
-1. OHLC CHECK constraints too strict for real data
-   → Fixed: dropped constraints, quality engine handles it
-2. TimescaleDB chunk explosion (5,148 weekly chunks)
-   → Fixed: monthly chunks, max_locks_per_transaction=512
-3. No FRED API key configured
-   → Framework ready, key needed from user
-4. No true XAU/USD spot data available from free sources
-   → Documented as tiered research plan
-5. VIX has 3,301 "outlier" jumps (it's VIX — expected)
-   → Quality engine correctly flags but doesn't delete
-
-
-O. SUITABILITY FOR HISTORICAL EXAMINATION
-──────────────────────────────────────────
-SAFE for daily strategy research (26+ years):
-  GC_FUTURES, XAGUSD_FUTURES, DXY, EURUSD, USDJPY,
-  SP500, NASDAQ, VIX, CRUDE_OIL, COPPER, US10Y, US2Y
-
-SAFE for hourly research (2 years):
-  GC_FUTURES, XAGUSD_FUTURES, DXY, EURUSD, USDJPY,
-  CRUDE_OIL
-
-NOT suitable as XAU/USD spot replacement:
-  ALL current datasets are proxies/futures/ETF.
-  True spot research requires MT5 history or commercial feed.
-
-NOT safe for point-in-time macro training (yet):
-  CPI, PCE, NFP, GDP — need ALFRED vintage data.
-  Daily market rates (DFF, yields, breakevens) ARE safe.
-
-
-P. RECOMMENDATION FOR PROMPT 4
+A. FEATURE ENGINE ARCHITECTURE
 ───────────────────────────────
-Trustworthy for feature engineering:
-  ✓ GC_FUTURES daily (26y) — primary gold proxy
-  ✓ DXY daily (55y) — dollar strength
-  ✓ EURUSD daily (22y) — major FX
-  ✓ USDJPY daily (29y) — safe haven
-  ✓ US10Y daily (64y) — opportunity cost
-  ✓ VIX daily (36y) — fear gauge
-  ✓ SP500 daily (98y) — risk appetite
-  ✓ All hourly datasets (2y) — for short-horizon features
+Wide-table Parquet approach per timeframe.
 
-Use with caution:
-  ⚠ GLD_ETF — US hours only, ETF mechanics
-  ⚠ Futures continuous contracts — roll artifacts
+Design decision: feature values stored as Parquet files
+(one per timeframe/instrument/version), NOT in the database.
+Feature definitions stored as JSON for versioning.
 
-Do not use for point-in-time training:
-  ✗ CPI, PCE, NFP, GDP until ALFRED vintage data acquired
+Rationale:
+  - Daily: 294 features × 6,515 rows = ~1.9M cells → 15 MB Parquet
+  - Hourly: 128 features × 11,462 rows = ~1.5M cells → 12 MB Parquet
+  - ML extraction: single file read, zero JOINs
+  - Alternative (EAV tall-table) rejected: 200× more rows, impractical
 
-Priority action for Shaheer:
-  → Register FRED API key (free, 2 minutes)
-  → Set FRED_API_KEY in /root/.trading-secrets/.env
+Feature definitions include: feature_id, name, version, category,
+description, formula, required_inputs, lookback, timeframe,
+point_in_time_safe, provider_dependencies, instrument, is_proxy.
 
-Verdict: READY FOR PROMPT 4 (feature engine).
+422 feature definitions exported to feature_definitions.json.
+Feature manifest with checksum for reproducibility.
+
+
+B. DATA ELIGIBILITY RESULTS
+────────────────────────────
+20 datasets classified:
+
+APPROVED_PRIMARY (1):
+  GC_FUTURES H1 (grade B)
+
+APPROVED_WITH_FILTERS (4):
+  GC_FUTURES D1 (grade D, 1 H<L → filtered)
+  CRUDE_OIL D1 (grade D, 2 H<L → filtered)
+  COPPER D1 (grade D, zero prices → filtered)
+  US2Y D1 (grade D, 9 zero prices → filtered)
+
+APPROVED_CONTEXT (14):
+  DXY D1/H1, EURUSD D1/H1, USDJPY D1/H1,
+  XAGUSD_FUTURES D1/H1, SP500 D1, NASDAQ D1,
+  VIX D1, CRUDE_OIL H1, GLD_ETF D1, US10Y D1
+
+PENDING_DATA (1):
+  FRED_MACRO (needs API key)
+
+Candle-level filtering:
+  GC_FUTURES D1: 1 invalid candle filtered (H<L)
+  CRUDE_OIL D1: 2 invalid candles filtered
+  US2Y D1: 9 invalid candles filtered (zero prices)
+  Total: 12 candles quarantined, raw data preserved
+
+
+C. GC FUTURES ANOMALY INVESTIGATION
+────────────────────────────────────
+FINDING: 1 row where high < low in GC_FUTURES daily data.
+
+Investigation:
+  This is a yfinance provider artifact, NOT a real market event.
+  COMEX gold futures never trade with high < low.
+  Caused by continuous-contract adjustment rounding.
+
+Resolution:
+  - Raw candle preserved in database (never deleted)
+  - Candle classified as INVALID_OHLC
+  - Excluded from feature computation via get_clean_candles()
+  - 6,515 valid candles used (out of 6,516 total)
+
+Rollover awareness:
+  GC futures is a continuous futures series. Exact contract-chain
+  data is unavailable from yfinance. Roll dates cannot be
+  precisely identified without contract specifications.
+
+  LIMITATION DOCUMENTED: Features derived from GC_FUTURES may
+  contain rollover artifacts. All gc_ prefixed features carry
+  this provenance. When true XAU/USD spot data arrives from
+  Dominion/MT5, features will be recalculated as xauusd_ prefix.
+
+
+D. DAILY FEATURES — 294 features × 6,515 rows
+───────────────────────────────────────────────
+Category              Count
+────────────────────────────
+Returns                 19
+Trend                   30
+Momentum                16
+Mean Reversion          16
+Volatility              20
+Market Structure        17
+Candle Geometry         10
+Cross-Asset             72
+Relative Strength       27
+Yield/Rate              11
+Calendar                 9
+Regime Primitives        8
+Drawdown/Path           15
+Distribution            13
+Autocorrelation         11
+────────────────────────────
+TOTAL                  294
+
+Cross-asset features (72) are the largest category because
+they cover correlations, betas, relative returns, and
+divergences across 12 context instruments.
+
+
+E. HOURLY FEATURES — 128 features × 11,462 rows
+─────────────────────────────────────────────────
+Category              Count
+────────────────────────────
+Returns                 13
+Trend                   15
+Momentum                10
+Mean Reversion           9
+Volatility              11
+Market Structure         9
+Candle Geometry         10
+Cross-Asset             20
+Calendar                 8
+Regime                   3
+Drawdown                 7
+Distribution             6
+Autocorrelation          7
+────────────────────────────
+TOTAL                  128
+
+Shorter windows used (12h, 24h, 48h, 120h, 240h, 500h)
+to match 2-year hourly history. Categories 9 (relative
+strength) and 10 (yield/rate) excluded from hourly —
+those instruments lack hourly eligibility.
+
+
+F. FEATURE DEFINITIONS
+──────────────────────
+422 definitions exported to feature_definitions.json.
+Each definition includes:
+  - Unique feature_id with version suffix (e.g., gc_return_1d_v1)
+  - Category classification
+  - Mathematical formula
+  - Required inputs and lookback
+  - Point-in-time safety status
+  - Proxy awareness flags
+
+Naming convention:
+  gc_ → GC_FUTURES derived (gold proxy)
+  dxy_ → DXY derived
+  eurusd_, usdjpy_ → FX derived
+  silver_ → XAGUSD_FUTURES derived
+  sp500_, nasdaq_ → equity index derived
+  vix_ → VIX derived
+  oil_, copper_ → commodity derived
+  us10y_, us2y_ → yield derived
+  No prefix → calendar/deterministic features
+
+NEVER xau_ or xauusd_ — those are reserved for true spot data.
+
+
+G. POINT-IN-TIME SAFETY
+────────────────────────
+How leakage is prevented:
+
+1. DAILY CROSS-ASSET: T-1 lag applied via merge_asof(backward).
+   For GC_FUTURES date T, all cross-asset data comes from T-1.
+   Different trading calendars handled correctly (merge_asof
+   finds most recent available observation, never forward).
+
+2. HOURLY CROSS-ASSET: merge_asof(direction='backward').
+   For each primary timestamp, finds most recent context
+   observation with event_time <= primary event_time.
+
+3. ROLLING WINDOWS: All use min_periods=window_size.
+   No centered windows. No expanding windows that use future.
+   Pandas rolling with default closed='right'.
+
+4. TARGETS: Physically separate from features.
+   Stored in data/targets/, never in data/features/.
+   feature_snapshot() API never returns target values.
+   shift(-horizon) used → trailing NaN proves forward-looking.
+
+5. NORMALIZATION: Rolling/expanding statistics only.
+   No global fit_transform across entire history.
+   Z-scores use rolling mean/std, not dataset-wide.
+
+6. NO_TIME_TRAVEL TESTS: 15 dedicated leakage tests.
+   Intentionally verify each feature type uses past only.
+
+
+H. CROSS-ASSET ALIGNMENT
+─────────────────────────
+DAILY ALIGNMENT:
+  Method: shift(lag=1) on context index → merge_asof(backward)
+  Rule: for primary date T, use context value from T-1
+  Handles different calendars: FX trades different days than equities
+  Missing values: NaN (ALIGNMENT_GAP), not forward-filled
+
+HOURLY ALIGNMENT:
+  Method: pd.merge_asof(direction='backward')
+  Rule: for each primary timestamp, find most recent context
+  observation at or before that time
+  No forward fill. Gaps remain as NaN.
+
+Alignment gaps detected:
+  EURUSD D1: 12.4% missing (FX calendar vs futures calendar)
+  GLD_ETF D1: 16.2% missing (ETF started 2004, GC from 2000)
+  All others: <1% missing
+
+
+I. FEATURE QUALITY
+──────────────────
+Quality grades (daily, 294 features):
+  B: 216 features (normal, good quality inputs)
+  C: 78 features (cross-asset with calendar gaps)
+  UNSAFE: 0 features
+
+All features are point-in-time safe.
+All gc_ features carry proxy provenance.
+Quality inherits upstream data grade:
+  - A/B data input → B feature grade
+  - C data input → C feature grade
+  - GLD_ETF features → C (ETF calendar limitations)
+
+
+J. MISSINGNESS
+──────────────
+Worst offenders (daily):
+  gc_vs_gld_divergence: 17.4% (GLD_ETF started 2004)
+  gc_gld_beta_60d: 17.1% (GLD + warmup)
+  gc_gld_corr_60d: 17.1%
+  gc_gld_corr_20d: 16.5%
+  gc_body_range_ratio: 16.0% (range=0 on some candles)
+
+Reasons:
+  EXPECTED_WARMUP: Features with lookback=200 have 199 NaN
+  ALIGNMENT_GAP: Cross-asset calendar differences
+  COMPUTATION_FAILURE: Division by zero (range=0 candles)
+
+No features have >30% missingness (HIGH_MISSINGNESS threshold).
+No NaN values are silently filled.
+
+
+K. REDUNDANCY
+─────────────
+294 daily features analyzed:
+  216 NORMAL — independent, useful
+  78 REDUNDANT — >0.95 correlation with another feature
+  0 LOW_VARIANCE — no near-constant features
+  0 HIGH_MISSINGNESS — none above 30%
+
+Notable redundant pairs (r=1.0):
+  gc_return_5d ↔ gc_cum_return_5d (identical by construction)
+  gc_body_return ↔ gc_open_to_close (same formula)
+  gc_gap_return ↔ gc_close_to_open (same formula)
+  gc_sma_200d_norm ↔ gc_dist_lt_trend (same formula)
+
+These are NOT deleted — marked as metadata for future ML
+feature selection. Some "redundant" features serve different
+conceptual roles even if mathematically identical.
+
+
+L. TARGET ARCHITECTURE
+──────────────────────
+Daily targets (17):
+  Forward returns: 1d, 2d, 5d, 10d, 20d
+  Forward direction: 1d, 5d, 20d
+  Max favorable excursion: 5d, 10d, 20d
+  Max adverse excursion: 5d, 10d, 20d
+  Future volatility: 5d, 10d, 20d
+
+Hourly targets (11):
+  Forward returns: 1h, 4h, 8h, 24h
+  Forward direction: 1h, 4h, 24h
+  MFE/MAE: 4h, 24h
+
+Storage: data/targets/ (SEPARATE from data/features/)
+feature_snapshot() never returns targets.
+Trailing NaN proves forward-looking construction.
+
+Data split boundaries configured:
+  TRAIN:    → 2023-12-31
+  VALIDATE: 2024-01-01 → 2024-12-31
+  TEST:     2025-01-01 → 2025-12-31
+  HOLDOUT:  2026-01-01 → (protected)
+
+
+M. STORAGE
+──────────
+Feature Parquet: 27 MB (D1: 15 MB, H1: 12 MB)
+Target Parquet: 1.9 MB
+Feature definitions: 396 KB (JSON)
+Redundancy report: 32 KB
+Missingness CSV: 29 KB
+Validation results: 8 KB
+
+Total new disk: ~30 MB
+Database: 165 MB (unchanged — features stored as Parquet)
+Docker container: 270 MB RAM / 1.5 GB limit
+
+
+N. PERFORMANCE
+──────────────
+Feature generation time: 248 seconds (~4 minutes)
+Peak RAM: 33 MB (feature computation only)
+Total server RAM: 4.4 GB / 16 GB used
+CPU: Single-threaded (vectorized NumPy/pandas)
+No impact on existing services (Caddy, Even Terminal active)
+
+
+O. TEST RESULTS
+───────────────
+89 passed, 0 failed
+
+Prompt 1-2 tests (28): all passing
+Prompt 3 tests (12): all passing
+Prompt 4 tests (49 new):
+  - Data eligibility (6): dataset status, candle classification
+  - Feature quality (4): grade inheritance, PIT safety
+  - NO_TIME_TRAVEL — Returns (4): 1d, 5d, log, gap return verification
+  - NO_TIME_TRAVEL — Rolling (4): SMA, RSI, Bollinger, z-score warmup
+  - NO_TIME_TRAVEL — Cross-Asset (4): daily lag, hourly backward-only
+  - NO_TIME_TRAVEL — Normalization (1): rolling vs global
+  - NO_TIME_TRAVEL — Targets (3): future data, trailing NaN, snapshot
+  - NO_TIME_TRAVEL — Rolling High/Low (1): backward-only verification
+  - NO_TIME_TRAVEL — Lagged Returns (1): proper shift
+  - Feature correctness (4): calendar, candle geometry, RSI, volatility
+  - Feature versioning (2): duplicate OK, version conflict error
+  - Proxy naming (1): gc_ prefix, never xau_
+  - Data splits (3): coverage, non-overlapping, holdout protected
+  - Redundancy (3): identical detection, low variance, missingness
+  - Missingness (2): warmup periods, report generation
+  - DB isolation (1): test database enforcement
+
+
+P. MANUAL VALIDATION
+────────────────────
+25 timestamps validated, 125/125 checks passed.
+
+For each timestamp, independently recomputed:
+  - gc_return_1d (close-to-close pct change)
+  - gc_return_5d (5-day return)
+  - gc_sma_20d_norm (price/SMA-1)
+  - gc_hl_range_norm (high-low range / close)
+  - day_of_week (calendar feature)
+
+All stored values matched recomputed values within 1e-6 tolerance.
+
+Timestamps include: random samples + warmup boundary + mid-series
++ near-end positions. No edge case failures.
+
+
+Q. PROBLEMS / LIMITATIONS
+──────────────────────────
+1. GC_FUTURES is FUTURES, not XAU/USD spot
+   → All gc_ features carry proxy provenance
+   → Rollover artifacts may affect some feature values
+   → True spot features await MT5/Dominion data
+
+2. No FRED macro features yet
+   → Framework built, API key needed
+   → Macro-dependent features marked PENDING_DATA
+
+3. GLD_ETF features have 16% missingness
+   → GLD started 2004, GC data from 2000
+   → 1,053 alignment gaps on daily features
+
+4. Hourly context limited to 5 instruments
+   → SP500, NASDAQ, VIX, COPPER, US10Y, US2Y, GLD_ETF
+     not in hourly eligibility (no hourly data ingested)
+   → Hourly cross-asset features based on DXY, EURUSD,
+     USDJPY, XAGUSD_FUTURES, CRUDE_OIL
+
+5. 78 redundant features identified
+   → Not deleted — metadata only
+   → Future ML feature selection can prune
+
+6. Candle geometry features show 16% missing
+   → Some candles have high==low (range=0)
+   → Division by zero → NaN → correctly classified
+
+7. sqrt warning in Garman-Klass volatility
+   → Some windows produce negative GK values
+   → NaN result correctly handled
+
+
+R. READINESS FOR PROMPT 5
+─────────────────────────
+Prompt 5 will build the HISTORICAL EXAMINATION + BACKTEST ENGINE.
+
+Ready:
+  ✓ 294 daily features computed and stored
+  ✓ 128 hourly features computed and stored
+  ✓ Point-in-time safety enforced and tested
+  ✓ 17 daily + 11 hourly target labels defined
+  ✓ TRAIN/VALIDATE/TEST/HOLDOUT splits configured
+  ✓ Feature snapshots available for model input
+  ✓ Redundancy analysis complete
+  ✓ Feature definitions versioned (v1)
+  ✓ Reproducible (checksum, manifest)
+  ✓ CLI tools for inspection
+  ✓ 89 tests passing
+  ✓ Server healthy (4.4 GB / 16 GB RAM)
+
+Not ready (and not needed for Prompt 5):
+  ✗ FRED macro features (needs API key)
+  ✗ True XAU/USD spot features (needs MT5)
+  ✗ News/sentiment features (Prompt scope later)
+
+Verdict: READY FOR PROMPT 5 (Historical Examination).
 ═══════════════════════════════════════════════════════════════
