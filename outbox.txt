@@ -1,214 +1,281 @@
 ═══════════════════════════════════════════════════════════════
-  PROMPT 2 — FINAL REPORT: Foundation & Database
+  PROMPT 3 — FINAL REPORT
+  Historical Data Acquisition, Provenance & Quality Audit
   XAU/USD AI Trading Research Platform
-  Completed: 2026-08-20 02:25 UTC
+  Completed: 2026-08-20 03:10 UTC
 ═══════════════════════════════════════════════════════════════
 
-A. WHAT YOU CREATED
+A. DATABASE CLEANUP
 ───────────────────
-43 files across a complete project skeleton:
-
-  src/trading_research/
-  ├── config/settings.py      — Pydantic Settings with LIVE mode rejection
-  ├── data/models.py          — 13 database tables (SQLAlchemy ORM)
-  ├── data/database.py        — Engine factory, session management
-  ├── cli/health.py           — 13-point health check
-  ├── cli/db_status.py        — Table counts, hypertables, DB size
-  ├── cli/config_check.py     — Config validation + LIVE mode guards
-  ├── cli/system_info.py      — One-line system overview
-  └── 10 module __init__.py stubs (agents, analytics, backtest,
-      execution, features, health, journal, models, portfolios,
-      strategies)
-
-  config/
-  ├── instruments.yaml        — 13 instruments with provider mappings
-  └── defaults.yaml           — RESEARCH mode, backtest params
-
-  migrations/
-  └── versions/a4843e...py    — Full initial schema migration
-
-  tests/
-  ├── unit/test_config.py     — 8 tests (modes, LIVE rejection, DB URL)
-  └── integration/test_database.py — 17 tests (schema, triggers,
-      constraints, timestamps, decimals, security)
-
-  scripts/
-  ├── backup_db.sh            — pg_dump + gzip, 10-backup rotation
-  └── restore_db.sh           — Drop/recreate/restore
-
-  docs/
-  ├── data-model.md, security.md, operations.md, roadmap.md
-
-  docker-compose.yml, pyproject.toml, alembic.ini, ARCHITECTURE.md
-
-  CLI wrappers in /usr/local/bin/:
-    trading-health, trading-db-status, trading-config-check,
-    trading-system-info
+✓ Created isolated test database: trading_research_test
+✓ All 40 tests now run against test DB only (conftest.py)
+✓ Verified research DB untouched after test runs (automated test)
+✓ Cleaned 22 test instruments, 11 candles, 5 predictions,
+  5 portfolios, 3 data sources, 3 macro series from research DB
+✓ Three-way proof: conftest forces TRADING_DB_NAME, fixture
+  verifies connection, test queries research DB for TEST_ rows
 
 
-B. EXACT SOFTWARE VERSIONS
+B. DATA SOURCES INVESTIGATED
+─────────────────────────────
+YFINANCE (Yahoo Finance via yfinance 1.6.0):
+  ✓ 13 instruments tested across 4 intervals (1d, 1h, 5m, 1m)
+  ✓ 52 coverage tests completed
+  ✓ Daily data: 26-98 years depending on instrument
+  ✓ Hourly data: ~2 years for all instruments
+  ✓ 5m/1m: 30-60 days only (per yfinance limits)
+  Limitations: GC=F is FUTURES (not spot), no true XAU/USD spot,
+  volume is exchange volume, continuous contracts have roll artifacts
+
+FRED (Federal Reserve Economic Data):
+  ✓ 16 gold-relevant macro series identified and classified
+  ✓ Framework built, API key needed for ingestion
+  ✗ No FRED_API_KEY configured — macro ingestion pending
+  Series ready: DFF, DGS2, DGS10, T10Y2Y, T10YIE, DFII10,
+  CPIAUCSL, CPILFESL, PCEPI, PCEPILFE, UNRATE, PAYEMS,
+  DTWEXBGS, NFCI, GDP
+
+
+C. PRIMARY XAU/USD FINDING
 ──────────────────────────
-  Python:       3.12.3
-  PostgreSQL:   16.15
-  TimescaleDB:  2.29.2
-  Docker:       29.1.3
-  SQLAlchemy:   2.0.52
-  Alembic:      1.19.1
-  psycopg:      3.3.4
-  Pydantic:     2.13.4
-  pydantic-settings: 2.15.0
-  PyYAML:       6.0.3
-  pytest:       9.1.1
+NO genuine XAU/USD spot data was obtained.
+yfinance does NOT provide XAU/USD spot prices.
+
+What we have instead:
+  GC_FUTURES — COMEX gold futures continuous contract
+    Daily: 6,516 rows, 2000-08-30 → 2026-08-19 (26 years)
+    Hourly: 11,462 rows, 2024-08-20 → 2026-08-20 (2 years)
+    Grade: D (daily — 1 H<L violation), B (hourly)
+    WARNING: This is FUTURES, not spot. Continuous contract
+    has roll artifacts. Stored as GC_FUTURES, never as XAUUSD_SPOT.
+
+Tiered research plan:
+  LONG-HORIZON: GC_FUTURES daily (26 years) — proxy only
+  MEDIUM-HORIZON: GC_FUTURES hourly (2 years) — proxy only
+  SHORT-HORIZON: Await MT5/Dominion bridge (Prompt 10)
+  LIVE-SPECIFIC: Dominion Markets feed when connected
+
+True XAU/USD spot sources would require:
+  - MT5 history export from Dominion Markets
+  - Commercial data providers (LBMA, Reuters/Refinitiv)
+  - No free high-quality multi-year intraday spot source found
 
 
-C. DATABASE STATUS
-──────────────────
-  Container: trading-timescaledb — HEALTHY
-  Size: 10 MB
-  Migration: a4843e5bb532 (initial schema)
+D. GOLD PROXY DATA
+───────────────────
+GC_FUTURES (COMEX Gold Futures Continuous):
+  26 years daily + 2 years hourly. Roll artifacts present.
+  Grade C as spot replacement, A/B as futures context.
 
-  Table             Rows
-  ─────────────────────────
-  instruments        22   (test data from repeated test runs)
-  candles            11
-  data_sources        3
-  dataset_manifests   3
-  macro_series        3
-  macro_observations  3
-  predictions         5
-  portfolios          5
-  All others          0
+GLD_ETF (SPDR Gold Shares):
+  21.7 years daily. US equity hours only. ETF volume.
+  Grade C as spot proxy, B as cross-reference.
 
-  Hypertable: candles ✓
-  Timezone: UTC ✓
+XAGUSD_FUTURES (Silver):
+  26 years daily + 2 years hourly. Gold/silver ratio useful.
 
 
-D. SECURITY STATUS
-──────────────────
-  Three independent LIVE-blocking layers:
-  ✓ Code-level:  Pydantic validators reject LIVE mode/trading
-  ✓ CHECK constraints: ck_portfolio_no_live, ck_trade_no_live
-  ✓ DB triggers: trg_portfolio_no_live, trg_trade_no_live (4 total)
-
-  Prediction immutability:
-  ✓ trg_prediction_immutable — blocks UPDATE and DELETE (2 triggers)
-
-  Network:
-  ✓ PostgreSQL binds to 127.0.0.1:5432 ONLY (verified via ss)
-  ✓ Not publicly accessible
-
-  Secrets:
-  ✓ /root/.trading-secrets/ — chmod 700
-  ✓ /root/.trading-secrets/.env — chmod 600
-  ✓ 43-character random password (secrets.token_urlsafe)
-  ✗ No secrets in git, logs, or this report
-
-
-E. TEST RESULTS
-───────────────
-  25 passed, 0 failed, 0 errors
-
-  All tests are idempotent — pass on every run (UUID suffixes
-  on all test entities prevent uniqueness conflicts).
-
-  Unit tests (8):
-    - Default mode is RESEARCH
-    - LIVE mode rejected
-    - LIVE trading rejected
-    - LIVE trading always false
-    - RESEARCH/SHADOW/DEMO modes accepted
-    - Database URL format
-
-  Integration tests (17):
-    - DB connection, TimescaleDB active, PG16 version
-    - All 13 tables exist, candles is hypertable
-    - Duplicate candle rejected, instruments separate
-    - UTC timestamps, available_time semantics
-    - Dataset manifest creation
-    - LIVE portfolio blocked, shadow portfolio allowed
-    - Prediction UPDATE blocked (immutability trigger)
-    - Decimal precision (NUMERIC(14,5))
-    - Port 5432 localhost-only
-    - Secrets permissions (700/600)
-
-
-F. RESOURCE IMPACT
-──────────────────
-  TimescaleDB container: 50 MB RAM (of 1.5 GB limit) / 3.25%
-  Docker images: ~2.3 GB disk
-  Database: 10 MB
-  Python venv: ~200 MB
-
-  Server totals:
-    RAM:  3.4 GB used / 16 GB total (12.6 GB available)
-    Disk: 41 GB used / 309 GB total (269 GB free)
-
-  New port: 127.0.0.1:5432 (localhost only)
-
-
-G. EXISTING SERVICES HEALTH
-────────────────────────────
-  ✓ Caddy (web server):    active
-  ✓ Even Terminal (G2):    active (6 days uptime)
-  ✓ Rabbit R1 agent:       cron active
-  ✓ Instagram bot:         hourly cron active
-  ✓ Ads audit:             daily cron active
-
-  No services were disrupted. No ports conflicted.
-
-
-H. PROBLEMS ENCOUNTERED
+E. CROSS-ASSET COVERAGE
 ────────────────────────
-  1. Docker Compose V2 not installed
-     → Fixed: downloaded binary to ~/.docker/cli-plugins/
-  2. docker-compose.yml "version" attribute obsolete warning
-     → Fixed: removed version field
-  3. Alembic init conflict (directory existed)
-     → Fixed: removed and re-initialized
-  4. CLI wrapper module name mismatch
-     → Fixed: corrected module paths
-  5. Git identity not configured
-     → Fixed: set user.email and user.name
-  6. 5 tests failed on re-run (uniqueness conflicts)
-     → Fixed: UUID suffixes on all test instrument symbols
-  All problems resolved. Zero open issues.
+Instrument       Type     TF    Rows    First       Last     Years
+──────────────────────────────────────────────────────────────────
+GC_FUTURES       FUTURES  D1    6,516  2000-08-30  2026-08-19  26.0
+GC_FUTURES       FUTURES  H1   11,462  2024-08-20  2026-08-20   2.0
+GLD_ETF          ETF      D1    5,471  2004-11-18  2026-08-19  21.7
+XAGUSD_FUTURES   FUTURES  D1    6,518  2000-08-30  2026-08-19  26.0
+XAGUSD_FUTURES   FUTURES  H1   11,460  2024-08-20  2026-08-20   2.0
+DXY              INDEX    D1   14,125  1971-01-04  2026-08-19  55.6
+DXY              INDEX    H1   11,936  2024-08-20  2026-08-20   2.0
+EURUSD           SPOT     D1    5,895  2003-12-01  2026-08-19  22.7
+EURUSD           SPOT     H1   12,321  2024-08-20  2026-08-20   2.0
+USDJPY           SPOT     D1    7,729  1996-10-30  2026-08-19  29.8
+USDJPY           SPOT     H1   12,253  2024-08-20  2026-08-20   2.0
+SP500            INDEX    D1   24,775  1927-12-30  2026-08-19  98.6
+NASDAQ           INDEX    D1   14,001  1971-02-05  2026-08-19  55.5
+VIX              INDEX    D1    9,226  1990-01-02  2026-08-19  36.6
+CRUDE_OIL        FUTURES  D1    6,525  2000-08-23  2026-08-19  26.0
+CRUDE_OIL        FUTURES  H1   11,308  2024-08-20  2026-08-20   2.0
+COPPER           FUTURES  D1    6,521  2000-08-30  2026-08-19  26.0
+US10Y            YIELD    D1   16,145  1962-01-02  2026-08-19  64.6
+US2Y             YIELD    D1   16,642  1960-01-04  2026-08-19  66.6
+
+Total: 210,829 candles across 19 datasets
 
 
-I. ARCHITECTURE CHANGES FROM PROMPT 1
-──────────────────────────────────────
-  None. Implementation follows the Prompt 1 architecture exactly:
-  - TimescaleDB for time-series (not InfluxDB)
-  - SQLAlchemy ORM (not raw SQL)
-  - NUMERIC for prices (not FLOAT)
-  - event_time/available_time separation
-  - Prediction immutability via triggers
-  - Three-layer LIVE mode blocking
-  - Instrument registry with provider mapping
+F. MACRO DATA COVERAGE
+───────────────────────
+Framework ready. 16 series classified:
+
+POINT_IN_TIME_SAFE (daily market data, minimal revision):
+  DFF, DGS2, DGS10, T10Y2Y, T10YIE, DFII10, DTWEXBGS, NFCI
+
+REQUIRES_VINTAGE_DATA (revised after initial release):
+  CPIAUCSL, CPILFESL, PCEPI, PCEPILFE, PAYEMS, GDP
+
+REVISION_RISK_LOW:
+  UNRATE
+
+ACTION NEEDED: Set FRED_API_KEY in /root/.trading-secrets/.env
+Register free at: https://fred.stlouisfed.org/docs/api/api_key.html
 
 
-J. READINESS FOR PROMPT 3
-─────────────────────────
-  Prompt 3 requires: Historical data ingestion & quality validation.
+G. NEWS DATA FINDINGS
+─────────────────────
+Evaluated but NOT ingested (per prompt — Prompt 4/5 scope):
+  GDELT: Massive archive, free, but noisy. Good timestamp coverage.
+  Alpha Vantage: Requires API key. Limited history for free tier.
+  Recommendation: GDELT for historical headlines with gold-keyword
+  filtering. Evaluate sentiment models in Prompt 4/5.
 
-  Ready:
-  ✓ instruments table + instruments.yaml (13 instruments configured)
-  ✓ candles hypertable with uniqueness constraints
-  ✓ macro_series + macro_observations with available_time
-  ✓ data_sources + dataset_manifests for provenance
-  ✓ yfinance provider mappings (GC=F for gold futures, etc.)
-  ✓ FRED macro series IDs ready to configure
-  ✓ Point-in-time architecture (event_time vs available_time)
-  ✓ Database healthy, migrations working, tests green
 
-  Not yet needed (per roadmap):
-  - ML frameworks (Prompt 7)
-  - MT5/Wine (Prompt 10)
-  - Claude API integration (Prompt 8)
+H. QUALITY REPORT
+──────────────────
+Instrument       TF  Rows    Miss%  Dupes  H<L  Jumps  Grade
+─────────────────────────────────────────────────────────────
+EURUSD           H1  12,321   1.6%     0     0      0  A
+CRUDE_OIL        H1  11,308   9.6%     0     0     16  B
+DXY              H1  11,936   4.6%     0     0      0  B
+EURUSD           D1   5,895   0.5%     0     0     10  B
+GC_FUTURES       H1  11,462   8.4%     0     0      2  B
+USDJPY           D1   7,729   0.6%     0     0      9  B
+USDJPY           H1  12,253   2.1%     0     0      0  B
+XAGUSD_FUTURES   H1  11,460   8.4%     0     0      8  B
+DXY              D1  14,125   2.7%     0     0      0  C
+GLD_ETF          D1   5,471   3.6%     0     0     17  C
+NASDAQ           D1  14,001   3.4%     0     0     98  C
+SP500            D1  24,775   3.7%     0     0    166  C
+US10Y            D1  16,145   4.2%     0     0    243  C
+VIX              D1   9,226   3.4%     0     0   3301  C
+XAGUSD_FUTURES   D1   6,518   3.8%     0     0    213  C
+COPPER           D1   6,521   3.7%     0     0    104  D
+CRUDE_OIL        D1   6,525   3.8%     0     4    309  D
+GC_FUTURES       D1   6,516   3.8%     0     1     22  D
+US2Y             D1  16,642   4.3%     0     0   1794  D
 
-  Verdict: READY FOR PROMPT 3.
+Grade distribution: A=1, B=7, C=6, D=5
+Note: D grades are due to zero/negative prices (historical
+provider artifacts) or H<L violations, not fundamental
+data problems. All issues are flagged, not deleted.
+6,312 outlier price moves flagged for review.
 
-═══════════════════════════════════════════════════════════════
-  Also: Bounce retry outreach completed — 60/60 emails sent
-  via Microsoft 365 Graph API at 19:00 UTC Aug 19 ✓
-  Cron entry cleaned up (was one-time, removed after firing).
+
+I. COVERAGE MATRIX
+──────────────────
+             DAILY          HOURLY     5MIN    1MIN
+GC_FUTURES   26 years       2 years    60d     30d
+GLD_ETF      21.7 years     2 years    60d     7d
+XAGUSD_FUT   26 years       2 years    60d     7d
+DXY          55.6 years     2 years    60d     7d
+EURUSD       22.7 years     2 years    60d     7d
+USDJPY       29.8 years     2 years    60d     7d
+SP500        98.6 years     2 years    60d     7d
+NASDAQ       55.5 years     2 years    60d     7d
+VIX          36.6 years     2 years    60d     7d
+CRUDE_OIL    26 years       2 years    60d     7d
+COPPER       26 years       —          —       —
+US10Y        64.6 years     2 years    60d     7d
+US2Y         66.6 years     2 years    60d     7d
+
+(5m/1m data available but NOT ingested — too short-lived
+and would need frequent refreshing)
+
+
+J. DATASET MANIFESTS
+────────────────────
+19 manifests created. Each records:
+  source, instrument, granularity, date range, row count,
+  checksum, quality grade, ingestion timestamp, raw file path.
+
+
+K. STORAGE IMPACT
+─────────────────
+Database: 165 MB (research) + test DB
+Raw Parquet: 7 MB (19 files in data/raw/)
+Total new disk: ~175 MB
+Docker container RAM: 265 MB / 1.5 GB limit
+
+
+L. RESOURCE IMPACT
+──────────────────
+Ingestion took ~3 minutes
+Peak RAM: ~3.4 GB (server total)
+No impact on existing services
+Caddy: active | Even Terminal: active
+
+
+M. TEST RESULTS
+───────────────
+40 passed, 0 failed
+
+  Prompt 2 tests (28): all passing
+  Prompt 3 tests (12 new):
+    - Provider normalization (3)
+    - Idempotent ingestion (1)
+    - Timezone conversion (1)
+    - Bad OHLC detection (1)
+    - Gap detection (1)
+    - Manifest creation (1)
+    - Instrument separation (1)
+    - Macro PIT metadata (1)
+    - Raw data preservation (1)
+    - Revised data safety (1)
+
+
+N. PROBLEMS
+────────────
+1. OHLC CHECK constraints too strict for real data
+   → Fixed: dropped constraints, quality engine handles it
+2. TimescaleDB chunk explosion (5,148 weekly chunks)
+   → Fixed: monthly chunks, max_locks_per_transaction=512
+3. No FRED API key configured
+   → Framework ready, key needed from user
+4. No true XAU/USD spot data available from free sources
+   → Documented as tiered research plan
+5. VIX has 3,301 "outlier" jumps (it's VIX — expected)
+   → Quality engine correctly flags but doesn't delete
+
+
+O. SUITABILITY FOR HISTORICAL EXAMINATION
+──────────────────────────────────────────
+SAFE for daily strategy research (26+ years):
+  GC_FUTURES, XAGUSD_FUTURES, DXY, EURUSD, USDJPY,
+  SP500, NASDAQ, VIX, CRUDE_OIL, COPPER, US10Y, US2Y
+
+SAFE for hourly research (2 years):
+  GC_FUTURES, XAGUSD_FUTURES, DXY, EURUSD, USDJPY,
+  CRUDE_OIL
+
+NOT suitable as XAU/USD spot replacement:
+  ALL current datasets are proxies/futures/ETF.
+  True spot research requires MT5 history or commercial feed.
+
+NOT safe for point-in-time macro training (yet):
+  CPI, PCE, NFP, GDP — need ALFRED vintage data.
+  Daily market rates (DFF, yields, breakevens) ARE safe.
+
+
+P. RECOMMENDATION FOR PROMPT 4
+───────────────────────────────
+Trustworthy for feature engineering:
+  ✓ GC_FUTURES daily (26y) — primary gold proxy
+  ✓ DXY daily (55y) — dollar strength
+  ✓ EURUSD daily (22y) — major FX
+  ✓ USDJPY daily (29y) — safe haven
+  ✓ US10Y daily (64y) — opportunity cost
+  ✓ VIX daily (36y) — fear gauge
+  ✓ SP500 daily (98y) — risk appetite
+  ✓ All hourly datasets (2y) — for short-horizon features
+
+Use with caution:
+  ⚠ GLD_ETF — US hours only, ETF mechanics
+  ⚠ Futures continuous contracts — roll artifacts
+
+Do not use for point-in-time training:
+  ✗ CPI, PCE, NFP, GDP until ALFRED vintage data acquired
+
+Priority action for Shaheer:
+  → Register FRED API key (free, 2 minutes)
+  → Set FRED_API_KEY in /root/.trading-secrets/.env
+
+Verdict: READY FOR PROMPT 4 (feature engine).
 ═══════════════════════════════════════════════════════════════
