@@ -1,16 +1,885 @@
-SPONSOR REPLY ALERT — 2026-08-20 01:00 UTC
+# XAU/USD AI Trading Research Platform — Architecture Report
+## Prompt 1: Reconnaissance & System Design
+### Date: 2026-08-20
 
 ---
-Brand: Microsoft 365
-From: MSSecurity-noreply@microsoft.com
-Subject: New recommendation available for shaheerknows com
-Received: 2026-08-20T00:28:55Z
-Preview: You have a new recommendation for shaheerknows com
 
-Do not allow users to grant consent to unreliable applications
+## 1. EXISTING ENVIRONMENT REPORT
 
-See why this recommendation was generated for your tenant and how to remediate it in the Microsoft Entra admin center. Learn more.
+### Hardware
+| Component | Specification |
+|-----------|--------------|
+| Provider | DigitalOcean (SGP1 — Singapore) |
+| OS | Ubuntu 24.04.4 LTS (Noble), Kernel 6.8.0 |
+| CPU | 8 vCPU cores, DO-Regular @ ~2.0 GHz (shared) |
+| RAM | 16 GB (currently ~3 GB used, ~12 GB available) |
+| Swap | 4 GB file-based (123 MB used) |
+| Disk | 309 GB SSD (38 GB used, 272 GB available — 13%) |
+| GPU | None. Virtio virtual GPU only. No CUDA, no NVENC. |
+| Uptime | 6 days |
 
-T
+### Software Stack
+| Software | Version | Status |
+|----------|---------|--------|
+| Python | 3.12.3 | System default |
+| Node.js | 22.23.2 | System default |
+| Docker | 29.1.3 | Installed, no containers running |
+| Docker Compose | Not installed | — |
+| PostgreSQL | Not installed | Client not present, no service |
+| Redis | Not installed | — |
+| TimescaleDB | Not installed | — |
+| SQLite | Not installed | — |
+| MongoDB | Not installed | — |
+| Nginx | 1.24.0 | Installed but Caddy is the active reverse proxy |
+| Caddy | Active | TLS termination, reverse proxy on 80/443 |
+| FFmpeg | 6.1.1 | Full codec suite |
+| Blender | 5.2.0 LTS | Snap install, headless capable |
+| Tor | Active | Listening on 127.0.0.1:9050 |
+| Tailscale | Installed | Logged out |
 
-Ask me on the Send tab if you want help drafting a response to any of these.
+### Python Packages (System-wide)
+- **PyTorch 2.13.0** — installed (CPU-only, no CUDA)
+- **NumPy 2.4.6**, **SciPy 1.18.0** — installed
+- **requests**, **websockets**, **beautifulsoup4** — installed
+- **ctranslate2** (whisper inference) — installed
+- **No pandas, no scikit-learn, no XGBoost, no LightGBM, no TA-Lib** system-wide
+
+### Python Virtual Environments
+1. `/root/ss22-documentary-studio/.venv/` — scikit-learn, matplotlib, opencv, librosa, pillow, scikit-image
+2. `/root/instagram_bot/` (venv) — google-ads API, beautifulsoup4, cryptography
+
+### Active Services (systemd)
+| Service | Port | Purpose |
+|---------|------|---------|
+| caddy | 80, 443, 2019 (admin) | TLS reverse proxy |
+| jarvis | 3457 | JARVIS voice assistant (WebSocket + Anthropic API) |
+| even-terminal | — | Even Realities G2 glasses bridge |
+| docker | — | Container runtime (idle) |
+| tor | 9050 | SOCKS proxy |
+| rabbit-agent (cron) | — | Spawns Claude Code sessions for Rabbit R1 |
+
+### Active Ports
+| Port | Service |
+|------|---------|
+| 22 | SSH |
+| 80 | Caddy (HTTP→HTTPS) |
+| 443 | Caddy (TLS) |
+| 3456 | Node.js app (preview/API) |
+| 3457 | JARVIS WebSocket |
+| 8080 | Python HTTP server |
+| 9050 | Tor SOCKS |
+
+### Disk Usage
+| Directory | Size |
+|-----------|------|
+| /root/shaheer-project/ | 3.7 GB |
+| /root/ss22-documentary-studio/ | 2.2 GB |
+| /root/instagram_bot/ | 573 MB |
+| /var/www/preview/ | ~500 MB (video assets) |
+| **Total used** | **38 GB of 309 GB** |
+
+### Crontab
+- Rabbit-agent reinstall every 10 min
+- Google Ads audit nightly at 22:00 UTC
+- Hourly email reply check
+- Bounce retry outreach (one-time, Aug 19)
+
+---
+
+## 2. REUSABLE COMPONENTS
+
+| Component | Location | Reuse For |
+|-----------|----------|-----------|
+| **Python 3.12** | System | Primary language for quant engine |
+| **PyTorch 2.13** | System | ML models (CPU inference) |
+| **NumPy / SciPy** | System | Numerical computation, signal processing |
+| **Docker** | System | Isolate PostgreSQL, Redis, TimescaleDB |
+| **Caddy** | System | Expose trading dashboard API (if needed) |
+| **FFmpeg** | System | Data visualization video exports |
+| **MS Graph API token** | instagram_bot/ | Email alerts, reports to Shaheer |
+| **Obsidian vault** | obsidian-vault/ | Memory/context for Claude sessions |
+| **Claude Code (Even G2)** | even-terminal | Query interface — "how is the experiment doing?" |
+| **JARVIS** | jarvis/ | Voice query interface for trading status |
+
+---
+
+## 3. CONFLICTS / RISKS
+
+| Risk | Severity | Mitigation |
+|------|----------|------------|
+| **RAM contention** — R1 zombie Claude sessions regularly consume 3-5 GB | HIGH | Trading services must be memory-efficient. Budget: 4-6 GB for trading platform max. Monitor with alerts. |
+| **Shared CPU** — 8 vCPUs are shared (not dedicated) | MEDIUM | Avoid sustained CPU-intensive tasks during market hours. Run heavy backtests during off-peak. |
+| **No GPU** — ML training limited to CPU | MEDIUM | Use lightweight models (XGBoost, LightGBM, logistic regression). No deep learning training — inference only for small models. |
+| **Port conflicts** — 3456, 3457 already taken | LOW | Use 5xxx range for trading services (e.g., 5432 PostgreSQL, 5555 trading API). |
+| **Disk space during backtests** — 5-10 years of tick data can be 50-100 GB | MEDIUM | Use 1-minute candles (much smaller), compress with Parquet. Budget: 50 GB max for all trading data. |
+| **Docker overhead** — containerized DB adds memory overhead | LOW | PostgreSQL in Docker typically adds ~50-100 MB overhead. Acceptable. |
+| **Caddy/Nginx conflict** — both installed | LOW | Caddy is active. Don't touch Nginx. Add trading routes to Caddy if needed. |
+| **R1 rabbit-agent cron** — spawns processes every 10 min | LOW | Do not interfere. Trading processes must coexist. |
+
+---
+
+## 4. RECOMMENDED ARCHITECTURE
+
+```
+                        ┌─────────────────────────────────────────┐
+                        │           SHAHEER (USER)                │
+                        │  Even G2 Glasses / iPhone / R1 Rabbit   │
+                        └──────────────┬──────────────────────────┘
+                                       │
+                                       ▼
+                        ┌──────────────────────────────┐
+                        │     CLAUDE CODE (Existing)    │
+                        │  even-terminal / JARVIS / R1  │
+                        │                              │
+                        │  "How is the experiment?"    │
+                        │  → queries trading DB        │
+                        │  → returns briefing          │
+                        └──────────────┬───────────────┘
+                                       │
+                            ┌──────────┴──────────┐
+                            ▼                     ▼
+               ┌────────────────────┐  ┌────────────────────┐
+               │   QUERY SERVICE    │  │  TRADING ENGINE     │
+               │   (Python CLI)     │  │  (Python daemon)    │
+               │                    │  │                     │
+               │ trading-briefing   │  │ Market data ingest  │
+               │ trading-status     │  │ Feature calculation  │
+               │ trading-pnl        │  │ Model inference     │
+               │ trading-positions  │  │ Signal generation   │
+               │ trading-journal    │  │ Shadow portfolios   │
+               └────────┬──────────┘  │ Decision journaling │
+                        │             │ Strategy tournament  │
+                        │             └─────────┬───────────┘
+                        │                       │
+                        ▼                       ▼
+               ┌─────────────────────────────────────────┐
+               │          POSTGRESQL + TIMESCALEDB        │
+               │          (Docker container)              │
+               │                                         │
+               │  Tables:                                │
+               │  ├── candles (hypertable, partitioned)   │
+               │  ├── features (computed indicators)      │
+               │  ├── predictions (frozen forecasts)      │
+               │  ├── trades (shadow + demo)              │
+               │  ├── portfolios (shadow $100 accounts)   │
+               │  ├── experiments (backtest runs)         │
+               │  ├── strategies (genome registry)        │
+               │  ├── journal (decision records)          │
+               │  ├── macro_events (econ calendar)        │
+               │  └── model_versions (ML artifacts)       │
+               └─────────────────────────────────────────┘
+                                    │
+               ┌────────────────────┼────────────────────┐
+               ▼                    ▼                    ▼
+     ┌──────────────┐   ┌──────────────────┐   ┌──────────────┐
+     │  DATA INGEST  │   │  BACKTEST ENGINE  │   │   ML LAYER   │
+     │               │   │                  │   │              │
+     │ Free APIs:    │   │ Walk-forward     │   │ XGBoost      │
+     │ • Yahoo Fin   │   │ Anti-leakage     │   │ LightGBM     │
+     │ • FRED        │   │ Shadow replay    │   │ LogReg       │
+     │ • News APIs   │   │ Counterfactual   │   │ RandomForest │
+     │ • MT5 bridge  │   │ Tournament       │   │ Ensemble     │
+     └──────────────┘   └──────────────────┘   └──────────────┘
+                                    │
+                                    ▼
+                        ┌──────────────────────┐
+                        │    MT5 BRIDGE         │
+                        │    (DEMO only)        │
+                        │                      │
+                        │ MetaTrader 5 API     │
+                        │ Dominion Markets     │
+                        │ Paper trading        │
+                        │ DEMO ≠ LIVE (strict) │
+                        └──────────────────────┘
+```
+
+---
+
+## 5. TECHNOLOGY STACK
+
+| Layer | Technology | Why |
+|-------|-----------|-----|
+| **Language** | Python 3.12 | Already installed. Richest ecosystem for quant finance (pandas, numpy, scipy, sklearn, xgboost, etc.). |
+| **Database** | PostgreSQL 16 + TimescaleDB | Purpose-built for time-series. Hypertables auto-partition candle data. Compression reduces storage 10-20x. Runs in Docker to avoid conflicting with existing services. |
+| **Cache** | Redis 7 (Docker) | Fast key-value store for live market state, feature cache, rate limiting. Small memory footprint (~100 MB). |
+| **Data Format** | Parquet (archival) + PostgreSQL (live) | Parquet for bulk historical data import/export. PostgreSQL for operational queries. |
+| **ML Framework** | scikit-learn, XGBoost, LightGBM | CPU-efficient gradient boosting. No GPU needed. Proven in quant finance. PyTorch available for small neural nets if needed. |
+| **Feature Engine** | pandas + ta (technical analysis library) | `ta` library provides 100+ indicators out of the box. pandas for time-series manipulation. |
+| **Market Data** | yfinance (free), FRED API (free), MetaTrader5 (broker) | yfinance: 5-10 years of daily/hourly XAU/USD. FRED: macro data (yields, CPI, etc.). MT5: live tick data during forward test. |
+| **News** | NewsAPI.org (free tier) or GDELT | Headline sentiment analysis. Free tier sufficient for research. |
+| **Scheduling** | APScheduler or systemd timers | Run data ingestion, feature calculation, model inference on schedule. |
+| **Containerization** | Docker (already installed) | Isolate PostgreSQL and Redis. Don't pollute the host system. |
+| **Secrets** | python-dotenv + `/root/.trading-secrets/` (chmod 600) | `.env` file outside git repo. Never committed. Never logged. |
+| **Query Interface** | CLI scripts callable by Claude Code | `trading-briefing`, `trading-status`, etc. Claude executes these and reads output. |
+| **Monitoring** | systemd journal + health-check script | Lightweight. No need for Prometheus/Grafana on this server. |
+
+---
+
+## 6. DATA ARCHITECTURE
+
+```
+INGESTION PIPELINE:
+
+  Yahoo Finance API ──┐
+  FRED API ───────────┤
+  NewsAPI ────────────┤──► INGESTION DAEMON ──► PostgreSQL/TimescaleDB
+  MT5 (later) ────────┘         │
+                                ▼
+                         Raw candles stored
+                         with exact timestamps
+                                │
+                                ▼
+                        FEATURE ENGINE (scheduled)
+                         │
+                         ├── Technical indicators (EMA, RSI, MACD, ADX, ATR, BB, etc.)
+                         ├── Multi-timeframe aggregation (1m, 5m, 15m, 1h, 4h, 1D)
+                         ├── Volatility features (realized vol, ATR percentiles, regime)
+                         ├── Cross-asset correlations (DXY, yields, silver, oil, SPX)
+                         ├── Macro features (rate expectations, CPI trend, NFP surprise)
+                         └── News features (sentiment, relevance, surprise)
+                                │
+                                ▼
+                         Features stored with
+                         point-in-time timestamps
+                         (NO future data leakage)
+                                │
+                                ▼
+                        MODEL INFERENCE
+                         │
+                         ├── Statistical models (momentum, mean-rev, breakout)
+                         ├── ML models (XGBoost, LightGBM, ensemble)
+                         ├── Specialist agents (technical, macro, volatility, etc.)
+                         └── Claude reasoning (structured evidence → decision)
+                                │
+                                ▼
+                         PREDICTIONS frozen and stored
+                         BEFORE outcome is known
+                                │
+                                ▼
+                         OUTCOME SCORING
+                         (after market moves)
+```
+
+### Data Volume Estimates
+| Dataset | Granularity | Duration | Estimated Size |
+|---------|------------|----------|---------------|
+| XAU/USD candles | 1-minute | 10 years | ~5 GB raw, ~500 MB compressed |
+| XAU/USD candles | Daily | 20 years | ~2 MB |
+| Cross-asset (6 instruments) | Daily | 10 years | ~12 MB |
+| Macro indicators (FRED) | Monthly/Quarterly | 20 years | ~5 MB |
+| Features (300 cols) | 1-hour | 10 years | ~2 GB |
+| Predictions | Per-decision | — | ~100 MB/year |
+| Trades/Shadow | Per-trade | — | ~50 MB/year |
+| **Total estimated** | | | **~10-15 GB** |
+
+This comfortably fits within the 272 GB available disk. Even with 50 GB budget, we use <5% of available space.
+
+---
+
+## 7. MODEL ARCHITECTURE
+
+### Layer 1: Feature Engine (Quantitative)
+Pure computation. No judgment. Calculates 200-300 features from raw market data across multiple timeframes. Every feature has a strict point-in-time guarantee.
+
+### Layer 2: Specialist Agents (Analytical)
+Each specialist receives relevant features and produces a structured assessment:
+
+| # | Specialist | Input | Output |
+|---|-----------|-------|--------|
+| 1 | Technical | Price action, indicators | Trend direction, strength, S/R levels |
+| 2 | Momentum | Returns, ROC, RSI | Momentum score, divergences |
+| 3 | Mean-Reversion | Bollinger, z-scores | Overextension score, reversion probability |
+| 4 | Breakout | Range, volatility, volume | Breakout probability, direction |
+| 5 | Volatility | ATR, realized vol, regime | Regime classification, expansion/contraction |
+| 6 | Macro | Yields, DXY, rates | Macro environment score, bias |
+| 7 | Cross-Asset | Correlations, relative moves | Confirmation/divergence signals |
+| 8 | News | Headlines, sentiment | Event risk, surprise factor |
+| 9 | Regime Classifier | Multi-feature ensemble | Current market regime label |
+| 10 | Statistical Pattern | Historical analogues | Pattern match confidence |
+| 11 | Contrarian | Consensus of other agents | Counter-argument, risk flags |
+| 12 | Risk/Portfolio | Position, drawdown, exposure | Position sizing, risk limits |
+
+Most specialists are **algorithmic** (fast, deterministic). A few high-level ones (News, Contrarian) can use **Claude API calls** when budget allows.
+
+### Layer 3: Claude Reasoning (Strategic)
+Claude receives a structured evidence packet from all specialists:
+```json
+{
+  "timestamp": "2026-08-20T14:00:00Z",
+  "market_regime": "trending_up",
+  "technical_score": 0.72,
+  "momentum_score": 0.65,
+  "mean_reversion_score": -0.3,
+  "breakout_probability": 0.45,
+  "volatility_regime": "expanding",
+  "macro_bias": "gold_bullish",
+  "cross_asset_confirmation": true,
+  "news_risk": "low",
+  "contrarian_flags": ["RSI overbought on daily"],
+  "ml_ensemble_probability": 0.68,
+  "historical_analogues": [{"date": "2024-03-15", "similarity": 0.82, "outcome": "+1.2%"}],
+  "supporting_evidence": ["Strong uptrend", "DXY weakening", "Real yields falling"],
+  "contradictory_evidence": ["RSI overbought", "Near resistance at 2450"]
+}
+```
+
+Claude then produces a structured decision (not a chat response):
+```json
+{
+  "decision": "LONG",
+  "confidence": 0.65,
+  "horizon": "4h",
+  "thesis": "Gold trending up with macro tailwinds, DXY weakness. RSI overbought is a caution but not a reversal signal in trending regime.",
+  "invalidation": "Break below 2420",
+  "position_size": "standard"
+}
+```
+
+### Layer 4: Strategy Tournament
+Multiple strategies compete. Each produces its own decision independently. Performance is tracked per-strategy, per-regime.
+
+---
+
+## 8. HISTORICAL RESEARCH DESIGN
+
+### The Examination Protocol
+
+```
+FOR each historical timestamp T in the dataset:
+
+  1. FREEZE the clock at T
+  2. Gather ONLY data available at or before T:
+     - Candles up to T (not T+1)
+     - Features computed from data ≤ T
+     - Macro releases published before T
+     - News headlines timestamped before T
+  3. Feed to models/specialists/Claude
+  4. Generate prediction P(T)
+  5. FREEZE prediction P(T) — write to database
+  6. Advance clock to T + horizon
+  7. Observe actual market movement
+  8. Score prediction accuracy
+  9. Record outcome alongside original prediction
+  10. NEVER modify P(T) after the fact
+
+VIOLATION DETECTION:
+  - Every feature has a computation timestamp
+  - Every data point has an availability timestamp
+  - Audit log flags any access to data with timestamp > T
+  - Economic data uses FIRST RELEASE values, not revised values
+```
+
+### Walk-Forward Windows (example for 10-year dataset)
+
+```
+Period 1: TRAIN [2016-2018] → VALIDATE [2019-H1] → TEST [2019-H2]
+Period 2: TRAIN [2016-2019] → VALIDATE [2020-H1] → TEST [2020-H2]
+Period 3: TRAIN [2016-2020] → VALIDATE [2021-H1] → TEST [2021-H2]
+Period 4: TRAIN [2016-2021] → VALIDATE [2022-H1] → TEST [2022-H2]
+Period 5: TRAIN [2016-2022] → VALIDATE [2023-H1] → TEST [2023-H2]
+Period 6: TRAIN [2016-2023] → VALIDATE [2024-H1] → TEST [2024-H2]
+Period 7: TRAIN [2016-2024] → VALIDATE [2025-H1] → TEST [2025-H2]
+Period 8: TRAIN [2016-2025] → VALIDATE [2026-H1] → FORWARD TEST [live]
+
+FINAL HOLDOUT: 2025-H2 through 2026 — NEVER optimized on.
+```
+
+### Data Sources for Historical Research
+
+| Data | Source | Cost | Coverage |
+|------|--------|------|----------|
+| XAU/USD daily OHLC | Yahoo Finance (GC=F, GLD) | Free | 20+ years |
+| XAU/USD hourly OHLC | Yahoo Finance | Free | ~2 years |
+| XAU/USD 1-min OHLC | MT5 historical download | Free (broker) | 1-3 years typically |
+| DXY, yields, SPX | Yahoo Finance / FRED | Free | 20+ years |
+| Fed Funds Rate | FRED (DFF) | Free | 50+ years |
+| CPI, PCE, NFP | FRED | Free | 50+ years |
+| Treasury yields | FRED (DGS2, DGS10) | Free | 50+ years |
+| News headlines | GDELT / NewsAPI | Free tier | 3-5 years |
+
+---
+
+## 9. ANTI-OVERFITTING DESIGN
+
+### The Seven Deadly Sins of Backtesting
+
+| Sin | How We Prevent It |
+|-----|-------------------|
+| **Look-ahead bias** | Strict point-in-time data access. Feature engine enforces timestamp boundaries. Audit trail flags violations. |
+| **Data leakage** | Train/validate/test split enforced programmatically. No feature uses future candle data. Features computed from rolling windows only. |
+| **Survivorship bias** | Not critical for XAU/USD (gold doesn't get delisted), but we track instrument changes and contract rollovers. |
+| **Overfitting to noise** | Require strategies to pass multiple independent test periods. Performance must be consistent across regimes. |
+| **Unrealistic execution** | All backtests include: spread (configurable, default 3 pips for XAU), slippage (1-2 pips), commission, and execution delay (1 candle minimum). |
+| **Parameter mining** | Track number of parameters per strategy. Penalize complexity. Require that Sharpe ratio exceeds threshold AFTER adjusting for degrees of freedom. |
+| **Selection bias** | The strategy tournament includes random and simple baselines. Any "smart" strategy must beat buy-and-hold AND random entry with trailing stop. |
+
+### Automatic Overfitting Detection
+```
+IF in_sample_sharpe / out_of_sample_sharpe > 2.0:
+    FLAG: "Likely overfit — in-sample performance degrades 50%+ out of sample"
+
+IF parameter_count > 10 AND sample_size < 500:
+    FLAG: "Too many parameters for available data"
+
+IF strategy works in only 1 of 4 market regimes:
+    FLAG: "Regime-specific — not robust"
+
+IF win_rate > 80%:
+    FLAG: "Suspiciously high — check for look-ahead bias"
+```
+
+---
+
+## 10. STRATEGY TOURNAMENT DESIGN
+
+### Tournament Structure
+```
+TIER 1 — BASELINES (must beat these to be "interesting")
+  ├── Random entry + trailing stop
+  ├── Buy-and-hold gold
+  ├── Simple 50/200 EMA crossover
+  └── Monthly rebalance (50% gold / 50% cash)
+
+TIER 2 — SIMPLE SYSTEMATIC
+  ├── Momentum (12-month return > 0 → long)
+  ├── Mean reversion (RSI < 30 → long, > 70 → short)
+  ├── Breakout (N-day high/low break)
+  ├── Volatility expansion (ATR breakout)
+  └── Trend following (ADX + EMA direction)
+
+TIER 3 — MULTI-FACTOR
+  ├── Technical ensemble (vote of 5+ indicators)
+  ├── Macro model (yields + DXY + rate expectations)
+  ├── Cross-asset model (gold vs correlated markets)
+  └── ML ensemble (XGBoost on 50+ features)
+
+TIER 4 — AI-AUGMENTED
+  ├── Claude reasoning on structured evidence
+  ├── Claude + ML ensemble
+  ├── Claude + specialist agent votes
+  └── Full system (all layers combined)
+
+TIER 5 — EVOLVED
+  ├── Mutated variants of winning strategies
+  ├── Parameter-optimized versions
+  └── Regime-conditional combinations
+```
+
+### Ranking Criteria (not just profit)
+1. **Risk-adjusted return** (Sortino ratio — penalizes downside only)
+2. **Maximum drawdown** (survival matters more than peak profit)
+3. **Consistency** (performance across all walk-forward periods)
+4. **Robustness** (in-sample vs out-of-sample degradation)
+5. **Simplicity** (fewer parameters preferred, all else equal)
+6. **Regime breadth** (works in trending AND ranging markets)
+
+---
+
+## 11. SHADOW PORTFOLIO DESIGN
+
+### Starting Capital: $100 per portfolio
+
+Each shadow portfolio tracks a virtual $100 account. No real money. All execute against the same market data stream.
+
+### Portfolio Categories
+
+```
+PRIMARY (10 portfolios)
+  ├── Full system (all agents + Claude + ML)
+  ├── High-confidence only (>70% confidence trades)
+  ├── Claude reasoning only (no ML)
+  ├── ML only (no Claude)
+  ├── Technical only
+  ├── Macro only
+  ├── Momentum only
+  ├── Mean reversion only
+  ├── Breakout only
+  └── Random baseline
+
+PARAMETER VARIANTS (20+ portfolios)
+  ├── Tight stops (0.5x ATR)
+  ├── Wide stops (2x ATR)
+  ├── Trailing stops
+  ├── Fixed target (1:2 risk/reward)
+  ├── Time-based exit (4h, 1D, 1W)
+  ├── Half position size
+  ├── Double position size
+  ├── Delayed entry (+5 min, +15 min, +1h)
+  └── Regime-filtered (only trade in trending markets)
+
+ABLATION (10+ portfolios)
+  ├── System minus news agent
+  ├── System minus macro agent
+  ├── System minus volatility filter
+  ├── System minus cross-asset
+  └── System minus contrarian
+```
+
+### Tracking Per Portfolio
+- Running balance
+- Open positions
+- Trade history
+- Cumulative P/L curve
+- Maximum drawdown
+- Win rate
+- Sharpe/Sortino
+- Comparison vs buy-and-hold benchmark
+
+---
+
+## 12. ONE-WEEK FORWARD TEST DESIGN
+
+### Prerequisites (must be completed first)
+1. Historical backtest complete with positive out-of-sample results
+2. Strategy selected from tournament
+3. MT5 DEMO account connected
+4. Data ingestion pipeline running live
+5. Feature engine running in real-time
+6. Decision journal system operational
+
+### 7-Day Protocol
+
+```
+DAY 0 (Setup):
+  - Connect MT5 DEMO account
+  - Verify live data feed
+  - Start all shadow portfolios at $100
+  - Log starting market conditions
+
+DAYS 1-7 (Continuous):
+  Every decision interval (e.g., hourly or 4-hourly):
+    1. Ingest latest market data
+    2. Calculate features (point-in-time)
+    3. Run all specialist agents
+    4. Generate prediction — FREEZE before market moves
+    5. If signal → place DEMO trade via MT5
+    6. Update all shadow portfolios
+    7. Score previous predictions against actual outcomes
+    8. Log everything to decision journal
+
+  Every 24 hours:
+    1. Generate daily summary
+    2. Compare shadow portfolio rankings
+    3. Evaluate confidence calibration
+    4. Detect any system errors/anomalies
+    5. Email summary to Shaheer (via M365)
+
+DAY 7 (Report):
+  Generate comprehensive report:
+    - Total predictions made
+    - Accuracy by confidence band
+    - P/L of each shadow portfolio
+    - Best/worst trades with analysis
+    - Comparison to baselines
+    - System uptime and errors
+    - Confidence calibration chart
+    - Regime analysis
+    - Honest assessment: did the system add value?
+```
+
+### Critical Rule
+NO prediction may be modified after it is made. The database enforces immutability on prediction records (INSERT only, no UPDATE/DELETE on predictions table).
+
+---
+
+## 13. CLAUDE QUERY INTERFACE
+
+### Design: CLI Commands Callable by Claude Code
+
+Claude Code (via Even G2, JARVIS, or R1) runs shell commands. The trading system exposes its state through simple CLI scripts:
+
+```bash
+# Quick status
+trading-briefing              # 5-line market summary + position status
+
+# Detailed queries
+trading-status                # Current market state, open positions, regime
+trading-pnl                   # P/L summary for all shadow portfolios
+trading-positions             # Open positions with entry, stop, target
+trading-journal [--last=5]    # Recent decision journal entries
+trading-predictions [--today] # Today's predictions and outcomes
+trading-calibration           # Confidence calibration report
+trading-strategies            # Tournament rankings
+trading-experiment [id]       # Specific backtest results
+trading-health                # System health check
+
+# Conversational answers
+trading-ask "What was our worst trade?"
+trading-ask "Why did that trade lose?"
+trading-ask "What is gold doing right now?"
+trading-ask "What are the agents disagreeing about?"
+```
+
+### Implementation
+Each command is a Python script in `/root/shaheer-project/trading-research/bin/` that:
+1. Connects to PostgreSQL
+2. Queries relevant tables
+3. Formats output as concise, speakable text
+4. Prints to stdout (Claude reads it)
+
+### Example Output
+```
+$ trading-briefing
+XAU/USD: $2,448.30 (+0.3%) | Regime: Trending Up | Volatility: Normal
+Position: LONG 0.01 lots @ $2,441 | P/L: +$7.30 (+0.3%)
+Shadow portfolios: 34/50 profitable | Best: Momentum ($112.40)
+Confidence calibration: 62% accuracy on 70%+ confidence calls
+Today: 3 predictions made, 2 correct, 1 pending
+```
+
+This works seamlessly with the existing Even G2 → Claude Code → server pipeline. Shaheer asks "How is the trading experiment doing?" → Claude runs `trading-briefing` → reads output → speaks it back.
+
+---
+
+## 14. SECURITY PLAN
+
+### Credential Management
+```
+/root/.trading-secrets/          (chmod 700)
+  ├── .env                       (chmod 600)
+  │   ├── POSTGRES_PASSWORD=...
+  │   ├── REDIS_PASSWORD=...
+  │   ├── MT5_DEMO_LOGIN=...
+  │   ├── MT5_DEMO_PASSWORD=...
+  │   ├── MT5_DEMO_SERVER=...
+  │   ├── NEWS_API_KEY=...
+  │   └── FRED_API_KEY=...
+  └── .env.live                  (chmod 600, EMPTY until approved)
+      ├── MT5_LIVE_LOGIN=...
+      └── MT5_LIVE_PASSWORD=...
+```
+
+### DEMO vs LIVE Separation
+```python
+# Environment variable controls mode — defaults to DEMO
+TRADING_MODE = os.environ.get('TRADING_MODE', 'DEMO')
+
+# Code-level enforcement
+if TRADING_MODE == 'LIVE':
+    raise RuntimeError("LIVE TRADING IS DISABLED. Edit .env and restart with explicit approval.")
+
+# Database-level enforcement
+# demo_trades and live_trades are SEPARATE tables
+# live_trades table has a trigger that blocks INSERT unless TRADING_MODE == 'LIVE'
+```
+
+### Git Protection
+```
+# .gitignore
+.env
+.env.live
+*.secret
+/root/.trading-secrets/
+__pycache__/
+*.pyc
+```
+
+### What NEVER enters logs/prompts
+- MT5 passwords
+- API keys
+- Database passwords
+- Account numbers
+- Any credential value
+
+---
+
+## 15. IMPLEMENTATION ROADMAP
+
+### Milestone 1: Foundation (Day 1-2)
+**Objective:** Database + project skeleton
+
+| Item | Detail |
+|------|--------|
+| Components | PostgreSQL 16 + TimescaleDB in Docker, Redis in Docker, project directory structure, Python venv with core packages |
+| Dependencies | Docker (already installed) |
+| Deliverable | Running database, schema created, health check passes |
+| Verification | `docker ps` shows healthy containers, `psql` connects, test insert/query works |
+| Rollback | `docker compose down -v` removes everything cleanly |
+
+```bash
+# Packages to install in venv:
+pip install pandas numpy scipy scikit-learn xgboost lightgbm
+pip install ta yfinance fredapi sqlalchemy psycopg2-binary
+pip install apscheduler python-dotenv redis requests
+```
+
+### Milestone 2: Historical Data Ingestion (Day 2-3)
+**Objective:** 5-10 years of XAU/USD + cross-asset data in the database
+
+| Item | Detail |
+|------|--------|
+| Components | Data ingestion scripts for yfinance (OHLC), FRED (macro), schema for candles/macro tables |
+| Dependencies | Milestone 1 |
+| Deliverable | 10 years of daily XAU/USD candles, 2 years hourly, DXY/yields/SPX daily, FRED macro series |
+| Verification | Query confirms expected row counts, no gaps, timestamps correct |
+| Rollback | Truncate tables and re-ingest |
+
+### Milestone 3: Feature Engine (Day 3-5)
+**Objective:** 200+ features computed with point-in-time guarantee
+
+| Item | Detail |
+|------|--------|
+| Components | Feature computation pipeline, technical indicators, multi-timeframe, volatility, cross-asset features |
+| Dependencies | Milestone 2 |
+| Deliverable | Feature table populated, audit confirms no future data access |
+| Verification | Spot-check 10 random timestamps — manually verify features match expected values |
+| Rollback | Drop feature table and recompute |
+
+### Milestone 4: Backtest Engine (Day 5-7)
+**Objective:** Walk-forward backtest with anti-leakage enforcement
+
+| Item | Detail |
+|------|--------|
+| Components | Backtest framework, walk-forward splitter, execution simulator (spread, slippage, commission), prediction recorder |
+| Dependencies | Milestone 3 |
+| Deliverable | Run simple EMA crossover strategy through full 10-year walk-forward, verify results are reasonable |
+| Verification | Compare to known EMA crossover results from public sources. Verify no look-ahead bias. |
+| Rollback | Drop experiment tables |
+
+### Milestone 5: Strategy Tournament (Day 7-9)
+**Objective:** 15+ strategies competing, ranked by risk-adjusted performance
+
+| Item | Detail |
+|------|--------|
+| Components | Strategy implementations (baselines, systematic, multi-factor), tournament runner, ranking system |
+| Dependencies | Milestone 4 |
+| Deliverable | Tournament results table showing all strategies ranked by Sortino, drawdown, consistency |
+| Verification | Random baseline performs ~0 expectancy. Simple strategies produce known-reasonable results. |
+| Rollback | Clear experiment results, re-run |
+
+### Milestone 6: ML Models (Day 9-11)
+**Objective:** XGBoost/LightGBM models trained with walk-forward validation
+
+| Item | Detail |
+|------|--------|
+| Components | ML training pipeline, feature selection, hyperparameter search (within training window only), model versioning |
+| Dependencies | Milestone 5 |
+| Deliverable | Trained models with out-of-sample performance metrics. Models entered into tournament. |
+| Verification | Out-of-sample Sharpe > 0. Models beat random baseline. In-sample/out-of-sample ratio < 2x. |
+| Rollback | Delete model artifacts, re-train |
+
+### Milestone 7: Specialist Agents + Claude Integration (Day 11-13)
+**Objective:** Specialist analytical agents feeding structured evidence to Claude
+
+| Item | Detail |
+|------|--------|
+| Components | 12 specialist agent implementations, evidence packet assembly, Claude API integration, decision parser |
+| Dependencies | Milestone 6 |
+| Deliverable | Full pipeline: features → specialists → evidence packet → Claude → structured decision |
+| Verification | Run on 20 historical timestamps, verify decisions are coherent and properly formatted |
+| Rollback | Disable Claude integration, fall back to ML-only |
+
+### Milestone 8: Shadow Portfolios (Day 13-14)
+**Objective:** 50+ virtual $100 portfolios running in parallel
+
+| Item | Detail |
+|------|--------|
+| Components | Portfolio engine, position tracking, P/L calculation, portfolio comparison dashboard |
+| Dependencies | Milestone 7 |
+| Deliverable | 50 shadow portfolios running through historical data, ranked |
+| Verification | All portfolios sum correctly, no P/L calculation errors |
+| Rollback | Reset portfolio balances |
+
+### Milestone 9: Query Interface (Day 14-15)
+**Objective:** Claude can answer "How is the experiment doing?"
+
+| Item | Detail |
+|------|--------|
+| Components | CLI scripts (trading-briefing, trading-status, etc.), installed in PATH |
+| Dependencies | Milestone 8 |
+| Deliverable | All query commands working, producing concise spoken-friendly output |
+| Verification | Shaheer asks via Even G2, Claude answers with live data |
+| Rollback | Remove scripts from PATH |
+
+### Milestone 10: MT5 DEMO Connection + Forward Test (Day 15-21)
+**Objective:** 7-day live forward test on DEMO account
+
+| Item | Detail |
+|------|--------|
+| Components | MT5 bridge (MetaTrader5 Python package or REST API), DEMO account connection, live data ingestion, real-time prediction pipeline |
+| Dependencies | All previous milestones |
+| Deliverable | 7 days of live DEMO trading with full decision journal |
+| Verification | Comprehensive post-test report comparing predictions to outcomes |
+| Rollback | Disconnect MT5, system continues in backtest-only mode |
+
+**NOTE on MT5:** The MetaTrader5 Python package requires Windows. On Linux, options are:
+- **Wine + MT5** (complex, fragile)
+- **MT5 REST API bridge** running on Shaheer's iPhone/Windows device
+- **Docker with Wine** (experimental)
+- **Third-party MT5 bridge** (e.g., mt5linux, dwx-zeromq)
+
+This is the biggest open question — see Section 16.
+
+---
+
+## 16. OPEN QUESTIONS (Requiring User Input)
+
+### Q1: MetaTrader 5 Connectivity (CRITICAL)
+The MT5 Python package (`MetaTrader5`) only works on Windows. This Linux server cannot run it natively.
+
+**Options:**
+- **(A)** Install MT5 via Wine in Docker — experimental, may be unreliable
+- **(B)** Use a third-party bridge like `mt5linux` or `dwx-zeromq-connector` — requires MT5 running somewhere (your iPhone app or a Windows VPS)
+- **(C)** Skip MT5 for now, use yfinance for market data, do paper trading purely in our database (no actual DEMO orders placed in MT5)
+- **(D)** Get a small Windows VPS ($5-10/month) to run MT5 headless, bridge to this server
+
+**Recommendation:** Start with **(C)** — pure database paper trading. Add MT5 bridge later when the system proves it has an edge.
+
+### Q2: Dominion Markets MT5 DEMO Credentials
+When we're ready for the forward test, I'll need the MT5 DEMO account credentials (login, password, server). These will be stored in `/root/.trading-secrets/.env` with strict permissions. **Not needed now — only when Milestone 10 begins.**
+
+### Q3: Claude API Budget for Trading
+The specialist agents and Claude reasoning layer will make Claude API calls. Each trading decision might use 1-2 API calls (~$0.01-0.05 each). During backtesting over 10 years of hourly data, this could mean thousands of API calls.
+
+**Options:**
+- **(A)** Use Claude API only for forward testing (cheapest — backtest uses ML only)
+- **(B)** Use Claude API for a sample of historical decisions (100-200 calls for calibration)
+- **(C)** Use Claude API for all decisions (expensive for backtesting, most thorough)
+
+**Recommendation:** **(B)** — sample-based historical calibration, then full Claude integration for forward test.
+
+### Q4: News Data Source
+Free news APIs have limitations. For historical news analysis:
+- **GDELT** — free, massive, but noisy
+- **NewsAPI.org** — free tier: 100 requests/day, 1 month history
+- **Alpha Vantage News** — free tier available
+
+**Recommendation:** Start with GDELT for historical, NewsAPI for live. Upgrade if needed.
+
+### Q5: FRED API Key
+FRED (Federal Reserve Economic Data) is free but requires an API key.
+**Action:** Register at https://fred.stlouisfed.org/docs/api/api_key.html (free, instant). Send the key via Claude Relay when ready.
+
+### Q6: Acceptable RAM Budget
+With R1 sessions and other services, RAM is occasionally tight. How much RAM should the trading platform be allowed to use?
+
+**Recommendation:** Cap at 4 GB (PostgreSQL 1.5 GB, Redis 500 MB, Python workers 2 GB). This leaves 8+ GB for existing services.
+
+---
+
+## HONEST ASSESSMENT
+
+### What Will Work Well
+- **Historical backtesting** — we have the compute, the data is free, the methodology is sound
+- **Feature engine** — 200+ indicators on CPU is trivial, pandas handles this easily
+- **Strategy tournament** — excellent way to prevent self-deception
+- **Shadow portfolios** — cheap to run, highly informative
+- **Claude query interface** — natural fit with existing Even G2 workflow
+- **Anti-overfitting framework** — the most important part of the entire system
+
+### What Will Be Challenging
+- **MT5 on Linux** — real technical challenge, may need Windows VPS
+- **No GPU** — limits ML to gradient boosting (which is actually fine — often beats neural nets on tabular financial data)
+- **Shared server** — RAM contention with R1 sessions is real
+- **News analysis** — free sources are noisy, may not add much value
+- **Claude API costs** — could add up during intensive backtesting
+
+### What I Won't Promise
+- **Profitability** — no trading system should promise this. The entire design is built around discovering whether an edge exists, not assuming one does.
+- **That AI beats simple strategies** — the tournament will tell us. If EMA crossover wins, we report that honestly.
+- **Real-time tick-level trading** — this server's latency to exchanges makes sub-second trading impossible. We're targeting 1-hour to daily timeframes.
+
+---
+
+*Architecture report complete. Awaiting approval to proceed to Prompt 2 (implementation).*
+*No installations or modifications have been made. The server is unchanged.*
