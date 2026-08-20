@@ -1,72 +1,55 @@
-PROMPT 7 — ML PREDICTIVE LABORATORY — COMPLETE — 2026-08-20 14:00 UTC
+PROMPT 8 — SPECIALIST INTELLIGENCE AGENTS + CLAUDE REASONING LAB — COMPLETE
+2026-08-20 14:17 UTC
 
 ═══════════════════════════════════════════════════
-  77 EXPERIMENTS | 295 TESTS PASSING | 81s RUNTIME
-  XAU/USD AI Trading Research Platform
-  ALLOW_HOLDOUT_EVALUATION = FALSE
+  7 SPECIALISTS | 6 PREDICTION SYSTEMS | 328 TESTS
+  69s RUNTIME | ALLOW_HOLDOUT_EVALUATION = FALSE
 ═══════════════════════════════════════════════════
 
-VERDICT: GOLD D1 RETURNS ARE NOT MEANINGFULLY PREDICTABLE
-WITH STANDARD ML ON THESE FEATURE FAMILIES.
+CORE QUESTION: Does contextual intelligence add measurable
+out-of-sample predictive value?
 
-MODEL HIERARCHY (VAL IC on 5d return):
-  Level 0 (Null):     predict-mean baseline
-  Level 1 (Linear):   elastic_net IC=0.17 ← BEST
-  Level 2 (Tree):     random_forest IC=0.11
-  Level 3 (Boosting): xgboost IC=0.13
-  Complexity DOES NOT help.
+ANSWER: NO — specialist ensemble does not reliably beat null.
 
-TEST SET (2025 — single use):
-  Ridge:         TEST IC=0.057, DirAcc=59.1%
-  Random Forest: TEST IC=0.239, DirAcc=67.1% ← best on TEST
-  XGBoost:       TEST IC=0.142, DirAcc=60.7%
-  LightGBM:      TEST IC=0.125, DirAcc=61.5%
-  ALL models R² < 0 on TEST (negative = worse than mean)
+SYSTEM COMPARISON (VALIDATE — 2024 data):
+  ml_random_forest:     DirAcc=65.8%, IC=0.115
+  ml_lightgbm:          DirAcc=59.4%, IC=-0.029
+  ml_xgboost:           DirAcc=56.8%, IC=-0.042
+  ml_ridge:             DirAcc=52.7%, IC=-0.085
+  specialist_ensemble:  DirAcc=0.0% (all NEUTRAL — signal too weak)
+  claude_simulated:     DirAcc=0.0% (all NEUTRAL — inherits weak signals)
 
-OVERFITTING CONFIRMED:
-  XGBoost:  TRAIN R²=0.24 → TEST R²=-0.16
-  LightGBM: TRAIN R²=0.25 → TEST R²=-0.22
+KEY FINDINGS:
+1. Specialist signals are too marginal to produce directional calls
+2. Most specialist scores fall near zero → NEUTRAL → no actionable prediction
+3. ML models overfit on TRAIN (XGBoost 73.6%) but degrade on VALIDATE (56.8%)
+4. Random Forest most stable across splits (65.8% VALIDATE)
+5. Contextual reasoning adds NO measurable edge over pure quant
+6. Real Claude API: anthropic package installed, ready for subsample
 
-PERMUTATION TESTS — ALL FAIL:
-  Ridge:   p=0.50 ✗ NOT SIGNIFICANT
-  XGBoost: p=0.30 ✗ NOT SIGNIFICANT
-  LightGBM: p=0.60 ✗ NOT SIGNIFICANT
-  No model produces signal distinguishable from noise.
+SPECIALIST AGENTS BUILT:
+  1. Technical — trend, RSI, MACD, Bollinger (algorithmic)
+  2. Macro — DXY, yields, VIX, gold-DXY correlation
+  3. Cross-Asset — Gold/Silver ratio, DXY divergence
+  4. Volatility — vol regimes, squeeze detection
+  5. Historical Analogue — nearest-neighbor (strict past-only)
+  6. Contrarian — consensus fade, crowding risk
+  7. Meta-Synthesis — equal-weighted combination baseline
 
-FEATURE STABILITY:
-  Random features rank 10-22 out of 22 (good — not top-ranked)
-  LightGBM: 3 random features above median ⚠ overfitting risk
-  Top real features: gc_return_60d, gc_sma_200d_norm, gc_macd_signal
+INFRASTRUCTURE:
+  agents/specialists.py — 7 specialist implementations
+  agents/context.py — PIT-safe context packets
+  agents/claude_reasoner.py — Claude API + cache + cost tracking
+  agents/evaluator.py — direction accuracy, Brier, IC, calibration
+  run_prompt8_agents_lab.py — Full 7-phase execution
+  tests/unit/test_agents.py — 33 tests (future leakage guards)
 
-FEATURE FAMILIES (mean |IC| vs 5d return):
-  TREND_MOMENTUM: 0.029 (best)
-  PRICE_ONLY:     0.025
-  TECHNICAL:      0.021
-  CROSS_ASSET:    0.018
-  MARKET_STRUCTURE: 0.012
-  VOLATILITY:     0.011
-  RANDOM NOISE:   0.006
+LIMITATIONS:
+  - No FRED macro data (API key not registered)
+  - No news/GDELT data (external API needed)
+  - No economic event calendar
+  - Simulated Claude for bulk historical, real API for subsample
 
-TARGET VALIDATION:
-  Zero feature-target column overlap ✓
-  Adversarial leakage detection: PASS ✓
-  1d return autocorrelation: -0.016 (near-random)
-  5d return autocorrelation: 0.795 (overlapping windows, expected)
-  No features with |corr| > 0.3 to future targets ✓
-
-INFRASTRUCTURE BUILT:
-  ml/pipeline.py — Train-only scaler, NaN handling, clipping
-  ml/metrics.py — IC, DSR, calibration, permutation importance
-  ml/models.py — 14+ models in MODEL_CATALOG (4 levels)
-  ml/splits.py — Purged expanding/rolling CV
-  ml/features.py — 7 feature families + random injection
-  ml/registry.py — Append-only experiment tracking
-  run_prompt7_ml_lab.py — Full 10-step execution (770 lines)
-  tests/unit/test_ml.py — 32 tests
-  PROMPT7_ML_LAB_REPORT.md — Sections A-O (260 lines)
-
-DEFLATED SHARPE RATIO: NOT SIGNIFICANT
-  54 trials, expected max IC under null absorbs observed values.
-
+328 TESTS PASSING (295 prior + 33 new)
+PROMPT 8 COMPLETE — READY FOR PROMPT 9
 ALLOW_HOLDOUT_EVALUATION = FALSE
-PROMPT 7 COMPLETE — READY FOR PROMPT 8
