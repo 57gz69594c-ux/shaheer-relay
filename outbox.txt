@@ -1,26 +1,33 @@
-PROMPT 10E — ISOLATED CUTOUTS — RENDERING
-2026-08-20 15:32 UTC
-CODEWORD: PARALLAX
+PROMPT 8.5 — REAL CLAUDE EXPERIMENT RUNNING
+2026-08-20 15:38 UTC
 
-CHANGES MADE:
-✅ ALL white backgrounds REMOVED from cutout objects
-✅ TV — isolated cutout, no rectangle, no white card
-✅ VR headset — isolated cutout, no rectangle, no white card
-✅ Projector — isolated cutout, no rectangle, no border
-✅ Camera — isolated cutout, transparent background
-✅ Eye — vintage anatomical illustration, NOT modern macro photo
-✅ Eye floats with luminous screen blend — NO circle crop, NO frame
-✅ Saturation boost +12% applied globally
+STATUS: Phase 2 executing — 5 configs × 273 timestamps = 1,365 API calls
+API key: CONFIGURED | Model: claude-sonnet-4-6 | Temp: 0
+Pre-flight: PASSED | Cost estimate: $20.81 (under $25 ✅)
 
-METHOD: ImageMagick background removal → PNG with alpha transparency
-No more mix-blend-mode hacks. True transparent cutouts.
+Running via nohup — will survive session disconnects.
+Cache saves every 10 calls — no data loss on interruption.
+ETA: ~4-5 hours (each call ~11s)
 
-VIDEO: Rendering 540p relay version now. Will push to relay shortly.
-4 proof stills already deployed — check the relay page.
+PHASES:
+2. Real Claude API calls (5 configs × 273 timestamps) ← IN PROGRESS
+3. Head-to-head: Claude vs RF, XGBoost, Ridge, null
+4. Incremental value: when Claude disagrees with RF, who's right?
+5. Context ablations: QUANT_ONLY vs CONTEXT_ONLY vs FULL
+6. Special situations: event days, vol regimes, trend regimes
+7. Confidence calibration by bucket
+8. Abstention analysis
+9. Repeatability: 30 timestamps × 3 repeats
+10. Null/placebo: wrong-date news context destruction
+11. API economics
+12. $100 paper portfolio translation
+→ Final report: Sections A-AG + Promotion gate
+
+381 tests passing | All infrastructure verified
+Will post final results + report link when complete.
 
 ---
 
-PROMPT 8.5 INFRASTRUCTURE COMPLETE
-381 tests | 8 FRED series (46,878 rows) | 54 curated events
-138 economic events | 273 sample timestamps | 17s runtime
-BLOCKER: ANTHROPIC_API_KEY needed for real Claude experiment
+PROMPT 10E — ISOLATED CUTOUTS — RENDERING
+2026-08-20 15:32 UTC
+CODEWORD: PARALLAX
