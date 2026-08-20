@@ -138,18 +138,64 @@
   <h1>Claude Relay</h1>
   <p class="sub">Send or receive from Claude.</p>
 
-  <!-- SS-22 VIDEO — CORRECTED LAYOUT ENGINE -->
+  <!-- PROMPT 8 — CHOREOGRAPHY VIDEO -->
   <div class="video-banner">
     <div class="vb-header">
-      <span class="vb-title">SS-22 — CORRECTED ENGINE</span>
-      <span class="vb-code">1920x1080 FIXED</span>
+      <span class="vb-title">PROMPT 8 — CHOREOGRAPHY</span>
+      <span class="vb-code">MOTION DIRECTION</span>
     </div>
     <video controls playsinline preload="auto">
-      <source src="p8_540p.mp4?v=20260820_v37" type="video/mp4">
+      <source src="p8_proof_540p.mp4?v=20260820_v38" type="video/mp4">
     </video>
     <div class="vb-info">
-      <span>19 scenes &bull; 2:13 &bull; 540p preview</span>
-      <span>Composition fixed from 3840x2160 to 1920x1080 — no audio</span>
+      <span>19 scenes &bull; 540p &bull; Pass A choreography</span>
+      <span>Mask reveals &bull; letter stagger &bull; draw-on &bull; slides — no audio</span>
+    </div>
+  </div>
+
+  <!-- PROMPT 8 — PASS A PROOF STILLS -->
+  <div class="video-banner">
+    <div class="vb-header">
+      <span class="vb-title">PASS A — COCKPIT</span>
+      <span class="vb-code">MASK REVEAL</span>
+    </div>
+    <img src="p8_cockpit.png?v=p8" alt="Cockpit choreography" style="width:100%;display:block;">
+    <div class="vb-info">
+      <span>Photo wipes from left &bull; labels stamp-hit &bull; connector draws</span>
+      <span>No fade entrance</span>
+    </div>
+  </div>
+  <div class="video-banner">
+    <div class="vb-header">
+      <span class="vb-title">PASS A — 18 MONTHS</span>
+      <span class="vb-code">DESK ASSEMBLY</span>
+    </div>
+    <img src="p8_18months.png?v=p8" alt="18 Months choreography" style="width:100%;display:block;">
+    <div class="vb-info">
+      <span>18 pops &bull; MONTHS slides &bull; calendars drop &bull; photos from sides</span>
+      <span>8-step sequence</span>
+    </div>
+  </div>
+  <div class="video-banner">
+    <div class="vb-header">
+      <span class="vb-title">PASS A — WINDOW</span>
+      <span class="vb-code">QUESTION→DISCOVERY</span>
+    </div>
+    <img src="p8_window.png?v=p8" alt="Window choreography" style="width:100%;display:block;">
+    <div class="vb-info">
+      <span>Letter stagger &bull; frame draws &bull; space reveals &bull; Saturn drifts</span>
+      <span>Narrative causality</span>
+    </div>
+  </div>
+  <div class="video-banner">
+    <div class="vb-header">
+      <span class="vb-title">PASS A — TV/VR</span>
+      <span class="vb-code">SLIDE + DRAW-ON X</span>
+    </div>
+    <img src="p8_tvvr.png?v=p8" alt="TV VR choreography" style="width:100%;display:block;">
+    <div class="vb-info">
+      <span>TV from left &bull; VR from right &bull; X strokes draw &bull; window glows</span>
+      <span>X contained within object bounds</span>
     </div>
   </div>
 
@@ -243,7 +289,7 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#4f7cff;font-weight:700;letter-spacing:2px;margin-bottom:6px;">PROMPT 7 — LAYOUT ENGINE DIAGNOSTIC</div>
+    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#4f7cff;font-weight:700;letter-spacing:2px;margin-bottom:6px;">PROMPT 8 — MOTION DIRECTION</div>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
     <button id="copy" class="secondary">Copy</button>
@@ -252,11 +298,11 @@
   </div>
 
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v37 — LAYOUT ENGINE DIAGNOSTIC — CODEWORD: SATURN — Aug 20 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v38 — MOTION DIRECTION — CODEWORD: TELESCOPE — Aug 20 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v37')) {
-  sessionStorage.setItem('relay_cache_bust_v37', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v38')) {
+  sessionStorage.setItem('relay_cache_bust_v38', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
