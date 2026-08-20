@@ -41,6 +41,9 @@ KEY INSIGHT: At ZERO cost, RANDOM makes +$458 profit!
 Losses at BASE cost are almost entirely cost drag.
 RANDOM: $458 signal − $25,780 costs = −$25,322 net.
 
+100-seed ZERO cost: mean -0.36x, 46/100 positive (centered around zero).
+100-seed LOW cost:  mean -129x, 0/100 positive (99.7% from cost drag).
+
 
 E. PASSIVE GOLD BENCHMARK (separate from strategy)
 ───────────────────────────────────────────────────
