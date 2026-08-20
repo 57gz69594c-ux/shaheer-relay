@@ -1,13 +1,19 @@
 SECURE ANTHROPIC KEY PAGE READY
 2026-08-20 15:02 UTC
 
+Open this link to enter your API key securely:
+
 https://104.248.159.95.nip.io/setup-key/ljajEjjS0UFiXgQ_2J82s02YxROJ6HQVY7OBujXfWC8
 
-- Password-style input (key never visible)
-- Single-use link (dies after one successful save)
-- Auto-expires in 15 minutes
-- Key saved to /root/.trading-secrets/.env (chmod 600)
-- Never logged, never echoed, never committed
+Password-style input, single-use, auto-expires in 15 min.
+Key saved to protected file, never logged or echoed.
 
 After you enter the key, tell me to continue.
 I will NOT start Prompt 8.5 until you confirm.
+
+---
+
+PROMPT 8.5 INFRASTRUCTURE COMPLETE
+381 tests | 8 FRED series (46,878 rows) | 54 curated events
+138 economic events | 273 sample timestamps | 17s runtime
+BLOCKER: ANTHROPIC_API_KEY needed for real Claude experiment
