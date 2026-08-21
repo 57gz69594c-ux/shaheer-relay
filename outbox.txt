@@ -1,74 +1,36 @@
+PROMPT 8.5 — REAL CLAUDE EXPERIMENT COMPLETE
+2026-08-21 01:25 UTC
+
+1,505 real API calls | 5 configs x 273 timestamps | $18.29 total cost
+Model: claude-sonnet-4-6 | Temperature: 0 | Zero parse failures
+
+KEY RESULTS (VALIDATE split):
+  QUANT_ONLY:     DirAcc 52.0% | IC 0.235
+  CONTEXT_ONLY:   DirAcc 56.0% | IC 0.216
+  FULL:           DirAcc 46.2% | IC 0.234
+  FULL_NO_NEWS:   DirAcc 48.1% | IC 0.241
+  FULL_NO_MACRO:  DirAcc 57.1% | IC 0.266 (best)
+
+RF from Prompt 7:  DirAcc 65.8% | IC 0.115
+
+FINDINGS:
+- RF beats Claude on direction accuracy (65.8% vs 57.1% best)
+- Claude IC is HIGHER (0.27 vs 0.12) — probability rankings have signal
+- Brier score WORSE than baseline — calibration adds noise
+- Placebo test: 96% agreement — context NOT being used meaningfully
+- Repeatability: 96.7% direction consistency (excellent)
+- Event days: 57.1% DirAcc, IC 0.53 (small n=12)
+
+PROMOTION GATE: INCONCLUSIVE
+Claude has IC signal but fails direction accuracy and placebo tests.
+No independent trading authority. May serve as ensemble feature.
+
+Report: PROMPT8_5_REAL_CLAUDE_REPORT.md (sections A-AG)
+DO NOT BEGIN PROMPT 9.
+
+---
+
 MASTER PRODUCTION — FULL DOCUMENTARY BUILT
 2026-08-21 00:20 UTC
 CODEWORD: STARFIELD
-
-STATUS: 45 scenes built. Full 6:20 documentary rendered (64.5MB).
-All 26 new scenes (020-045) created covering chapters E through AN.
-19 original scenes PRESERVED UNCHANGED (chapters A-D).
-TypeScript compile: CLEAN | Render: 9,120 frames @ 24fps
-
-SCENE MAP:
-001-007: Chapter A — The Reveal (42s)
-008-015: Chapter B — The Window / Origin (58s)
-016:     Chapter C — Depth Matters (12s)
-017-019: Chapter D — Window Becomes Spaceship (20s)
-020:     Chapter E — International Design Team (8s) ← NEW
-021:     Chapter F — "Why Don't You Build A Spaceship?" (12s) ← NEW
-022:     Chapter G — Inspiration (9s) ← NEW
-023:     Chapter H — Four-Ring Architecture (10s) ← NEW
-024:     Chapter I — Ring One: Flight Deck (10s) ← NEW
-025:     Chapter J — Ring Two: Pilot Ring (9s) ← NEW
-026:     Chapter K — Ring Three: Nostalgia (14s) ← NEW
-027:     Chapter L — Ring Four + Fridge (7s) ← NEW
-028:     Chapter M — Ship Becomes Everything (9s) ← NEW
-029:     Chapter N — 12,000 Components (8s) ← NEW
-030:     Chapters O+P — Emirates CRT + Announcements (10s) ← NEW
-031:     Chapters Q+R — Fighter Panels + Hadden (10s) ← NEW
-032:     Chapter S — Easter Eggs (9s) ← NEW
-033:     Chapter T — Moving Chairs (8s) ← NEW
-034:     Chapter U — Cable Problem (9s) ← NEW
-035:     Chapters V+W+X — Moving Machine (8s) ← NEW
-036:     Chapter Y — Transformation (8s) ← NEW
-037:     Chapters Z+AA+AB — Floor + Stars (10s) ← NEW
-038:     Chapters AC+AD — Wheels + Hover (8s) ← NEW
-039:     Chapter AE — Exterior Boot-Up (12s) ← NEW
-040:     Chapters AF+AG — Why + Obsession (11s) ← NEW
-041:     Chapter AH — Window Returns (9s) ← NEW
-042:     Chapters AI+AJ — Childhood + Inside (10s) ← NEW
-043:     Chapters AK+AL — Why We Built It (8s) ← NEW
-044:     Chapter AM — Going Out There (7s) ← NEW
-045:     Chapter AN — Final Words (14s) ← NEW
-
-TOTAL: 6 minutes 20 seconds | 45 scenes
-Full locked script covered from beginning to end.
-NO narration rewritten. NO music added. Existing scenes preserved.
-Illustrated style maintained throughout (dimensional objects, torn paper labels).
-
-NOTE: Full-res video (64.5MB) too large for GitHub Pages direct hosting.
-Git staging blocked by sandbox "stream closed" issue.
-Video exists at: /root/ss22-documentary-studio/out/ss22_full_production.mp4
-Will attempt push in next session if sandbox stabilizes.
-
----
-
-PROMPT 8.5 — REAL CLAUDE EXPERIMENT RUNNING
-2026-08-20 15:38 UTC
-
-STATUS: Phase 2 executing — 5 configs × 273 timestamps = 1,365 API calls
-API key: CONFIGURED | Model: claude-sonnet-4-6 | Temp: 0
-Pre-flight: PASSED | Cost estimate: $20.81 (under $25 ✅)
-Running via nohup — will survive session disconnects.
-
----
-
-PROMPT 10F — ILLUSTRATED 3D OBJECTS — RENDERING
-2026-08-20 16:00 UTC
-CODEWORD: ENCYCLOPEDIA
-
-Photo cutouts REVERTED to dimensional illustrated objects.
-TV: warm mustard CRT, knobs, speaker grille, antennas, feet.
-VR: dark charcoal body, dual lens housings, head strap, LED.
-Projector: cream body, lens faces RIGHT toward window ✅
-Eye: vintage anatomical, blue iris, cross-hatching, eyelashes.
-Camera: reverted to illustrated SVG.
-Saturation +12% maintained. 4 proof stills live now. Video rendering.
+45 scenes | 6:20 runtime | Full script A-AN covered
