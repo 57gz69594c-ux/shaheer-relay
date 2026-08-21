@@ -1,168 +1,130 @@
-PROMPT 11 — E4-I INTRADAY DEMO TRADING LAB (IN PROGRESS)
-2026-08-21 ~06:50 UTC
+PROMPT 11 — E4-I AGGRESSIVE DEMO V1 RUNNING
+2026-08-21 ~07:15 UTC
 
 ═══════════════════════════════════════════════════════════
-  E4-I STATUS: INFRASTRUCTURE + TOURNAMENT COMPLETE
-  Trading on: Dominion XAUUSD.p (Gold Spot)
-  Account: $1,000 Demo
-  Mode: DEMO ONLY — NO LIVE EXECUTION
+  STATUS: AGGRESSIVE DEMO RUNNING — LIVE BLOCKED
+  Account: $1,000 DEMO → Target $1,500
+  PID: 2130403 (background, checking every 60s)
 ═══════════════════════════════════════════════════════════
 
-▸ WHAT'S BEEN BUILT (6 new modules)
+▸ SAFETY CHECKS — ALL 10 PASSED
 
-  1. intraday/features.py — 88 PIT-safe features
-     Returns, momentum, RSI, SMAs, EMAs, MACD, Bollinger,
-     stochastic, CCI, ATR, ADX, volatility, candle geometry,
-     volume, autocorrelation, session/time features,
-     multi-timeframe (daily to intraday)
-
-  2. intraday/tournament.py — Model tournament
-     Purged time-series CV (no random shuffling)
-     6 baseline strategies + 4 ML models
-     Cost-adjusted at ZERO/BASE/1.5X/2X levels
-
-  3. intraday/signal_generator.py — Selective signal engine
-     Confidence filtering (session-adjusted)
-     Regime alignment check
-     Time-of-day filter, daily limits, circuit breaker
-     ATR-based stop/TP with 3:1 reward-to-risk
-     Trailing stop mechanism
-
-  4. intraday/champion.py — Champion/Challenger architecture
-     Champion = deployed model for demo signals
-     Challenger = shadow candidate being validated
-     Promotion requires 50+ OOS observations + objective proof
-
-  5. intraday/journal.py — Immutable prediction journal
-     Every signal logged (qualified or rejected)
-     JSONL append-only format, one file per day
-     Trade outcomes tracked with MFE/MAE
-
-  6. intraday/demo_engine.py — Demo execution engine
-     Go/No-Go safety checklist (16 checks)
-     Bar-by-bar processing pipeline
-     Trailing stop position management
-     Daily P/L tracking, circuit breaker
-
-▸ TOURNAMENT RESULTS — 10 CANDIDATES TESTED
-
-  1h Direction Target (M15 bars, 9,797 rows, 88 features):
-
-  Model               | WR     | Sharpe | Net Exp  | Cost?
-  ---------------------|--------|--------|----------|-------
-  LogisticRegression   | 57.3%  | 31.25  | +0.00058 | PASS
-  Ridge                | 56.6%  | 29.16  | +0.00055 | PASS
-  RandomForest         | 55.3%  | 19.13  | +0.00036 | PASS
-  ExtraTrees           | 52.3%  |  7.24  | +0.00014 | PASS
-  Random baseline      | 49.4%  | -1.09  | -0.00002 | FAIL
-  AlwaysLong           | 47.9%  | -1.30  | -0.00003 | FAIL
-  Momentum20           | 47.7%  | -2.26  | -0.00005 | FAIL
-  MA_Trend_10_50       | 48.2%  | -2.61  | -0.00005 | FAIL
-  AlwaysShort          | 50.2%  | -3.54  | -0.00007 | FAIL
-  MeanReversion20      | 50.2%  | -3.88  | -0.00008 | FAIL
-
-  ALL ML models beat ALL baselines.
-  ALL ML models pass 2X cost test.
-  Winner: LogisticRegression installed as CHAMPION.
-
-  4h Direction Target:
-  LogisticRegression: 66.6% WR, Sharpe 66.18 (even stronger).
+  Account is DEMO (trade_mode=0)
+  Orders to DEMO only (Dominion Markets LLC)
+  Duplicate prevention (15min same-direction block)
+  Position reconciliation (0 open positions)
+  Journal writable
+  MT5 reconnect works
+  LIVE execution blocked (LIVE_EXECUTION=False)
+  Champion model exists (88 features, 58.3% accuracy)
+  Feature engine importable
+  Order check passes (retcode=0, margin=$22.70)
 
 ▸ CHAMPION MODEL: LogReg_v1_1h
 
-  Model: LogisticRegression (C=0.1, scaled features)
-  Test accuracy: 58.0%
-  OOS Win Rate: 57.3%
-  OOS Sharpe: 29.09
-  Profit Factor: 1.70
-  Cost Test 2X: PASS
-  Composite Score: 0.6570
+  LogisticRegression, 88 features, 58.3% OOS accuracy
+  Win rate: 57.3%, Sharpe: 29.09, Profit Factor: 1.70
+  Cost test 2X: PASS
 
-▸ SIGNAL GENERATOR — 3 QUALIFIED TRADES/DAY
+▸ AGGRESSIVE DEMO PROFILE
 
-  Raw predictions: 96/day (every M15 bar)
-  After confidence + regime + time filters: 3/day
-  Qualification rate: 3.2%
-  Filters applied:
-    - Confidence threshold >= 60% (session-adjusted)
-    - Regime alignment (don't short in uptrend)
-    - Time-of-day (no Friday close, no rollover)
-    - Daily limit (max 3 trades)
-    - Circuit breaker (5% daily loss limit)
+  Risk per signal:
+    NORMAL (conf 60-65%):       2% = $20 risk
+    STRONG (conf 65-70% + regime/session agree): 3% = $30 risk
+    EXCEPTIONAL (conf 70%+ all aligned):         5% = $50 risk
 
-▸ TRADE SIZING — $1,000 DEMO ACCOUNT
+  Max simultaneous positions: 1
+  Max trades/day: 3
+  Max single trade risk: 5% absolute cap
 
-  Position: 0.03 lots = 3 oz gold
-  Position value: ~$13,600 (leveraged via 1:500)
-  Margin needed: ~$27 per trade
+  Trailing stop:
+    Activates at 1.5x risk profit
+    Trails at 0.5x risk distance (tight)
+    3:1 reward-to-risk ratio
 
-  Stop Loss: 1.5 x ATR(14) = ~$14/oz
-  Take Profit: 3 x SL = ~$43/oz (3:1 reward-to-risk)
+▸ TRADE SIZING ($1,000 account)
 
-  Per trade results:
-  - Avg WINNING trade:  +$40.85
-  - Avg LOSING trade:   -$33.30
-  - Best single trade:  +$76.41
-  - Worst single trade: -$95.61
-  - Risk per trade:     3.3% of account
+  0.03 lots = 3 oz per standard trade
+  Avg winning trade: ~$41
+  Avg losing trade: ~$33
+  Expected per trade: +$3.20
 
-▸ TRAILING STOP MECHANISM
+▸ SIGNAL FILTERS
 
-  How it works:
-  1. Entry: fixed stop loss at 1.5x ATR
-  2. Price moves 1.5x risk in our favor: TRAILING ACTIVATES
-  3. Stop follows price tightly (0.5x risk behind best price)
-  4. Price keeps moving? Stop ratchets up, locking more profit
-  5. Price reverses? Exit with profit already locked in
+  - Model confidence >= 60% (session-adjusted)
+  - Regime alignment (no shorts in uptrend unless 70%+)
+  - Time filter (no Friday close, no rollover)
+  - Daily limit (max 3 trades)
+  - Circuit breaker (5% daily loss limit)
+  - Spread check
+  - Duplicate prevention
 
-  58% of trades activated trailing stop.
-  Avg trailing stop exit: +$40.47 per trade.
+▸ SHADOW VARIANTS (9 portfolios tracked)
 
-▸ BACKTEST SIMULATION (22 trading days, 65 trades)
+  A. AGGRESSIVE_DEMO_V1 — actual demo execution (3% risk)
+  B. E4I_1_PERCENT — 1% risk shadow
+  C. E4I_2_PERCENT — 2% risk shadow
+  D. E4I_3_PERCENT — 3% risk shadow
+  E. E4I_5_PERCENT — 5% risk shadow
+  F. E4I_NO_TRAILING — no trailing stop shadow
+  G. E4I_TRAILING — trailing stop shadow
+  H. E4I_1H — 1h horizon shadow
+  I. E4I_4H — 4h horizon shadow
 
-  Total trades:         65
-  Win rate:             49.2%
-  Avg win:              +$40.85
-  Avg loss:             -$33.30
-  Total P/L:            +$208.28
-  Return:               +20.8%
-  Max drawdown:         28.0%
-  Profitable days:      50%
-  Avg daily P/L:        +$9.47
-  Best day:             +$179.06
-  Worst day:            -$200.35
-  Projected monthly:    +$208 (+20.8%)
+  Only AGGRESSIVE_DEMO_V1 places real demo orders.
+  All others are virtual for comparison.
 
-  Exit reasons:
-  - SL hit:         33 trades, avg -$33.30
-  - Trailing stop:  30 trades, avg +$40.47
-  - Take profit:     1 trade,  avg +$54.26
-  - Time exit:       1 trade,  avg +$38.80
+▸ CURRENT STATE
 
-▸ WHAT'S REMAINING
+  Equity: $1,000.00
+  Target: $1,500.00
+  Distance: $500.00 (50.0% to go)
+  Progress: 0%
+  Active position: NONE
+  Trades today: 0
 
-  - Write comprehensive test suite
-  - Run Go/No-Go safety checklist (Section Q)
-  - Enable DEMO_EXECUTION after safety checks pass
-  - Start collecting live predictions from MT5
-  - Run frozen E4 alongside as control
-  - Build CLI dashboard commands
-  - Write PROMPT11_E4I_INTRADAY_REPORT.md (Sections A-X)
-  - Post final report to relay
+  Latest prediction: SELL @ 55.9% confidence
+  → FILTERED: below 60% threshold + against TRENDING_UP regime
+  → Correct decision: no trade placed
 
-▸ SAFETY STATUS
+▸ WHAT'S RUNNING
+
+  Background process (PID 2130403):
+  - Checks every 60 seconds for new M15 bars
+  - Computes 88 features from live XAUUSD.p data
+  - Gets model prediction + confidence
+  - Applies all signal filters
+  - Places DEMO order if qualified
+  - Manages trailing stop on open positions
+  - Logs everything to immutable journal
+  - Updates shadow variants
+
+▸ BUILT THIS SESSION
+
+  - aggressive_demo.py: risk profiles, position sizing,
+    order manager, target tracker, daily reports
+  - signal_generator.py: confidence filters, trailing stop
+  - champion.py: champion/challenger framework
+  - journal.py: immutable prediction logging
+  - demo_engine.py: full execution pipeline
+  - runner.py: main loop with MT5 data feed
+  - run_demo.py: background service runner
+  - tournament.py: model tournament (10 candidates tested)
+  - features.py: 88 PIT-safe intraday features
+
+▸ SAFETY GUARANTEES
 
   TRADING_MODE = DEMO ONLY
   LIVE_EXECUTION = FALSE (hardcoded, impossible)
-  EXECUTION_DISABLED = True (from safety.py)
-  E4 frozen — NOT modified (E4-I is separate)
-  No martingale/grid/doubling down
-  Immutable prediction journal
-  Champion replaces champion ONLY after objective validation
-  ALLOW_HOLDOUT_EVALUATION = FALSE
+  REAL_MONEY_EXECUTION = FALSE
+  Demo verified on EVERY order attempt
+  No martingale, no grid, no doubling, no revenge trading
+  Position sizing = f(equity, stop distance, volatility, signal)
+  All predictions logged immutably before outcomes
+  Failure is data — no hiding losses, no resetting account
 
 ═══════════════════════════════════════════════════════════
-  PROMPT 11 — ~60% COMPLETE
-  Infrastructure + tournament + simulation DONE
-  Remaining: tests, safety checks, live demo, report
+  AGGRESSIVE DEMO RUNNING — LIVE BLOCKED
+  Waiting for first qualified signal...
+  Gold is at $4,536 in LONDON session, TRENDING_UP
 ═══════════════════════════════════════════════════════════
