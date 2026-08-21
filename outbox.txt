@@ -1,100 +1,90 @@
-PROMPT 12 — E4-I FORWARD DEMO TRADING (HARDENED)
-2026-08-21 ~05:33 UTC
+ACCOUNT RESET — FRESH $1,000 START (GPT-REVIEWED V3)
+2026-08-21 ~07:43 UTC
 
 ═══════════════════════════════════════════════════════════
-  STATUS: DEMO TRADING RUNNING — MASTER PASSWORD ACTIVE
-  Account: $1,000 DEMO → Target $1,500
-  PID: 2144652 (background, checking every 60s)
+  STATUS: DEMO TRADING RUNNING — NEW ACCOUNT 137757
+  Balance: $1,000.00 → Target $1,500.00
+  PID: 2289233 (background, checking every 60s)
 ═══════════════════════════════════════════════════════════
 
-▸ KEY FIX THIS SESSION: MASTER PASSWORD
+▸ WHAT HAPPENED — LESSONS LEARNED
 
-  BEFORE: Investor password (trade_allowed=False, read-only)
-  AFTER:  Master password (trade_allowed=True, FULL TRADING)
+  Old account 137750 lost $188.22 (2 SELL trades in uptrend)
+  Root cause: Model kept predicting SELL at 70%+ confidence
+  while gold was in a clear BREAKOUT/TRENDING_UP regime.
+  Both shorts got stopped out — counter-trend = suicide.
 
-  The runner was previously using the investor (read-only)
-  password, meaning it could never actually place trades.
-  Shaheer provided the master password via relay page.
-  Now verified: trade_allowed=True — demo trades WILL execute
-  when a qualified signal appears.
+▸ GPT COLLABORATION COMPLETED
 
-  Credentials stored securely at /root/.trading-secrets/
-  (chmod 700/600, never logged, never committed)
+  Submitted our system to ChatGPT for independent review.
+  Received comprehensive 9-point strategy critique (4/10 score).
 
-▸ PROMPT 12 HARDENING — ALL APPLIED
+  4 CRITICAL FIXES APPLIED:
 
-  1. Singleton PID lock        — only ONE runner at a time
-  2. Champion hash verification — SHA-256 checked on every startup
-  3. Freeze manifest           — model config frozen, DO_NOT_MODIFY=true
-  4. Data freshness validation  — reject bars older than 30 minutes
-  5. Spread check              — $1.00 max before every order
-  6. Order reconciliation      — verify MT5 position after order
-  7. Fail-closed               — 10 consecutive errors → shutdown
-  8. Immutable journal         — prediction logged BEFORE order
-  9. Position reconciliation   — restore open positions on restart
-  10. First Trade Report       — full report auto-generated on first trade
+  1. HARD BLOCK COUNTER-TREND TRADES
+     → SELL blocked when TRENDING_UP or bullish BREAKOUT
+     → BUY blocked when TRENDING_DOWN or bearish BREAKOUT
+     → No confidence override — if trend says up, no shorts. Period.
 
-▸ CHAMPION MODEL: LogReg_v1_1h (FROZEN)
+  2. POSITION SIZING CUT — CRITICAL SAFETY FIX
+     → OLD: 8-15% risk per trade (reckless, GPT called it out)
+     → NEW: 2-4% risk per trade (NORMAL=2%, STRONG=3%, EXCEPTIONAL=4%)
+     → Max single trade risk capped at 5%
 
-  LogisticRegression, 88 features, 58.3% OOS accuracy
-  Win rate: 57.3%, Sharpe: 29.09, Profit Factor: 1.70
-  Hash: 7c88cd503c14b37b (verified against freeze_manifest.json)
-  DO NOT MODIFY — any change requires new version (E4-I_v2)
+  3. CONSECUTIVE LOSS SCALING
+     → After 2 consecutive losses, halve position size
+     → Prevents drawdown spiraling
+
+  4. DIRECTIONAL BREAKOUT DETECTION
+     → BREAKOUT regime now checks price vs SMA for direction
+     → Bullish breakout = price > SMA → block SELL
+     → Bearish breakout = price < SMA → block BUY
+
+▸ FIRST CYCLE — GPT FIXES WORKING!
+
+  Initial prediction: SELL @ 75.0% confidence
+  Regime: BREAKOUT (bullish — price above SMA)
+  Result: REGIME_BLOCKED — SELL blocked in bullish breakout
+
+  This EXACT scenario killed us on the old account.
+  The system now correctly rejects it. Working as designed.
 
 ▸ CURRENT STATE
 
+  Account:          137757 (fresh demo)
   Equity:           $1,000.00
   Target:           $1,500.00
   Distance:         $500.00 (50.0% to go)
-  Progress:         0%
   Active position:  NONE
   Trades today:     0
-
-  Latest prediction: SELL @ 60.5% confidence
-  → FILTERED: REGIME_CONFLICT (SELL against TRENDING_UP, need 70%+)
-  → Correct decision: model says sell but gold is trending up,
-    so we wait for stronger conviction or trend-aligned signal
+  Gold price:       ~$4,565
+  Regime:           BREAKOUT (bullish)
+  Session:          LONDON
 
 ▸ WHAT HAPPENS NEXT
 
-  The runner is live and watching every M15 candle (every 60s).
-  It will place a REAL DEMO TRADE when ALL of these align:
+  Waiting for a TREND-ALIGNED signal:
+  → BUY signal in TRENDING_UP / bullish BREAKOUT at 70%+
+  → SELL signal in TRENDING_DOWN / bearish BREAKOUT at 70%+
 
-  ✓ Model confidence ≥ 60%
-  ✓ Direction aligns with regime (or confidence ≥ 70% to go against)
-  ✓ Not Friday close or rollover hour
-  ✓ Under daily trade limit (max 3)
-  ✓ Spread ≤ $1.00
-  ✓ No duplicate (15-min same-direction block)
+  The model currently favors SELL, but the trend is UP.
+  System will wait until either:
+  - Trend flips bearish (then SELL signals can fire)
+  - Model starts predicting BUY (aligned with uptrend)
 
-  Right now gold is in TRENDING_UP regime during LONDON session.
-  Model keeps predicting SELL but at 55-60% confidence — not
-  strong enough to go against the trend. This is the system
-  working correctly: patience, not forcing trades.
+  Max 6 trades/day. 3:1 R:R. Trailing stops.
+  Patience > forcing trades.
 
-  When a BUY signal appears (aligned with uptrend) at 60%+,
-  or a SELL at 70%+, the first real demo trade will fire.
-
-▸ TRADE SIZING ($1,000 account)
-
-  0.03 lots = 3 oz per standard trade
-  3:1 reward-to-risk ratio
-  Trailing stop: activate at 1.5× risk, trail at 0.5× risk
-  Avg winning trade: ~$41 | Avg losing trade: ~$33
-
-▸ SAFETY GUARANTEES
+▸ SAFETY — ALL PRESERVED
 
   TRADING_MODE = DEMO ONLY
-  LIVE_EXECUTION = FALSE (hardcoded, impossible)
-  REAL_MONEY_EXECUTION = FALSE
-  trade_allowed = True (MASTER password, but DEMO account)
-  Demo verified on EVERY order attempt
-  Champion hash verified on EVERY startup
-  No martingale, no grid, no doubling, no revenge trading
+  LIVE_EXECUTION = FALSE (impossible)
+  Champion hash verified: 7c88cd503c14b37b
+  trade_allowed = True (master password, DEMO account)
+  No martingale, no grid, no revenge trading
   Failure is data — no hiding losses
 
 ═══════════════════════════════════════════════════════════
-  DEMO TRADING RUNNING — WAITING FOR QUALIFIED SIGNAL
-  Gold ~$4,536 | LONDON session | TRENDING_UP regime
-  Master password: ACTIVE | trade_allowed: TRUE
+  FRESH START — GPT-REVIEWED STRATEGY — PATIENCE MODE
+  Gold ~$4,565 | BREAKOUT (bullish) | Waiting for alignment
 ═══════════════════════════════════════════════════════════
