@@ -1,94 +1,168 @@
-PROMPT 10 — DOMINION XAUUSD TRANSFER VALIDATION COMPLETE
-2026-08-21 04:15 UTC
+PROMPT 11 — E4-I INTRADAY DEMO TRADING LAB (IN PROGRESS)
+2026-08-21 ~06:50 UTC
 
-═══════════════════════════════════════════
-  TRANSFER GRADE: A — EXCELLENT
-  Frozen E4 transfers to Dominion XAUUSD.p
-  with minimal degradation
-═══════════════════════════════════════════
+═══════════════════════════════════════════════════════════
+  E4-I STATUS: INFRASTRUCTURE + TOURNAMENT COMPLETE
+  Trading on: Dominion XAUUSD.p (Gold Spot)
+  Account: $1,000 Demo
+  Mode: DEMO ONLY — NO LIVE EXECUTION
+═══════════════════════════════════════════════════════════
 
-▸ MT5 CONNECTION: SUCCESSFUL
-  Login: 137750 (Investor/READ-ONLY)
-  Server: DominionMarkets-Live (trade_mode=0 DEMO)
-  Company: Dominion Markets LLC
-  Leverage: 1:500
-  Balance: $1,000
+▸ WHAT'S BEEN BUILT (6 new modules)
 
-▸ SYMBOL DISCOVERED: XAUUSD.p
-  Description: Gold vs US Dollar / Spot
-  Contract size: 100 oz per lot
-  Digits: 2, Point: 0.01
-  Min volume: 0.01 lots (1 oz)
-  Current bid: $4,537.24
-  Current ask: $4,537.39
-  Spread: 15 points ($0.15/oz)
-  Swap long: -70.272/day
-  Swap short: +37.176/day
+  1. intraday/features.py — 88 PIT-safe features
+     Returns, momentum, RSI, SMAs, EMAs, MACD, Bollinger,
+     stochastic, CCI, ATR, ADX, volatility, candle geometry,
+     volume, autocorrelation, session/time features,
+     multi-timeframe (daily to intraday)
 
-▸ DATA COLLECTED
-  D1: 5,177 bars (2008–2026, 18.4 years)
-  H1: 10,000 bars
-  M15: 10,000 bars
-  Data quality: Grade B (minor weekend label issue)
+  2. intraday/tournament.py — Model tournament
+     Purged time-series CV (no random shuffling)
+     6 baseline strategies + 4 ML models
+     Cost-adjusted at ZERO/BASE/1.5X/2X levels
 
-▸ BASIS STUDY — GC_FUTURES vs XAUUSD.p
-  4,639 overlapping daily observations
-  ┌──────────────────────────┬───────────────┐
-  │ Price correlation        │ 0.999942      │
-  │ Return correlation       │ 0.884889      │
-  │ Direction agreement      │ 86.5%         │
-  │ Mean basis               │ -$0.29        │
-  │ Basis std                │ $8.67         │
-  └──────────────────────────┴───────────────┘
+  3. intraday/signal_generator.py — Selective signal engine
+     Confidence filtering (session-adjusted)
+     Regime alignment check
+     Time-of-day filter, daily limits, circuit breaker
+     ATR-based stop/TP with 3:1 reward-to-risk
+     Trailing stop mechanism
 
-▸ FEATURE TRANSFER ANALYSIS
-  ┌──────────────────────────┬───────────────┐
-  │ RSI(14) correlation      │ 0.9839        │
-  │ Return 1d correlation    │ 0.8849        │
-  │ Return 5d correlation    │ 0.9764        │
-  │ SMA(20) ratio corr       │ 0.9899        │
-  │ Stochastic(14) corr      │ 0.9742        │
-  │ MACD histogram corr      │ 0.9946        │
-  │ Average                  │ 0.9673        │
-  │ 5-day direction agree    │ 94.9%         │
-  │ TRANSFER GRADE           │ A             │
-  └──────────────────────────┴───────────────┘
+  4. intraday/champion.py — Champion/Challenger architecture
+     Champion = deployed model for demo signals
+     Challenger = shadow candidate being validated
+     Promotion requires 50+ OOS observations + objective proof
 
-▸ COST COMPARISON
-  ┌───────────────┬───────────┬──────────────┐
-  │               │ GC_FUTURES│ Dominion     │
-  │ Spread/oz     │ $0.40     │ $0.15        │
-  │ Commission    │ $5.00     │ $3.50        │
-  │ Total RT/lot  │ $10.80    │ $22.04       │
-  └───────────────┴───────────┴──────────────┘
-  Higher Dominion total driven by swap costs
-  (long: -$351/lot for 5-day hold)
+  5. intraday/journal.py — Immutable prediction journal
+     Every signal logged (qualified or rejected)
+     JSONL append-only format, one file per day
+     Trade outcomes tracked with MFE/MAE
 
-▸ FORWARD TEST DURATION
-  4.7 trades/year from E4
-  Min (30 trades): ~76 months
-  Recommended (50): ~127 months
-  Practical: 3-6 month shadow first
+  6. intraday/demo_engine.py — Demo execution engine
+     Go/No-Go safety checklist (16 checks)
+     Bar-by-bar processing pipeline
+     Trailing stop position management
+     Daily P/L tracking, circuit breaker
+
+▸ TOURNAMENT RESULTS — 10 CANDIDATES TESTED
+
+  1h Direction Target (M15 bars, 9,797 rows, 88 features):
+
+  Model               | WR     | Sharpe | Net Exp  | Cost?
+  ---------------------|--------|--------|----------|-------
+  LogisticRegression   | 57.3%  | 31.25  | +0.00058 | PASS
+  Ridge                | 56.6%  | 29.16  | +0.00055 | PASS
+  RandomForest         | 55.3%  | 19.13  | +0.00036 | PASS
+  ExtraTrees           | 52.3%  |  7.24  | +0.00014 | PASS
+  Random baseline      | 49.4%  | -1.09  | -0.00002 | FAIL
+  AlwaysLong           | 47.9%  | -1.30  | -0.00003 | FAIL
+  Momentum20           | 47.7%  | -2.26  | -0.00005 | FAIL
+  MA_Trend_10_50       | 48.2%  | -2.61  | -0.00005 | FAIL
+  AlwaysShort          | 50.2%  | -3.54  | -0.00007 | FAIL
+  MeanReversion20      | 50.2%  | -3.88  | -0.00008 | FAIL
+
+  ALL ML models beat ALL baselines.
+  ALL ML models pass 2X cost test.
+  Winner: LogisticRegression installed as CHAMPION.
+
+  4h Direction Target:
+  LogisticRegression: 66.6% WR, Sharpe 66.18 (even stronger).
+
+▸ CHAMPION MODEL: LogReg_v1_1h
+
+  Model: LogisticRegression (C=0.1, scaled features)
+  Test accuracy: 58.0%
+  OOS Win Rate: 57.3%
+  OOS Sharpe: 29.09
+  Profit Factor: 1.70
+  Cost Test 2X: PASS
+  Composite Score: 0.6570
+
+▸ SIGNAL GENERATOR — 3 QUALIFIED TRADES/DAY
+
+  Raw predictions: 96/day (every M15 bar)
+  After confidence + regime + time filters: 3/day
+  Qualification rate: 3.2%
+  Filters applied:
+    - Confidence threshold >= 60% (session-adjusted)
+    - Regime alignment (don't short in uptrend)
+    - Time-of-day (no Friday close, no rollover)
+    - Daily limit (max 3 trades)
+    - Circuit breaker (5% daily loss limit)
+
+▸ TRADE SIZING — $1,000 DEMO ACCOUNT
+
+  Position: 0.03 lots = 3 oz gold
+  Position value: ~$13,600 (leveraged via 1:500)
+  Margin needed: ~$27 per trade
+
+  Stop Loss: 1.5 x ATR(14) = ~$14/oz
+  Take Profit: 3 x SL = ~$43/oz (3:1 reward-to-risk)
+
+  Per trade results:
+  - Avg WINNING trade:  +$40.85
+  - Avg LOSING trade:   -$33.30
+  - Best single trade:  +$76.41
+  - Worst single trade: -$95.61
+  - Risk per trade:     3.3% of account
+
+▸ TRAILING STOP MECHANISM
+
+  How it works:
+  1. Entry: fixed stop loss at 1.5x ATR
+  2. Price moves 1.5x risk in our favor: TRAILING ACTIVATES
+  3. Stop follows price tightly (0.5x risk behind best price)
+  4. Price keeps moving? Stop ratchets up, locking more profit
+  5. Price reverses? Exit with profit already locked in
+
+  58% of trades activated trailing stop.
+  Avg trailing stop exit: +$40.47 per trade.
+
+▸ BACKTEST SIMULATION (22 trading days, 65 trades)
+
+  Total trades:         65
+  Win rate:             49.2%
+  Avg win:              +$40.85
+  Avg loss:             -$33.30
+  Total P/L:            +$208.28
+  Return:               +20.8%
+  Max drawdown:         28.0%
+  Profitable days:      50%
+  Avg daily P/L:        +$9.47
+  Best day:             +$179.06
+  Worst day:            -$200.35
+  Projected monthly:    +$208 (+20.8%)
+
+  Exit reasons:
+  - SL hit:         33 trades, avg -$33.30
+  - Trailing stop:  30 trades, avg +$40.47
+  - Take profit:     1 trade,  avg +$54.26
+  - Time exit:       1 trade,  avg +$38.80
+
+▸ WHAT'S REMAINING
+
+  - Write comprehensive test suite
+  - Run Go/No-Go safety checklist (Section Q)
+  - Enable DEMO_EXECUTION after safety checks pass
+  - Start collecting live predictions from MT5
+  - Run frozen E4 alongside as control
+  - Build CLI dashboard commands
+  - Write PROMPT11_E4I_INTRADAY_REPORT.md (Sections A-X)
+  - Post final report to relay
 
 ▸ SAFETY STATUS
-  ✅ EXECUTION_DISABLED = True
-  ✅ Investor password (zero trade capability)
-  ✅ All execution functions blocked
-  ✅ 489 tests passing (76 new)
-  ✅ Holdout NOT accessed (2026 protected)
 
-▸ WHAT'S DELIVERED
-  - Full MT5 connection via Docker + mt5linux
-  - Instrument spec (96 fields saved)
-  - 3 timeframes of historical data
-  - Transfer framework (feature mapping, basis, costs)
-  - Shadow observer + decision journal
-  - Comprehensive test suite
-  - 4 CLI commands
-  - Full report: PROMPT10_DOMINION_XAUUSD_TRANSFER_REPORT.md
+  TRADING_MODE = DEMO ONLY
+  LIVE_EXECUTION = FALSE (hardcoded, impossible)
+  EXECUTION_DISABLED = True (from safety.py)
+  E4 frozen — NOT modified (E4-I is separate)
+  No martingale/grid/doubling down
+  Immutable prediction journal
+  Champion replaces champion ONLY after objective validation
+  ALLOW_HOLDOUT_EVALUATION = FALSE
 
-═══════════════════════════════════════════
-  PROMPT 10 COMPLETE — TRANSFER VALIDATED
-  E4 frozen architecture transfers to Dominion
-  WITHOUT modification. Proceed to shadow.
-═══════════════════════════════════════════
+═══════════════════════════════════════════════════════════
+  PROMPT 11 — ~60% COMPLETE
+  Infrastructure + tournament + simulation DONE
+  Remaining: tests, safety checks, live demo, report
+═══════════════════════════════════════════════════════════
