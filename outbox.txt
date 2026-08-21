@@ -1,78 +1,23 @@
-PROMPT 9 — ENSEMBLE INTELLIGENCE COMPLETE
-2026-08-21 02:15 UTC
+CODEWORD: COCKPIT
+Updated: Aug 21 2026
 
-═══════════════════════════════════════════
-  VERDICT: B — WEAK CANDIDATE EDGE
-  Proceed to Dominion shadow validation only
-  NOT ready for real money
-═══════════════════════════════════════════
+SS-22 CORRECTIVE PASS — VISUAL POLISH COMPLETE
 
-▸ 75.8% DISAGREEMENT CLAIM: DEBUNKED
-  Actual: 48.1% (coin flip)
-  Binomial test p = 0.71 (no signal)
-  Bootstrap 95% CI: [40.3%, 55.8%]
-  Claude bearish bias: 97.4% SHORT in disagreements
-  Permutation p = 1.0 — completely random
+The corrective pass video is now live on the relay page.
 
-▸ BEST ENSEMBLE: E4 — RF + CLAUDE AGREEMENT ONLY
-  Trade only when both RF and Claude agree on direction
-  ┌──────────────────────┬────────────┐
-  │ Return (25 years)    │ +32.3%     │
-  │ Win Rate             │ 72.0%      │
-  │ Max Drawdown         │ 2.6%       │
-  │ Trades               │ 118        │
-  │ Sharpe               │ 7.99*      │
-  │ Cost at HIGH (2x)    │ +18.3%     │
-  │ Permutation p-value  │ < 0.001    │
-  └──────────────────────┴────────────┘
-  *Sharpe inflated by infrequent trading (118 trades / 25 years)
+WHAT CHANGED (vs. previous STARFIELD version):
+- Saturation boosted from +12% to +25%
+- All text enlarged to minimum 40-80px (was 11-22px in some scenes)
+- 12 scenes fully recomposed with larger elements (65-85% frame occupancy)
+- New SS-22 cockpit component used across scenes (faithful to real photos)
+- Scene 044: Pilot perspective view instead of generic frame
+- Scene 045: Real cockpit photo background with "LET'S DO THIS AGAIN SOMETIME." at 130px
+- Charcoal paper labels no longer blend into cosmic background
+- Scenes 022, 026-027, 030, 032, 034: All recomposed with large objects
 
-▸ DOES CLAUDE ADD VALUE BEYOND RF?
-  YES — for probability ranking (IC)
-  VALIDATE blend IC: 0.314 vs RF-only: 0.250 (+25.7%)
-  TEST blend IC: 0.455 vs RF-only: 0.342 (+33.0%)
-  Claude acc when RF is wrong: 74% (chi² p=1.8×10⁻⁵)
+STILL PENDING:
+- Sound design with ElevenLabs (~30 categories)
+- Web-sourced transparent PNG assets
+- Full watchdown QC pass
 
-  NO — for direction accuracy
-  Claude alone: 59.3% vs RF: 60.5%
-  Claude disagreement trading: 48.1% (coin flip)
-
-▸ TOURNAMENT RANKING (RISK 0.50%, $100 capital)
-  #1  E4 Agreement Only    +32.3%  72% win  2.6% DD
-  #2  E3 Claude Alone      +19.1%  53% win  4.7% DD
-  #3  E7c Blend 25/75      +14.2%  53% win  5.6% DD
-  #4  E9 Gated Ensemble    +10.5%  53% win  3.1% DD
-  #5  E2 RF Alone          +8.6%   52% win  7.4% DD
-  ...
-  #14 E14 Exp-Random       -0.3%   47% win  11.0% DD
-  #15 E13 Random           -23.5%  39% win  24.9% DD
-  #16 E1 Passive Gold     +3121%  100% win  44.4% DD
-
-▸ BUT: NO STRATEGY BEATS PASSIVE GOLD
-  E4: +32.3% over 25 years
-  Passive Gold: +3,121% over 25 years
-  Gold buy-and-hold earns 97× more
-
-▸ KEY DECISIONS FOR CLAUDE:
-  ✅ KEEP as ensemble confirmation filter (E4 agreement)
-  ✅ KEEP for probability blending (improves IC)
-  ❌ REMOVE from independent trading authority
-  ❌ REMOVE from disagreement override (75.8% debunked)
-  ✅ KEEP as explanation/research assistant
-
-▸ 17 ensembles tested, 3 risk levels, 413 tests passing
-  Zero additional API cost ($0.00 — all from cache)
-  Full report: PROMPT9_ENSEMBLE_SHADOW_REPORT.md (A-AA)
-  Holdout: NOT accessed (2026 protected)
-
-▸ NEXT STEPS (if you approve):
-  1. Obtain Dominion MT5 demo account (shadow only)
-  2. Get actual XAU/USD contract specs
-  3. Run paper/shadow trades ≥90 days
-  4. Compare to historical expectations
-  5. DO NOT begin real-money trading
-
-═══════════════════════════════════════════
-  PROMPT 9 COMPLETE — WAITING FOR INSTRUCTIONS
-  DO NOT BEGIN PROMPT 10
-═══════════════════════════════════════════
+Watch it: top video on the relay page, codeword COCKPIT.
