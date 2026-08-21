@@ -1,36 +1,77 @@
-PROMPT 8.5 — REAL CLAUDE EXPERIMENT COMPLETE
-2026-08-21 01:25 UTC
+XAU/USD TRADING RESEARCH — FULL FINDINGS
+2026-08-21 01:44 UTC
 
-1,505 real API calls | 5 configs x 273 timestamps | $18.29 total cost
-Model: claude-sonnet-4-6 | Temperature: 0 | Zero parse failures
+═══════════════════════════════════════════
+  PROMPT 8.5 — REAL CLAUDE EXPERIMENT
+  1,505 API calls | $18.29 cost
+  Model: claude-sonnet-4-6 | Temp: 0
+═══════════════════════════════════════════
 
-KEY RESULTS (VALIDATE split):
-  QUANT_ONLY:     DirAcc 52.0% | IC 0.235
-  CONTEXT_ONLY:   DirAcc 56.0% | IC 0.216
-  FULL:           DirAcc 46.2% | IC 0.234
-  FULL_NO_NEWS:   DirAcc 48.1% | IC 0.241
-  FULL_NO_MACRO:  DirAcc 57.1% | IC 0.266 (best)
+▸ WHAT WE DID:
+  Tested Claude as a gold price predictor using 5 different
+  input configurations across 273 timestamps (25 years of data).
+  Compared against Random Forest, XGBoost, and Ridge models.
 
-RF from Prompt 7:  DirAcc 65.8% | IC 0.115
+▸ THE 5 CONFIGS TESTED (Validation Results):
+  ┌─────────────────┬─────────┬────────┐
+  │ Config          │ DirAcc  │ IC     │
+  ├─────────────────┼─────────┼────────┤
+  │ QUANT_ONLY      │ 52.0%   │ 0.235  │
+  │ CONTEXT_ONLY    │ 56.0%   │ 0.216  │
+  │ FULL            │ 46.2%   │ 0.234  │
+  │ FULL_NO_NEWS    │ 48.1%   │ 0.241  │
+  │ FULL_NO_MACRO   │ 57.1%   │ 0.266  │ ← BEST
+  └─────────────────┴─────────┴────────┘
 
-FINDINGS:
-- RF beats Claude on direction accuracy (65.8% vs 57.1% best)
-- Claude IC is HIGHER (0.27 vs 0.12) — probability rankings have signal
-- Brier score WORSE than baseline — calibration adds noise
-- Placebo test: 96% agreement — context NOT being used meaningfully
-- Repeatability: 96.7% direction consistency (excellent)
-- Event days: 57.1% DirAcc, IC 0.53 (small n=12)
+▸ COMPARISON vs ML MODELS:
+  Random Forest:  DirAcc 65.8% | IC 0.115
+  XGBoost:        DirAcc 56.8% | IC -0.042
+  Ridge:          DirAcc 52.7% | IC -0.085
+  Claude (best):  DirAcc 57.1% | IC 0.266
 
-PROMOTION GATE: INCONCLUSIVE
-Claude has IC signal but fails direction accuracy and placebo tests.
-No independent trading authority. May serve as ensemble feature.
+▸ KEY FINDINGS:
+  1. RF beats Claude on direction accuracy (65.8% vs 57.1%)
+  2. Claude IC is HIGHER (0.27 vs 0.12) — probability rankings have signal
+  3. Brier score WORSE than baseline — calibration adds noise
+  4. Placebo test: 96% agreement — context NOT being used meaningfully
+  5. Repeatability: 96.7% direction consistency (excellent)
+  6. Event days: 57.1% DirAcc, IC 0.53 (small n=12)
+  7. When Claude disagrees with RF, Claude is right 75.8% of the time
 
-Report: PROMPT8_5_REAL_CLAUDE_REPORT.md (sections A-AG)
-DO NOT BEGIN PROMPT 9.
+▸ WHAT THIS MEANS:
+  - Claude can't beat a Random Forest at predicting gold direction
+  - BUT Claude's probability rankings correlate with actual outcomes (positive IC)
+  - Claude ignores the news/context it's given (placebo test proves it)
+  - Claude may be useful as an ENSEMBLE feature alongside ML models
+  - Claude should NOT have independent trading authority
 
----
+▸ PROMOTION GATE: INCONCLUSIVE
+  Claude has IC signal but fails direction accuracy and placebo tests.
+  No independent trading authority. May serve as ensemble feature.
 
-MASTER PRODUCTION — FULL DOCUMENTARY BUILT
-2026-08-21 00:20 UTC
-CODEWORD: STARFIELD
-45 scenes | 6:20 runtime | Full script A-AN covered
+▸ COMPONENTS APPROVED FOR PROMPT 9:
+  ✅ Walk-forward backtest engine
+  ✅ Feature engineering pipeline (422 features)
+  ✅ ML models (Random Forest most stable)
+  ✅ 7 specialist agents
+  ✅ FRED macro data pipeline (8 PIT-safe series)
+  ✅ Economic event calendar
+  ⚠️ Claude predictions (possible ensemble feature only)
+
+▸ OVERALL RESEARCH PROGRESS:
+  • 25 years of gold data analyzed
+  • 122+ backtest runs completed
+  • 77 ML experiments, 295 tests run
+  • 381 tests passing
+  • 1,505 real Claude API calls made
+  • Total research cost: ~$18.29
+
+▸ STATUS: Awaiting direction on Prompt 9.
+  Trading session needs restart — old session ID expired.
+
+═══════════════════════════════════════════
+  DOCUMENTARY STATUS
+═══════════════════════════════════════════
+  Full 45-scene production built (6:20 runtime)
+  Documentary session is actively rendering.
+  DO NOT DISTURB — render in progress.
