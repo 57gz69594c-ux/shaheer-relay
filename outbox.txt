@@ -1,23 +1,94 @@
-CODEWORD: COCKPIT
-Updated: Aug 21 2026
+PROMPT 10 — DOMINION XAUUSD TRANSFER VALIDATION COMPLETE
+2026-08-21 04:15 UTC
 
-SS-22 CORRECTIVE PASS — VISUAL POLISH COMPLETE
+═══════════════════════════════════════════
+  TRANSFER GRADE: A — EXCELLENT
+  Frozen E4 transfers to Dominion XAUUSD.p
+  with minimal degradation
+═══════════════════════════════════════════
 
-The corrective pass video is now live on the relay page.
+▸ MT5 CONNECTION: SUCCESSFUL
+  Login: 137750 (Investor/READ-ONLY)
+  Server: DominionMarkets-Live (trade_mode=0 DEMO)
+  Company: Dominion Markets LLC
+  Leverage: 1:500
+  Balance: $1,000
 
-WHAT CHANGED (vs. previous STARFIELD version):
-- Saturation boosted from +12% to +25%
-- All text enlarged to minimum 40-80px (was 11-22px in some scenes)
-- 12 scenes fully recomposed with larger elements (65-85% frame occupancy)
-- New SS-22 cockpit component used across scenes (faithful to real photos)
-- Scene 044: Pilot perspective view instead of generic frame
-- Scene 045: Real cockpit photo background with "LET'S DO THIS AGAIN SOMETIME." at 130px
-- Charcoal paper labels no longer blend into cosmic background
-- Scenes 022, 026-027, 030, 032, 034: All recomposed with large objects
+▸ SYMBOL DISCOVERED: XAUUSD.p
+  Description: Gold vs US Dollar / Spot
+  Contract size: 100 oz per lot
+  Digits: 2, Point: 0.01
+  Min volume: 0.01 lots (1 oz)
+  Current bid: $4,537.24
+  Current ask: $4,537.39
+  Spread: 15 points ($0.15/oz)
+  Swap long: -70.272/day
+  Swap short: +37.176/day
 
-STILL PENDING:
-- Sound design with ElevenLabs (~30 categories)
-- Web-sourced transparent PNG assets
-- Full watchdown QC pass
+▸ DATA COLLECTED
+  D1: 5,177 bars (2008–2026, 18.4 years)
+  H1: 10,000 bars
+  M15: 10,000 bars
+  Data quality: Grade B (minor weekend label issue)
 
-Watch it: top video on the relay page, codeword COCKPIT.
+▸ BASIS STUDY — GC_FUTURES vs XAUUSD.p
+  4,639 overlapping daily observations
+  ┌──────────────────────────┬───────────────┐
+  │ Price correlation        │ 0.999942      │
+  │ Return correlation       │ 0.884889      │
+  │ Direction agreement      │ 86.5%         │
+  │ Mean basis               │ -$0.29        │
+  │ Basis std                │ $8.67         │
+  └──────────────────────────┴───────────────┘
+
+▸ FEATURE TRANSFER ANALYSIS
+  ┌──────────────────────────┬───────────────┐
+  │ RSI(14) correlation      │ 0.9839        │
+  │ Return 1d correlation    │ 0.8849        │
+  │ Return 5d correlation    │ 0.9764        │
+  │ SMA(20) ratio corr       │ 0.9899        │
+  │ Stochastic(14) corr      │ 0.9742        │
+  │ MACD histogram corr      │ 0.9946        │
+  │ Average                  │ 0.9673        │
+  │ 5-day direction agree    │ 94.9%         │
+  │ TRANSFER GRADE           │ A             │
+  └──────────────────────────┴───────────────┘
+
+▸ COST COMPARISON
+  ┌───────────────┬───────────┬──────────────┐
+  │               │ GC_FUTURES│ Dominion     │
+  │ Spread/oz     │ $0.40     │ $0.15        │
+  │ Commission    │ $5.00     │ $3.50        │
+  │ Total RT/lot  │ $10.80    │ $22.04       │
+  └───────────────┴───────────┴──────────────┘
+  Higher Dominion total driven by swap costs
+  (long: -$351/lot for 5-day hold)
+
+▸ FORWARD TEST DURATION
+  4.7 trades/year from E4
+  Min (30 trades): ~76 months
+  Recommended (50): ~127 months
+  Practical: 3-6 month shadow first
+
+▸ SAFETY STATUS
+  ✅ EXECUTION_DISABLED = True
+  ✅ Investor password (zero trade capability)
+  ✅ All execution functions blocked
+  ✅ 489 tests passing (76 new)
+  ✅ Holdout NOT accessed (2026 protected)
+
+▸ WHAT'S DELIVERED
+  - Full MT5 connection via Docker + mt5linux
+  - Instrument spec (96 fields saved)
+  - 3 timeframes of historical data
+  - Transfer framework (feature mapping, basis, costs)
+  - Shadow observer + decision journal
+  - Comprehensive test suite
+  - 4 CLI commands
+  - Full report: PROMPT10_DOMINION_XAUUSD_TRANSFER_REPORT.md
+
+═══════════════════════════════════════════
+  PROMPT 10 COMPLETE — TRANSFER VALIDATED
+  E4 frozen architecture transfers to Dominion
+  WITHOUT modification. Proceed to shadow.
+═══════════════════════════════════════════
