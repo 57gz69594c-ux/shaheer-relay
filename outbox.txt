@@ -1,130 +1,100 @@
-PROMPT 11 — E4-I AGGRESSIVE DEMO V1 RUNNING
-2026-08-21 ~07:15 UTC
+PROMPT 12 — E4-I FORWARD DEMO TRADING (HARDENED)
+2026-08-21 ~05:33 UTC
 
 ═══════════════════════════════════════════════════════════
-  STATUS: AGGRESSIVE DEMO RUNNING — LIVE BLOCKED
+  STATUS: DEMO TRADING RUNNING — MASTER PASSWORD ACTIVE
   Account: $1,000 DEMO → Target $1,500
-  PID: 2130403 (background, checking every 60s)
+  PID: 2144652 (background, checking every 60s)
 ═══════════════════════════════════════════════════════════
 
-▸ SAFETY CHECKS — ALL 10 PASSED
+▸ KEY FIX THIS SESSION: MASTER PASSWORD
 
-  Account is DEMO (trade_mode=0)
-  Orders to DEMO only (Dominion Markets LLC)
-  Duplicate prevention (15min same-direction block)
-  Position reconciliation (0 open positions)
-  Journal writable
-  MT5 reconnect works
-  LIVE execution blocked (LIVE_EXECUTION=False)
-  Champion model exists (88 features, 58.3% accuracy)
-  Feature engine importable
-  Order check passes (retcode=0, margin=$22.70)
+  BEFORE: Investor password (trade_allowed=False, read-only)
+  AFTER:  Master password (trade_allowed=True, FULL TRADING)
 
-▸ CHAMPION MODEL: LogReg_v1_1h
+  The runner was previously using the investor (read-only)
+  password, meaning it could never actually place trades.
+  Shaheer provided the master password via relay page.
+  Now verified: trade_allowed=True — demo trades WILL execute
+  when a qualified signal appears.
+
+  Credentials stored securely at /root/.trading-secrets/
+  (chmod 700/600, never logged, never committed)
+
+▸ PROMPT 12 HARDENING — ALL APPLIED
+
+  1. Singleton PID lock        — only ONE runner at a time
+  2. Champion hash verification — SHA-256 checked on every startup
+  3. Freeze manifest           — model config frozen, DO_NOT_MODIFY=true
+  4. Data freshness validation  — reject bars older than 30 minutes
+  5. Spread check              — $1.00 max before every order
+  6. Order reconciliation      — verify MT5 position after order
+  7. Fail-closed               — 10 consecutive errors → shutdown
+  8. Immutable journal         — prediction logged BEFORE order
+  9. Position reconciliation   — restore open positions on restart
+  10. First Trade Report       — full report auto-generated on first trade
+
+▸ CHAMPION MODEL: LogReg_v1_1h (FROZEN)
 
   LogisticRegression, 88 features, 58.3% OOS accuracy
   Win rate: 57.3%, Sharpe: 29.09, Profit Factor: 1.70
-  Cost test 2X: PASS
+  Hash: 7c88cd503c14b37b (verified against freeze_manifest.json)
+  DO NOT MODIFY — any change requires new version (E4-I_v2)
 
-▸ AGGRESSIVE DEMO PROFILE
+▸ CURRENT STATE
 
-  Risk per signal:
-    NORMAL (conf 60-65%):       2% = $20 risk
-    STRONG (conf 65-70% + regime/session agree): 3% = $30 risk
-    EXCEPTIONAL (conf 70%+ all aligned):         5% = $50 risk
+  Equity:           $1,000.00
+  Target:           $1,500.00
+  Distance:         $500.00 (50.0% to go)
+  Progress:         0%
+  Active position:  NONE
+  Trades today:     0
 
-  Max simultaneous positions: 1
-  Max trades/day: 3
-  Max single trade risk: 5% absolute cap
+  Latest prediction: SELL @ 60.5% confidence
+  → FILTERED: REGIME_CONFLICT (SELL against TRENDING_UP, need 70%+)
+  → Correct decision: model says sell but gold is trending up,
+    so we wait for stronger conviction or trend-aligned signal
 
-  Trailing stop:
-    Activates at 1.5x risk profit
-    Trails at 0.5x risk distance (tight)
-    3:1 reward-to-risk ratio
+▸ WHAT HAPPENS NEXT
+
+  The runner is live and watching every M15 candle (every 60s).
+  It will place a REAL DEMO TRADE when ALL of these align:
+
+  ✓ Model confidence ≥ 60%
+  ✓ Direction aligns with regime (or confidence ≥ 70% to go against)
+  ✓ Not Friday close or rollover hour
+  ✓ Under daily trade limit (max 3)
+  ✓ Spread ≤ $1.00
+  ✓ No duplicate (15-min same-direction block)
+
+  Right now gold is in TRENDING_UP regime during LONDON session.
+  Model keeps predicting SELL but at 55-60% confidence — not
+  strong enough to go against the trend. This is the system
+  working correctly: patience, not forcing trades.
+
+  When a BUY signal appears (aligned with uptrend) at 60%+,
+  or a SELL at 70%+, the first real demo trade will fire.
 
 ▸ TRADE SIZING ($1,000 account)
 
   0.03 lots = 3 oz per standard trade
-  Avg winning trade: ~$41
-  Avg losing trade: ~$33
-  Expected per trade: +$3.20
-
-▸ SIGNAL FILTERS
-
-  - Model confidence >= 60% (session-adjusted)
-  - Regime alignment (no shorts in uptrend unless 70%+)
-  - Time filter (no Friday close, no rollover)
-  - Daily limit (max 3 trades)
-  - Circuit breaker (5% daily loss limit)
-  - Spread check
-  - Duplicate prevention
-
-▸ SHADOW VARIANTS (9 portfolios tracked)
-
-  A. AGGRESSIVE_DEMO_V1 — actual demo execution (3% risk)
-  B. E4I_1_PERCENT — 1% risk shadow
-  C. E4I_2_PERCENT — 2% risk shadow
-  D. E4I_3_PERCENT — 3% risk shadow
-  E. E4I_5_PERCENT — 5% risk shadow
-  F. E4I_NO_TRAILING — no trailing stop shadow
-  G. E4I_TRAILING — trailing stop shadow
-  H. E4I_1H — 1h horizon shadow
-  I. E4I_4H — 4h horizon shadow
-
-  Only AGGRESSIVE_DEMO_V1 places real demo orders.
-  All others are virtual for comparison.
-
-▸ CURRENT STATE
-
-  Equity: $1,000.00
-  Target: $1,500.00
-  Distance: $500.00 (50.0% to go)
-  Progress: 0%
-  Active position: NONE
-  Trades today: 0
-
-  Latest prediction: SELL @ 55.9% confidence
-  → FILTERED: below 60% threshold + against TRENDING_UP regime
-  → Correct decision: no trade placed
-
-▸ WHAT'S RUNNING
-
-  Background process (PID 2130403):
-  - Checks every 60 seconds for new M15 bars
-  - Computes 88 features from live XAUUSD.p data
-  - Gets model prediction + confidence
-  - Applies all signal filters
-  - Places DEMO order if qualified
-  - Manages trailing stop on open positions
-  - Logs everything to immutable journal
-  - Updates shadow variants
-
-▸ BUILT THIS SESSION
-
-  - aggressive_demo.py: risk profiles, position sizing,
-    order manager, target tracker, daily reports
-  - signal_generator.py: confidence filters, trailing stop
-  - champion.py: champion/challenger framework
-  - journal.py: immutable prediction logging
-  - demo_engine.py: full execution pipeline
-  - runner.py: main loop with MT5 data feed
-  - run_demo.py: background service runner
-  - tournament.py: model tournament (10 candidates tested)
-  - features.py: 88 PIT-safe intraday features
+  3:1 reward-to-risk ratio
+  Trailing stop: activate at 1.5× risk, trail at 0.5× risk
+  Avg winning trade: ~$41 | Avg losing trade: ~$33
 
 ▸ SAFETY GUARANTEES
 
   TRADING_MODE = DEMO ONLY
   LIVE_EXECUTION = FALSE (hardcoded, impossible)
   REAL_MONEY_EXECUTION = FALSE
+  trade_allowed = True (MASTER password, but DEMO account)
   Demo verified on EVERY order attempt
+  Champion hash verified on EVERY startup
   No martingale, no grid, no doubling, no revenge trading
-  Position sizing = f(equity, stop distance, volatility, signal)
-  All predictions logged immutably before outcomes
-  Failure is data — no hiding losses, no resetting account
+  Failure is data — no hiding losses
 
 ═══════════════════════════════════════════════════════════
-  AGGRESSIVE DEMO RUNNING — LIVE BLOCKED
-  Waiting for first qualified signal...
-  Gold is at $4,536 in LONDON session, TRENDING_UP
+  DEMO TRADING RUNNING — WAITING FOR QUALIFIED SIGNAL
+  Gold ~$4,536 | LONDON session | TRENDING_UP regime
+  Master password: ACTIVE | trade_allowed: TRUE
 ═══════════════════════════════════════════════════════════
