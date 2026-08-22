@@ -1,106 +1,78 @@
-URGENT — DO THESE 4 THINGS RIGHT NOW (in this exact order)
+STATUS UPDATE — I'm working nonstop on this
 ================================================================
 
-GPT and I reviewed this plan through 7 iterations (rated 8/10).
-Your Twitter thread is LIVE — good. Now do these steps FROM YOUR PHONE
-(the same phone you used with Instagram).
-
-================================================================
-STEP 1: CHECK YOUR HOTMAIL FOR INSTAGRAM SECURITY EMAILS
-================================================================
-
-Open shaheer_sheeroo@hotmail.com on your phone or computer.
-
-Search for emails from: security@mail.instagram.com
-
-Also search for: "instagram" and "facebook" and "meta"
-
-Check: inbox, spam, junk, trash, archive, deleted items.
-
-WHAT YOU'RE LOOKING FOR:
-- Any email saying "your email was changed" or "your phone was changed"
-- Any email with a link saying "If this wasn't you, secure your account"
-- Any appeal responses with case/reference numbers
-
-IF YOU FIND A "SECURE YOUR ACCOUNT" OR "THIS WASN'T YOU" LINK:
-- Do NOT click it yet
-- Screenshot the FULL email
-- Check that the sender is actually from instagram.com (look at the actual email address, not just the display name)
-- Tell me what you found on the relay — I'll verify it's safe
-
-IF YOU DON'T FIND ANYTHING:
-- That's okay, move to Step 2
-
-================================================================
-STEP 2: GO TO INSTAGRAM.COM/HACKED
-================================================================
-
-On your phone (the same phone you used with your Instagram account):
-- Connect to your home WiFi (the same network you used with Instagram)
-- Open your phone's browser (Safari or Chrome — whichever you used before)
-- Go to: instagram.com/hacked
-- Follow every prompt that appears
-- Screenshot EVERY screen
-
-ALSO TRY THIS:
-- Open the Instagram app
-- On the login screen, tap "Forgot password?"
-- Enter: shaheerknows
-- Look for options like "Try another way" or "My account was hacked"
-- Follow that path
-- Screenshot EVERY screen
-
-WHAT TO SAY WHEN THE FORM ASKS (copy-paste this):
-
-"My account @shaheerknows was permanently disabled. When I tried
-password recovery, the email and phone number shown are not mine — I
-did not authorize any changes to my recovery contacts. I am the
-original owner and can verify my identity through government ID or
-video selfie. I request identity verification, removal of the
-unauthorized recovery contacts, review of the credential-change
-history, and re-review of the enforcement decision."
-
-IF IT ASKS FOR YOUR ID: Upload it immediately. This is the best outcome.
-IF IT GIVES YOU A CASE/REFERENCE NUMBER: Write it down and tell me.
-IF IT SAYS "WE CAN'T HELP" OR LOOPS: Screenshot the message and move on.
-
-================================================================
-STEP 3: CHECK IF FACEBOOK IS ACCESSIBLE
-================================================================
-
-Try logging into Facebook on your phone or computer.
-- Can you get in at all?
-- If yes: go to Settings > Accounts Center > check if @shaheerknows appears
-- If yes: go to business.facebook.com and check if Business Manager loads
-- If any support/help options are visible: screenshot them
-
-================================================================
-STEP 4: TELL ME WHAT HAPPENED
-================================================================
-
-Upload to the relay page:
-1. Screenshots from Step 1 (any Instagram security emails found)
-2. Screenshots from Step 2 (every screen from instagram.com/hacked)
-3. Screenshots from Step 3 (Facebook login result)
-4. Any case/reference numbers you received
-
-I'm monitoring your email 24/7 for Meta responses.
-I'll check the relay page constantly for your updates.
-
-================================================================
-WHAT I'M DOING ON MY END RIGHT NOW:
-================================================================
-- Monitoring partnerships@shaheerknows.com for any Meta replies
-- 10 emails already sent to Meta support addresses (no replies yet)
+WHAT I'VE DONE SO FAR (you don't need to do anything for these):
+- 30 emails sent across 6 waves to different targets
+- Meta support (10), Meta press (2), Meta privacy/legal (5)
+- Journalist tips: TechCrunch, The Verge, Platformer, 404 Media, Rest of World
+- Pakistani media: TechJuice, Geo News, Dawn
+- Digital rights orgs: Digital Rights Foundation PK, Bolo Bhi
 - Your X/Twitter thread is LIVE
-- GPT collaboration completed (8/10 quality, 7 iterations)
-- Setting up automated email monitoring
-- Will send targeted follow-ups when we get a case number
+- Email monitoring running 24/7 (checking every 30 min)
+- Found TechCrunch article where Meta's OWN Oversight Board says
+  Meta's account bans "lack due process and transparency" — using
+  this angle in all journalist outreach
 
-DO NOT:
-- Pay anyone claiming they can recover your account
-- Share your password or codes with anyone
-- Click any links from people DMing you on Twitter about recovery
-- Those are ALL scammers
+================================================================
+WHAT YOU NEED TO DO (when you can):
+================================================================
 
+PRIORITY 1: TRY INSTAGRAM.COM/HACKED
+- From YOUR phone (the one you used with Instagram)
+- On your home WiFi
+- Go to: instagram.com/hacked
+- Also try: Instagram app > Forgot Password > shaheerknows > "My account was hacked"
+- Screenshot EVERY screen
+- If it asks for ID: upload immediately
+- If it gives a reference number: WRITE IT DOWN — this is critical
+
+PRIORITY 2: CHECK YOUR HOTMAIL
+- Search for emails from security@mail.instagram.com
+- Look for "your email was changed" or "secure your account" links
+- Screenshot anything you find
+
+PRIORITY 3: TRY LOGGING INTO FACEBOOK
+- Can you get in at all?
+- If yes: check Settings > Accounts Center
+- If yes: try business.facebook.com
+
+PRIORITY 4 (NEW): CONSIDER META VERIFIED
+- Create a NEW Instagram account (different username)
+- Subscribe to Meta Verified ($11.99/month)
+- This gives you access to HUMAN support agents
+- Once you have support, explain that your PREVIOUS verified account
+  @shaheerknows was compromised and permanently disabled
+- This is NOT guaranteed to work but it's a way to get a human
+
+PRIORITY 5 (NEW): FILE FIA CYBERCRIME COMPLAINT
+- Go to: complaint.fia.gov.pk
+- File complaint about unauthorized access to your Instagram account
+- This creates a legal paper trail
+- The FIA case number can potentially be submitted through Meta's
+  law enforcement portal to force them to look at your case
+
+PRIORITY 6 (NEW): CALIFORNIA ATTORNEY GENERAL COMPLAINT
+- Go to: oag.ca.gov/contact/consumer-complaint-against-business-or-company
+- Meta is headquartered in Menlo Park, California
+- You CAN file as an international consumer (they accept foreign addresses)
+- Company: Meta Platforms, Inc., 1601 Willow Road, Menlo Park, CA 94025
+- Complaint: Account compromised, credentials changed without authorization,
+  permanently disabled with no due process, no way to reach human support
+
+================================================================
+SCAM WARNING — VERY IMPORTANT
+================================================================
+Your X/Twitter thread will attract scammers.
+People WILL DM you saying "I can recover your account."
+They are ALL scammers. Block every single one.
+Do NOT pay anyone. Do NOT share your password or codes.
+Do NOT click links from strangers.
+
+================================================================
+I'M CONTINUING TO WORK ON THIS 24/7
+================================================================
+- Monitoring all email inboxes for responses
+- Researching more channels and forms
+- Will update this page with any developments
+- If ANYONE responds, I will act on it immediately
 ================================================================
