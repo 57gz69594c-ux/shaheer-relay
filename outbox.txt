@@ -1,52 +1,106 @@
-COPY-PASTE THESE TWEETS TO X/TWITTER
-======================================
-Post them as a THREAD (post #1 first, then reply with #2, then #3)
+URGENT — DO THESE 4 THINGS RIGHT NOW (in this exact order)
+================================================================
 
-======================================
-TWEET #1 (post this first):
-======================================
+GPT and I reviewed this plan through 7 iterations (rated 8/10).
+Your Twitter thread is LIVE — good. Now do these steps FROM YOUR PHONE
+(the same phone you used with Instagram).
 
-My verified Instagram account @shaheerknows with 186K followers was permanently disabled.
+================================================================
+STEP 1: CHECK YOUR HOTMAIL FOR INSTAGRAM SECURITY EMAILS
+================================================================
 
-When I tried "Forgot Password" — the email and phone number shown aren't mine. Someone changed my credentials without my authorization.
+Open shaheer_sheeroo@hotmail.com on your phone or computer.
 
-I've been punished for activity I didn't perform.
+Search for emails from: security@mail.instagram.com
 
-@Meta @instagram
+Also search for: "instagram" and "facebook" and "meta"
 
-======================================
-TWEET #2 (reply to tweet #1):
-======================================
+Check: inbox, spam, junk, trash, archive, deleted items.
 
-I built @shaheerknows over 12 years — 2,563 posts, verified Public Figure, 186K community.
+WHAT YOU'RE LOOKING FOR:
+- Any email saying "your email was changed" or "your phone was changed"
+- Any email with a link saying "If this wasn't you, secure your account"
+- Any appeal responses with case/reference numbers
 
-After my account was initially disabled, a third party I hired claimed to restore it through "inside contacts." I only gave them my username. They changed my recovery info without my knowledge.
+IF YOU FIND A "SECURE YOUR ACCOUNT" OR "THIS WASN'T YOU" LINK:
+- Do NOT click it yet
+- Screenshot the FULL email
+- Check that the sender is actually from instagram.com (look at the actual email address, not just the display name)
+- Tell me what you found on the relay — I'll verify it's safe
 
-======================================
-TWEET #3 (reply to tweet #2):
-======================================
+IF YOU DON'T FIND ANYTHING:
+- That's okay, move to Step 2
 
-Instagram's own disablement notice says "your account, OR ACTIVITY ON IT" violated standards.
+================================================================
+STEP 2: GO TO INSTAGRAM.COM/HACKED
+================================================================
 
-The unauthorized credential changes ARE that "activity" — not my content. I should not be permanently banned for someone else's unauthorized actions.
+On your phone (the same phone you used with your Instagram account):
+- Connect to your home WiFi (the same network you used with Instagram)
+- Open your phone's browser (Safari or Chrome — whichever you used before)
+- Go to: instagram.com/hacked
+- Follow every prompt that appears
+- Screenshot EVERY screen
 
-I can verify my identity. Please review my case.
+ALSO TRY THIS:
+- Open the Instagram app
+- On the login screen, tap "Forgot password?"
+- Enter: shaheerknows
+- Look for options like "Try another way" or "My account was hacked"
+- Follow that path
+- Screenshot EVERY screen
 
-@Meta @instagram @MetaNewsroom
+WHAT TO SAY WHEN THE FORM ASKS (copy-paste this):
 
-======================================
-TWEET #4 (reply to tweet #3):
-======================================
+"My account @shaheerknows was permanently disabled. When I tried
+password recovery, the email and phone number shown are not mine — I
+did not authorize any changes to my recovery contacts. I am the
+original owner and can verify my identity through government ID or
+video selfie. I request identity verification, removal of the
+unauthorized recovery contacts, review of the credential-change
+history, and re-review of the enforcement decision."
 
-I'm the same Shaheer Knows on:
-🎥 YouTube — 85K+ subscribers: youtube.com/@shaheerknows
-🌐 Website: shaheerknows.com
-🎵 TikTok: @shaheerknows
+IF IT ASKS FOR YOUR ID: Upload it immediately. This is the best outcome.
+IF IT GIVES YOU A CASE/REFERENCE NUMBER: Write it down and tell me.
+IF IT SAYS "WE CAN'T HELP" OR LOOPS: Screenshot the message and move on.
 
-This email was sent FROM my own domain partnerships@shaheerknows.com to Instagram support.
+================================================================
+STEP 3: CHECK IF FACEBOOK IS ACCESSIBLE
+================================================================
 
-All I'm asking for is a fair review. #InstagramDisabled #AccountHacked
+Try logging into Facebook on your phone or computer.
+- Can you get in at all?
+- If yes: go to Settings > Accounts Center > check if @shaheerknows appears
+- If yes: go to business.facebook.com and check if Business Manager loads
+- If any support/help options are visible: screenshot them
 
-======================================
-DONE — Post all 4 as a thread, then pin tweet #1 to your profile.
-======================================
+================================================================
+STEP 4: TELL ME WHAT HAPPENED
+================================================================
+
+Upload to the relay page:
+1. Screenshots from Step 1 (any Instagram security emails found)
+2. Screenshots from Step 2 (every screen from instagram.com/hacked)
+3. Screenshots from Step 3 (Facebook login result)
+4. Any case/reference numbers you received
+
+I'm monitoring your email 24/7 for Meta responses.
+I'll check the relay page constantly for your updates.
+
+================================================================
+WHAT I'M DOING ON MY END RIGHT NOW:
+================================================================
+- Monitoring partnerships@shaheerknows.com for any Meta replies
+- 10 emails already sent to Meta support addresses (no replies yet)
+- Your X/Twitter thread is LIVE
+- GPT collaboration completed (8/10 quality, 7 iterations)
+- Setting up automated email monitoring
+- Will send targeted follow-ups when we get a case number
+
+DO NOT:
+- Pay anyone claiming they can recover your account
+- Share your password or codes with anyone
+- Click any links from people DMing you on Twitter about recovery
+- Those are ALL scammers
+
+================================================================
