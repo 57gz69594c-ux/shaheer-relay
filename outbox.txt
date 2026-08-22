@@ -1,76 +1,135 @@
-OPERATION RECOVER SHAHEER KNOWS — STATUS UPDATE
-================================================
-
+@SHAHEERKNOWS INSTAGRAM RECOVERY — ACTION PLAN READY
+======================================================
 Case ID: RECOVER-SK-001
-Status: ACTIVE — Phase 2 (Interview)
+Status: PHASE 3 — RECOVERY EXECUTION
 Date: 2026-08-22
 
-COMPLETED:
-✅ Case directory created (8 files)
-✅ 8 recovery paths researched & documented
-✅ 10 hypotheses for repeated disablement
-✅ Current Meta/Instagram 2026 procedures verified
-✅ Post-recovery security protocol prepared
+GPT COLLABORATION: 5 review iterations completed (quality: 2→6→7→8→7.5→final)
+GPT credits exhausted during final review — plan is comprehensive and ready.
 
-KEY FINDING: The old public web appeal form may still be live at:
-help.instagram.com/contact/437908793443074
+======================================================
+KEY FINDING: "ACCOUNT DOESN'T EXIST" IS NOT PROOF OF DATA PURGE
+======================================================
+Public-facing Instagram error messages do NOT indicate whether your
+account data has been retained or deleted. Your account may still be
+recoverable. The only way to know is through the diagnostic tests below.
 
-STRONGEST PATHS (in priority order):
-1. Deactivated account web form
-2. Facebook Business live chat (IF you ever ran ads)
-3. In-app appeal (IF login still works)
-4. Identity/video verification (be ready when requested)
-5. Escalation with previous case numbers
+======================================================
+WHAT YOU NEED TO DO RIGHT NOW (in this order)
+======================================================
 
-================================================
-INTERVIEW — I NEED THESE ANSWERS FROM YOU
-================================================
+STEP 1: SECURITY LOCKDOWN (do this FIRST — 30 minutes)
+────────────────────────────────────────────────────────
+□ Change your Hotmail password (shaheer_sheeroo@hotmail.com)
+  - Make it 20+ characters, completely unique
+  - Enable 2FA using Microsoft Authenticator app (NOT SMS)
+  - Check Settings → Forwarding — remove any unknown forwarding rules
+  - Check recent login activity — screenshot anything unfamiliar
 
-Please answer as many as you can. Skip what you don't know.
+□ Change your Facebook password (same — 20+ chars, unique)
+  - Enable 2FA via authenticator app
+  - Review "Where You're Logged In" — end unfamiliar sessions
+  - Remove unknown connected apps
 
-ACCOUNT BASICS:
-1. When did you create @shaheerknows (approx year)?
-2. Was it Personal, Creator, or Business account?
-3. What email address was linked to it?
-4. What phone number was linked?
-5. Do you still control that email and phone?
-6. Was a Facebook account linked to it?
-7. Was Accounts Center set up?
+□ Check Business Manager (business.facebook.com)
+  - Screenshot the People section — remove unknown users
+  - Screenshot the Partners section — remove unknown partners
+  - Screenshot Instagram Accounts — does @shaheerknows appear?
+  - Note your Ad Account ID and Business Manager ID
 
-ADVERTISING / BUSINESS:
-8. Did you EVER run Instagram or Facebook ads?
-9. Did you have Meta Business Manager or Business Suite?
-10. Did you have a Facebook Page linked?
+□ Phone security
+  - Verify +923212333335 is active and receiving SMS
+  - Call your carrier — confirm no SIM swap has occurred
 
-DISABLEMENT HISTORY:
-11. When was the FIRST time it was disabled (approx date)?
-12. What EXACT message did Instagram show?
-13. Do you have screenshots of any disablement notices?
-14. Do you have emails from Instagram about it?
+STEP 2: DIAGNOSTIC TESTS (do immediately after lockdown)
+────────────────────────────────────────────────────────
+□ TEST 1: Open Instagram app → enter @shaheerknows + your password
+  - Screenshot the EXACT message shown
+  - IF AN APPEAL OR VERIFICATION BUTTON APPEARS → USE IT IMMEDIATELY
+  - Don't wait for other tests — just do it right away
 
-RESTORATION HISTORY:
-15. How many times was it restored?
-16. Do you have appeal/case reference numbers?
-17. Did Instagram send confirmation emails when restored?
+□ TEST 2: Tap "Forgot password?" → enter shaheer_sheeroo@hotmail.com
+  - Does it send a reset link? Does it name the account? Screenshot everything
 
-LIQUID BLACK:
-18. How did you find Liquid Black?
-19. What info did you give them?
-20. Did they explain HOW they restore accounts?
-21. Did they claim an "inside contact" at Meta?
-22. Did they ask for 2FA or recovery codes?
-23. After restoration, unfamiliar devices in login?
-24. Did the email or phone on the account change?
-25. How long after restoration was it re-disabled?
+□ TEST 3: Tap "Forgot password?" → enter +923212333335
+  - Same questions as Test 2. Screenshot everything
 
-CURRENT STATE:
-26. Can you still try to log in? What happens?
-27. Does instagram.com/shaheerknows show anything?
-28. Is another account using @shaheerknows?
+□ TEST 4: Facebook → Settings → Accounts Center → Accounts
+  - Does @shaheerknows appear as a linked Instagram account?
 
-EVIDENCE:
-29. Screenshots of your posts/profile when active?
-30. YouTube channel as identity proof?
-31. Other proof of "Shaheer Knows" brand?
+□ TEST 5: Business Manager → Instagram Accounts section
+  - Does @shaheerknows appear?
+  - Is there a Help/Support option visible? (live chat, form, callback?)
 
-Answer what you can. Every detail helps.
+□ TEST 6: From a different device (logged out) → instagram.com/shaheerknows
+  - Screenshot what you see
+
+STEP 3: SEND ME THE RESULTS
+────────────────────────────────────────────────────────
+Send me screenshots of ALL six test results on the relay page.
+This determines which recovery path we take.
+
+======================================================
+APPEAL DRAFTS ARE READY
+======================================================
+I have 3 appeal drafts prepared:
+- Draft A: Standard disabled account appeal (short + expanded versions)
+- Draft B: Business Support escalation (if BM support is available)
+- Draft C: Security concern (only if we find evidence of unauthorized access)
+
+We'll use the right draft based on your test results.
+
+======================================================
+CRITICAL WARNINGS
+======================================================
+⚠️ DO NOT contact Liquid Black again or any "recovery service"
+⚠️ DO NOT make any more payments to anyone for recovery
+⚠️ DO NOT share your password, 2FA codes, or recovery codes with ANYONE
+⚠️ DO NOT spam multiple appeal forms — we submit ONE clean appeal
+⚠️ DO NOT create a new account with the @shaheerknows username
+⚠️ Only provide ID documents through the official Instagram/Facebook app
+   or official Meta websites you navigate to directly
+
+======================================================
+FORENSIC QUESTIONNAIRE — ANSWER THESE ABOUT LIQUID BLACK
+======================================================
+I need honest answers to determine what we can safely tell Meta:
+
+1. Did you share your Instagram PASSWORD with Liquid Black?
+2. Did you share any SMS codes, 2FA codes, or one-time passwords?
+3. Did you share recovery or backup codes?
+4. Did you give them screen sharing or remote device access?
+5. Did you share your Facebook password or Business Manager login?
+6. Did you share your Hotmail password?
+7. Did you forward any password reset links to them?
+8. Did you provide any ID documents (passport, CNIC, selfie)?
+9. Did they ask you to approve any login requests or account changes?
+10. Exact amount paid and payment method?
+11. Do you have payment receipts?
+12. Do you have the WhatsApp/chat history with them?
+13. Did anything look different on the account after they restored it?
+14. Did you notice unfamiliar login sessions after restoration?
+
+Your answers determine what we can truthfully say to Meta.
+DO NOT guess — if you're not sure, say "I don't know."
+
+======================================================
+TIMELINE — FILL IN THESE DATES
+======================================================
+Even approximate dates help:
+- When was the FIRST disablement? (month/year at minimum)
+- When was the FIRST restoration by Liquid Black?
+- When was the SECOND disablement? (~1 week after restoration 1?)
+- When was the SECOND restoration?
+- When was the THIRD disablement (current state)?
+
+======================================================
+WHAT HAPPENS NEXT
+======================================================
+1. You do the security lockdown + diagnostic tests (Steps 1-2)
+2. You send me the screenshots and forensic answers (Step 3)
+3. I analyze the results and determine the best recovery path
+4. We submit ONE clean, well-crafted appeal through the strongest channel
+5. We wait for Meta's response and escalate if needed
+
+Full recovery plan saved to: shaheerknows-instagram-recovery/RECOVERY_PLAN_FINAL.md
