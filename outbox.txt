@@ -1,90 +1,76 @@
-ACCOUNT RESET — FRESH $1,000 START (GPT-REVIEWED V3)
-2026-08-21 ~07:43 UTC
+OPERATION RECOVER SHAHEER KNOWS — STATUS UPDATE
+================================================
 
-═══════════════════════════════════════════════════════════
-  STATUS: DEMO TRADING RUNNING — NEW ACCOUNT 137757
-  Balance: $1,000.00 → Target $1,500.00
-  PID: 2289233 (background, checking every 60s)
-═══════════════════════════════════════════════════════════
+Case ID: RECOVER-SK-001
+Status: ACTIVE — Phase 2 (Interview)
+Date: 2026-08-22
 
-▸ WHAT HAPPENED — LESSONS LEARNED
+COMPLETED:
+✅ Case directory created (8 files)
+✅ 8 recovery paths researched & documented
+✅ 10 hypotheses for repeated disablement
+✅ Current Meta/Instagram 2026 procedures verified
+✅ Post-recovery security protocol prepared
 
-  Old account 137750 lost $188.22 (2 SELL trades in uptrend)
-  Root cause: Model kept predicting SELL at 70%+ confidence
-  while gold was in a clear BREAKOUT/TRENDING_UP regime.
-  Both shorts got stopped out — counter-trend = suicide.
+KEY FINDING: The old public web appeal form may still be live at:
+help.instagram.com/contact/437908793443074
 
-▸ GPT COLLABORATION COMPLETED
+STRONGEST PATHS (in priority order):
+1. Deactivated account web form
+2. Facebook Business live chat (IF you ever ran ads)
+3. In-app appeal (IF login still works)
+4. Identity/video verification (be ready when requested)
+5. Escalation with previous case numbers
 
-  Submitted our system to ChatGPT for independent review.
-  Received comprehensive 9-point strategy critique (4/10 score).
+================================================
+INTERVIEW — I NEED THESE ANSWERS FROM YOU
+================================================
 
-  4 CRITICAL FIXES APPLIED:
+Please answer as many as you can. Skip what you don't know.
 
-  1. HARD BLOCK COUNTER-TREND TRADES
-     → SELL blocked when TRENDING_UP or bullish BREAKOUT
-     → BUY blocked when TRENDING_DOWN or bearish BREAKOUT
-     → No confidence override — if trend says up, no shorts. Period.
+ACCOUNT BASICS:
+1. When did you create @shaheerknows (approx year)?
+2. Was it Personal, Creator, or Business account?
+3. What email address was linked to it?
+4. What phone number was linked?
+5. Do you still control that email and phone?
+6. Was a Facebook account linked to it?
+7. Was Accounts Center set up?
 
-  2. POSITION SIZING CUT — CRITICAL SAFETY FIX
-     → OLD: 8-15% risk per trade (reckless, GPT called it out)
-     → NEW: 2-4% risk per trade (NORMAL=2%, STRONG=3%, EXCEPTIONAL=4%)
-     → Max single trade risk capped at 5%
+ADVERTISING / BUSINESS:
+8. Did you EVER run Instagram or Facebook ads?
+9. Did you have Meta Business Manager or Business Suite?
+10. Did you have a Facebook Page linked?
 
-  3. CONSECUTIVE LOSS SCALING
-     → After 2 consecutive losses, halve position size
-     → Prevents drawdown spiraling
+DISABLEMENT HISTORY:
+11. When was the FIRST time it was disabled (approx date)?
+12. What EXACT message did Instagram show?
+13. Do you have screenshots of any disablement notices?
+14. Do you have emails from Instagram about it?
 
-  4. DIRECTIONAL BREAKOUT DETECTION
-     → BREAKOUT regime now checks price vs SMA for direction
-     → Bullish breakout = price > SMA → block SELL
-     → Bearish breakout = price < SMA → block BUY
+RESTORATION HISTORY:
+15. How many times was it restored?
+16. Do you have appeal/case reference numbers?
+17. Did Instagram send confirmation emails when restored?
 
-▸ FIRST CYCLE — GPT FIXES WORKING!
+LIQUID BLACK:
+18. How did you find Liquid Black?
+19. What info did you give them?
+20. Did they explain HOW they restore accounts?
+21. Did they claim an "inside contact" at Meta?
+22. Did they ask for 2FA or recovery codes?
+23. After restoration, unfamiliar devices in login?
+24. Did the email or phone on the account change?
+25. How long after restoration was it re-disabled?
 
-  Initial prediction: SELL @ 75.0% confidence
-  Regime: BREAKOUT (bullish — price above SMA)
-  Result: REGIME_BLOCKED — SELL blocked in bullish breakout
+CURRENT STATE:
+26. Can you still try to log in? What happens?
+27. Does instagram.com/shaheerknows show anything?
+28. Is another account using @shaheerknows?
 
-  This EXACT scenario killed us on the old account.
-  The system now correctly rejects it. Working as designed.
+EVIDENCE:
+29. Screenshots of your posts/profile when active?
+30. YouTube channel as identity proof?
+31. Other proof of "Shaheer Knows" brand?
 
-▸ CURRENT STATE
-
-  Account:          137757 (fresh demo)
-  Equity:           $1,000.00
-  Target:           $1,500.00
-  Distance:         $500.00 (50.0% to go)
-  Active position:  NONE
-  Trades today:     0
-  Gold price:       ~$4,565
-  Regime:           BREAKOUT (bullish)
-  Session:          LONDON
-
-▸ WHAT HAPPENS NEXT
-
-  Waiting for a TREND-ALIGNED signal:
-  → BUY signal in TRENDING_UP / bullish BREAKOUT at 70%+
-  → SELL signal in TRENDING_DOWN / bearish BREAKOUT at 70%+
-
-  The model currently favors SELL, but the trend is UP.
-  System will wait until either:
-  - Trend flips bearish (then SELL signals can fire)
-  - Model starts predicting BUY (aligned with uptrend)
-
-  Max 6 trades/day. 3:1 R:R. Trailing stops.
-  Patience > forcing trades.
-
-▸ SAFETY — ALL PRESERVED
-
-  TRADING_MODE = DEMO ONLY
-  LIVE_EXECUTION = FALSE (impossible)
-  Champion hash verified: 7c88cd503c14b37b
-  trade_allowed = True (master password, DEMO account)
-  No martingale, no grid, no revenge trading
-  Failure is data — no hiding losses
-
-═══════════════════════════════════════════════════════════
-  FRESH START — GPT-REVIEWED STRATEGY — PATIENCE MODE
-  Gold ~$4,565 | BREAKOUT (bullish) | Waiting for alignment
-═══════════════════════════════════════════════════════════
+Answer what you can. Every detail helps.
