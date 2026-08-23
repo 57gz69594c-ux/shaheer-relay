@@ -9,6 +9,7 @@
 <title>Claude Relay v7</title>
 <style>
   :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: -apple-system, system-ui, sans-serif;
@@ -19,7 +20,6 @@
     align-items: center;
     min-height: 100vh;
     padding: 24px 16px;
-    box-sizing: border-box;
   }
   h1 { font-size: 1.2rem; font-weight: 600; margin: 0 0 4px; }
   p.sub { color: #9a9aa5; font-size: 0.85rem; margin: 0 0 20px; text-align: center; }
@@ -60,7 +60,7 @@
     resize: vertical;
   }
   #recv-text {
-    min-height: 70vh;
+    min-height: 50vh;
     font-size: 1.15rem;
     word-break: break-all;
     line-height: 1.5;
@@ -89,17 +89,132 @@
   .ok { color: #6ee08a; }
   .err { color: #ff6e6e; }
   .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
+
+  /* Clip Review Styles */
+  .clip-card {
+    width: 100%;
+    max-width: 480px;
+    background: #1b1e26;
+    border: 1px solid #2e323d;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .clip-video {
+    width: 100%;
+    max-height: 65vh;
+    background: #000;
+    display: block;
+  }
+  .clip-info { padding: 14px; }
+  .clip-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .clip-meta {
+    font-size: 0.78rem;
+    color: #9a9aa5;
+    margin-bottom: 10px;
+  }
+  .clip-caption {
+    background: #14161c;
+    border: 1px solid #2e323d;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .clip-caption .label {
+    font-size: 0.65rem;
+    color: #4f7cff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .clip-caption .text {
+    font-size: 0.9rem;
+    color: #e0e0e5;
+    line-height: 1.4;
+  }
+  .clip-caption .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #2e323d;
+    border: none;
+    color: #9a9aa5;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    margin: 0;
+  }
+  .clip-score {
+    text-align: center;
+    padding: 8px;
+    background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
+    border: 1px solid #2a4a2a;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  .clip-score .label { font-size: 0.65rem; color: #6ee08a; text-transform: uppercase; letter-spacing: 1px; }
+  .clip-score .value { font-size: 1.6rem; font-weight: 800; color: #6ee08a; }
+  .clip-scores-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+  .score-item {
+    text-align: center;
+    padding: 5px;
+    background: #14161c;
+    border-radius: 5px;
+  }
+  .score-item .sl { font-size: 0.55rem; color: #9a9aa5; text-transform: uppercase; letter-spacing: 0.5px; }
+  .score-item .sv { font-size: 0.95rem; font-weight: 700; }
+  .sh { color: #6ee08a; }
+  .sm { color: #ffd666; }
+  .sl-c { color: #ff6e6e; }
+  .clip-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .clip-actions button {
+    flex: 1;
+    padding: 14px;
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.95rem;
+  }
+  .btn-approve { background: #1a8a1a !important; }
+  .btn-approve:active { background: #22aa22 !important; }
+  .btn-reject { background: #8a1a1a !important; }
+  .btn-reject:active { background: #aa2222 !important; }
+  .clip-status {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .empty-clips {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9a9aa5;
+  }
+  .empty-clips h2 { font-size: 1.1rem; color: #e8e8ec; margin-bottom: 8px; }
 </style>
 </head>
 <body>
   <h1>Claude Relay</h1>
   <p class="sub">Send or receive from Claude.</p>
-
-  <!-- VIDEO UPLOAD FOR CONTENT ENGINE -->
-  <a href="http://104.248.159.95:9877/" target="_blank" style="display:block;width:100%;max-width:480px;margin:0 auto 18px;padding:18px;background:#0a1a0a;border:2px solid #ff9900;border-radius:10px;text-align:center;text-decoration:none;">
-    <div style="color:#ff9900;font-size:1.1rem;font-weight:700;">UPLOAD YOUR LIVE VIDEO HERE</div>
-    <div style="color:#cc7700;font-size:0.75rem;margin-top:5px;">Download one live stream from YouTube app → upload here → Claude makes the shorts</div>
-  </a>
 
   <!-- FIELDSTATION42 ARCHIVE LINK -->
   <a href="https://104.248.159.95.nip.io/fieldstation42/" target="_blank" style="display:block;width:100%;max-width:480px;margin:0 auto 18px;padding:18px;background:#0a0a0f;border:2px solid #33ff33;border-radius:10px;text-align:center;text-decoration:none;font-family:monospace;">
@@ -108,12 +223,20 @@
   </a>
 
   <div class="tabs">
-    <div class="tab active" id="tab-send">Send</div>
+    <div class="tab active" id="tab-clips">Review Clips</div>
+    <div class="tab" id="tab-send">Send</div>
     <div class="tab" id="tab-recv">From Claude</div>
   </div>
 
+  <!-- CLIPS REVIEW TAB -->
+  <div class="panel active" id="panel-clips">
+    <div id="clips-stats" style="width:100%;max-width:480px;text-align:center;font-size:0.78rem;color:#9a9aa5;margin-bottom:12px;">Loading clips...</div>
+    <div id="clips-container" style="width:100%;max-width:480px;"></div>
+    <button onclick="loadClips()" style="max-width:200px;">Refresh</button>
+  </div>
+
   <!-- SEND TAB -->
-  <div class="panel active" id="panel-send">
+  <div class="panel" id="panel-send">
     <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
     <button id="send">Send</button>
     <div id="status"></div>
@@ -139,29 +262,157 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v61 — Clean slate — Aug 23 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v65 — Clip Review — Aug 23 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v61')) {
-  sessionStorage.setItem('relay_cache_bust_v61', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v65')) {
+  sessionStorage.setItem('relay_cache_bust_v65', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
-const OUT_BIN = "shaheer-relay-out-b83toafpulxqmhms";
-const SERVER = "https://104.248.159.95.nip.io/preview/enhanced";
+const CLIP_API = "https://104.248.159.95.nip.io/clip-api";
+const CLIP_CDN = "https://104.248.159.95.nip.io/clips";
 
 // --- tabs ---
-const tabs = ['send','recv'];
+const tabs = ['clips','send','recv'];
 tabs.forEach(t => {
   document.getElementById('tab-'+t).addEventListener('click', () => {
     tabs.forEach(x => {
       document.getElementById('tab-'+x).classList.toggle('active', x===t);
       document.getElementById('panel-'+x).classList.toggle('active', x===t);
     });
+    if (t === 'clips') loadClips();
     if (t === 'recv') loadLatest();
   });
 });
+
+// --- CLIP REVIEW ---
+async function loadClips() {
+  const statsEl = document.getElementById('clips-stats');
+  const container = document.getElementById('clips-container');
+  statsEl.textContent = 'Loading...';
+
+  try {
+    const resp = await fetch(CLIP_API + '/api/clips?t=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+
+    statsEl.textContent = `${data.stats.clips_ready || 0} to review | ${data.stats.clips_approved || 0} approved | ${data.stats.total_clips || 0} total`;
+
+    if (!data.clips || !data.clips.length) {
+      container.innerHTML = `
+        <div class="empty-clips">
+          <h2>No clips to review yet</h2>
+          <p>The content engine is processing your live streams.<br>
+          Clips will appear here when ready.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = data.clips.map(clip => {
+      const previewUrl = CLIP_CDN + '/clip_' + clip.id + '_preview.mp4';
+      const scoreColor = clip.content_score >= 8 ? 'sh' : clip.content_score >= 6 ? 'sm' : 'sl-c';
+      const isReview = clip.status === 'READY_FOR_REVIEW';
+      const isApproved = clip.status === 'APPROVED';
+      const isRejected = clip.status === 'REJECTED';
+      const statusText = isApproved ? 'APPROVED — Publishing...' : isRejected ? 'REJECTED' : '';
+      const statusColor = isApproved ? 'ok' : isRejected ? 'err' : '';
+
+      return `
+      <div class="clip-card" id="clip-${clip.id}">
+        <video class="clip-video" controls preload="metadata" playsinline poster="">
+          <source src="${previewUrl}" type="video/mp4">
+          Your browser does not support video.
+        </video>
+        <div class="clip-info">
+          <div class="clip-title">${clip.title || 'Untitled Clip'}</div>
+          <div class="clip-meta">
+            ${Math.round(clip.duration)}s &bull; ${clip.clip_type || 'clip'} &bull; ${clip.episode_title || ''}
+          </div>
+          <div class="clip-caption">
+            <div class="label">Caption for posting</div>
+            <div class="text">${clip.caption || 'No caption generated'}</div>
+            <button class="copy-btn" onclick="copyCaption(this, ${clip.id})">Copy</button>
+          </div>
+          <div class="clip-score">
+            <div class="label">Viral Score</div>
+            <div class="value ${scoreColor}">${clip.content_score}/10</div>
+          </div>
+          <div class="clip-scores-grid">
+            ${Object.entries(clip.scores || {}).map(([k,v]) => `
+              <div class="score-item">
+                <div class="sl">${k}</div>
+                <div class="sv ${v >= 8 ? 'sh' : v >= 6 ? 'sm' : 'sl-c'}">${v}</div>
+              </div>
+            `).join('')}
+          </div>
+          ${isReview ? `
+          <div class="clip-actions">
+            <button class="btn-approve" onclick="reviewClip(${clip.id}, 'APPROVED')">Approve</button>
+            <button class="btn-reject" onclick="reviewClip(${clip.id}, 'REJECTED')">Reject</button>
+          </div>` : ''}
+          ${statusText ? `<div class="clip-status ${statusColor}">${statusText}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+  } catch (e) {
+    container.innerHTML = `<div class="empty-clips"><h2>Connection error</h2><p>${e.message}<br>Server may be processing.</p></div>`;
+    statsEl.textContent = 'Could not connect to server';
+  }
+}
+
+async function reviewClip(clipId, status) {
+  const card = document.getElementById('clip-' + clipId);
+  const btns = card.querySelectorAll('.clip-actions button');
+  btns.forEach(b => b.disabled = true);
+
+  try {
+    const resp = await fetch(CLIP_API + '/api/clips/' + clipId, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status})
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
+    // Update UI immediately
+    const actionsDiv = card.querySelector('.clip-actions');
+    if (actionsDiv) actionsDiv.remove();
+
+    const statusDiv = document.createElement('div');
+    statusDiv.className = 'clip-status ' + (status === 'APPROVED' ? 'ok' : 'err');
+    statusDiv.textContent = status === 'APPROVED' ? 'APPROVED — Auto-publishing...' : 'REJECTED';
+    card.querySelector('.clip-info').appendChild(statusDiv);
+
+    // Refresh stats
+    loadClips();
+  } catch (e) {
+    btns.forEach(b => b.disabled = false);
+    alert('Failed: ' + e.message);
+  }
+}
+
+function copyCaption(btn, clipId) {
+  const text = btn.parentElement.querySelector('.text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// Load clips on startup
+loadClips();
 
 // --- send tab ---
 const btn = document.getElementById('send');
@@ -214,7 +465,6 @@ sendFileBtn.addEventListener('click', async () => {
   let done = 0, failed = 0;
   fileStatus.textContent = `Uploading ${total} file${total > 1 ? 's' : ''}...`;
   fileStatus.className = '';
-
   for (let i = 0; i < total; i++) {
     const file = files[i];
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -228,11 +478,7 @@ sendFileBtn.addEventListener('click', async () => {
       xhr.timeout = 120000;
       await new Promise((resolve, reject) => {
         xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) {
-            const filePct = (e.loaded / e.total) * 100;
-            const overallPct = ((i + e.loaded / e.total) / total) * 100;
-            progressBar.style.width = overallPct + '%';
-          }
+          if (e.lengthComputable) progressBar.style.width = ((i + e.loaded / e.total) / total * 100) + '%';
         };
         xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
         xhr.onerror = () => reject(new Error('network error'));
@@ -240,19 +486,11 @@ sendFileBtn.addEventListener('click', async () => {
         xhr.send(safeBlob);
       });
       done++;
-    } catch (e) {
-      failed++;
-    }
+    } catch (e) { failed++; }
     progressBar.style.width = ((i + 1) / total * 100) + '%';
   }
-
-  if (failed === 0) {
-    fileStatus.textContent = `All ${done} file${done > 1 ? 's' : ''} sent. Claude will see them next.`;
-    fileStatus.className = 'ok';
-  } else {
-    fileStatus.textContent = `${done} sent, ${failed} failed.`;
-    fileStatus.className = failed === total ? 'err' : 'ok';
-  }
+  fileStatus.textContent = failed === 0 ? `All ${done} sent.` : `${done} sent, ${failed} failed.`;
+  fileStatus.className = failed === total ? 'err' : 'ok';
   progressText.textContent = 'Done.';
   fileInput.value = '';
   sendFileBtn.disabled = false;
@@ -268,14 +506,11 @@ const copyBtn = document.getElementById('copy');
 async function loadLatest() {
   refreshBtn.disabled = true;
   recvStatus.textContent = 'Loading...';
-  recvStatus.className = '';
   try {
     const resp = await fetch('./outbox.txt?t=' + Date.now(), { cache: 'no-store' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const text = await resp.text();
-    if (/^\s*<(!DOCTYPE|html)/i.test(text)) {
-      throw new Error('got a webpage instead of the file');
-    }
+    if (/^\s*<(!DOCTYPE|html)/i.test(text)) throw new Error('got a webpage');
     recvText.value = text;
     recvStatus.textContent = 'Loaded.';
     recvStatus.className = 'ok';
@@ -283,26 +518,14 @@ async function loadLatest() {
   } catch (e) {
     recvStatus.textContent = 'Failed: ' + e.message;
     recvStatus.className = 'err';
-  } finally {
-    refreshBtn.disabled = false;
-  }
+  } finally { refreshBtn.disabled = false; }
 }
-
 refreshBtn.addEventListener('click', loadLatest);
 copyBtn.addEventListener('click', async () => {
   if (!recvText.value) return;
-  try {
-    await navigator.clipboard.writeText(recvText.value);
-    recvStatus.textContent = 'Copied.';
-    recvStatus.className = 'ok';
-  } catch (e) {
-    recvText.select();
-    document.execCommand('copy');
-    recvStatus.textContent = 'Copied.';
-    recvStatus.className = 'ok';
-  }
+  try { await navigator.clipboard.writeText(recvText.value); } catch(e) { recvText.select(); document.execCommand('copy'); }
+  recvStatus.textContent = 'Copied.'; recvStatus.className = 'ok';
 });
-
 </script>
 </body>
 </html>
