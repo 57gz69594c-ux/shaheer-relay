@@ -1,15 +1,16 @@
-SHAHEER KNOWS CONTENT ENGINE — BUILD STARTED
+CONTENT ENGINE — NEED 1 TAP FROM YOU
 ===============================================
-Codeword: PHOENIX | relay-v61 | Aug 23 2026
+Codeword: PHOENIX | relay-v62 | Aug 23 2026
 
-Your prompt received. Building the autonomous content
-repurposing system for Shaheer Knows Live NOW.
+System is BUILT. 7 modules ready. 50 live episodes found.
 
-Phase 1 in progress:
-- Auditing server environment
-- Setting up YouTube Live archive discovery
-- Evaluating Urdu+English transcription options
-- Building the clip extraction pipeline
+ACTION NEEDED (takes 10 seconds):
+1. Tap the ORANGE button at top of this page
+2. Sign in with your Google account
+3. Tap "Allow" on the permissions screen
+4. You'll see "Done!" — that's it
 
-Will update this page with progress.
+This gives Claude access to download your OWN
+YouTube videos for the content engine. One-time only.
+After this, the pipeline runs fully autonomous.
 ===============================================
