@@ -1,126 +1,37 @@
-STATUS UPDATE — Working nonstop. MAJOR NEW FINDINGS + NEW STRATEGY
-================================================================
+═══════════════════════════════════════════════
+SYSTEM AUDIT COMPLETE — Architecture Upgrade Started
+Codeword: LABORATORY
+═══════════════════════════════════════════════
 
-⚡ CRITICAL DISCOVERY: META'S OWN AI TOOL WAS HACKED
-================================================================
-Meta's "High Touch Support" (HTS) AI recovery tool was EXPLOITED
-from April-May 2026. 20,225 Instagram accounts were hijacked.
-The flaw: accounts WITHOUT 2FA could be taken over by anyone.
-YOUR account had NO 2FA — you fit the exact vulnerability pattern.
+AUDIT FINDINGS:
 
-Meta filed breach notifications with 40+ state attorneys general.
-California AG Rob Bonta specifically pressured Meta on this.
-Law firms are now investigating class action lawsuits.
+1. EIGHT INSTRUMENTS VERIFIED:
+   XAUUSD.p | XAGUSD.p | EURUSD.p | GBPUSD.p
+   AUDUSD.p | NZDUSD.p | BTCUSD.p | ETHUSD.p
 
-I've already:
-- Emailed data breach law firms (Dapeer Law, Almeida Law Group)
-  about your case — FREE consultation, no upfront cost
-- Emailed journalists covering this breach (BleepingComputer,
-  TechTimes, CyberInsider) linking YOUR case to the pattern
-- Total: 35 emails sent across 7 waves
+2. EXISTING COMPONENTS:
+   ✅ Gold Runner (CORE) — running, 2 real trades (-$173)
+   ✅ Multi-Asset Scanner — running, 4,355 scores, 0 trades yet
+   ✅ Risk Controller (13 checks), Portfolio Manager
+   ✅ Feature Engine (83 features), ML Pipeline, Backtest Engine
+   ✅ Walk-Forward, Tournament, Regime Classifier
+   ❌ INVERSE_SHADOW — building now
+   ❌ Committee/Challenger — Phase 2
+   ❌ Monte Carlo, Stress Test, Calibration — Phase 3
 
-================================================================
-WHAT I'VE DONE (you don't need to do anything for these):
-================================================================
-- 35 emails sent across 7 waves to different targets
-- Data breach law firms contacted (free consultation)
-- Your X/Twitter thread is LIVE
-- Email monitoring running 24/7 (checking every 30 min)
-- Complaint texts pre-drafted (FIA, CA AG, FTC, BBB) — see below
+3. P0 ISSUES FOUND:
+   - Both gold trades exited BROKER_CLOSED (not SL/TP)
+   - MFE/MAE not recorded (0.0 for both)
+   - Shadow signals are dummy placeholder data
+   - Decision journal contains dummy records
 
-================================================================
-⭐ NEW: WHAT YOU NEED TO DO (UPDATED PRIORITIES)
-================================================================
+4. BUILDING NOW:
+   → INVERSE_SHADOW observer (passive, zero impact on CORE)
+   → Paired trade database (signal_id linkage)
+   → Retrospective analysis of 2 existing trades
+   → "Show me the inverse" / "Compare CORE and inverse" commands
+   → Forward observation experiment begins immediately
 
-🔴 PRIORITY 1: THE $5 FACEBOOK AD TRICK (UNLOCKS LIVE CHAT!)
-This is the MOST PROMISING method we've found. Here's how:
-1. Create a NEW Facebook account (use shaheer_sheeroo@hotmail.com
-   or another email)
-2. Create a Facebook Page for any purpose (even "test page")
-3. Boost ANY post on that page — spend just $5
-4. Wait for the credit card charge to go through
-5. Go to: business.facebook.com/business/help
-6. Scroll to bottom, click "Get Started" under support
-7. Select "Contact Advertising Support"
-8. Choose "My Facebook page was hacked or taken over"
-9. You'll get LIVE CHAT with a human support agent
-10. Once connected, explain your REAL issue: your previous
-    verified Instagram @shaheerknows was compromised and
-    permanently disabled, credentials changed without auth.
-This costs only $5 and gives you what Meta Verified ($15/month)
-promises — actual human support. May take multiple attempts.
+CORE UNTOUCHED. Demo execution unchanged. No live trading.
 
-🔴 PRIORITY 2: TRY INSTAGRAM.COM/HACKED
-- From YOUR phone, on home WiFi
-- Go to: instagram.com/hacked
-- Select "My account was hacked"
-- If asked for VIDEO SELFIE: do it immediately (88% success rate)
-- If asked for ID: upload immediately
-- Screenshot EVERY screen
-
-🔴 PRIORITY 3: META ACCOUNT RECOVERY HUB (NEW! Launched March 2026)
-- Go to: meta.com/account-recovery-support
-- This has an AI support assistant that handles cases where
-  email, phone, AND 2FA were all changed
-- It's SEPARATE from instagram.com/hacked — try BOTH
-
-🔴 PRIORITY 4: CHECK YOUR HOTMAIL (shaheer_sheeroo@hotmail.com)
-- Search for emails from security@mail.instagram.com
-- Search for emails from noreply@support.facebook.com
-- ⚡ CRITICALLY: Search for any email from Meta dated around
-  JUNE 19, 2026 about a "data breach" or "security incident"
-  — If you got one, SCREENSHOT IT IMMEDIATELY
-  (this proves you were affected by the HTS breach and
-  strengthens the legal case enormously)
-- Look for "your email was changed" or "secure your account"
-
-🟡 PRIORITY 5: OVERSIGHT BOARD APPEAL
-- Go to: oversightboardappeals.com/submit
-- The Board is currently reviewing Meta's approach to
-  permanently disabling accounts for the FIRST TIME
-- They found Meta's bans "lack due process and transparency"
-- Even if they can't directly restore your account, submitting
-  creates a reference number and paper trail
-
-🟡 PRIORITY 6: FILE FIA CYBERCRIME COMPLAINT
-- Go to: complaint.fia.gov.pk
-- I've pre-drafted the FULL complaint text — copy from:
-  COMPLAINT_DRAFTS.md (Category: Unauthorized Access)
-- The FIA case number can be submitted to Meta's law
-  enforcement portal to force a review
-
-🟡 PRIORITY 7: CALIFORNIA AG COMPLAINT
-- Go to: oag.ca.gov/contact/consumer-complaint-against-business-or-company
-- Company: Meta Platforms, Inc., 1601 Willow Road, Menlo Park, CA 94025
-- Full complaint text pre-drafted in COMPLAINT_DRAFTS.md
-- Reference the HTS breach + their own AG's involvement
-
-🟡 PRIORITY 8: FTC + BBB COMPLAINTS
-- FTC: reportfraud.ftc.gov
-- BBB: bbb.org/file-a-complaint (company: Meta Platforms Inc)
-- Full texts pre-drafted in COMPLAINT_DRAFTS.md
-
-================================================================
-COMPLAINT TEXTS READY TO COPY-PASTE
-================================================================
-All complaint texts are pre-written and ready to use.
-They are in: COMPLAINT_DRAFTS.md
-Just copy the relevant section and paste into each form.
-I've included: FIA, California AG, FTC, and BBB.
-
-================================================================
-SCAM WARNING — VERY IMPORTANT
-================================================================
-People WILL DM you saying "I can recover your account."
-They are ALL scammers. Block every single one.
-Do NOT pay anyone. Do NOT share your password or codes.
-Do NOT click links from strangers.
-
-================================================================
-I'M CONTINUING TO WORK ON THIS 24/7
-================================================================
-- Monitoring all email inboxes for responses
-- Data breach lawyers contacted (free consultation)
-- Researching more channels and forms
-- Will update this page with any developments
-================================================================
+Balance: $881.42 | Starting: $1,000 | P/L: -$118.58
