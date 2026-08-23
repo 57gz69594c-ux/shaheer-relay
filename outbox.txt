@@ -1,16 +1,23 @@
-CONTENT ENGINE — NEED 1 TAP FROM YOU
+CONTENT ENGINE — UPLOAD 1 VIDEO TO START
 ===============================================
-Codeword: PHOENIX | relay-v62 | Aug 23 2026
+Codeword: PHOENIX | relay-v63 | Aug 23 2026
 
-System is BUILT. 7 modules ready. 50 live episodes found.
+System is BUILT and ready. Just need ONE video to start.
 
-ACTION NEEDED (takes 10 seconds):
-1. Tap the ORANGE button at top of this page
-2. Sign in with your Google account
-3. Tap "Allow" on the permissions screen
-4. You'll see "Done!" — that's it
+YouTube blocks server downloads (bot detection).
+So upload one live stream from your phone:
 
-This gives Claude access to download your OWN
-YouTube videos for the content engine. One-time only.
-After this, the pipeline runs fully autonomous.
+STEP 1: Open YouTube app
+STEP 2: Go to your latest Shaheer Knows Live
+STEP 3: Tap "Download" (offline save)
+STEP 4: Tap the ORANGE button on this relay page
+STEP 5: Select the downloaded video → Upload
+
+Claude will automatically:
+- Transcribe it (Urdu+English)
+- Find the best viral moments
+- Create 3 polished vertical shorts
+- Show them to you for review
+
+One upload = full pipeline demo.
 ===============================================
