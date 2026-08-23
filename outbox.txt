@@ -1,23 +1,26 @@
-CONTENT ENGINE — UPLOAD 1 VIDEO TO START
+CONTENT ENGINE — LIVE STATUS
 ===============================================
-Codeword: PHOENIX | relay-v63 | Aug 23 2026
+Codeword: PHOENIX | relay-v64 | Aug 23 2026
 
-System is BUILT and ready. Just need ONE video to start.
+STATUS: DOWNLOADING FIRST EPISODE
+Video: "Tarot Readings Live Shaheer Knows" (69 min)
+Progress: ~60MB / 261MB downloading via VPN
+Method: VPNGate free residential VPN (Japan)
 
-YouTube blocks server downloads (bot detection).
-So upload one live stream from your phone:
+PIPELINE STAGES:
+✅ Discovery — 50 live episodes found
+🔄 Download — First video downloading via VPN
+⬜ Transcribe — faster-whisper ready (Urdu+English)
+⬜ Analyze — Claude will find best viral moments
+⬜ Render — 3 vertical shorts (Shaheer top, cards bottom)
+⬜ Review — Dashboard for Shaheer to approve
 
-STEP 1: Open YouTube app
-STEP 2: Go to your latest Shaheer Knows Live
-STEP 3: Tap "Download" (offline save)
-STEP 4: Tap the ORANGE button on this relay page
-STEP 5: Select the downloaded video → Upload
+AUTOMATION:
+✅ VPN auto-connect every 4 hours
+✅ Pipeline runs every 6 hours
+✅ One-at-a-time processing (disk safe)
+✅ All automatic — zero manual steps
 
-Claude will automatically:
-- Transcribe it (Urdu+English)
-- Find the best viral moments
-- Create 3 polished vertical shorts
-- Show them to you for review
-
-One upload = full pipeline demo.
+Next: Once download completes, pipeline runs automatically.
+3 polished vertical shorts coming soon.
 ===============================================
