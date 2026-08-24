@@ -291,26 +291,7 @@
       <div id="tt-status" style="text-align:center;margin-top:10px;font-size:0.85rem;min-height:1.2em;"></div>
     </div>
 
-    <div id="yt-connect-section" style="width:100%;max-width:480px;padding:18px;background:linear-gradient(135deg,#1a0a0a,#1a1010);border:2px solid #cc0000;border-radius:14px;margin-bottom:14px;">
-      <div style="text-align:center;color:#ff4444;font-weight:800;font-size:1rem;margin-bottom:6px;">Connect YouTube</div>
-      <div style="text-align:center;color:#ccc;font-size:0.78rem;line-height:1.5;margin-bottom:14px;">
-        Two quick steps. Tap the button, sign in, tap Allow. You'll see an error page — that's normal. Copy the URL from the address bar and paste it below.
-      </div>
-
-      <a id="yt-auth-link" href="#" target="_blank" style="display:block;width:100%;padding:16px;background:#cc0000;border:none;border-radius:10px;color:white;font-size:1.05rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;text-align:center;text-decoration:none;margin-bottom:14px;">
-        Step 1: Sign In with Google
-      </a>
-
-      <div style="color:#9a9aa5;font-size:0.72rem;text-align:center;margin-bottom:8px;">After you tap Allow and see an error page, copy the full URL from the address bar and paste here:</div>
-
-      <input id="yt-code-input" type="text" placeholder="Paste the URL here..." style="width:100%;padding:14px;background:#1b1e26;color:#e8e8ec;border:1px solid #2e323d;border-radius:10px;font-size:0.95rem;margin-bottom:10px;box-sizing:border-box;">
-
-      <button id="yt-submit-btn" onclick="submitYouTubeCode()" style="width:100%;padding:14px;background:#4f7cff;border:none;border-radius:10px;color:white;font-size:1rem;font-weight:700;cursor:pointer;">
-        Step 2: Submit
-      </button>
-
-      <div id="yt-status" style="text-align:center;margin-top:10px;font-size:0.85rem;min-height:1.2em;"></div>
-    </div>
+    <!-- YouTube: Already connected (Aug 24) -->
   </div>
 
   <!-- SEND TAB -->
@@ -340,11 +321,11 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v71 — TIKTOK — Aug 24 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v72 — TIKTOK — Aug 24 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v71')) {
-  sessionStorage.setItem('relay_cache_bust_v71', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v72')) {
+  sessionStorage.setItem('relay_cache_bust_v72', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -489,14 +470,19 @@ async function generateTikTokQR() {
 
   btn.disabled = true;
   btn.textContent = 'Generating QR...';
-  statusEl.textContent = 'Launching browser, please wait...';
+  statusEl.textContent = 'Launching browser (~15s)...';
   statusEl.style.color = '#ffd666';
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
     const resp = await fetch('https://104.248.159.95.nip.io/tiktok/qr', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      signal: controller.signal
     });
+    clearTimeout(timeout);
+
     const data = await resp.json();
     if (data.status === 'ready') {
       img.src = 'https://104.248.159.95.nip.io' + data.qr_url;
@@ -505,7 +491,6 @@ async function generateTikTokQR() {
       statusEl.style.color = '#6ee08a';
       btn.textContent = 'Refresh QR';
       btn.disabled = false;
-      // Start polling for success
       pollTikTokStatus();
     } else {
       statusEl.textContent = 'Failed: ' + (data.message || 'unknown error');
@@ -514,7 +499,11 @@ async function generateTikTokQR() {
       btn.textContent = 'Try Again';
     }
   } catch (e) {
-    statusEl.textContent = 'Error: ' + e.message;
+    if (e.name === 'AbortError') {
+      statusEl.textContent = 'Timed out. Tap Try Again.';
+    } else {
+      statusEl.textContent = 'Error: ' + e.message;
+    }
     statusEl.style.color = '#ff6e6e';
     btn.disabled = false;
     btn.textContent = 'Try Again';
@@ -523,7 +512,7 @@ async function generateTikTokQR() {
 
 function pollTikTokStatus() {
   let polls = 0;
-  const maxPolls = 40; // 40 * 5s = ~3.3 minutes
+  const maxPolls = 40;
   const interval = setInterval(async () => {
     polls++;
     if (polls > maxPolls) {
@@ -545,69 +534,8 @@ function pollTikTokStatus() {
         document.getElementById('tt-connect-section').style.borderColor = '#1a8a1a';
         document.getElementById('tt-qr-container').style.display = 'none';
       }
-    } catch(e) { /* ignore polling errors */ }
+    } catch(e) {}
   }, 5000);
-}
-
-// --- YouTube Connect (direct OAuth link + paste code) ---
-(function() {
-  const CLIENT_ID = '666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com';
-  const REDIRECT = 'http://localhost:9876/callback';
-  const SCOPES = 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.force-ssl';
-  const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
-    'client_id=' + encodeURIComponent(CLIENT_ID) +
-    '&redirect_uri=' + encodeURIComponent(REDIRECT) +
-    '&response_type=code' +
-    '&scope=' + encodeURIComponent(SCOPES) +
-    '&access_type=offline&prompt=consent';
-  document.getElementById('yt-auth-link').href = authUrl;
-})();
-
-async function submitYouTubeCode() {
-  const input = document.getElementById('yt-code-input');
-  const statusEl = document.getElementById('yt-status');
-  const btn = document.getElementById('yt-submit-btn');
-  const raw = input.value.trim();
-
-  if (!raw) { statusEl.textContent = 'Paste the URL first.'; statusEl.style.color = '#ff6e6e'; return; }
-
-  // Extract code from URL or raw code
-  let code = raw;
-  if (raw.includes('code=')) {
-    const m = raw.match(/[?&]code=([^&]+)/);
-    if (m) code = decodeURIComponent(m[1]);
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Connecting...';
-  statusEl.textContent = 'Saving tokens...';
-  statusEl.style.color = '#ffd666';
-
-  try {
-    const resp = await fetch('https://104.248.159.95.nip.io/oauth/exchange', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: code })
-    });
-    const data = await resp.json();
-    if (data.status === 'success') {
-      statusEl.textContent = 'YouTube Connected! Auto-posting is LIVE.';
-      statusEl.style.color = '#6ee08a';
-      btn.textContent = 'Connected';
-      btn.style.background = '#1a8a1a';
-      document.getElementById('yt-connect-section').style.borderColor = '#1a8a1a';
-    } else {
-      statusEl.textContent = 'Failed: ' + JSON.stringify(data.details || data);
-      statusEl.style.color = '#ff6e6e';
-      btn.disabled = false;
-      btn.textContent = 'Step 2: Submit';
-    }
-  } catch (e) {
-    statusEl.textContent = 'Error: ' + e.message;
-    statusEl.style.color = '#ff6e6e';
-    btn.disabled = false;
-    btn.textContent = 'Step 2: Submit';
-  }
 }
 </script>
 </body>
