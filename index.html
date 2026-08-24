@@ -267,19 +267,16 @@
     <div style="width:100%;max-width:480px;text-align:center;font-size:0.7rem;color:#6ee08a;margin-top:12px;">All 3 clips APPROVED ✓</div>
 
     <div style="width:100%;max-width:480px;border-top:1px solid #2e323d;margin:20px 0 12px;"></div>
-    <div style="width:100%;max-width:480px;text-align:center;font-size:0.75rem;color:#FF8647;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">YouTube Auto-Post Setup (2 steps)</div>
 
-    <div style="width:100%;max-width:480px;padding:14px;background:#1a1510;border:1px solid #3a3020;border-radius:10px;margin-bottom:10px;">
-      <div style="color:#FF8647;font-weight:700;font-size:0.85rem;margin-bottom:8px;">Step 1: Publish the app (one tap)</div>
-      <div style="color:#ccc;font-size:0.78rem;line-height:1.5;margin-bottom:10px;">
-        The Google app is in "Testing" mode which blocks sign-in. Open the link below, scroll down, tap <b>"PUBLISH APP"</b>, confirm. That's it.
+    <div id="yt-connect-section" style="width:100%;max-width:480px;padding:18px;background:linear-gradient(135deg,#1a0a0a,#1a1010);border:2px solid #cc0000;border-radius:14px;margin-bottom:14px;">
+      <div style="text-align:center;color:#ff4444;font-weight:800;font-size:1rem;margin-bottom:6px;">⚡ Connect YouTube</div>
+      <div style="text-align:center;color:#ccc;font-size:0.78rem;line-height:1.5;margin-bottom:14px;">
+        One tap. Sign in with your Google account, tap Allow. Auto-posting goes live instantly.
       </div>
-      <a href="https://console.cloud.google.com/apis/credentials/consent" target="_blank" style="display:block;padding:12px;background:#4285F4;border-radius:8px;text-align:center;text-decoration:none;color:white;font-weight:700;font-size:0.9rem;">Open Google Console → OAuth Screen</a>
-    </div>
-
-    <div style="width:100%;max-width:480px;padding:14px;background:#1a1510;border:1px solid #3a3020;border-radius:10px;margin-bottom:10px;">
-      <div style="color:#FF8647;font-weight:700;font-size:0.85rem;margin-bottom:8px;">Step 2: Connect YouTube (after Step 1)</div>
-      <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com&redirect_uri=http%3A%2F%2F104.248.159.95%3A9876%2Fcallback&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.upload&access_type=offline&prompt=consent" target="_blank" style="display:block;padding:12px;background:#cc0000;border-radius:8px;text-align:center;text-decoration:none;color:white;font-weight:700;font-size:0.9rem;">Connect YouTube</a>
+      <button id="yt-connect-btn" onclick="connectYouTube()" style="width:100%;padding:16px;background:#cc0000;border:none;border-radius:10px;color:white;font-size:1.05rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;">
+        🔴 Connect YouTube — One Tap
+      </button>
+      <div id="yt-status" style="text-align:center;margin-top:10px;font-size:0.85rem;min-height:1.2em;"></div>
     </div>
   </div>
 
@@ -310,11 +307,12 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v68 — EAGLE — Aug 24 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v69 — FALCON — Aug 24 2026</p>
 
+<script src="https://accounts.google.com/gsi/client" async></script>
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v68')) {
-  sessionStorage.setItem('relay_cache_bust_v68', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v69')) {
+  sessionStorage.setItem('relay_cache_bust_v69', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -449,6 +447,69 @@ copyBtn.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(recvText.value); } catch(e) { recvText.select(); document.execCommand('copy'); }
   recvStatus.textContent = 'Copied.'; recvStatus.className = 'ok';
 });
+
+// --- YouTube Connect (Google Identity Services) ---
+function connectYouTube() {
+  const statusEl = document.getElementById('yt-status');
+  const btn = document.getElementById('yt-connect-btn');
+
+  if (typeof google === 'undefined' || !google.accounts) {
+    statusEl.textContent = 'Loading Google... try again in 2 seconds.';
+    statusEl.style.color = '#ffd666';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Opening Google Sign-In...';
+  statusEl.textContent = '';
+
+  const client = google.accounts.oauth2.initCodeClient({
+    client_id: '666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com',
+    scope: 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.force-ssl',
+    ux_mode: 'popup',
+    callback: async (response) => {
+      if (response.error) {
+        statusEl.textContent = 'Auth failed: ' + response.error;
+        statusEl.style.color = '#ff6e6e';
+        btn.disabled = false;
+        btn.textContent = '🔴 Connect YouTube — One Tap';
+        return;
+      }
+
+      statusEl.textContent = 'Got authorization! Saving tokens...';
+      statusEl.style.color = '#ffd666';
+
+      try {
+        const resp = await fetch('https://104.248.159.95.nip.io/oauth/exchange', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: response.code })
+        });
+        const data = await resp.json();
+
+        if (data.status === 'success') {
+          statusEl.textContent = 'YouTube Connected! Auto-posting is now LIVE.';
+          statusEl.style.color = '#6ee08a';
+          btn.textContent = '✅ YouTube Connected';
+          btn.style.background = '#1a8a1a';
+          document.getElementById('yt-connect-section').style.borderColor = '#1a8a1a';
+        } else {
+          statusEl.textContent = 'Token exchange failed: ' + JSON.stringify(data.details || data);
+          statusEl.style.color = '#ff6e6e';
+          btn.disabled = false;
+          btn.textContent = '🔴 Connect YouTube — One Tap';
+        }
+      } catch (e) {
+        statusEl.textContent = 'Server error: ' + e.message;
+        statusEl.style.color = '#ff6e6e';
+        btn.disabled = false;
+        btn.textContent = '🔴 Connect YouTube — One Tap';
+      }
+    }
+  });
+
+  client.requestCode();
+}
 </script>
 </body>
 </html>
