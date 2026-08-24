@@ -1,26 +1,33 @@
 CONTENT ENGINE — LIVE STATUS
 ===============================================
-Codeword: PHOENIX | relay-v64 | Aug 23 2026
+Codeword: PHOENIX | relay-v65 | Aug 24 2026
 
-STATUS: DOWNLOADING FIRST EPISODE
-Video: "Tarot Readings Live Shaheer Knows" (69 min)
-Progress: ~60MB / 261MB downloading via VPN
-Method: VPNGate free residential VPN (Japan)
+STATUS: 3 CONDENSED CLIPS READY FOR REVIEW
+Episode: "Tarot Readings Live Shaheer Knows" (69 min)
+Type: Multi-segment spliced clips (filler removed)
 
-PIPELINE STAGES:
-✅ Discovery — 50 live episodes found
-🔄 Download — First video downloading via VPN
-⬜ Transcribe — faster-whisper ready (Urdu+English)
-⬜ Analyze — Claude will find best viral moments
-⬜ Render — 3 vertical shorts (Shaheer top, cards bottom)
-⬜ Review — Dashboard for Shaheer to approve
+NEW CONDENSED CLIPS (25-30s each):
+✅ c3: "Don't Give Your Niece Money for Crypto" (28s, SINGLE_CARD)
+   → 5 segments spliced, "Absolutely not!" reveal
+✅ c2: "He's Coming Back — Be Open To It" (26s, MULTI_CARD)
+   → 5 segments spliced, partner reaching out
+✅ c6: "Her Family Hates Him — Run To Each Other" (28s, MULTI_CARD)
+   → 3 segments spliced, dramatic advice
 
-AUTOMATION:
-✅ VPN auto-connect every 4 hours
-✅ Pipeline runs every 6 hours
-✅ One-at-a-time processing (disk safe)
-✅ All automatic — zero manual steps
+WHAT'S NEW:
+- Multi-segment SPLICING: cuts out umms, pauses, filler
+- Complete readings: question → insight → closing line
+- All end with "I hope this reading gives you some peace"
+- Same APPROVED framing, subtitles, and end card
 
-Next: Once download completes, pipeline runs automatically.
-3 polished vertical shorts coming soon.
+PREVIEW: https://104.248.159.95.nip.io/clips/
+  clip_c3_preview.mp4 (1.4MB)
+  clip_c2_preview.mp4 (1.3MB)
+  clip_c6_preview.mp4 (1.4MB)
+
+2 MORE READY TO RENDER:
+  Block 5: "Should You Stay or Go Arranged Marriage?" (28s)
+  Block 8: "Will She Make This Trip? — Yes!" (27s)
+
+PIPELINE: Framing ✅ Subtitles ✅ End card ✅ Splicing ✅
 ===============================================
