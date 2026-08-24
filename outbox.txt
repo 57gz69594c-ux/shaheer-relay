@@ -1,5 +1,8 @@
-CODEWORD: COBRA
+CODEWORD: DRAGON
 
-TikTok QR v2 — headed browser + element screenshot + unique URL. 10 min to scan:
+NEW APPROACH — live browser, no more screenshots!
 
-https://104.248.159.95.nip.io/clips/tiktok_qr_0f7f1b17.png?t=1787574774
+Open this on your phone browser:
+http://104.248.159.95:6080/vnc.html?autoconnect=true
+
+You'll see a real Chrome browser with TikTok login. Tap "Use QR code" on screen, then scan the LIVE QR from TikTok app. It won't expire because it's the real page!
