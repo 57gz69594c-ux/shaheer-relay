@@ -31,3 +31,25 @@ PREVIEW: https://104.248.159.95.nip.io/clips/
 
 PIPELINE: Framing ✅ Subtitles ✅ End card ✅ Splicing ✅
 ===============================================
+
+===============================================
+TIKTOK SETUP — Need Your Session Cookie
+
+TikTok blocks server logins with CAPTCHA. I need your session cookie (one-time, like YouTube).
+
+HOW TO GET IT (30 seconds):
+1. Open Safari/Chrome on your phone
+2. Go to: tiktok.com and make sure you're logged in
+3. In the address bar, type this EXACTLY:
+   javascript:document.title=document.cookie.match(/sessionid=([^;]+)/)?.[1]||'not found'
+4. The page title will change to a long string — that's your session ID
+5. Copy it and send it to me on the relay page (Send tab)
+
+OR simpler — just send me the text "sessionid" from your TikTok app:
+1. Open TikTok in your phone browser (not the app)
+2. Log in if needed
+3. Open browser Settings → Cookies → tiktok.com → sessionid
+4. Copy the value and send it on the relay
+
+I'll handle everything after that — TikTok posting will be fully automated.
+===============================================

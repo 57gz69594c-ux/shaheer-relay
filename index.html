@@ -268,6 +268,29 @@
 
     <div style="width:100%;max-width:480px;border-top:1px solid #2e323d;margin:20px 0 12px;"></div>
 
+    <!-- TIKTOK CONNECT -->
+    <div id="tt-connect-section" style="width:100%;max-width:480px;padding:18px;background:linear-gradient(135deg,#0a0a1a,#101020);border:2px solid #69C9D0;border-radius:14px;margin-bottom:14px;">
+      <div style="text-align:center;color:#69C9D0;font-weight:800;font-size:1rem;margin-bottom:6px;">Connect TikTok</div>
+      <div style="text-align:center;color:#ccc;font-size:0.78rem;line-height:1.5;margin-bottom:14px;">
+        Tap the button below → save the QR image → open TikTok app → scan from gallery.
+      </div>
+
+      <button id="tt-qr-btn" onclick="generateTikTokQR()" style="width:100%;padding:16px;background:#69C9D0;border:none;border-radius:10px;color:#000;font-size:1.05rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;margin-bottom:14px;">
+        Generate QR Code
+      </button>
+
+      <div id="tt-qr-container" style="display:none;text-align:center;margin-bottom:14px;">
+        <img id="tt-qr-img" src="" style="max-width:280px;border-radius:10px;border:2px solid #2e323d;" />
+        <div style="color:#ffd666;font-size:0.8rem;font-weight:700;margin-top:10px;">
+          ① Long-press the QR → Save Image<br>
+          ② Open TikTok → Profile → Scan icon<br>
+          ③ Tap gallery icon → Pick the saved QR
+        </div>
+      </div>
+
+      <div id="tt-status" style="text-align:center;margin-top:10px;font-size:0.85rem;min-height:1.2em;"></div>
+    </div>
+
     <div id="yt-connect-section" style="width:100%;max-width:480px;padding:18px;background:linear-gradient(135deg,#1a0a0a,#1a1010);border:2px solid #cc0000;border-radius:14px;margin-bottom:14px;">
       <div style="text-align:center;color:#ff4444;font-weight:800;font-size:1rem;margin-bottom:6px;">Connect YouTube</div>
       <div style="text-align:center;color:#ccc;font-size:0.78rem;line-height:1.5;margin-bottom:14px;">
@@ -317,11 +340,11 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v70 — FALCON — Aug 24 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v71 — TIKTOK — Aug 24 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v69')) {
-  sessionStorage.setItem('relay_cache_bust_v69', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v71')) {
+  sessionStorage.setItem('relay_cache_bust_v71', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -456,6 +479,75 @@ copyBtn.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(recvText.value); } catch(e) { recvText.select(); document.execCommand('copy'); }
   recvStatus.textContent = 'Copied.'; recvStatus.className = 'ok';
 });
+
+// --- TikTok QR Connect ---
+async function generateTikTokQR() {
+  const btn = document.getElementById('tt-qr-btn');
+  const container = document.getElementById('tt-qr-container');
+  const img = document.getElementById('tt-qr-img');
+  const statusEl = document.getElementById('tt-status');
+
+  btn.disabled = true;
+  btn.textContent = 'Generating QR...';
+  statusEl.textContent = 'Launching browser, please wait...';
+  statusEl.style.color = '#ffd666';
+
+  try {
+    const resp = await fetch('https://104.248.159.95.nip.io/tiktok/qr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await resp.json();
+    if (data.status === 'ready') {
+      img.src = 'https://104.248.159.95.nip.io' + data.qr_url;
+      container.style.display = 'block';
+      statusEl.textContent = 'QR ready! Save it and scan from TikTok.';
+      statusEl.style.color = '#6ee08a';
+      btn.textContent = 'Refresh QR';
+      btn.disabled = false;
+      // Start polling for success
+      pollTikTokStatus();
+    } else {
+      statusEl.textContent = 'Failed: ' + (data.message || 'unknown error');
+      statusEl.style.color = '#ff6e6e';
+      btn.disabled = false;
+      btn.textContent = 'Try Again';
+    }
+  } catch (e) {
+    statusEl.textContent = 'Error: ' + e.message;
+    statusEl.style.color = '#ff6e6e';
+    btn.disabled = false;
+    btn.textContent = 'Try Again';
+  }
+}
+
+function pollTikTokStatus() {
+  let polls = 0;
+  const maxPolls = 40; // 40 * 5s = ~3.3 minutes
+  const interval = setInterval(async () => {
+    polls++;
+    if (polls > maxPolls) {
+      clearInterval(interval);
+      document.getElementById('tt-status').textContent = 'QR may have expired. Tap "Refresh QR" for a new one.';
+      document.getElementById('tt-status').style.color = '#ffd666';
+      return;
+    }
+    try {
+      const resp = await fetch('https://104.248.159.95.nip.io/tiktok/status');
+      const data = await resp.json();
+      if (data.state === 'success') {
+        clearInterval(interval);
+        document.getElementById('tt-status').textContent = 'TikTok Connected! Auto-posting is LIVE.';
+        document.getElementById('tt-status').style.color = '#6ee08a';
+        document.getElementById('tt-qr-btn').textContent = 'Connected';
+        document.getElementById('tt-qr-btn').style.background = '#1a8a1a';
+        document.getElementById('tt-qr-btn').style.color = '#fff';
+        document.getElementById('tt-connect-section').style.borderColor = '#1a8a1a';
+        document.getElementById('tt-qr-container').style.display = 'none';
+      }
+    } catch(e) { /* ignore polling errors */ }
+  }, 5000);
+}
 
 // --- YouTube Connect (direct OAuth link + paste code) ---
 (function() {
