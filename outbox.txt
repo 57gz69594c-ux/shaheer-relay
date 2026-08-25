@@ -1,20 +1,21 @@
-CODEWORD: PHOENIX
+24/7 CONTENT MACHINE — BATCH 001 STATUS
 
-SERVER HOUSEKEEPING SYSTEM — FULLY DEPLOYED
+INFRASTRUCTURE BUILT:
+- Content Ledger (SQLite) — tracks episodes, clips, batches, publishing
+- Media Vault + resolve_media() — centralized source resolution  
+- Master Pipeline — transcript-first batch production
+- Subtitle module — English only, no translation of non-English speech
+- 42 episode transcripts indexed
 
-What I built:
-1. Log rotation — even-terminal log was 408MB, truncated to 10MB, auto-rotation set up
-2. G2 watchdog — even-terminal monitored every 10 min, auto-restart if port 3456 goes down
-3. OOM protection — memory limit on even-terminal (was OOM-killed Aug 13, won't happen again)
-4. Daily cleanup cron — runs 7 AM PKT: cleans logs, zombies, stale downloads, disk protection
-5. All services verified running: G2, trading, FieldStation42, Caddy, Jarvis, MT5
+BATCH 001:
+- Tarot: 3/3 RENDERED (31-36s each, English subs)
+  T1: Can I Give My Furniture to My Mom? (Mr. Bean) — 31s
+  T2: Will I Get Married Before Year End? (Mashra) — 36s
+  T3: Should I Go Back to My Husband? (Kenan) — 36s
+- Podcast: 0/3 — MEDIA SOURCE REQUIRED
 
-Server health right now:
-- Disk: 60% (126GB free)
-- RAM: 2GB/16GB (12%)
-- All 6 critical services: ACTIVE
-- Zero zombie processes
+PODCAST BLOCKER:
+YouTube has completely IP-blocked this server.
+To unblock: Upload the podcast video via Send tab on this relay page.
 
-TikTok: Rate limited, will auto-retry tomorrow.
-c6 posting at 9 PM PKT: Cron set.
-Next episode downloading now (100MB so far).
+Review page: http://104.248.159.95/clips/
