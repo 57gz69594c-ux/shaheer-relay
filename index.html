@@ -90,7 +90,6 @@
   .err { color: #ff6e6e; }
   .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
 
-  /* Clip Review Styles */
   .clip-card {
     width: 100%;
     max-width: 480px;
@@ -118,107 +117,42 @@
     color: #9a9aa5;
     margin-bottom: 10px;
   }
-  .clip-caption {
-    background: #14161c;
-    border: 1px solid #2e323d;
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 10px;
-    position: relative;
-  }
-  .clip-caption .label {
-    font-size: 0.65rem;
-    color: #4f7cff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  .section-label {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    padding: 14px 0 8px;
+    font-size: 0.75rem;
     font-weight: 700;
-    margin-bottom: 4px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
   }
-  .clip-caption .text {
-    font-size: 0.9rem;
-    color: #e0e0e5;
-    line-height: 1.4;
-  }
-  .clip-caption .copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #2e323d;
-    border: none;
-    color: #9a9aa5;
-    font-size: 0.7rem;
-    padding: 4px 8px;
+  .section-label.tarot { color: #9B59B6; }
+  .section-label.podcast { color: #E74C3C; }
+  .time-badge {
+    display: inline-block;
+    padding: 2px 8px;
     border-radius: 4px;
-    cursor: pointer;
-    width: auto;
-    margin: 0;
-  }
-  .clip-score {
-    text-align: center;
-    padding: 8px;
-    background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
-    border: 1px solid #2a4a2a;
-    border-radius: 8px;
-    margin-bottom: 12px;
-  }
-  .clip-score .label { font-size: 0.65rem; color: #6ee08a; text-transform: uppercase; letter-spacing: 1px; }
-  .clip-score .value { font-size: 1.6rem; font-weight: 800; color: #6ee08a; }
-  .clip-scores-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-    margin-bottom: 12px;
-  }
-  .score-item {
-    text-align: center;
-    padding: 5px;
-    background: #14161c;
-    border-radius: 5px;
-  }
-  .score-item .sl { font-size: 0.55rem; color: #9a9aa5; text-transform: uppercase; letter-spacing: 0.5px; }
-  .score-item .sv { font-size: 0.95rem; font-weight: 700; }
-  .sh { color: #6ee08a; }
-  .sm { color: #ffd666; }
-  .sl-c { color: #ff6e6e; }
-  .clip-actions {
-    display: flex;
-    gap: 10px;
-  }
-  .clip-actions button {
-    flex: 1;
-    padding: 14px;
-    margin: 0;
+    font-size: 0.65rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 0.95rem;
+    margin-left: 6px;
+    vertical-align: middle;
   }
-  .btn-approve { background: #1a8a1a !important; }
-  .btn-approve:active { background: #22aa22 !important; }
-  .btn-reject { background: #8a1a1a !important; }
-  .btn-reject:active { background: #aa2222 !important; }
-  .clip-status {
-    text-align: center;
-    margin-top: 8px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
+  .time-badge.tarot { background: #9B59B6; color: #fff; }
+  .time-badge.podcast { background: #E74C3C; color: #fff; }
   .empty-clips {
     text-align: center;
     padding: 40px 20px;
     color: #9a9aa5;
   }
-  .empty-clips h2 { font-size: 1.1rem; color: #e8e8ec; margin-bottom: 8px; }
 </style>
 </head>
 <body>
   <h1>Claude Relay</h1>
-  <p class="sub">Send or receive from Claude.</p>
+  <p class="sub">Aug 25 — 6 Clips Ready for Review</p>
 
-  <!-- FIELDSTATION42 ARCHIVE LINK -->
   <a href="https://104.248.159.95.nip.io/fieldstation42/" target="_blank" style="display:block;width:100%;max-width:480px;margin:0 auto 18px;padding:18px;background:#0a0a0f;border:2px solid #33ff33;border-radius:10px;text-align:center;text-decoration:none;font-family:monospace;">
-    <div style="color:#33ff33;font-size:1.3rem;letter-spacing:3px;text-shadow:0 0 10px #33ff33;">▸ FIELDSTATION42 ARCHIVE ◂</div>
+    <div style="color:#33ff33;font-size:1.3rem;letter-spacing:3px;text-shadow:0 0 10px #33ff33;">FIELDSTATION42 ARCHIVE</div>
     <div style="color:#1a8a1a;font-size:0.75rem;margin-top:5px;">RETRO TELEVISION MEDIA ACQUISITION SYSTEM</div>
   </a>
 
@@ -230,50 +164,75 @@
 
   <!-- CLIPS REVIEW TAB -->
   <div class="panel active" id="panel-clips">
-    <div style="width:100%;max-width:480px;text-align:center;font-size:0.7rem;color:#FF8647;font-weight:700;letter-spacing:3px;margin-bottom:14px;">CODEWORD: COBRA</div>
+    <div style="width:100%;max-width:480px;text-align:center;font-size:0.7rem;color:#FF8647;font-weight:700;letter-spacing:3px;margin-bottom:14px;">CODEWORD: DRAGON</div>
 
-    <!-- CLIP 1: p1 — Desert Alien Encounter -->
+    <div class="section-label tarot">TAROT CLIPS — New Episode</div>
+
+    <!-- TAROT c1 — 10 AM -->
     <div class="clip-card">
       <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_p1_final.mp4?v=2" type="video/mp4">
+        <source src="https://104.248.159.95.nip.io/clips/clip_c1_preview.mp4?v=83" type="video/mp4">
       </video>
       <div class="clip-info">
-        <div class="clip-title">Alien Encounter in the Desert | Spaceship Podcast</div>
-        <div class="clip-meta">Clip p1 · 30s · UFO Episode</div>
-        <div class="clip-caption">
-          <div class="label">Caption</div>
-          <div class="text">A desert trip turns into an alien encounter! 🛸🏜️ #spaceshippodcast #ufo #alienencounter #desert #aliens #podcast #podcastclips #viral #shorts</div>
-        </div>
+        <div class="clip-title">Is He the One? Love Reading Reveal <span class="time-badge tarot">10 AM</span></div>
+        <div class="clip-meta">Tarot #1 · 29s · Slot 1</div>
       </div>
     </div>
 
-    <!-- CLIP 2: p2 — Mysterious Light Beam -->
+    <!-- TAROT c2 — 4 PM -->
     <div class="clip-card">
       <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_p2_final.mp4?v=2" type="video/mp4">
+        <source src="https://104.248.159.95.nip.io/clips/clip_c2_preview.mp4?v=83" type="video/mp4">
       </video>
       <div class="clip-info">
-        <div class="clip-title">The Mysterious Light Beam | Spaceship Podcast</div>
-        <div class="clip-meta">Clip p2 · 30s · UFO Episode</div>
-        <div class="clip-caption">
-          <div class="label">Caption</div>
-          <div class="text">A light beam from the sky leaves a chilling mark 🔦👽 #spaceshippodcast #ufo #alienattack #lightbeam #mystery #podcast #podcastclips #viral #shorts</div>
-        </div>
+        <div class="clip-title">Will His Behavior Change? Relationship Reading <span class="time-badge tarot">4 PM</span></div>
+        <div class="clip-meta">Tarot #2 · 24s · Slot 3</div>
       </div>
     </div>
 
-    <!-- CLIP 3: p3 — Shape-Shifting Metal -->
+    <!-- TAROT c3 — 9 PM -->
     <div class="clip-card">
       <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_p3_final.mp4?v=2" type="video/mp4">
+        <source src="https://104.248.159.95.nip.io/clips/clip_c3_preview.mp4?v=83" type="video/mp4">
       </video>
       <div class="clip-info">
-        <div class="clip-title">Shape-Shifting Metal | Spaceship Podcast</div>
-        <div class="clip-meta">Clip p3 · 30s · UFO Episode</div>
-        <div class="clip-caption">
-          <div class="label">Caption</div>
-          <div class="text">A mysterious metal defies the laws of physics 🛸🔬 #spaceshippodcast #ufocrash #alientech #shapeshifting #mystery #podcast #podcastclips #viral #shorts</div>
-        </div>
+        <div class="clip-title">Will Debt Be Cleared? Financial Reading <span class="time-badge tarot">9 PM</span></div>
+        <div class="clip-meta">Tarot #3 · 29s · Slot 5</div>
+      </div>
+    </div>
+
+    <div class="section-label podcast">PODCAST CLIPS — Mega UFO &amp; Aliens Episode</div>
+
+    <!-- PODCAST p1 — 1 PM -->
+    <div class="clip-card">
+      <video class="clip-video" controls playsinline preload="metadata">
+        <source src="https://104.248.159.95.nip.io/clips/clip_p1_preview.mp4?v=83" type="video/mp4">
+      </video>
+      <div class="clip-info">
+        <div class="clip-title">Mega UFO Episode Begins! <span class="time-badge podcast">1 PM</span></div>
+        <div class="clip-meta">Podcast #1 · 26s · Slot 2</div>
+      </div>
+    </div>
+
+    <!-- PODCAST p2 — 7 PM -->
+    <div class="clip-card">
+      <video class="clip-video" controls playsinline preload="metadata">
+        <source src="https://104.248.159.95.nip.io/clips/clip_p2_preview.mp4?v=83" type="video/mp4">
+      </video>
+      <div class="clip-info">
+        <div class="clip-title">Nordic Aliens: Human Lookalikes? <span class="time-badge podcast">7 PM</span></div>
+        <div class="clip-meta">Podcast #2 · 26s · Slot 4</div>
+      </div>
+    </div>
+
+    <!-- PODCAST p3 — 11 PM -->
+    <div class="clip-card">
+      <video class="clip-video" controls playsinline preload="metadata">
+        <source src="https://104.248.159.95.nip.io/clips/clip_p3_preview.mp4?v=83" type="video/mp4">
+      </video>
+      <div class="clip-info">
+        <div class="clip-title">Strange Encounter on Orcas Island <span class="time-badge podcast">11 PM</span></div>
+        <div class="clip-meta">Podcast #3 · 27s · Slot 6</div>
       </div>
     </div>
   </div>
@@ -297,7 +256,7 @@
 
   <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#FF8647;font-weight:700;letter-spacing:2px;margin-bottom:6px;">CODEWORD: PHOENIX</div>
+    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#FF8647;font-weight:700;letter-spacing:2px;margin-bottom:6px;">CODEWORD: DRAGON</div>
     <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
     <button id="refresh">Refresh</button>
     <button id="copy" class="secondary">Copy</button>
@@ -305,19 +264,16 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v82 — NEW 3 CLIPS (COBRA) — Aug 25 2026</p>
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v83 — 6 CLIPS AUG 25 (DRAGON) — Aug 25 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v82')) {
-  sessionStorage.setItem('relay_cache_bust_v82', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v83')) {
+  sessionStorage.setItem('relay_cache_bust_v83', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
-const CLIP_API = "https://104.248.159.95.nip.io/clip-api";
-const CLIP_CDN = "https://104.248.159.95.nip.io/clips";
 
-// --- tabs ---
 const tabs = ['clips','send','recv'];
 tabs.forEach(t => {
   document.getElementById('tab-'+t).addEventListener('click', () => {
@@ -325,14 +281,10 @@ tabs.forEach(t => {
       document.getElementById('tab-'+x).classList.toggle('active', x===t);
       document.getElementById('panel-'+x).classList.toggle('active', x===t);
     });
-    if (t === 'clips') loadClips();
     if (t === 'recv') loadLatest();
   });
 });
 
-// Clips are embedded directly — no API needed
-
-// --- send tab ---
 const btn = document.getElementById('send');
 const status = document.getElementById('status');
 const note = document.getElementById('note');
@@ -366,7 +318,6 @@ btn.addEventListener('click', async () => {
   }
 });
 
-// --- send file/image ---
 const fileInput = document.getElementById('fileInput');
 const sendFileBtn = document.getElementById('sendFile');
 const fileStatus = document.getElementById('file-status');
@@ -414,7 +365,6 @@ sendFileBtn.addEventListener('click', async () => {
   sendFileBtn.disabled = false;
 });
 
-// --- receive tab ---
 const recvText = document.getElementById('recv-text');
 const recvStatus = document.getElementById('recv-status');
 const recvMeta = document.getElementById('recv-meta');
@@ -444,8 +394,6 @@ copyBtn.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(recvText.value); } catch(e) { recvText.select(); document.execCommand('copy'); }
   recvStatus.textContent = 'Copied.'; recvStatus.className = 'ok';
 });
-
-
 </script>
 </body>
 </html>
