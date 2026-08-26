@@ -1,21 +1,72 @@
-24/7 CONTENT MACHINE — BATCH 001 STATUS
+CODEWORD: MERCURY
 
-INFRASTRUCTURE BUILT:
-- Content Ledger (SQLite) — tracks episodes, clips, batches, publishing
-- Media Vault + resolve_media() — centralized source resolution  
-- Master Pipeline — transcript-first batch production
-- Subtitle module — English only, no translation of non-English speech
-- 42 episode transcripts indexed
+FORENSIC PERFORMANCE + TRADING ENGINE RELIABILITY AUDIT
+Complete Report — Aug 26, 2026 05:55 UTC
 
-BATCH 001:
-- Tarot: 3/3 RENDERED (31-36s each, English subs)
-  T1: Can I Give My Furniture to My Mom? (Mr. Bean) — 31s
-  T2: Will I Get Married Before Year End? (Mashra) — 36s
-  T3: Should I Go Back to My Husband? (Kenan) — 36s
-- Podcast: 0/3 — MEDIA SOURCE REQUIRED
+═══════════════════════════════════════
+WHAT WAS WRONG
+═══════════════════════════════════════
 
-PODCAST BLOCKER:
-YouTube has completely IP-blocked this server.
-To unblock: Upload the podcast video via Send tab on this relay page.
+ROOT CAUSE #1: Wine Python IPC Bug (WinError 10038)
+The MT5 REST API server used Python's select.select() on pipe file descriptors. Wine Python does NOT support select() on pipes — only sockets. This caused the worker subprocess to crash immediately after every container restart.
 
-Review page: http://104.248.159.95/clips/
+ROOT CAUSE #2: Worker Subprocess Startup Deadlock
+The worker had a 10-second blocking sleep before reading stdin. The server only waited 3 seconds then sent commands that went unanswered. Result: server killed the worker for timeout, restarted it, same loop forever.
+
+ROOT CAUSE #3: MT5 Terminal Not Logging In
+After server reboot, the terminal process was running but never authenticated to the broker. The worker's mt5.initialize() call hung indefinitely.
+
+ROOT CAUSE #4: Server Reboots (External — DigitalOcean)
+3 reboots on Aug 26 (03:27, 04:07, 05:25 UTC). Kernel logs show "Power Button" ACPI event — DigitalOcean hypervisor maintenance, not caused by us.
+
+═══════════════════════════════════════
+WHY 16 CORES + 35GB RAM DIDN'T HELP
+═══════════════════════════════════════
+
+CPU was at 7%, RAM at 8%, zero swap, zero I/O wait. The bottleneck was a SOFTWARE BUG in the Wine Python IPC layer that caused a crash loop after every container restart. More cores and RAM cannot fix a compatibility bug.
+
+═══════════════════════════════════════
+WHAT WAS FIXED
+═══════════════════════════════════════
+
+1. MT5 REST Server v4b — replaced select.select() with thread-based readline timeout
+2. MT5 Worker v3 — immediate stdin reading, lazy MT5 init, login credentials from env
+3. MT5 Terminal restarted with explicit login parameters
+4. Trading engine restarted — Inverse mode: OFF confirmed
+5. SSH hardening: fail2ban active, 4 IPs banned (1773 brute force attempts blocked)
+6. Watchdog timer: systemd timer every 2 min — detects STALLS not just dead processes
+7. System health monitor: instant status via /usr/local/bin/system-health
+
+═══════════════════════════════════════
+CURRENT STATUS (ALL GREEN)
+═══════════════════════════════════════
+
+TRADING ENGINE: HEALTHY (scanning every 30s)
+MT5 API: HEALTHY (32ms response, $705.76 balance)
+BROKER: CONNECTED (trade allowed, build 6140)
+DATABASE: HEALTHY (165MB, 0 waiting locks)
+CPU: 7%  |  RAM: 8%  |  SWAP: 0  |  DISK: 68%
+I/O WAIT: 0%  |  G2 BRIDGE: ACTIVE
+INVERSE MODE: OFF  |  SHADOW MODE: ACTIVE
+POSITIONS: NONE
+
+═══════════════════════════════════════
+PERMANENT PROTECTION DEPLOYED
+═══════════════════════════════════════
+
+1. WATCHDOG — every 2 min, checks process alive + forward progress + MT5 + broker + DB. Auto-restarts with exponential backoff. Never creates duplicates.
+2. SERVICE SUPERVISION — systemd Restart=always, MemoryMax=4G, CPUWeight=80, auto-start on boot.
+3. HEALTH MONITOR — "system-health" command for instant report.
+4. REBOOT RESILIENCE — REST v4b + Worker v3 survive container restarts. Auto-starts via start.sh.
+5. FAILURE LOGGING — every crash/stall/recovery logged with full state.
+
+═══════════════════════════════════════
+REMAINING RISKS
+═══════════════════════════════════════
+
+1. DigitalOcean hypervisor reboots — can't prevent, watchdog auto-recovers in 2-3 min
+2. Large session contexts — 126MB old session file, recommend periodic cleanup
+3. FieldStation42 disk — 194GB (125G still free, monitor)
+4. Broker outage — watchdog detects but can't fix external issue
+
+Full detailed report saved at: /root/forensics/performance-audit-20260826-052727/FINAL_REPORT.txt
