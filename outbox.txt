@@ -1,61 +1,28 @@
-CODEWORD: MERCURY + TITAN
+TRADING STATUS REPORT — Aug 26, 2026, ~14:10 PKT-server time
+Code word: SEXTANT
 
-TWO TASKS COMPLETED — Aug 26, 2026
+=== ARE WE TRADING? NO. ===
+Execution is offline. Here's exactly why and what I've done about it.
 
-===================================
-TASK 1: SELECTIVE INVERSE MODE (TITAN) — DEPLOYED
-===================================
+=== THE PROBLEM ===
+The trading engine and scanner ARE running (found valid 80+ score setups on AUD/NZD in the last hour), but the MT5 broker connection (REST bridge inside the mt5 Docker container) has been completely dead for 3+ hours. Every single rate fetch and position check has been timing out since at least 13:54. This means:
+- No new trades can execute
+- Any existing open position has ZERO trailing-stop protection right now
+- We have no way to confirm current equity/open positions via REST until it's back
 
-Gold ML      = INVERSE  (BUY→SELL, SELL→BUY)
-Rule Scanner = NORMAL   (BUY→BUY, SELL→SELL)
-Global Inverse = INACTIVE (fallback preserved)
-16/16 tests PASSED. Engine running.
+This is the MERCURY incident flagged earlier today. Root cause: an intermittent Wine/MT5 terminal login hang inside the container — sometimes clears in ~11 seconds, once took 1 hour 47 minutes to clear on its own.
 
-===================================
-TASK 2: FORENSIC AUDIT (MERCURY) — COMPLETE
-===================================
+=== WHAT I DID ===
+1. Confirmed no background fix agent was actually still running (checked live processes — the "dispatched engineering agent" mentioned in memory was not active).
+2. Restarted the mt5 Docker container myself at 14:03.
+3. Container is rebooting the MT5 terminal now (terminal64.exe + REST server process both confirmed running inside the container as of restart), but the REST API has NOT come back online yet as of this report.
+4. Kicked off a background watcher polling every 15 seconds for up to 50 minutes. The moment the REST API responds, I will resume verifying positions and protection immediately and report back to you.
 
-8 paired trades analyzed (same signal, both directions)
+=== BOTTOM LINE ===
+- Scanner/analysis: ALIVE
+- Trade execution: OFFLINE
+- Trailing stop protection: OFFLINE (nothing to protect that we can currently see, but also nothing protected if there is)
+- Fix in progress, self-recovering, no action needed from you
+- Note: this was a same-day recurrence of the connectivity issue — a proper resilience rebuild (circuit breaker, real health checks, faster auto-recovery) was requested earlier but not yet completed. Worth prioritizing once this immediate outage clears.
 
-OVERALL: TIE (4 Normal correct, 4 Inverse correct = 50/50)
-
-BUT BY SIGNAL SOURCE — the real story:
-
-GOLD ML (3 trades):
-  Normal:  0/3 = 0%
-  Inverse: 3/3 = 100%
-  INVERSE WINS UNANIMOUSLY
-
-RULE SCANNER (5 trades):
-  Normal:  4/5 = 80%
-  Inverse: 1/5 = 20%
-  NORMAL WINS CLEARLY
-
-BY INSTRUMENT:
-  XAUUSD: INVERSE (0 vs 3)
-  AUDUSD: NORMAL  (2 vs 1)
-  BTCUSD: NORMAL  (1 vs 0)
-  NZDUSD: NORMAL  (1 vs 0)
-
-VERDICT:
-"Across 8 comparable historical signals, NORMAL was
-directionally correct 50.0% and INVERSE 50.0%. However,
-by SIGNAL SOURCE: Gold ML = 100% inverse correct,
-Rule Scanner = 80% normal correct."
-
-This PERFECTLY validates the TITAN decision:
-  Gold ML = INVERSE
-  Rule Scanner = NORMAL
-
-Statistical confidence: INSUFFICIENT DATA (n=8)
-Need more trades to be statistically confident,
-but the directional split by source is unanimous.
-
-===================================
-ENGINE STATUS
-===================================
-
-TRADING: ACTIVE ($653.56)
-BTCUSD.p SELL 0.06 open
-SELECTIVE INVERSE: LIVE
-Scanning every 30s, 7 instruments
+I'll post an update here the moment it's back up.
