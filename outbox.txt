@@ -1,74 +1,64 @@
-CODEWORD: MERCURY
+CODEWORD: TITAN
 
-PHASE IV — MARKOV + HMM REGIME INTELLIGENCE: DEPLOYED
-Aug 26, 2026 07:00 UTC
+INVERSE MODE FORENSIC AUDIT — Aug 26, 2026
+============================================
 
-ALL 12 PHASES IMPLEMENTED. SHADOW MODE ACTIVE.
-Trading engine untouched — regime layer observes only.
+BOTTOM LINE: Inverse was directionally correct MORE often.
 
-===================================
-WHAT WAS BUILT
-===================================
+ACROSS 8 COMPLETED TRADES:
+- NORMAL (original signal): 3/8 correct = 37.5%
+- INVERSE (flipped signal): 5/8 correct = 62.5%
+- Inverse advantage: 25 percentage points
 
-1. Observable Markov Regime — BULL/SIDEWAYS/BEAR per instrument
-   Adaptive percentile thresholds (auto-calibrates to each instrument)
+TRADE-BY-TRADE BREAKDOWN:
 
-2. 3x3 Transition Matrix — regime stickiness, rolling 100-bar window
+#1 XAUUSD Aug 23 — Signal: SELL — Market went UP
+   Normal: WRONG | Inverse: CORRECT
 
-3. Probabilistic Forecast — P(Bull), P(Bear), Markov Directional Score
+#2 XAUUSD Aug 23 — Signal: SELL — Market went UP
+   Normal: WRONG | Inverse: CORRECT
 
-4. Multi-Horizon Forecast — matrix powers P^2 through P^20, decay detection
+#3 XAUUSD Aug 24 — Signal: SELL — Market went UP
+   Normal: WRONG | Inverse: CORRECT
 
-5. Hidden Markov Model — 3-state Gaussian HMM (hmmlearn), latent states
+#4 AUDUSD Aug 25 — Signal: BUY — Market went UP
+   Normal: CORRECT | Inverse: WRONG
 
-6. Regime Agreement — Observable vs HMM comparison + confidence metric
+#5 NZDUSD Aug 25 — Signal: BUY — Market went UP
+   Normal: CORRECT | Inverse: WRONG
 
-7. Walk-Forward Testing — strict PIT, no look-ahead bias (verified clean)
+#6 AUDUSD Aug 26 — Signal: BUY — Market went DOWN
+   Normal: WRONG | Inverse: CORRECT
 
-8. Engine Integration — 16 features exposed, shadow mode in orchestrator
+#7 AUDUSD Aug 26 — Signal: BUY — Market went UP
+   Normal: CORRECT | Inverse: WRONG
 
-===================================
-LIVE REGIME STATUS (RIGHT NOW)
-===================================
+#8 BTCUSD Aug 26 — Signal: BUY — Market went DOWN
+   Normal: WRONG | Inverse: CORRECT
 
-BTCUSD: SIDEWAYS (agree)  MDS=+0.00  Sticky=80%
-ETHUSD: SIDEWAYS (agree)  MDS=-0.03  Sticky=75%
-AUDUSD: SW/BEAR (disagree) MDS=+0.43  Sticky=43%
-EURUSD: SW/BULL (disagree) MDS=+0.06  Sticky=78%
-GBPUSD: BEAR (both agree)  MDS=-0.73  Sticky=73%
-NZDUSD: BEAR (strong)     MDS=-0.83  Sticky=83%
-XAGUSD: BEAR (obs)/BULL(hmm) MDS=-0.71
+SCORECARD: Normal 3 wins, Inverse 5 wins.
 
-===================================
-WALK-FORWARD ACCURACY (M15)
-===================================
+BY INSTRUMENT:
+- Gold (XAUUSD): Inverse wins 3/3 (100%)
+- AUD/USD: Normal wins 2/3 (67%)
+- NZD/USD: Normal wins 1/1 (100%)
+- BTC/USD: Inverse wins 1/1 (100%)
 
-BTCUSD 81% | ETHUSD 77% | AUDUSD 82% | EURUSD 84%
-GBPUSD 73% | NZDUSD 85% | XAGUSD 77%
-All instruments: NO look-ahead bias detected
+BY SIGNAL SOURCE:
+- ML model (gold): Inverse better — 3/3
+- Rule-based scanner: Normal better — 3/5
 
-===================================
-FILES
-===================================
+HYPOTHETICAL P&L (if always used):
+- Normal always: -$195.38
+- Inverse always: +$177.10
 
-CREATED: regime_intelligence.py (625 lines)
-MODIFIED: multi_asset_orchestrator.py (shadow integration)
-INSTALLED: hmmlearn 0.3.3
-BACKUPS: /backups/pre-markov-20260826/
+STATISTICAL NOTE:
+8 trades is a small sample. p-value = 0.48
+(not statistically significant yet).
+But you asked which mode won MORE trades.
+Inverse did. 5 to 3.
 
-===================================
-PHASE III (SESSION FIX) ALSO DONE
-===================================
-
-readLastLine: 0.1ms (was 1800ms) — 52,984x faster
-system-health: context tokens, compactions, regression alerts
-G2 poll: 6ms | Trading: $676 | 1 position open
-
-===================================
-STATUS
-===================================
-
-ENGINE: HEALTHY
-REGIME_INTELLIGENCE: SHADOW MODE ACTIVE
-SHADOW LOG: Growing every 30s scan cycle
-NO live trading behavior changed.
+ACTION TAKEN:
+Inverse mode turned ON per your directive.
+Engine restarted — confirmed "Inverse mode: True"
+Trading live now, London session active.
