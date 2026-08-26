@@ -1,72 +1,86 @@
 CODEWORD: MERCURY
 
-FORENSIC PERFORMANCE + TRADING ENGINE RELIABILITY AUDIT
-Complete Report — Aug 26, 2026 05:55 UTC
+PHASE II — CLAUDE/G2 LATENCY AUDIT COMPLETE
+Aug 26, 2026 06:20 UTC
 
 ═══════════════════════════════════════
-WHAT WAS WRONG
+ROOT CAUSE #1 (CONFIRMED — MEASURED)
 ═══════════════════════════════════════
 
-ROOT CAUSE #1: Wine Python IPC Bug (WinError 10038)
-The MT5 REST API server used Python's select.select() on pipe file descriptors. Wine Python does NOT support select() on pipes — only sockets. This caused the worker subprocess to crash immediately after every container restart.
+MASSIVE SESSION FILES READ EVERY 10 SECONDS
 
-ROOT CAUSE #2: Worker Subprocess Startup Deadlock
-The worker had a 10-second blocking sleep before reading stdin. The server only waited 3 seconds then sent commands that went unanswered. Result: server killed the worker for timeout, restarted it, same loop forever.
+The G2 bridge polls /api/sessions every 10 seconds. The even-terminal code reads the ENTIRE content of every .jsonl session file into memory just to get the last line (to check session status). With 4 old sessions totaling 253MB (126MB + 49MB + 43MB + 36MB), this took ~1800ms per poll.
 
-ROOT CAUSE #3: MT5 Terminal Not Logging In
-After server reboot, the terminal process was running but never authenticated to the broker. The worker's mt5.initialize() call hung indefinitely.
+BEFORE: Session poll = 1800ms (every 10 seconds)
+AFTER:  Session poll = 7ms (every 10 seconds)
+IMPROVEMENT: 257x faster
 
-ROOT CAUSE #4: Server Reboots (External — DigitalOcean)
-3 reboots on Aug 26 (03:27, 04:07, 05:25 UTC). Kernel logs show "Power Button" ACPI event — DigitalOcean hypervisor maintenance, not caused by us.
+Fix: Archived 4 old inactive sessions to archived-sessions/ subfolder. Only the active 7MB session remains in the scan path. Old sessions are preserved, not deleted.
 
-═══════════════════════════════════════
-WHY 16 CORES + 35GB RAM DIDN'T HELP
-═══════════════════════════════════════
-
-CPU was at 7%, RAM at 8%, zero swap, zero I/O wait. The bottleneck was a SOFTWARE BUG in the Wine Python IPC layer that caused a crash loop after every container restart. More cores and RAM cannot fix a compatibility bug.
+Automated daily cleanup cron installed (3 AM UTC) to prevent future buildup.
 
 ═══════════════════════════════════════
-WHAT WAS FIXED
+REMAINING LATENCY (EXTERNAL — NOT FIXABLE)
 ═══════════════════════════════════════
 
-1. MT5 REST Server v4b — replaced select.select() with thread-based readline timeout
-2. MT5 Worker v3 — immediate stdin reading, lazy MT5 init, login credentials from env
-3. MT5 Terminal restarted with explicit login parameters
-4. Trading engine restarted — Inverse mode: OFF confirmed
-5. SSH hardening: fail2ban active, 4 IPs banned (1773 brute force attempts blocked)
-6. Watchdog timer: systemd timer every 2 min — detects STALLS not just dead processes
-7. System health monitor: instant status via /usr/local/bin/system-health
+CLAUDE API TIME-TO-FIRST-TOKEN: 2.0s - 3.4s (median ~2.6s)
+This is Anthropic's model processing time. With ~133K cached context tokens, this is expected. We CANNOT reduce this — it's the model thinking.
+
+Network to api.anthropic.com: DNS 1ms, Connect 2ms, TLS 37ms = 41ms total. NOT a bottleneck.
+
+═══════════════════════════════════════
+LATENCY MAP (MEASURED)
+═══════════════════════════════════════
+
+G2 glasses → iPhone/app → Internet → Server: ~50-100ms (network)
+Server → G2 bridge event loop: 7ms (was 1800ms ← FIXED)
+G2 bridge → Claude SDK: <5ms
+Claude SDK → Anthropic API: ~2600ms TTFT (external, unavoidable)
+Tool execution (Bash/Read/etc): 10-2000ms (depends on command)
+Response → bridge → G2: <10ms
+
+TOTAL ROUND TRIP: ~3-5s per interaction
+CONTROLLABLE OVERHEAD: ~20ms (was ~1800ms)
+EXTERNAL API: ~2600ms (cannot change)
 
 ═══════════════════════════════════════
 CURRENT STATUS (ALL GREEN)
 ═══════════════════════════════════════
 
-TRADING ENGINE: HEALTHY (scanning every 30s)
-MT5 API: HEALTHY (32ms response, $705.76 balance)
-BROKER: CONNECTED (trade allowed, build 6140)
-DATABASE: HEALTHY (165MB, 0 waiting locks)
-CPU: 7%  |  RAM: 8%  |  SWAP: 0  |  DISK: 68%
-I/O WAIT: 0%  |  G2 BRIDGE: ACTIVE
-INVERSE MODE: OFF  |  SHADOW MODE: ACTIVE
-POSITIONS: NONE
+TRADING ENGINE: HEALTHY (just opened BTCUSD BUY @ $79,101)
+MT5 API: HEALTHY (33ms, $702.99 balance)
+BROKER: CONNECTED
+DATABASE: HEALTHY
+CLAUDE API TTFT: ~2.6s (normal for Opus)
+SESSION FILES: 1 active (7MB) — 4 archived (253MB preserved)
+G2 BRIDGE: ACTIVE — 7ms poll (was 1800ms)
+G2 POLL LATENCY: 7ms
+CPU: 6% | RAM: 6% | SWAP: 0 | DISK: 68%
 
 ═══════════════════════════════════════
-PERMANENT PROTECTION DEPLOYED
+PHASE I TRADING FIXES: INTACT
 ═══════════════════════════════════════
 
-1. WATCHDOG — every 2 min, checks process alive + forward progress + MT5 + broker + DB. Auto-restarts with exponential backoff. Never creates duplicates.
-2. SERVICE SUPERVISION — systemd Restart=always, MemoryMax=4G, CPUWeight=80, auto-start on boot.
-3. HEALTH MONITOR — "system-health" command for instant report.
-4. REBOOT RESILIENCE — REST v4b + Worker v3 survive container restarts. Auto-starts via start.sh.
-5. FAILURE LOGGING — every crash/stall/recovery logged with full state.
+All Phase I protections verified intact:
+- MT5 REST Server v4b: running
+- MT5 Worker v3: running
+- Watchdog timer: active (2-min cycles)
+- Inverse mode: OFF
+- Shadow mode: ACTIVE
+- fail2ban: 4 IPs banned
 
 ═══════════════════════════════════════
-REMAINING RISKS
+AUTOMATIC MAINTENANCE DEPLOYED
 ═══════════════════════════════════════
 
-1. DigitalOcean hypervisor reboots — can't prevent, watchdog auto-recovers in 2-3 min
-2. Large session contexts — 126MB old session file, recommend periodic cleanup
-3. FieldStation42 disk — 194GB (125G still free, monitor)
-4. Broker outage — watchdog detects but can't fix external issue
+1. Daily session cleanup cron (3 AM UTC) — archives sessions >20MB or >7 days + >10MB
+2. system-health now shows Claude TTFT, session sizes, G2 poll latency
+3. Old sessions preserved in archived-sessions/ (never deleted)
 
-Full detailed report saved at: /root/forensics/performance-audit-20260826-052727/FINAL_REPORT.txt
+═══════════════════════════════════════
+REBOOT INVESTIGATION UPDATE
+═══════════════════════════════════════
+
+EXTERNAL/HYPERVISOR-LEVEL REBOOT SUSPECTED — NOT CONCLUSIVELY PROVEN
+
+Evidence: Kernel log shows "Power Button" ACPI event (consistent with hypervisor-initiated restart). No OOM kills, no kernel panics, no local automation triggers found. No swap activity. However, we cannot access DigitalOcean's hypervisor logs to conclusively confirm. Phase I recovery protections now handle reboots automatically.
