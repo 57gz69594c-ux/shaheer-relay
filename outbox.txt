@@ -1,28 +1,46 @@
-TRADING STATUS REPORT — Aug 26, 2026, ~14:10 PKT-server time
-Code word: SEXTANT
+SEXTANT RESULT — Aug 26, 2026, ~14:37 PKT-server time
+Code word: HALYARD
 
-=== ARE WE TRADING? NO. ===
-Execution is offline. Here's exactly why and what I've done about it.
+REQUIRED IMMEDIATE STATUS (as asked):
+CURRENT BROKEN LAYER: Terminal <-> Broker login (terminal never gets past "MCP started" to attempt authorization)
+OPEN POSITIONS LAST KNOWN: UNKNOWN as fact, not fabricated. No successful position check anywhere in any log since well before this incident. I will NOT guess a number. The moment the terminal authenticates, position reconciliation runs automatically and I will report real numbers immediately.
+MT5 LOGIN: 0 / not authenticated
+MT5 LAST ERROR: none logged by the terminal itself — it never reaches the network/login step at all, it hangs earlier
+TERMINAL STATE: running (fresh process), stuck at "MCP started on 127.0.0.1:22346", zero progress for 3+ hours today
+WORKER STATE: cycling correctly — spawns, health-checks, times out at 8s, gets killed, respawns with backoff (5s/10s/20s/30s). This part is now working exactly as designed.
+NETWORK/BROKER STATE: general internet from the container is fine (verified). MT5's own proprietary login handshake never fires.
 
-=== THE PROBLEM ===
-The trading engine and scanner ARE running (found valid 80+ score setups on AUD/NZD in the last hour), but the MT5 broker connection (REST bridge inside the mt5 Docker container) has been completely dead for 3+ hours. Every single rate fetch and position check has been timing out since at least 13:54. This means:
-- No new trades can execute
-- Any existing open position has ZERO trailing-stop protection right now
-- We have no way to confirm current equity/open positions via REST until it's back
+WHAT I FOUND (root cause investigation, not guesswork — pulled logs and a live VNC screenshot):
+1. There was ALREADY a partially-built worker-isolated REST server (v3/v4b) on this box from earlier today. It got reverted back to the old, naive, single-threaded version at some point — that's why the fix "didn't stick" and today's incident is a same-day recurrence. I restored and hardened that architecture (v5).
+2. I checked the ACTUAL MT5 terminal log (not just the REST layer) going back through all of today. This exact failure — terminal restarts, gets stuck at "MCP started," never logs in, for hours, across many restart attempts, then eventually clears on its own — already happened ONCE before today, from 03:27 to 05:44 (about 2h17m, ~10 failed restart attempts before one finally worked). We are now in a SECOND occurrence of the identical pattern, ongoing since around 11:32, so roughly 3 hours now.
+3. I took a live screenshot of the terminal's VNC display. There is a stray black popup (looks like an MQL5 voice-chat notification with a microphone icon) that reappears identically on every single restart. I closed it and separately did a clean hands-off restart with zero interference — the terminal got stuck at the exact same point either way. So this is NOT something my restarts are causing, and it is NOT something I can click my way out of. Restarting more does not help and may not be the actual lever here.
+4. Conclusion: this looks like an external dependency (the broker's MT5 login/session backend, or MetaQuotes' own infrastructure that the terminal talks to before it even dials the broker) intermittently refusing new sessions for hours at a time, then clearing on its own. That is consistent with your own memory note that recovery has ranged from 11 seconds to 1h47m — now we have a second data point at ~2h17m. This is genuinely outside what any amount of local restarting or code fixes can force to resolve faster.
 
-This is the MERCURY incident flagged earlier today. Root cause: an intermittent Wine/MT5 terminal login hang inside the container — sometimes clears in ~11 seconds, once took 1 hour 47 minutes to clear on its own.
+PERMANENT ARCHITECTURE — DEPLOYED AND VERIFIED WORKING RIGHT NOW:
+- REST server (mt5_rest_server.py v5) now runs as a thin HTTP layer that NEVER touches MT5 directly. All MetaTrader5 calls live only in an isolated worker subprocess (mt5_worker.py).
+- Hard 8-second timeout on every call to the worker. If it hangs, the worker process is force-killed (the only reliable way to unstick a hung native Wine call) and respawned with backoff (5s/10s/20s/30s, capped) so we don't hammer the broker.
+- CONFIRMED BY LIVE TEST: /health now responds in 3 milliseconds, always — even right now, while MT5 itself is completely stuck. Before today it would hang forever (I measured full curl timeouts). This alone kills the "3+ hour blind outage" failure mode for anything in our control.
+- Explicit mt5.login() with credentials now happens on every worker start — no longer relying on the terminal's own saved session state.
+- Circuit breaker: while unhealthy, all endpoints (/positions, /tick, /rates, etc.) fail fast with a 503 instead of hanging — the scanner and orchestrator get instant feedback instead of 15-second stalls per call.
+- Every worker spawn/timeout/kill/recovery is now persisted to an incident log (/config/mt5_incidents.log inside the container) — verified growing correctly in real time during this incident.
+- New host-side escalation supervisor (systemd timer, every 2 min, ONE authoritative recovery owner — nothing else restarts the terminal or container now): if unhealthy 20+ minutes, restart just the terminal; if still unhealthy after 90 minutes total, restart the container as an absolute last resort. This replaces ad-hoc manual restarts with bounded, logged, non-overlapping escalation.
+- The moment MT5 actually authenticates (whenever the external side clears), this system detects it within its normal ~5-30s health-check cadence and auto-resumes — no manual restart needed, and I will get an explicit "RECOVERED after Xs" incident log entry with position reconciliation triggered automatically.
 
-=== WHAT I DID ===
-1. Confirmed no background fix agent was actually still running (checked live processes — the "dispatched engineering agent" mentioned in memory was not active).
-2. Restarted the mt5 Docker container myself at 14:03.
-3. Container is rebooting the MT5 terminal now (terminal64.exe + REST server process both confirmed running inside the container as of restart), but the REST API has NOT come back online yet as of this report.
-4. Kicked off a background watcher polling every 15 seconds for up to 50 minutes. The moment the REST API responds, I will resume verifying positions and protection immediately and report back to you.
+WHAT THIS DOES NOT DO: it cannot force the broker/MetaQuotes backend to accept a login session faster. If that's the real bottleneck (which the evidence points to), our system will now sit in a clean, fast-failing, auto-retrying BROKER_OUTAGE state — which is the textbook-correct behavior you specified — rather than blindly hanging for hours undetected.
 
-=== BOTTOM LINE ===
-- Scanner/analysis: ALIVE
-- Trade execution: OFFLINE
-- Trailing stop protection: OFFLINE (nothing to protect that we can currently see, but also nothing protected if there is)
-- Fix in progress, self-recovering, no action needed from you
-- Note: this was a same-day recurrence of the connectivity issue — a proper resilience rebuild (circuit breaker, real health checks, faster auto-recovery) was requested earlier but not yet completed. Worth prioritizing once this immediate outage clears.
+CURRENT:
+SCANNER: ALIVE
+EXECUTION: OFFLINE
+REST: HEALTHY (fast, correct, verified)
+WORKER: cycling / retrying automatically
+TERMINAL: stuck pre-login
+LOGIN: 0
+BROKER: unreachable-from-our-side (login handshake never fires)
+RATE FETCH: failing fast (503, not hanging)
+POSITION FETCH: failing fast (503, not hanging) — no positions confirmed either way
+LAST TICK: none this session
+OPEN POSITIONS: unknown, will confirm the instant we reconnect
+CIRCUIT: OPEN
+RECOVERY STATE: auto-retrying with backoff, escalation timer armed
 
-I'll post an update here the moment it's back up.
+Not stopping. Not waiting on you for anything. Will report the moment it clears.
