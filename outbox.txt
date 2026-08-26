@@ -1,64 +1,63 @@
 CODEWORD: TITAN
 
-INVERSE MODE FORENSIC AUDIT — Aug 26, 2026
-============================================
+SELECTIVE INVERSE MODE: ACTIVE
+Aug 26, 2026 08:40 UTC
 
-BOTTOM LINE: Inverse was directionally correct MORE often.
+===================================
+LIVE DIRECTION POLICY
+===================================
 
-ACROSS 8 COMPLETED TRADES:
-- NORMAL (original signal): 3/8 correct = 37.5%
-- INVERSE (flipped signal): 5/8 correct = 62.5%
-- Inverse advantage: 25 percentage points
+Gold ML      = INVERSE  (BUY→SELL, SELL→BUY)
+Rule Scanner = NORMAL   (BUY→BUY, SELL→SELL)
+Global Inverse = INACTIVE (preserved as fallback)
 
-TRADE-BY-TRADE BREAKDOWN:
+===================================
+VERIFIED ROUTING
+===================================
 
-#1 XAUUSD Aug 23 — Signal: SELL — Market went UP
-   Normal: WRONG | Inverse: CORRECT
+Gold ML BUY   → SELL   (inverted)
+Gold ML SELL  → BUY    (inverted)
+Rule Scanner BUY  → BUY  (normal)
+Rule Scanner SELL → SELL (normal)
+No double inversion exists
 
-#2 XAUUSD Aug 23 — Signal: SELL — Market went UP
-   Normal: WRONG | Inverse: CORRECT
+===================================
+TEST RESULTS: 16/16 PASSED
+===================================
 
-#3 XAUUSD Aug 24 — Signal: SELL — Market went UP
-   Normal: WRONG | Inverse: CORRECT
+Test 1: Gold ML BUY → SELL
+Test 2: Gold ML SELL → BUY
+Test 3: Rule Scanner BUY → BUY
+Test 4: Rule Scanner SELL → SELL
+Test 5: NZDUSD Rule BUY → BUY
+Test 6: BTCUSD Rule SELL → SELL
+Test 7: No double inversion
+Test 8-12: Geometry, shadow, config, fallback
 
-#4 AUDUSD Aug 25 — Signal: BUY — Market went UP
-   Normal: CORRECT | Inverse: WRONG
+===================================
+WHAT CHANGED
+===================================
 
-#5 NZDUSD Aug 25 — Signal: BUY — Market went UP
-   Normal: CORRECT | Inverse: WRONG
+trading_config.py — selective policy + resolve_direction()
+runner.py — Gold ML uses INVERSE routing
+multi_asset_orchestrator.py — Rule Scanner uses NORMAL routing
+autonomous_engine.py — TITAN startup log
+test_inverse_mode.py — 16 tests all passing
+Backups: /backups/pre-titan-20260826/
 
-#6 AUDUSD Aug 26 — Signal: BUY — Market went DOWN
-   Normal: WRONG | Inverse: CORRECT
+===================================
+PRESERVED (UNTOUCHED)
+===================================
 
-#7 AUDUSD Aug 26 — Signal: BUY — Market went UP
-   Normal: CORRECT | Inverse: WRONG
+Risk management, SL/TP/trailing, Markov/HMM,
+momentum, autonomous engine, shadow tracking,
+global inverse (kept as fallback)
 
-#8 BTCUSD Aug 26 — Signal: BUY — Market went DOWN
-   Normal: WRONG | Inverse: CORRECT
+===================================
+ENGINE STATUS
+===================================
 
-SCORECARD: Normal 3 wins, Inverse 5 wins.
-
-BY INSTRUMENT:
-- Gold (XAUUSD): Inverse wins 3/3 (100%)
-- AUD/USD: Normal wins 2/3 (67%)
-- NZD/USD: Normal wins 1/1 (100%)
-- BTC/USD: Inverse wins 1/1 (100%)
-
-BY SIGNAL SOURCE:
-- ML model (gold): Inverse better — 3/3
-- Rule-based scanner: Normal better — 3/5
-
-HYPOTHETICAL P&L (if always used):
-- Normal always: -$195.38
-- Inverse always: +$177.10
-
-STATISTICAL NOTE:
-8 trades is a small sample. p-value = 0.48
-(not statistically significant yet).
-But you asked which mode won MORE trades.
-Inverse did. 5 to 3.
-
-ACTION TAKEN:
-Inverse mode turned ON per your directive.
-Engine restarted — confirmed "Inverse mode: True"
-Trading live now, London session active.
+TRADING ENGINE: ACTIVE
+MT5: CONNECTED ($653.56)
+BTCUSD.p SELL 0.06 open
+Scanning: every 30s, 7 instruments
