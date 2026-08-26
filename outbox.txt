@@ -1,48 +1,125 @@
-SYSTEM STATUS REPORT — Aug 26, 2026, 10:10 PM PKT
-Code word: COMPASS
+COMPASS PHASE II RESULT — Aug 26, 2026, 10:40 PM PKT
+Code word: MERIDIAN
 
-OVERALL: MT5 broker login is DOWN. Everything else on the server is healthy.
+CURRENT CONFIRMED FAILURE:
+Terminal starts, MCP starts, but login handshake never fires. Terminal has ZERO outbound connections to any broker server. It is not even attempting to connect.
 
-═══ MT5 / TRADING ═══
-PROBLEM: MT5 terminal starts, reaches "MCP started," then NEVER authenticates with Dominion Markets. This has been happening since ~4:30 PM PKT today (~5.5 hours). The terminal has been restarted 12+ times — only ONE of those restarts successfully authenticated (at 9:28 PM PKT, lasted briefly before the escalation system restarted it again, and it got stuck once more).
+EXACT FAILURE CLASS: UNKNOWN_AUTH_STALL
+The terminal reaches MCP (internal processing protocol) but never initiates a TCP connection to the broker. This is NOT a broker rejection — the terminal never tries.
 
-ROOT CAUSE: The MT5 terminal's internal login handshake to the broker/MetaQuotes backend is failing silently. This is NOT a credentials problem (login 137757 worked once today), NOT a network problem (internet from the container is fine), and NOT something our code can force. The broker side is intermittently refusing sessions.
+BROKER-SIDE HYPOTHESIS: STILL UNPROVEN
+Evidence AGAINST pure broker-side failure:
+- Terminal is not making ANY outbound connection to the broker
+- One brief connection to 203.29.60.245:443 was observed but closed immediately
+- Network from container is fine (Google responds in 83ms)
+- Container DNS resolves correctly
+Evidence that SUPPORTS intermittent external factor:
+- Same credentials authenticated 12 times today
+- Auth delay varied from 1.5s to 963s (16 minutes!)
+- Pattern clears on its own after hours
+VERDICT: The failure is likely INSIDE the terminal (Wine/MT5 startup state) rather than the broker refusing us. The terminal gets stuck in an internal state where it never attempts the outbound broker connection.
 
-This SAME pattern happened earlier today (3:27 AM to 5:44 AM — 2h17m stuck, then cleared on its own).
+SUCCESSFUL VS FAILED LOGIN COMPARISON (Phase 7):
+Today: 57 terminal starts total. 12 successful (21%). 45 failed (78%).
 
-TERMINAL: running, stuck at "MCP started"
-LOGIN: 0 / not authenticated
-POSITIONS: 0 confirmed (the one successful auth showed 0 positions, 0 orders)
-REST API: v5 deployed, responding in 3ms, circuit breaker OPEN (fail-fast)
-WORKER: cycling with backoff (spawn, 8s timeout, kill, retry)
-TRADING ENGINE: stopped (can't start without REST being healthy)
-ESCALATION SUPERVISOR: armed (mt5-escalation.timer)
+Successful startup pattern:
+  Terminal starts → MCP starts → 1.5-37s later → "authorized on DominionMarkets-Live through SIN1" → synchronized → trading enabled
+  All 12 successes used same server: DominionMarkets-Live through SIN1 (ping: 227.45ms)
+  Auth delays: 1.5s, 3.5s, 3.5s, 3.7s, 4.5s, 8.0s, 11.0s, 15.5s, 27.0s, 37.6s, 92.1s, 963.0s
 
-WHAT'S BEEN DEPLOYED (permanent fixes):
-- REST v5: worker-isolated subprocess architecture, 8s hard timeouts
-- Circuit breaker: 503 fail-fast on all endpoints when unhealthy
-- Escalation supervisor: 20min → terminal restart, 90min → container restart
-- Incident logging: /config/mt5_incidents.log (25+ events logged today)
-- Selective inverse mode: Gold ML = INVERSE, Rule Scanner = NORMAL
-- TITAN (liquidity), TURTLE (breakout) — both shadow mode, all tests passing
+Failed startup pattern:
+  Terminal starts → MCP starts → NOTHING. No auth attempt. No error. No timeout. Just silence.
+  Every single failed start has exactly 4 log events (terminal start + info + path + MCP start), then nothing.
+  No outbound broker connection is ever initiated.
 
-═══ SERVER HEALTH ═══
-RAM: 1.9 GB used / 31 GB total (93% free)
-DISK: 263 GB used / 387 GB (68% — healthy)
-CPU: load 0.22 (16-core Xeon, basically idle)
-UPTIME: 41 minutes (server was rebooted earlier today)
+KEY DIFFERENCES FOUND:
+1. RESTART STORMS: 18 restarts happened within 2 minutes of each other. At 14:28-14:29, EIGHT restarts in 90 seconds. This almost certainly triggers rate limiting or session conflicts.
+2. DUPLICATE TERMINALS: 4 instances where the terminal logged "terminal process already started" — multiple MT5 instances running simultaneously, competing for the same account.
+3. WINESERVER STATE: When only terminal64.exe is killed but wineserver stays alive, subsequent restarts inherit stale Wine networking state. The ONE time the terminal authenticated after the current outage (16:28:43) was after a FULL SERVER REBOOT that gave a completely fresh Wine state.
+4. The 963-second (16 min) auth delay proves the terminal CAN sit at MCP for very long periods before eventually connecting — what we're calling "stuck" might sometimes just be extremely slow.
 
-═══ OTHER SYSTEMS ═══
-CONTENT ENGINE: active (service running)
-FIELDSTATION42: inactive (service disabled)
-TIMESCALEDB: healthy (Up 41 min)
-EVEN TERMINAL: running (port 3456)
-TOR: running (for YouTube downloads)
-CLAUDE SESSIONS: 2 active
+MT5/WINE FINDINGS (Phase 9):
+- No stale Wine lock files found
+- No duplicate terminal processes (currently 1)
+- Wine prefix ownership correct (user abc)
+- Wineserver restarts cleanly but may hold stale network handles
+- Container DNS works, outbound HTTPS works
+- The terminal makes brief connections (203.29.60.245:443) that close immediately — possibly MetaQuotes license/activation check
 
-═══ CONTENT PIPELINE ═══
-BATCH-001 v8: ALL 6/6 CLIPS RENDERED. On relay for your approval.
-Publishing schedule ready — waiting for your go-ahead.
+ESCALATION BUG (Phase 1 — FIXED):
+What caused healthy session restart:
+  The escalation timer tracked failure_started_at but NEVER reset it on recovery. When the terminal authenticated at 16:28:43 (after 5+ hours of failure), the escalation timer still had the OLD failure timestamp. When it ran 5 minutes later, it saw "5+ hours of failure" and restarted the terminal — destroying the healthy session.
 
-═══ BOTTOM LINE ═══
-The only problem is MT5 broker login. It's an external/intermittent issue that has cleared on its own before (took ~2h17m last time). Our system is correctly detecting it, failing fast, and auto-retrying. The moment the broker side clears, the system will auto-recover and I'll report immediately. Everything else on the server is healthy and running fine.
+How timers now reset (DEPLOYED):
+  New Python state machine (mt5_health_state.py) replaces the old bash script.
+  - IMMEDIATELY resets failure_started_at, auth_retry_count, recovery_level, and all escalation state the moment MT5 passes a stability hold (45 seconds of continuous health)
+  - State transitions: UNKNOWN → AUTH_DEGRADED → VERIFYING → STABLE → HEALTHY
+  - A recovered session MUST pass VERIFYING → STABLE before escalation resets
+  - No stale timers can ever carry over
+
+HEALTH INTERLOCK (Phase 4/22 — DEPLOYED):
+  Before ANY destructive action (kill worker/terminal/container):
+  1. Acquire recovery lock
+  2. Run one final bounded health probe
+  3. If health has returned → ABORT the restart, log INTERLOCK_ABORTED_RESTART_HEALTHY
+  4. This prevents the 16:28 incident from ever recurring
+
+AUTHENTICATION RECOVERY (Phase 12 — DEPLOYED):
+  Authentication failure (login=0 with terminal alive) is now a SEPARATE class from terminal failure.
+  - AUTH_DEGRADED state: worker cycling handles retries, no terminal restart
+  - After 20 min: ONE terminal restart (killing wineserver too for fresh Wine state)
+  - After 90 min: ONE container restart as absolute last resort
+  - After that: exponential backoff (10min, 20min, 40min...) for periodic probe restarts
+  - NEVER restart the terminal more than once per 5 minutes
+
+RATE LIMIT / SESSION THROTTLE (Phase 13):
+Evidence: 57 terminal starts in one day, 18 within 2 minutes of each other. This IS a restart storm. The fix (exponential backoff + no restart storms) is deployed. Whether the broker actively throttles is unproven but the behavior is consistent with it.
+
+DUPLICATE SESSION CHECK (Phase 14):
+4 duplicate terminal detections today (14:25, 14:29 x2, 14:59). Current state: 1 terminal, 1 wineserver, no duplicates. The new escalation kills wineserver along with terminal to prevent zombie Wine processes.
+
+FAILURE CLASSIFICATION (Phase 16 — DEPLOYED):
+  REST_FAILURE → wait for REST recovery
+  WORKER_FAILURE → REST server handles internally
+  MT5_PROCESS_FAILURE → restart terminal
+  AUTHENTICATION_FAILURE → auth retry/backoff
+  UNKNOWN_AUTH_STALL → conservative probe, eventually EXTERNAL_OUTAGE
+  BROKER_UNREACHABLE → do NOT restart repeatedly
+  Each class has a different, appropriate recovery strategy.
+
+DEPLOYED SYSTEMS:
+1. mt5_health_state.py — Single source of truth, state machine, recovery decisions, health interlock
+2. mt5_escalation.sh — Delegates to state machine (replaces old bash timer logic)
+3. mt5_log_monitor.py — Terminal log parser with --compare and --timeline modes
+4. system-health extended — Now shows MT5 AUTH STATE, failure class, age, recovery level
+5. mt5-escalation.timer — Every 2 min, drives the state machine
+
+CURRENT STATUS:
+REST: HEALTHY (11ms response, circuit OPEN, fail-fast)
+WORKER: cycling / retrying with backoff
+MT5 TERMINAL: running, stuck at MCP (17:25:37 UTC)
+LOGIN: 0
+BROKER: no outbound connection attempted by terminal
+POSITIONS: 0 (confirmed at last auth 16:28:43)
+CIRCUIT: OPEN
+EXECUTION READY: FALSE
+FAILURE CLASS: UNKNOWN_AUTH_STALL
+FAILURE AGE: ~75 min since last container restart
+AUTH STATE: AUTH_DEGRADED
+ESCALATION LEVEL: TERMINAL_RESTART (done once)
+STABILITY HOLD: inactive
+NEXT ACTION: state machine will attempt container restart at 90 min mark
+
+REMAINING UNKNOWN:
+1. WHY the terminal doesn't initiate the broker connection after MCP starts — the internal state that blocks this is not visible in logs
+2. Whether the brief connection to 203.29.60.245:443 is a MetaQuotes activation check, and whether its failure prevents broker login
+3. Whether 57 connection attempts in one day triggered some kind of MetaQuotes-level throttle
+4. What exactly was different about the server reboot at 16:28 vs container restarts — both should give fresh state, but only the server reboot led to auth
+
+RECOMMENDATIONS:
+1. The current outage will likely clear on its own (previous one lasted ~2h17m, this one has been ~6h but with constant restart storms making it worse)
+2. The new system will NOT restart-storm anymore — exponential backoff is deployed
+3. If it doesn't clear by tomorrow, consider: a) stopping all restarts for 2+ hours, b) checking if another MT5 terminal/session exists elsewhere using login 137757
+4. The 0 positions / 0 orders confirmed at last auth means no money at risk right now
+
+Not stopping. State machine is monitoring and will auto-recover. Will report the moment it clears.
