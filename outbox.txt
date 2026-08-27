@@ -1,69 +1,86 @@
-🚨 INCIDENT REPORT v2 — AutoTrading Disabled at London Open (Aug 27)
-Updated: Aug 27, 1:00 PM PKT
+🚨 MT5 AUTOTRADING — FULL STATUS REPORT (Aug 27, 10:10 PM PKT)
+CODEWORD: PHOENIX
 
-WHAT HAPPENED:
-London session opened at 12:00 PM PKT. Scanner immediately found 3 qualifying signals:
-- AUDUSD BUY score=76 — BREAKOUT regime, HIGH session readiness
-- EURUSD BUY score=76 — BREAKOUT regime, HIGH session readiness
-- GBPUSD BUY score=76 — BREAKOUT regime, HIGH session readiness
+=== THE PROBLEM ===
+MT5 terminal has TWO separate blocks preventing trading:
 
-ALL 3 ORDERS REJECTED — retcode 10027: "AutoTrading disabled by client"
+1. tradeapi_disabled = True
+   → "Disable algorithmic trading via external Python API" checkbox is CHECKED in Tools > Options > Expert Advisors
+   → This is CHECKED BY DEFAULT in MT5 for security. It was never unchecked after the container setup.
+   → This setting is stored in an ENCRYPTED file (settings.ini) — cannot be edited directly.
+   → Can ONLY be changed via the GUI checkbox in Tools > Options > Expert Advisors.
 
-The scanner kept finding qualifying signals every 30 seconds but NONE could execute. We missed the entire London open window.
+2. terminal.trade_allowed = False
+   → The AutoTrading button in the toolbar is OFF
+   → Previously was toggling on/off due to "account changed" and "profile changed" triggers
 
-ROOT CAUSE:
-Yesterday's SEXTANT P0 fix (Session 058) required deleting/resetting accounts.dat. When MT5 detects "account has been changed," it permanently disables the AutoTrading toggle. This is a terminal-level runtime state that persists across restarts.
-
-Under Wine (our Docker setup), re-enabling AutoTrading via the GUI is extremely unreliable. The terminal also has a SECOND protection — even when I successfully toggle AutoTrading ON, the terminal detects the state change and re-disables it within 1-2 seconds with the message: "automated trading is disabled because the account has been changed" or "because profile has been changed."
-
-PROOF IT CAN BE TOGGLED (BUT WON'T STAY):
-Terminal log evidence shows I DID successfully enable AutoTrading multiple times:
-- 07:17:16 UTC — enabled via xdotool Ctrl+E (WORKED, stayed until container restart)
-- 07:26:00 UTC — enabled again (WORKED, but container restart at 07:26:32 wiped it)
-- 07:32:11 UTC — enabled via toolbar click (re-disabled 13 sec later automatically)
-- 07:32:26 UTC — enabled again (re-disabled 2 sec later)
-- 07:32:59 UTC — enabled again (re-disabled 2 sec later)
-- 07:39:05 UTC — enabled via Win32 WM_COMMAND (re-disabled 1 sec later: "profile changed")
-- 07:45:55 UTC — enabled again (re-disabled 1 sec later: "profile changed")
-
-The terminal keeps fighting back. It enables for 1-2 seconds then auto-disables.
-
-WHAT I'VE TRIED (15+ METHODS):
-1. Ctrl+E via xdotool — worked initially, lost on container restart
-2. Toolbar click at x=50,y=15 — toggled successfully but terminal re-disables within 2 sec
-3. Tools > Options menu automation — Wine doesn't pass key events reliably
-4. common.ini: AutoTrading=1, ExpertEnabled=1 — terminal ignores config files for runtime state
-5. terminal.ini: AutoTrading=1 — same, ignored
-6. Deleting accounts.dat + restart — terminal recreates it, triggers "account changed" detection
-7. Container restart (5+ times) — each restart triggers fresh "account changed" disable
-8. Full wineserver kill + fresh restart — still disabled
-9. Wine Python PostMessage WM_KEYDOWN Ctrl+E — no effect
-10. Wine Python keybd_event Ctrl+E — no effect
-11. Wine Python SendInput Ctrl+E — no effect
-12. Wine Python WM_COMMAND scan (400 command IDs) — found toggle but profile change re-disables
-13. Wine Python SendMessage WM_COMMAND — same result
-14. Dismissing "account changed" dialog with Escape — doesn't clear the persistent flag
-15. Dismissing dialog with Enter — dialog didn't respond
-
-THE CORE PROBLEM:
-MT5 has TWO separate auto-disable triggers that keep firing:
-1. "account has been changed" — fires on every terminal restart since accounts.dat was reset
-2. "profile has been changed" — fires when WM_COMMAND scan changes any setting
-
-Even when I successfully toggle AutoTrading ON, one of these triggers re-disables it within 1-2 seconds. This is a terminal-level security feature that cannot be bypassed through config files or API calls.
-
-CURRENT STATUS:
-- AutoTrading: DISABLED (terminal keeps re-disabling it)
+=== CURRENT STATE ===
 - Account: $707.70, 0 positions, no money at risk
-- Both engines (Gold ML + Multi-Asset Scanner) are running and finding signals
-- Signals ARE qualifying but cannot execute
-- All lot sizes are maxed per your directive (10-15% risk per trade)
+- Login: 137757, DominionMarkets-Live (Demo, Hedging)
+- account.trade_allowed = True (broker allows trading)
+- account.trade_expert = True (broker allows EAs)
+- terminal.trade_allowed = False (AutoTrading button OFF)
+- terminal.tradeapi_disabled = True (Python API checkbox BLOCKED)
+- MT5 Python library v5.0.36 — IPC working fine
+- mt5.initialize() with credentials — SUCCESS every time
 
-NEXT STEPS I'M WORKING ON:
-- Attempting to access the VNC web interface to manually click the AutoTrading button through a real GUI interaction (not simulated)
-- Investigating whether the "account changed" flag can be cleared by a proper re-authentication sequence
-- Considering a full clean MT5 reinstall inside the container as a last resort
+=== ROOT CAUSE ANALYSIS ===
+The REAL root cause is simpler than previously thought:
+- The "Disable algorithmic trading via external Python API" checkbox in Tools > Options > Expert Advisors has ALWAYS been checked (it's the DEFAULT).
+- Yesterday's SEXTANT fix (Session 058) exposed this because it tested trade execution properly for the first time.
+- The common.ini has Api=1 but this gets OVERRIDDEN by the encrypted settings.ini.
+- The only way to uncheck it is through the MT5 GUI.
 
-No money is at risk. The system is safe. But we cannot trade until this is resolved.
+=== WHAT I'VE TRIED TODAY (20+ APPROACHES) ===
 
-— Claude (Aug 27, 1:00 PM PKT)
+GUI Automation (Win32 API via Wine Python):
+1. WM_COMMAND 32850 to open Options dialog — works ONCE per terminal session, then stops working
+2. SendMessage to toggle checkboxes — successfully found the checkboxes (HWND identified), toggled them, but Options dialog wouldn't open again to repeat
+3. BM_CLICK + BM_SETCHECK on checkbox HWNDs — sent successfully but settings.ini didn't update (dialog needs OK click)
+4. Pure Win32 API (ctypes) without MT5 library — same WM_COMMAND limitation
+
+GUI Automation (xdotool from Linux):
+5. xdotool click on "Tools" menu text — PARTIALLY WORKS: highlights "Tools" in menu bar but dropdown doesn't appear consistently
+6. xdotool mousedown/mouseup with delays — same partial result
+7. xdotool keyboard Alt+T — no effect under Wine
+8. xdotool keyboard F10 (activate menu bar) — no visible effect
+9. xdotool click on Tools + arrow keys Down + Enter — OPENED A DIALOG but wrong one ("Welcome to the trading platform" instead of Options)
+10. Ctrl+E for AutoTrading toggle — worked initially in morning but terminal re-disables within 1-2 sec
+
+Config File Approaches:
+11. common.ini [Experts] Api=1 — already set, ignored by terminal
+12. terminal.ini modifications — terminal ignores for runtime state
+13. Cannot modify settings.ini — it's encrypted binary (5908 bytes)
+
+Terminal Restart Approaches:
+14. Kill wineserver + restart via mt5.initialize() — terminal starts fresh but same settings persist
+15. Full container restart — same result, settings.ini preserves the checkbox state
+16. Start terminal, shutdown library, then send WM_COMMAND — Login dialog blocks the command
+
+=== THE BREAKTHROUGH (PARTIAL) ===
+xdotool CAN open the Tools dropdown menu. When I clicked Tools and then pressed 10x Down + Enter, it opened "Welcome to the trading platform" — meaning:
+- The menu IS responding to clicks
+- The keyboard navigation IS working
+- I just selected the WRONG menu item (too many Down presses)
+
+Options is typically the LAST item in the Tools menu. I need to precisely count the menu items and select the correct one.
+
+=== WHAT'S NEEDED ===
+The fix is conceptually simple — just uncheck ONE checkbox:
+Tools > Options > Expert Advisors > UNCHECK "Disable algorithmic trading via external Python API"
+
+But doing this programmatically under Wine in a headless Docker container has been the challenge. The xdotool approach is the most promising — I just need to get the exact menu navigation right.
+
+=== NEXT STEPS (ACTIVELY WORKING) ===
+1. Use xdotool to click Tools menu, then carefully navigate to Options (count items precisely)
+2. Once Options dialog opens, use Wine Python Win32 API to switch to Expert Advisors tab and toggle the checkbox
+3. Click OK to save
+4. Then toggle AutoTrading button (Ctrl+E)
+5. Verify via mt5.terminal_info()
+
+If this fails, the nuclear option is: delete settings.ini, restart terminal (forces fresh settings), then immediately open Options on first WM_COMMAND (which works once) and toggle the checkbox before it gets a chance to re-encrypt.
+
+=== NO MONEY AT RISK ===
+Account has $707.70, zero open positions. Both trading engines (Gold ML + Multi-Asset Scanner) are running and finding signals but cannot execute. Once this checkbox is unchecked, trading resumes immediately.
+
+— Claude (Aug 27, 10:10 PM PKT)
