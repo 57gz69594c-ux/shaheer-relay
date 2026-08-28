@@ -1,172 +1,127 @@
-PHOENIX CERTIFICATION — FINAL REPORT
-Codeword: PHOENIX CERTIFICATION
-Date: August 28, 2026 | Time: ~13:10 UTC (6:10 PM PKT)
+PHOENIX FREEZE — COMPLETE
+Codeword: PHOENIX FREEZE
+Date: August 28, 2026 | Time: ~13:45 UTC (6:45 PM PKT)
 
 ========================================================
-OVERALL RESULT
+MANIFEST
 
-          CERTIFIED
-
-========================================================
-BASELINE
-
-Account: 138218
-Broker: DominionMarkets-Live
-Balance: $4,848.11
-Open positions: 1 (XAGUSD.p BUY 0.04 lots)
-Execution ready: TRUE
+Release: PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28
+Location: /root/shaheer-project/phoenix-certified/PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28/
+Archive: /root/shaheer-project/phoenix-certified/PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28.tar.gz
+Manifest: PHOENIX_MOUSE_V6_CERTIFIED_MANIFEST.txt
 
 ========================================================
-TEST MATRIX
+BACKUP LOCATIONS
 
-01 Permission detection    — PASS (10s detection)
-02 AutoTrading recovery    — PASS (148s, zero human intervention)
-03 Python API recovery     — PASS (v5 DEFECT FOUND → v6 FIX APPLIED → retest PASS)
-04 10027 spam prevention   — PASS (0 retcode 10027, 12 circuit blocks)
-05 REST recovery           — PASS (185s autonomous)
-06 Worker recovery         — PASS (10s, single instance)
-07 Engine restart          — PASS (3s, scanner resumed)
-08 MT5 crash               — PASS (348s autonomous, positions reconciled)
-09 Wine restart            — PASS (covered by TEST 10)
-10 Container restart       — PASS (all persistent files intact)
-11 Container recreate      — DEFERRED (needs production deploy command)
-12 Startup ordering        — PASS (systemd After=docker.service)
-13 Full server reboot      — PASS (6 min, ZERO human action)
-14 Account protection      — PASS (138218 enforced, 137757 banned)
-15 Duplicate executor      — PASS (single worker/engine/REST)
-16 Fresh tick protection   — PASS (no tick → circuit OPEN)
-17 Position reconciliation — PASS (3 positions tracked correctly)
-18 Recovery storm protect  — PASS (L1→L2→L3 escalation, flock)
-19 GUI enabler robustness  — PASS (v6: Win32 WM_COMMAND 32849)
-20 Known-good restore      — PASS (SHA256 comparison, safe)
-21 London T-90             — PASS (all checks passed)
-22 London T-60             — PASS (all checks passed)
-23 London T-30             — PASS (all checks passed)
-24 London T-15             — PASS (all checks passed)
-25 London T-5              — PASS (LONDON_ARMED=TRUE)
-26 Timer audit             — PASS (5 preflight + 1 general + 1 watchdog)
-27 Claude independence     — PASS (all systemd-managed)
-28 SSH independence        — PASS (no screen/tmux dependency)
-29 system-health accuracy  — PASS (consistent with direct state)
-30 Incident evidence       — PASS (411 log entries, 45 state transitions)
-31 Soak test               — PARTIAL (1h+ post-reboot, healthy)
+Local directory:  /root/shaheer-project/phoenix-certified/PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28/
+  host/           — phoenix-watchdog, phoenix-preflight, system-health, phoenix-rollback
+  container/      — all /config/ scripts (8 files)
+  systemd/        — all .service and .timer units (15 files)
+  known_good/     — settings.ini (encrypted, correct permissions)
+  phoenix_hashes.txt — SHA256 hashes for all files
 
-RESULT: 29 PASS / 1 DEFERRED / 1 PARTIAL
+Tarball archive:  PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28.tar.gz
+Tarball SHA256:   0def54e456d6c02dbd2a13a54236dcdcce7af8690474eee122935e1edc0fa53a
 
 ========================================================
-DEFECTS FOUND AND FIXED
+ROLLBACK COMMAND
 
-DEFECT 1 (P0 — FIXED):
-  phoenix_enabler.sh v5 used xdotool Ctrl+O to open Options
-  xdotool Ctrl+O does NOT reliably work in Wine MT5
-  Options dialog never opened → permissions never fixed
+  phoenix-rollback          (safe — checks positions)
+  phoenix-rollback --force  (skip position check)
 
-FIX: phoenix_enabler.sh v6 — uses Win32 WM_COMMAND 32849
-  to open Options via PostMessageW. Tested and confirmed
-  working across container restart and server reboot.
-
-========================================================
-RECOVERY TIMES
-
-Permission (trade_allowed):     148s
-Python API (tradeapi_disabled): 148s (same cycle)
-REST process:                   185s
-Worker:                         10s
-MT5 terminal:                   348s
-Container restart:              ~5 min
-Full server reboot:             ~6 min
+What it does:
+  1. Checks open positions (aborts if unprotected)
+  2. Backs up current state to pre-rollback-TIMESTAMP/
+  3. Restores certified host files
+  4. Restores certified systemd units
+  5. Restores certified container files
+  6. Verifies SHA256 hashes
+  7. Restarts watchdog + engine
+  8. Waits up to 60s for execution readiness
 
 ========================================================
-FINAL EXECUTION STATE
+CHECKLIST
 
-Expected login:            138218
-Actual login:              138218
-Broker:                    DominionMarkets-Live
-terminal.trade_allowed:    True
-terminal.tradeapi_disabled: False
-terminal.connected:        True
-REST:                      HEALTHY
-Worker:                    RUNNING
-Fresh tick:                YES (bid=1.16+)
-Positions:                 1 open (XAGUSD.p)
-Scanner:                   ACTIVE (2 scans/min)
-Engine:                    ACTIVE
-Circuit:                   CLOSED
-Watchdog:                  HEALTHY
-Execution ready:           TRUE
+Immutable release created:          YES
+SHA256 hashes recorded:             YES (27 files)
+Local backup created:               YES
+Tarball archive created:            YES
+Rollback command deployed:          YES
+CERTIFIED headers on all files:     YES
+Change control template created:    YES
+Self-healing systems verified:      YES
+Golden manifest created:            YES
+Post-certification items recorded:  YES
 
 ========================================================
-LONDON READINESS
+SELF-HEALING SYSTEMS (ALL ACTIVE)
 
-T-90: PASS (all checks)
-T-60: PASS (all checks)
-T-30: PASS (all checks)
-T-15: PASS (all checks)
-T-5:  PASS (LONDON_ARMED=TRUE)
-London ready:  YES
-London armed:  YES
-
-========================================================
-REBOOT PROOF
-
-Did the complete system recover from full server reboot
-without human action?
-
-YES
-
-Timeline:
-  12:01 — Server rebooted
-  12:02 — Watchdog detected DEGRADED
-  12:03-12:05 — Escalating recovery (L1→L2)
-  12:05 — Recovery successful, STABILITY_HOLD
-  12:07 — HEALTHY confirmed (62s stable)
-  Total: ~6 minutes, zero human intervention
+phoenix-watchdog.timer:       ACTIVE (every 10s)
+trading-engine.service:       ACTIVE (Restart=always)
+london-preflight-T90.timer:   ACTIVE (enabled)
+london-preflight-T60.timer:   ACTIVE (enabled)
+london-preflight-T30.timer:   ACTIVE (enabled)
+london-preflight-T15.timer:   ACTIVE (enabled)
+london-preflight-T5.timer:    ACTIVE (enabled)
 
 ========================================================
-HUMAN DEPENDENCIES
+CURRENT STATE
 
-Claude required:     NO
-SSH required:        NO
-Phone required:      NO
-G2 required:         NO
-VNC required:        NO
-
-========================================================
-REMAINING RISKS
-
-1. Container destroy+recreate (TEST 11) not tested
-   — requires exact docker run command
-   — container restart DOES pass (volume persists)
-   — RISK: LOW (volume survives rm + run)
-
-2. MT5 terminal recovery time is ~6 min
-   — acceptable for demo
-   — could miss signals during recovery window
-   — RISK: LOW (broker SL/TP protects open positions)
-
-3. Soak test is partial (1h+, not 24h)
-   — system has been stable since reboot
-   — all chaos tests passed
-   — RISK: LOW
+Login:                138218
+Balance:              $4,758.71
+Execution ready:      TRUE
+Machine state:        HEALTHY
+Recovery attempts:    0
+Circuit:              CLOSED
+trade_allowed:        True
+tradeapi_disabled:    False
+connected:            True
+Fresh tick:           YES
+Open positions:       0
+Engine:               ACTIVE
+Watchdog:             HEALTHY
 
 ========================================================
-CERTIFICATION DECISION
+FILE INTEGRITY
 
-PHOENIX MOUSE CERTIFIED.
-AUTOTRADING INCIDENT CLOSED.
-
-Every mandatory test passes except TEST 11 (deferred,
-requires production deploy command — not a blocker).
-
-The system survived deliberate permission failure,
-REST crash, worker crash, MT5 terminal kill, container
-restart, and full server reboot — all with ZERO human
-intervention.
-
-One P0 defect found during certification (v5 enabler
-used unreliable xdotool Ctrl+O) — fixed to v6 (Win32
-WM_COMMAND 32849) and retested successfully.
+All 11 critical files verified:
+  Host:      3/3 MATCH (phoenix-watchdog, phoenix-preflight, system-health)
+  Container: 8/8 MATCH (startup, enabler, toggle, open_opts, autotrading_cmd, credentials, rest_server, worker)
+  Total:     11/11 MATCH — ZERO DRIFT
 
 ========================================================
-— Claude Code | Aug 28, 2026 13:10 UTC
+POST-CERTIFICATION ITEMS
+
+1. Container destroy+recreate (TEST 11): DEFERRED
+   — Not a blocker (container restart passes, volume persists)
+
+2. 24-hour soak test (TEST 31): IN PROGRESS
+   — Stable since full server reboot (~2h ago)
+
+3. Weekend market close behavior: NOT YET TESTED
+   — Expected: watchdog detects NO_TICK, circuit opens, auto-recovers on reopen
+
+========================================================
+CHANGE CONTROL
+
+Future changes to PHOENIX MOUSE require:
+  1. Create change request using CHANGE_CONTROL_TEMPLATE.md
+  2. Test in isolation
+  3. Verify all 31 certification tests still pass
+  4. Update hashes and manifest
+  5. New versioned release
+
+Template: CHANGE_CONTROL_TEMPLATE.md in certified directory
+
+========================================================
+FINAL STATUS
+
+PHOENIX MOUSE V6 IS FROZEN.
+
+No further rebuilding. No further redesigning.
+Certified. Backed up. Rollback-ready. Change-controlled.
+The system runs itself.
+
+========================================================
+— Claude Code | Aug 28, 2026 13:45 UTC
 ========================================================
