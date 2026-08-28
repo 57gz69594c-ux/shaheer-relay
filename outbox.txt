@@ -1,126 +1,196 @@
-PHOENIX FREEZE — COMPLETE
-Codeword: PHOENIX FREEZE
+SHADOW LAB — DEPLOYMENT REPORT
+Codeword: SHADOW LAB
 Date: August 28, 2026 | Time: ~13:45 UTC (6:45 PM PKT)
 
 ========================================================
-MANIFEST
+DEPLOYMENT
 
-Release: PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28
-Location: /root/shaheer-project/phoenix-certified/PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28/
-Archive: /root/shaheer-project/phoenix-certified/PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28.tar.gz
-Manifest: PHOENIX_MOUSE_V6_CERTIFIED_MANIFEST.txt
+Status: DEPLOYED AND OBSERVING
 
-========================================================
-BACKUP LOCATIONS
+LIVE ENGINE
 
-Local directory:  /root/shaheer-project/phoenix-certified/PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28/
-  host/           — phoenix-watchdog, phoenix-preflight, system-health, phoenix-rollback
-  container/      — all /config/ scripts (8 files)
-  systemd/        — all .service and .timer units (15 files)
-  known_good/     — settings.ini (encrypted, correct permissions)
-  phoenix_hashes.txt — SHA256 hashes for all files
+Behavior changed: NO
 
-Tarball archive:  PHOENIX_MOUSE_V6_CERTIFIED_2026-08-28.tar.gz
-Tarball SHA256:   0def54e456d6c02dbd2a13a54236dcdcce7af8690474eee122935e1edc0fa53a
-
-========================================================
-ROLLBACK COMMAND
-
-  phoenix-rollback          (safe — checks positions)
-  phoenix-rollback --force  (skip position check)
-
-What it does:
-  1. Checks open positions (aborts if unprotected)
-  2. Backs up current state to pre-rollback-TIMESTAMP/
-  3. Restores certified host files
-  4. Restores certified systemd units
-  5. Restores certified container files
-  6. Verifies SHA256 hashes
-  7. Restarts watchdog + engine
-  8. Waits up to 60s for execution readiness
+Signal threshold:      75 (unchanged)
+Direction policy:      selective inverse (unchanged)
+Gold ML inverse:       YES (unchanged)
+Rule scanner normal:   YES (unchanged)
+Risk per trade:        2% (unchanged)
+Lot sizing:            unchanged
+SL/TP:                 unchanged
+Trailing system:       unchanged
+Execution routing:     unchanged
+Scan interval:         30s (unchanged)
 
 ========================================================
-CHECKLIST
+EXECUTION BOUNDARY
 
-Immutable release created:          YES
-SHA256 hashes recorded:             YES (27 files)
-Local backup created:               YES
-Tarball archive created:            YES
-Rollback command deployed:          YES
-CERTIFIED headers on all files:     YES
-Change control template created:    YES
-Self-healing systems verified:      YES
-Golden manifest created:            YES
-Post-certification items recorded:  YES
+Shadow execution access: DISABLED
+Penetration test: PASS (17/17 blocked)
 
-========================================================
-SELF-HEALING SYSTEMS (ALL ACTIVE)
+Blocked patterns:
+  order_send, ORDER_TYPE_BUY/SELL, TRADE_ACTION_DEAL,
+  TRADE_ACTION_SLTP, TRADE_ACTION_MODIFY, TRADE_ACTION_CLOSE,
+  position_close, order_check, place_order, close_position,
+  modify_position, send_order, modify_sl, modify_tp
 
-phoenix-watchdog.timer:       ACTIVE (every 10s)
-trading-engine.service:       ACTIVE (Restart=always)
-london-preflight-T90.timer:   ACTIVE (enabled)
-london-preflight-T60.timer:   ACTIVE (enabled)
-london-preflight-T30.timer:   ACTIVE (enabled)
-london-preflight-T15.timer:   ACTIVE (enabled)
-london-preflight-T5.timer:    ACTIVE (enabled)
+Shadow modules receive ReadOnlyMarketProxy (not real connection).
 
 ========================================================
-CURRENT STATE
+MODULES
 
-Login:                138218
-Balance:              $4,758.71
-Execution ready:      TRUE
-Machine state:        HEALTHY
-Recovery attempts:    0
-Circuit:              CLOSED
-trade_allowed:        True
-tradeapi_disabled:    False
-connected:            True
-Fresh tick:           YES
-Open positions:       0
-Engine:               ACTIVE
-Watchdog:             HEALTHY
-
-========================================================
-FILE INTEGRITY
-
-All 11 critical files verified:
-  Host:      3/3 MATCH (phoenix-watchdog, phoenix-preflight, system-health)
-  Container: 8/8 MATCH (startup, enabler, toggle, open_opts, autotrading_cmd, credentials, rest_server, worker)
-  Total:     11/11 MATCH — ZERO DRIFT
+Trade Quality Memory:      ACTIVE (14 signals captured)
+Regime Classifier:         ACTIVE (shadow classifications)
+Momentum Engine:           ACTIVE (7-component scoring)
+Momentum TP Experiment:    ACTIVE (experiment registered)
+Confluence Score:           ACTIVE (9-component quality)
+Correlation Observer:      ACTIVE (exposure tracking)
+Dynamic Risk Shadow:       ACTIVE (actual vs recommended)
+Meta Router:               ACTIVE (5-strategy ranking)
+Counterfactual Engine:     ACTIVE (33 hypotheticals)
+Exit Lab:                  ACTIVE (3 exit variants per signal)
+Normal/Inverse Forensics:  ACTIVE (direction experiment)
+Strategy Tournament:       ACTIVE (9 entries)
+Performance Tracker:       ACTIVE (multi-dimensional matrix)
 
 ========================================================
-POST-CERTIFICATION ITEMS
+DATABASE
 
-1. Container destroy+recreate (TEST 11): DEFERRED
-   — Not a blocker (container restart passes, volume persists)
+Tables: 12
+  shadow_signals, shadow_features, shadow_regime,
+  shadow_momentum, shadow_quality, shadow_portfolio,
+  shadow_risk, shadow_meta_router, shadow_counterfactuals,
+  shadow_outcomes, shadow_performance, shadow_tournament,
+  shadow_experiments
 
-2. 24-hour soak test (TEST 31): IN PROGRESS
-   — Stable since full server reboot (~2h ago)
-
-3. Weekend market close behavior: NOT YET TESTED
-   — Expected: watchdog detects NO_TICK, circuit opens, auto-recovers on reopen
-
-========================================================
-CHANGE CONTROL
-
-Future changes to PHOENIX MOUSE require:
-  1. Create change request using CHANGE_CONTROL_TEMPLATE.md
-  2. Test in isolation
-  3. Verify all 31 certification tests still pass
-  4. Update hashes and manifest
-  5. New versioned release
-
-Template: CHANGE_CONTROL_TEMPLATE.md in certified directory
+Persistence: SQLite (WAL mode, idempotent writes)
+Signal ID linkage: YES (all records linked via SIGNAL_ID)
+Location: data/raw/dominion/shadow_lab/shadow_lab.db
 
 ========================================================
-FINAL STATUS
+CONTROL GROUP
 
-PHOENIX MOUSE V6 IS FROZEN.
+Current production behavior preserved: YES
 
-No further rebuilding. No further redesigning.
-Certified. Backed up. Rollback-ready. Change-controlled.
-The system runs itself.
+Verified:
+  - Signal threshold: 75 (unchanged)
+  - Selective inverse: enabled (unchanged)
+  - Gold ML: inverse (unchanged)
+  - Rule scanner: normal (unchanged)
+  - Risk: 2% (unchanged)
+  - Trailing: 20%/1.5x/50% (unchanged)
+  - PHOENIX watchdog: hash match (unchanged)
+
+========================================================
+PHOENIX
+
+Modified: NO
+Watchdog hash: verified match with certified backup
+All PHOENIX files: untouched
+
+========================================================
+RESOURCE IMPACT
+
+CPU: negligible (< 3s per 30s cycle)
+RAM: < 20MB additional
+DB latency: < 50ms per write
+Scanner impact: ZERO (Shadow Lab runs AFTER scanner)
+
+========================================================
+RESTART TEST
+
+Service restart: PASS
+Engine restart: PASS
+Persistence: PASS (14 signals, 33 CFs survived restart)
+No data duplication: CONFIRMED
+
+========================================================
+CURRENT EXPERIMENTS
+
+1. EXP_DIRECTION — Normal vs Inverse for every signal
+2. EXP_TP_RATIO — 1:2 vs 1:3 vs 1:4 risk-reward
+3. EXP_TRAILING — Current trailing vs fixed vs extended vs tight
+4. EXP_THRESHOLD — Score 75 vs 80 vs 85
+5. EXP_MOMENTUM_TP — Momentum-gated TP extension
+
+========================================================
+INITIAL SAMPLE
+
+Signals: 14
+Control trades: 0 (awaiting qualifying signals)
+Counterfactuals: 33
+
+========================================================
+PROMOTION AUTHORITY
+
+Automatic promotion enabled: NO
+Human approval required: YES
+
+Promotion criteria:
+  - Sufficient forward sample (N >= 30)
+  - Positive expectancy
+  - Acceptable drawdown
+  - Beats control
+  - Not a concentration artifact
+  - Walk-forward validated
+  - Shaheer approval
+
+========================================================
+ANTI-OVERFITTING (Phase 20)
+
+Walk-forward enforcement: YES
+  - Each experiment records forward_start date
+  - Only data AFTER creation counts as forward evidence
+  - Sample status tracking: INSUFFICIENT → EARLY → DEVELOPING → MEANINGFUL
+
+========================================================
+CLI COMMAND
+
+  shadow-lab-status
+
+Shows: all metrics, experiments, champion, regime perf,
+momentum, portfolio, risk, sample warnings, promotion candidates.
+
+========================================================
+FINAL STATE
+
+SHADOW_ONLY = TRUE
+EXECUTION_ACCESS = FALSE
+CONTROL_ENGINE = UNCHANGED
+
+SHADOW LAB DEPLOYED.
+
+THE PRODUCTION TRADING ENGINE REMAINS THE CONTROL GROUP.
+
+ALL NEW INTELLIGENCE IS OBSERVATIONAL UNTIL FORWARD
+EVIDENCE JUSTIFIES PROMOTION.
+
+========================================================
+FILES CREATED (Shadow Lab — zero modifications to existing logic)
+
+New package:
+  src/trading_research/intraday/shadow_lab/__init__.py
+  src/trading_research/intraday/shadow_lab/engine.py
+  src/trading_research/intraday/shadow_lab/database.py
+  src/trading_research/intraday/shadow_lab/execution_boundary.py
+  src/trading_research/intraday/shadow_lab/regime_classifier.py
+  src/trading_research/intraday/shadow_lab/momentum_engine.py
+  src/trading_research/intraday/shadow_lab/quality_scorer.py
+  src/trading_research/intraday/shadow_lab/portfolio_observer.py
+  src/trading_research/intraday/shadow_lab/risk_model.py
+  src/trading_research/intraday/shadow_lab/meta_router.py
+  src/trading_research/intraday/shadow_lab/counterfactual_engine.py
+  src/trading_research/intraday/shadow_lab/performance_tracker.py
+  src/trading_research/intraday/shadow_lab/tournament.py
+
+Host:
+  /usr/local/bin/shadow-lab-status
+
+Modified (additive hooks only):
+  multi_asset_orchestrator.py — 3 fail-safe hooks added:
+    1. on_scan_cycle (after scanner, before execution)
+    2. on_trade_executed (after successful order)
+    3. on_trade_closed (after position close)
 
 ========================================================
 — Claude Code | Aug 28, 2026 13:45 UTC
