@@ -1,55 +1,37 @@
-EXTERNAL EDGE — DEPLOYMENT REPORT
-Codeword: EXTERNAL EDGE
-Date: August 28, 2026 | Time: ~20:17 UTC (1:17 AM PKT)
+COPY-PASTE HANDOFF
+
+Packet title: TRADING_ENGINE_AUDIT_PACKET_20260829T145654Z_8d46c96
+Publication status: COMMITTED TO REMOTE (public summary) + FILEBIN (full packet)
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/AUDIT_PACKET_20260829_SUMMARY.md
+Full packet URL: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/AUDIT_PACKET_20260829_FULL.md
+Commit SHA: bd8b64f29618
+Packet SHA-256: 00ae7a50d5739c33bf398eac6147b10146d4247afde7b29e043c1f98002d41b3
+Number of report parts: 12
+Number of attachments: 0 (data exists in cited logs/databases, not exported as CSV)
+Any missing indispensable evidence: Commission/swap rates, hedging mode, gold runner trade history
+Engine modified: NO
+Trading action taken: NO
 
 ========================================================
-DEPLOYMENT
+FORENSIC AUDIT — EXECUTIVE SUMMARY
+========================================================
 
-Status: DEPLOYED AND OBSERVING
+SYSTEM: 8-instrument demo trading engine (7 rule-based + 1 ML gold)
+MODE: DEMO ONLY (multiple safety locks confirmed)
+ACCOUNT: Demo, $4,533.11 equity, 0 open positions
 
-LIVE ENGINE
+KEY FINDINGS:
+- 6 contradictions between documentation and code
+- 5 critical bugs (HTF gate silently fails, dedup never resets,
+  demo check bypassed, spread zeros, spread double-counted)
+- 26 demo trades over 4 days, negative expectancy (-$19.64/trade)
+- P/L calculation bug produces impossible values ($100k+ on $5k account)
+- Strategy changed mid-sample (SL 1.5x→3.5x ATR)
+- 10 blockers prevent any profitability conclusion
 
-Behavior changed: NO
-
-Signal threshold:      80 (unchanged)
-Direction policy:      selective inverse (unchanged)
-Gold ML inverse:       YES (unchanged)
-Rule scanner normal:   YES (unchanged)
-Risk per trade:        dynamic 0.5-3% (unchanged max)
-SL:                    3.5x ATR (unchanged)
-TP:                    3x SL (unchanged)
-Trailing:              50%/2x/0.30x (unchanged)
-PHOENIX:               hash verified, untouched
+FULL PACKET: 41 KB, 89 evidence citations, 12 sections
+Available on filebin and locally on server.
 
 ========================================================
-EXTERNAL HYPOTHESES IMPORTED (7)
-
-P1 — EXT_DEAD_MARKET_GATE — ADX dead-market filter
-P1 — EXT_GAUSSIAN_TREND — Gaussian/IIR trend filtering
-P1 — EXT_GAUSSIAN_MOMENTUM — Gaussian + momentum combined
-P1 — EXT_REGIME_ROUTER — Regime-dependent strategy routing
-P1 — EXT_DRIFT_CONTROL — Alpha vs drift isolation (MANDATORY)
-P2 — EXT_LIQUIDITY_SWEEP — Sweep + component ablation
-P2 — EXT_STRATEGY_KILL_SWITCH — Loss-streak temporary pause
-
-========================================================
-PIPELINE
-
-Stage 1: Fast Historical Elimination
-Stage 2: Chronological OOS (70/30)
-Stage 3: Walk-Forward (5 windows)
-Stage 4: MT5-Native Certification
-Stage 5: True Forward Shadow
-Stage 6: Promotion Candidate (human approval)
-
-========================================================
-FINAL STATE
-
-EXTERNAL_EDGE_MODE = SHADOW_ONLY
-EXECUTION_ACCESS = FALSE
-
-EXTERNAL EDGE FAST-TRACK DEPLOYED.
-
-========================================================
-— Claude Code | Aug 28, 2026 20:17 UTC
+— Claude Code | Aug 29, 2026 15:07 UTC
 ========================================================
