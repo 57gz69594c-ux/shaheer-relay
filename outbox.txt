@@ -1,44 +1,44 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: TITAN FOUNDATION REPAIR CHECKPOINT ===
-Packet title: TITAN_FOUNDATION_REPAIR_CHECKPOINT_20260829
+=== LATEST: ASCENSION ARENA BUILD COMPLETE ===
+Packet title: ASCENSION_ARENA_REPORT_20260829
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_ARENA_REPORT.md
+Commit: 664ee73 (crypto-alpha-engine)
+Tests: 65 ASCENSION + 53 ORACLE = 117 passed (1 pre-existing flaky)
+Tournament winner: AGENT_6_LOGISTIC — 2.36x lift, 53% precision
+Agents: 10 entry + 7 exit = 17 total
+Verdict: BLIND_ARENA_OPERATIONAL
+Safety: 0 live orders, trading DISABLED, withdrawal DISABLED
+
+=== PREVIOUS: TITAN FOUNDATION REPAIR ===
 Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_REPAIR_CHECKPOINT.md
 Repair branch: titan-repair (commit e5950b7)
 Tests: 138 passed, 0 failed
-Bugs fixed: 5/5 critical (HTF gate, dedup, demo check, spread zero, spread double-count)
-Contradictions resolved: 6/6
-New modules: 12 (9,921 lines)
 Engine modified: NO (isolated worktree only)
-Trading action taken: NO
-
-=== PREVIOUS: FORENSIC AUDIT ===
-Packet title: TRADING_ENGINE_AUDIT_PACKET_20260829T145654Z_8d46c96
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/AUDIT_PACKET_20260829_SUMMARY.md
-Commit SHA: bd8b64f29618
-Packet SHA-256: 00ae7a50d5739c33bf398eac6147b10146d4247afde7b29e043c1f98002d41b3
-Engine modified: NO
-Trading action taken: NO
 
 ========================================================
-FORENSIC AUDIT — EXECUTIVE SUMMARY
+ASCENSION ARENA — EXECUTIVE SUMMARY
 ========================================================
 
-SYSTEM: 8-instrument demo trading engine (7 rule-based + 1 ML gold)
-MODE: DEMO ONLY (multiple safety locks confirmed)
-ACCOUNT: Demo, $4,533.11 equity, 0 open positions
+SYSTEM: Blind historical-replay tournament for 100X crypto alpha engine
+MODE: RESEARCH_ONLY — live trading DISABLED
 
-KEY FINDINGS:
-- 6 contradictions between documentation and code
-- 5 critical bugs (HTF gate silently fails, dedup never resets,
-  demo check bypassed, spread zeros, spread double-counted)
-- 26 demo trades over 4 days, negative expectancy (-$19.64/trade)
-- P/L calculation bug produces impossible values ($100k+ on $5k account)
-- Strategy changed mid-sample (SL 1.5x→3.5x ATR)
-- 10 blockers prevent any profitability conclusion
+KEY RESULTS:
+- 2,961 tokens in deterministic universe (no survivorship bias)
+- Token identities masked (TOKEN_SOL_NNNNNN)
+- Outcome vault isolates outcomes from agents
+- AGENT_6_LOGISTIC: 2.36x lift, 53% precision on blind data
+- Random agent ranks #5 (1.10x lift) — evaluation NOT contaminated
+- 65 new tests, all passing
+- Binance live orders physically blocked
 
-FULL PACKET: 41 KB, 89 evidence citations, 12 sections
-Available on filebin and locally on server.
+WHAT'S NEXT:
+- More tournament seasons across different time periods
+- Missing agents: survival model, path-state, TGE fundamentals
+- Probability calibration
+- Binance API credentials for testnet
+- Multi-chain expansion
 
 ========================================================
-— Claude Code | Aug 29, 2026 15:07 UTC
+— Claude Code | Session 072 | Aug 29, 2026
 ========================================================
