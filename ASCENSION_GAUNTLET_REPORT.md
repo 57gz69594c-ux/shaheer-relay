@@ -163,7 +163,23 @@ AGENT_14 (Random): p = 0.367 — correctly NOT significant. Evaluation NOT conta
 | AGENT_3_BUYER_PRESSURE | 215 | 79 | 36.74% | 1.64× | [30.4%, 43.5%] | < 0.001 |
 | AGENT_14_RANDOM | 73 | 18 | 24.66% | 1.10× | [16.1%, 35.8%] | 0.367 |
 
-**Note**: Creator-cluster, launch-day, and wallet-cluster adjusted intervals are PENDING. Effective independent observation count assumes independence (upper bound).
+### Cluster-Adjusted Intervals (AGENT_6)
+
+| Method | 95% CI |
+|--------|--------|
+| Wilson (independence assumed) | [43.97%, 61.92%] |
+| Standard bootstrap | [43.48%, 61.74%] |
+| DEX-platform clustered | [0.0%, 100%] ← **WARNING** |
+| Time-block clustered (10min) | [14.3%, 55.6%] |
+
+**CRITICAL FINDING**: 111 of 115 AGENT_6 selections (96.5%) are pumpswap tokens. Precision by DEX:
+- pumpswap: 60/111 = **54.05%**
+- manifest: 0/3 = 0%
+- meteora: 1/1 = 100%
+
+The DEX-cluster CI is degenerate because essentially all observations come from one platform. The signal may be **pumpswap-specific**, not generalizable.
+
+**Data limitations**: Creator-address is NULL for all tokens. All 2,961 tokens discovered in a ~1.5h window (single launch day). Wallet clustering requires on-chain data not in dataset.
 
 ---
 
@@ -381,8 +397,9 @@ AGENT_6_LOGISTIC demonstrates a real statistical signal in Season 1 blind evalua
 3. **Winner's curse** — expected 10-30% shrinkage from tournament selection.
 4. **High top-1 dependency** — 58% of portfolio profits from best single trade.
 5. **Survivorship bias detected** — blind set has different composition than universe.
-6. **Cluster adjustments pending** — creator, launch-day, and wallet clusters not yet analyzed.
-7. **Label semantics weak** — raw chart wick ≥ 2× is NOT executable 2× return.
+6. **Platform concentration** — 96.5% of selections from pumpswap. Signal may be platform-specific, not generalizable across DEXes.
+7. **Cluster CIs degenerate** — DEX-cluster bootstrap yields [0%, 100%] due to single-platform concentration.
+8. **Label semantics weak** — raw chart wick ≥ 2× is NOT executable 2× return.
 
 ### Final Classification
 
