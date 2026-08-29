@@ -1,68 +1,56 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: ASCENSION REALITY LOCK — TEMPORAL LEAKAGE CONFIRMED ===
+=== LATEST: ASCENSION EVENT GENESIS — RAW_PROVIDER_BLOCKED ===
+Packet title: ASCENSION_EVENT_GENESIS_CHECKPOINT_20260829
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_EVENT_GENESIS_CHECKPOINT.md
+Commit: 6c85e10 (crypto-alpha-engine)
+Tests: 294 passed (224 existing + 70 new), 0 failed
+Module: src/ascension/event_genesis.py (~2,800 lines)
+Artifacts: 12 JSON + 2 documentation + event_genesis.db + corrigendum
+
+VERDICT: RAW_PROVIDER_BLOCKED
+Pipeline complete. Awaiting qualifying Solana RPC provider.
+
+WHAT WAS BUILT:
+- Reality Lock corrigendum (8 corrections to naming, status, terminology)
+- Provider-neutral Solana RPC adapter (public canary verified: genesis OK, 4 events ingested)
+- Raw append-only event ledger (12 tables, 62-column events, v2.0 schema)
+- P0 decoders: Pump.fun + PumpSwap (authoritative program IDs)
+- P1 registered: Raydium, Meteora, Orca, Jupiter (decoders pending)
+- Three-clock model (chain slot time, provider receipt, ingestion)
+- Resilience: watermarks, gap detection, daily UTC manifests
+- Causal snapshot certification (12 frozen ages, dual temporal eligibility)
+- 70 adversarial tests (all 20 directive-required + 50 structural)
+- Bounded canary: 4 real Pump.fun events from Solana mainnet
+
+KEY CORRECTIONS (Corrigendum):
+- AGENT_6_LEGACY_V1 = QUARANTINED_LEGACY_CONTROL (was RESEARCH_CANDIDATE)
+- Legacy target renamed to LEGACY_DEXSCREENER_TRAILING_24H_PRICE_RATIO
+- RIGHT_CENSORED → MISSING_LEGACY_OUTCOME (exact counts published)
+- ECE/lift/p-values/portfolio = INVALIDATED_LEGACY_DIAGNOSTICS
+- Framework tests are NOT evidence of alpha
+
+REMAINING BLOCKER:
+Set HELIUS_API_KEY env var (free tier at helius.dev) to activate qualifying collection.
+Alternative: Set SOLANA_RPC_URL to a private Solana HTTP RPC endpoint.
+
+SAFETY: 0 real orders, 0 credentials, 0 signing, 0 wallet loading, trading DISABLED
+DexScreener aggregates PROHIBITED from qualifying events/snapshots/features/labels.
+
+=== PREVIOUS: ASCENSION REALITY LOCK — TEMPORAL LEAKAGE CONFIRMED ===
 Packet title: ASCENSION_REALITY_LOCK_REPORT_20260829
 Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_REALITY_LOCK_REPORT.md
 Commit: f8e1da2 (crypto-alpha-engine)
-Tests: 224 passed (183 existing + 41 new), 0 failed
-Module: src/ascension/reality_lock.py (~2,280 lines)
-Artifacts: 15 JSON analysis files + 7 documentation files + event store DB
-
 VERDICT: TEMPORAL_LEAKAGE_CONFIRMED_RESULT_INVALIDATED
 
-CRITICAL FINDING:
-- ALL features and labels come from the SAME DexScreener API snapshot
-- raw_max_multiple_24h = 1 + price_change_24h/100 (100% match rate)
-- Features and labels describe the SAME already-completed time period
-- The model classified tokens that ALREADY went 2x, not ones that WILL
-- 0 raw on-chain events in the entire project
-- first_trade_ts is NULL for all 2,961 tokens
-- 96% of tokens already >24h old at discovery
-- All data from single 88-minute DexScreener API collection window
-
-SEASON 1 RESULT:
-- Preserved as LEGACY_SEASON_1_RAW_WICK_RESULT
-- AGENT_6 renamed to AGENT_6_LEGACY_V1
-- Status: INVALID_AS_PREDICTIVE_EVIDENCE
-- Season 1 artifacts FROZEN and intact
-
-WHAT'S BUILT (frameworks ready, awaiting raw event data):
-- Canonical event store with idempotent ingestion
-- 12 decision snapshot age definitions
-- Executable label framework (7 multiples × 8 horizons × 8 position sizes)
-- Pre-takeoff definitions (20%, 30%, 50%)
-- Executability vs alpha separation (Gate A / Gate B)
-- Prospective shadow pipeline (COLLECTION_ONLY state)
-- Full portfolio selection accounting (115/115 accounted)
-- Post-reveal agent quarantine (agents 7,8,9,10,12)
-- Multiple-testing registry (PBO = NOT_COMPUTABLE)
-
-WHAT'S NEEDED NEXT:
-1. Raw on-chain event collector (Solana RPC or Helius)
-2. Multi-day prospective token launch collection
-3. Point-in-time feature construction from raw events
-4. Executable labels with temporal separation
-5. Independent calendar-day seasons
-
-SAFETY: 0 real orders, 0 credentials, trading DISABLED
-Arena architecture PRESERVED — needs new data, not new architecture.
-
 === PREVIOUS: TITAN PHASE B — ORCHESTRATOR WIRING & SHADOW BOOT ===
-Packet title: TITAN_PHASE_B_WIRING_REPORT_20260829
 Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B_WIRING_REPORT.md
 Commit: d991630 (titan-repair branch)
-Tests: 222 passed, 0 failed, 0 flaky
 
 === PREVIOUS: ASCENSION GAUNTLET — COMPREHENSIVE VERIFICATION ===
 Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_GAUNTLET_REPORT.md
-Commit: c34f1e3 (crypto-alpha-engine)
-VERDICT: PROVISIONAL_SIGNAL_CONFIRMED → NOW SUPERSEDED BY REALITY LOCK
-
-=== PREVIOUS: ASCENSION ARENA BUILD COMPLETE ===
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_ARENA_REPORT.md
-Commit: 664ee73 (crypto-alpha-engine)
-Verdict: BLIND_ARENA_OPERATIONAL
+Commit: c34f1e3 → SUPERSEDED BY REALITY LOCK
 
 ========================================================
-— Claude Code | Session 073 | Aug 29, 2026
+— Claude Code | Session 074 | Aug 29, 2026
 ========================================================
