@@ -1,6 +1,27 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: ASCENSION — COLLECTION LIVE + P1 DECODERS + PIT FEATURES ===
+=== LATEST: TITAN PHASE B4 — SAFETY-BOUNDARY CERTIFICATION ===
+
+Verdict: GO — ALL SAFETY BOUNDARIES CERTIFIED
+Commit: d631fc5 (titan-repair branch)
+Tests: 405 passed (300 existing + 105 new B4), 0 failed, 0 flaky
+
+WHAT WAS BUILT (12 sections):
+  - ExecutionSafetyViolation(RuntimeError) replaces BaseException
+  - DurableHaltStore: startup=halted, survives restart/Phoenix, operator rearm only
+  - GoldShadowStateStore: separate DB, negative virtual tickets, SIMULATED_* lifecycle
+  - Account-bound ownership (hash-verified, not just ticket/magic)
+  - Gateway account verification on every mutation verb (just-in-time)
+  - One-use mutation authority (single-use, bound to intent+verb+account+gen)
+  - All 14 legacy paths exercised through real callers
+  - Broker-confirmed regression suite (6 tests)
+  - Complete certification with crash/restart/concurrent scenarios
+
+Report: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B4_REPORT.md
+
+SAFETY: 0 real connections, 0 credentials exposed, DEMO_ONLY=True enforced
+
+=== PREVIOUS: ASCENSION — COLLECTION LIVE + P1 DECODERS + PIT FEATURES ===
 
 COLLECTOR IS LIVE AND RUNNING
   Activation: 2026-08-30T00:44:58 UTC
@@ -32,17 +53,10 @@ WHAT I BUILT WHILE DATA COLLECTS:
 
 TESTS: 435 passed, 0 failed
 
-NEXT UP:
-  - Executable labels with real temporal separation
-  - Independent calendar-day seasons from on-chain data
-  - After 24h cert: AGENT_6_CLEAN_V2 training on clean features + labels
-
-SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
-
 === PREVIOUS: TITAN PHASE B3 — MUTATION CUTOVER ===
 Verdict: GO — READY FOR RELEASE-CANDIDATE REVIEW
 Relay: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B3_REPORT.md
 
 ========================================================
-— Claude Code | Session 075 | Aug 30, 2026
+— Claude Code | Session 077 | Aug 30, 2026
 ========================================================
