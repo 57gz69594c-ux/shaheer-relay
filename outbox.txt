@@ -1,42 +1,40 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: ASCENSION EVENT GENESIS — PROVIDER ACTIVATION (SECURE_CREDENTIAL_BLOCKED) ===
-Packet title: ASCENSION_PROVIDER_ACTIVATION_20260830
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_PROVIDER_ACTIVATION.md
-Commit: ee91abd (crypto-alpha-engine)
-Tests: 387 passed (294 existing + 93 new), 0 failed
-Module: src/ascension/collector_service.py (1,103 lines)
+=== ACTION REQUIRED: Install Your Helius API Key ===
 
-VERDICT: SECURE_CREDENTIAL_BLOCKED
-All infrastructure built, tested, deployed. Awaiting key installation.
+Everything is built and waiting. You just need to run ONE command on the server.
 
-TO ACTIVATE:
+STEP 1: Get a free Helius API key
+  Go to https://www.helius.dev
+  Sign up (free tier is fine — no credit card needed)
+  Copy your API key from the dashboard
+
+STEP 2: SSH into your server and run this single command:
   sudo /usr/local/sbin/ascension-set-helius-key
+
+  It will prompt you: "Enter Helius API key:"
+  Paste your key and press Enter.
+  (The key is hidden — nothing will appear on screen as you paste. That's normal.)
+
+STEP 3: Start the collector:
   sudo systemctl start ascension-event-genesis
+
+STEP 4: Verify it's running:
   ascension-collector-status
 
-WHAT WAS BUILT:
-- Secure Helius key installer (root-only, tty-read, atomic write, umask 077, 0600)
-- SafeRPCClient with frozen read-only RPC method allowlist (50+ methods)
-- Explicit denylist: sendTransaction, simulateTransaction, requestAirdrop
-- RedactingFormatter — secrets scrubbed from all logs, exceptions, status, artifacts
-- Provider capability gate (genesis, HTTP, WSS, Pump.fun, PumpSwap, tx completeness)
-- EventCollector polling loop with rate limiting and watermark-based dedup
-- CertificationState: genuine 24h elapsed time, lag p50/p95/p99, coverage ratio
-- systemd service with EnvironmentFile, security hardening, restart-on-failure
-- Certification timer (15-min periodic check)
-- ascension-collector-status CLI
-- 93 adversarial tests (secret leakage, RPC enforcement, restarts, backfill, timing)
+That's it. The 24-hour certification begins automatically.
 
-SAFETY: 0 real orders, 0 credentials loaded, 0 signing, 0 wallet loading, trading DISABLED
+DO NOT paste your key into Claude, GitHub, or any chat.
+DO NOT pass it as a command-line argument.
+The installer reads it silently and stores it securely.
 
-=== PREVIOUS: ASCENSION EVENT GENESIS — RAW_PROVIDER_BLOCKED ===
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_EVENT_GENESIS_CHECKPOINT.md
-Commit: 6c85e10 (crypto-alpha-engine)
+=== CURRENT STATE ===
+Verdict: SECURE_CREDENTIAL_BLOCKED
+Tests: 387 passed, 0 failed
+Commit: 03f75f3 (crypto-alpha-engine)
+Relay report: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_PROVIDER_ACTIVATION.md
 
-=== PREVIOUS: ASCENSION REALITY LOCK — TEMPORAL LEAKAGE CONFIRMED ===
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_REALITY_LOCK_REPORT.md
-Commit: f8e1da2 (crypto-alpha-engine)
+SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
 
 ========================================================
 — Claude Code | Session 075 | Aug 30, 2026
