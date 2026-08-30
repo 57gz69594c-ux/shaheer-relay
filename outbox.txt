@@ -1,62 +1,79 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: TITAN PHASE B4 — SAFETY-BOUNDARY CERTIFICATION ===
+=== LATEST: ASCENSION LABEL GENESIS — ALL 8 STAGES BUILT ===
 
+Commit: 0563844 (crypto-alpha-engine master)
+Tests: 486 passed, 0 failed
+Verdict: COLLECTOR_CERTIFICATION_RUNNING (3.7%, ~4,600 events)
+
+CRITICAL BUG FOUND AND FIXED:
+  All 9 decoders used base64.b64decode() but Solana JSON encoding
+  returns base58 instruction data. Every event decoded as UNKNOWN.
+  Fixed: _decode_ix_data() tries base58 first, base64 fallback.
+  Decode rate: 0% → 32% of events now have venue/type.
+  Re-decoded all existing events. Collector restarted with fix.
+
+WHAT I BUILT (all 8 directive stages):
+
+1. SNAPSHOT CONTRACT RECONCILIATION
+   - 12 frozen decision ages preserved (T+30s through T+24h)
+   - 7 aggregation windows (feature lookback) are SEPARATE — do NOT replace ages
+   - Feature window > decision age is BLOCKED (e.g. 24h window → T+30s model)
+   - Dual temporal bounds enforced: cursor AND first-seen-at
+
+2. DECODER & COVERAGE CERTIFICATION
+   - Per-venue decode rates: Raydium CPMM 97%, CLMM 94%, Orca 90%,
+     Meteora Pools 83%, Meteora DLMM 66%, Raydium V4 57%, Jupiter 38%
+   - Added missing discriminators (Orca SWAP_V2, Meteora INITIALIZE_BIN_ARRAY, etc.)
+   - Jupiter double-counting detection (router vs inner venue legs)
+   - Re-decode utility for existing events
+   - 0 gaps, 0 duplicates detected
+
+3. EXECUTABLE LABEL FEASIBILITY
+   - Verdict: STATE_MISSING_PROSPECTIVE_CAPTURE_STARTED
+   - Have: pre/post token balances, fee_lamports, inner_instructions
+   - Missing: pool state (CLMM ticks, DLMM bins, bonding curves, fees)
+   - Need prospective capture via getAccountInfo after swap events
+
+4. TWO-GATE LABEL ENGINE
+   - Gate A: Could the position be purchased? (entry simulation)
+   - Gate B: What could it be liquidated for? (exit simulation)
+   - net_multiple = settlement_received / settlement_spent
+   - Rug after purchase = EXECUTABLE_LOSS (not missing data)
+   - 7 explicit states: ENTRY_INELIGIBLE, EXECUTABLE_LOSS, etc.
+   - Secondary labels: 2x, 5x, 10x, 20x, 50x, 100x
+
+5. PRIMARY LABEL PREREGISTRATION
+   - Default: T+5m, 0.1 SOL, 2s latency, FIRST_QUALIFYING route
+   - Spec defined but NOT frozen — freeze before opening outcomes
+
+6. SEASON VAULT
+   - UTC calendar-day assignment from first qualifying launch
+   - Token-disjoint, chronological day groups
+   - Maturity = launch + decision_age + outcome_horizon + finality_buffer
+   - Current: 1 season (2026-08-30), 40 token lineages, 0 mature days
+
+7. TRAINING AUTHORIZATION
+   - NOT authorized: need 21 mature days (have 0), 5000 launches (have 40),
+     500 primary positives (have 0)
+   - Allowed now: label-engine code, tests, coverage monitoring, seasons
+   - NOT allowed: AGENT_6_CLEAN_V2 training, alpha claims, trading
+
+8. CURRENT VERDICT: COLLECTOR_CERTIFICATION_RUNNING
+   - 4,600+ live events, 40 unique tokens, 0.83 hours elapsed
+   - Certification target: 24h continuous collection
+
+LIVE COLLECTOR STATUS:
+  Events: ~4,600 and climbing
+  Restarts: 2 (1 original + 1 decoder fix restart)
+  429s: 0 | Failures: 0
+  Certification: ~3.7% complete
+
+SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
+
+=== PREVIOUS: TITAN PHASE B4 ===
 Verdict: GO — ALL SAFETY BOUNDARIES CERTIFIED
-Commit: d631fc5 (titan-repair branch)
-Tests: 405 passed (300 existing + 105 new B4), 0 failed, 0 flaky
-
-WHAT WAS BUILT (12 sections):
-  - ExecutionSafetyViolation(RuntimeError) replaces BaseException
-  - DurableHaltStore: startup=halted, survives restart/Phoenix, operator rearm only
-  - GoldShadowStateStore: separate DB, negative virtual tickets, SIMULATED_* lifecycle
-  - Account-bound ownership (hash-verified, not just ticket/magic)
-  - Gateway account verification on every mutation verb (just-in-time)
-  - One-use mutation authority (single-use, bound to intent+verb+account+gen)
-  - All 14 legacy paths exercised through real callers
-  - Broker-confirmed regression suite (6 tests)
-  - Complete certification with crash/restart/concurrent scenarios
-
-Report: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B4_REPORT.md
-
-SAFETY: 0 real connections, 0 credentials exposed, DEMO_ONLY=True enforced
-
-=== PREVIOUS: ASCENSION — COLLECTION LIVE + P1 DECODERS + PIT FEATURES ===
-
-COLLECTOR IS LIVE AND RUNNING
-  Activation: 2026-08-30T00:44:58 UTC
-  Slot: 442,745,967
-  Live events: 796 and climbing
-  429s: 0 | Failures: 0 | Restarts: 1
-  Certification: 0.8% (24h timer running)
-
-WHAT I BUILT WHILE DATA COLLECTS:
-
-1. P1 DECODERS (commit 10cc9a7)
-   - Raydium AMM V4 (u8 tag decoder)
-   - Raydium CLMM (Anchor)
-   - Raydium CPMM (Anchor)
-   - Meteora DLMM (Anchor)
-   - Meteora Dynamic Pools (Anchor)
-   - Orca Whirlpool (Anchor)
-   - Jupiter V6 Aggregator (Anchor)
-   = Now collecting from ALL 9 major Solana venues (2 P0 + 7 P1)
-
-2. POINT-IN-TIME FEATURE FRAMEWORK (commit 74d59dc)
-   - 95 features across 7 time windows (30s, 1m, 5m, 15m, 1h, 4h, 24h)
-   - provider_receipt_time is the binding clock (NOT chain time)
-   - Future events are provably invisible — PIT audit verifier built in
-   - Features: swap counts, buy/sell ratio, venue diversity, failure rate,
-     event timing, pool counts, lifecycle indicators
-   - NO DexScreener. NO future leakage. NO predictions.
-   - This replaces the old co-temporal features that Reality Lock killed.
-
-TESTS: 435 passed, 0 failed
-
-=== PREVIOUS: TITAN PHASE B3 — MUTATION CUTOVER ===
-Verdict: GO — READY FOR RELEASE-CANDIDATE REVIEW
-Relay: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B3_REPORT.md
 
 ========================================================
-— Claude Code | Session 077 | Aug 30, 2026
+— Claude Code | Session 078 | Aug 30, 2026
 ========================================================
