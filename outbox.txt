@@ -1,56 +1,43 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: ASCENSION EVENT GENESIS — RAW_PROVIDER_BLOCKED ===
-Packet title: ASCENSION_EVENT_GENESIS_CHECKPOINT_20260829
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_EVENT_GENESIS_CHECKPOINT.md
-Commit: 6c85e10 (crypto-alpha-engine)
-Tests: 294 passed (224 existing + 70 new), 0 failed
-Module: src/ascension/event_genesis.py (~2,800 lines)
-Artifacts: 12 JSON + 2 documentation + event_genesis.db + corrigendum
+=== LATEST: ASCENSION EVENT GENESIS — PROVIDER ACTIVATION (SECURE_CREDENTIAL_BLOCKED) ===
+Packet title: ASCENSION_PROVIDER_ACTIVATION_20260830
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_PROVIDER_ACTIVATION.md
+Commit: ee91abd (crypto-alpha-engine)
+Tests: 387 passed (294 existing + 93 new), 0 failed
+Module: src/ascension/collector_service.py (1,103 lines)
 
-VERDICT: RAW_PROVIDER_BLOCKED
-Pipeline complete. Awaiting qualifying Solana RPC provider.
+VERDICT: SECURE_CREDENTIAL_BLOCKED
+All infrastructure built, tested, deployed. Awaiting key installation.
+
+TO ACTIVATE:
+  sudo /usr/local/sbin/ascension-set-helius-key
+  sudo systemctl start ascension-event-genesis
+  ascension-collector-status
 
 WHAT WAS BUILT:
-- Reality Lock corrigendum (8 corrections to naming, status, terminology)
-- Provider-neutral Solana RPC adapter (public canary verified: genesis OK, 4 events ingested)
-- Raw append-only event ledger (12 tables, 62-column events, v2.0 schema)
-- P0 decoders: Pump.fun + PumpSwap (authoritative program IDs)
-- P1 registered: Raydium, Meteora, Orca, Jupiter (decoders pending)
-- Three-clock model (chain slot time, provider receipt, ingestion)
-- Resilience: watermarks, gap detection, daily UTC manifests
-- Causal snapshot certification (12 frozen ages, dual temporal eligibility)
-- 70 adversarial tests (all 20 directive-required + 50 structural)
-- Bounded canary: 4 real Pump.fun events from Solana mainnet
+- Secure Helius key installer (root-only, tty-read, atomic write, umask 077, 0600)
+- SafeRPCClient with frozen read-only RPC method allowlist (50+ methods)
+- Explicit denylist: sendTransaction, simulateTransaction, requestAirdrop
+- RedactingFormatter — secrets scrubbed from all logs, exceptions, status, artifacts
+- Provider capability gate (genesis, HTTP, WSS, Pump.fun, PumpSwap, tx completeness)
+- EventCollector polling loop with rate limiting and watermark-based dedup
+- CertificationState: genuine 24h elapsed time, lag p50/p95/p99, coverage ratio
+- systemd service with EnvironmentFile, security hardening, restart-on-failure
+- Certification timer (15-min periodic check)
+- ascension-collector-status CLI
+- 93 adversarial tests (secret leakage, RPC enforcement, restarts, backfill, timing)
 
-KEY CORRECTIONS (Corrigendum):
-- AGENT_6_LEGACY_V1 = QUARANTINED_LEGACY_CONTROL (was RESEARCH_CANDIDATE)
-- Legacy target renamed to LEGACY_DEXSCREENER_TRAILING_24H_PRICE_RATIO
-- RIGHT_CENSORED → MISSING_LEGACY_OUTCOME (exact counts published)
-- ECE/lift/p-values/portfolio = INVALIDATED_LEGACY_DIAGNOSTICS
-- Framework tests are NOT evidence of alpha
+SAFETY: 0 real orders, 0 credentials loaded, 0 signing, 0 wallet loading, trading DISABLED
 
-REMAINING BLOCKER:
-Set HELIUS_API_KEY env var (free tier at helius.dev) to activate qualifying collection.
-Alternative: Set SOLANA_RPC_URL to a private Solana HTTP RPC endpoint.
-
-SAFETY: 0 real orders, 0 credentials, 0 signing, 0 wallet loading, trading DISABLED
-DexScreener aggregates PROHIBITED from qualifying events/snapshots/features/labels.
+=== PREVIOUS: ASCENSION EVENT GENESIS — RAW_PROVIDER_BLOCKED ===
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_EVENT_GENESIS_CHECKPOINT.md
+Commit: 6c85e10 (crypto-alpha-engine)
 
 === PREVIOUS: ASCENSION REALITY LOCK — TEMPORAL LEAKAGE CONFIRMED ===
-Packet title: ASCENSION_REALITY_LOCK_REPORT_20260829
 Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_REALITY_LOCK_REPORT.md
 Commit: f8e1da2 (crypto-alpha-engine)
-VERDICT: TEMPORAL_LEAKAGE_CONFIRMED_RESULT_INVALIDATED
-
-=== PREVIOUS: TITAN PHASE B — ORCHESTRATOR WIRING & SHADOW BOOT ===
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B_WIRING_REPORT.md
-Commit: d991630 (titan-repair branch)
-
-=== PREVIOUS: ASCENSION GAUNTLET — COMPREHENSIVE VERIFICATION ===
-Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_GAUNTLET_REPORT.md
-Commit: c34f1e3 → SUPERSEDED BY REALITY LOCK
 
 ========================================================
-— Claude Code | Session 074 | Aug 29, 2026
+— Claude Code | Session 075 | Aug 30, 2026
 ========================================================
