@@ -1,79 +1,105 @@
 COPY-PASTE HANDOFF
 
-=== LATEST: ASCENSION LABEL GENESIS — ALL 8 STAGES BUILT ===
+=== LATEST: ASCENSION EXACT STATE GENESIS + DECODER PRODUCTION LOCK ===
 
-Commit: 0563844 (crypto-alpha-engine master)
-Tests: 486 passed, 0 failed
-Verdict: COLLECTOR_CERTIFICATION_RUNNING (3.7%, ~4,600 events)
+Commit: 6245f7d (crypto-alpha-engine master)
+Tests: 525 passed, 0 failed
+Status: FRAMEWORK_SCAFFOLDED
+Collector: RAW_COLLECTOR_CERTIFICATION_RUNNING (33.2%, ~46,000 events)
 
-CRITICAL BUG FOUND AND FIXED:
-  All 9 decoders used base64.b64decode() but Solana JSON encoding
-  returns base58 instruction data. Every event decoded as UNKNOWN.
-  Fixed: _decode_ix_data() tries base58 first, base64 fallback.
-  Decode rate: 0% → 32% of events now have venue/type.
-  Re-decoded all existing events. Collector restarted with fix.
+GOVERNANCE CORRECTION:
+  Previous post said "ALL 8 STAGES BUILT" — WRONG.
+  Correct status: FRAMEWORK_SCAFFOLDED.
+  Label engine code exists but is NOT operational.
+  Executable labels require exact pool state capture (not yet activated).
 
-WHAT I BUILT (all 8 directive stages):
+WHAT THIS COMMIT ADDS (12-stage directive):
 
-1. SNAPSHOT CONTRACT RECONCILIATION
-   - 12 frozen decision ages preserved (T+30s through T+24h)
-   - 7 aggregation windows (feature lookback) are SEPARATE — do NOT replace ages
-   - Feature window > decision age is BLOCKED (e.g. 24h window → T+30s model)
-   - Dual temporal bounds enforced: cursor AND first-seen-at
+1. EXPLICIT ENCODING CONTRACT
+   - SourceEncoding enum: BASE58, BASE64, BINARY, PROVENANCE_UNKNOWN
+   - RPC_ENCODING_TO_IX_ENCODING: "json" → BASE58, "base64" → BASE64
+   - _decode_ix_data() refuses PROVENANCE_UNKNOWN (returns None, never guesses)
+   - PRODUCTION_IX_ENCODING = BASE58 (Solana JSON RPC reality)
+   - All 9 decoders updated to use explicit encoding, no fallback
 
-2. DECODER & COVERAGE CERTIFICATION
-   - Per-venue decode rates: Raydium CPMM 97%, CLMM 94%, Orca 90%,
-     Meteora Pools 83%, Meteora DLMM 66%, Raydium V4 57%, Jupiter 38%
-   - Added missing discriminators (Orca SWAP_V2, Meteora INITIALIZE_BIN_ARRAY, etc.)
-   - Jupiter double-counting detection (router vs inner venue legs)
-   - Re-decode utility for existing events
-   - 0 gaps, 0 duplicates detected
+2. GOLDEN FIXTURE CERTIFICATION
+   - 9 real mainnet fixtures in tests/fixtures/mainnet_golden/
+   - pump_fun, raydium_v4, raydium_clmm, raydium_cpmm, meteora_dlmm,
+     meteora_pools, orca_whirlpool, jupiter_v6, failed_transaction
+   - Missing: PumpSwap (0 events collected for that program)
+   - Each fixture carries: venue, program_id, signature, rpc_encoding,
+     source_encoding, expected_event_type, full transaction payload
 
-3. EXECUTABLE LABEL FEASIBILITY
-   - Verdict: STATE_MISSING_PROSPECTIVE_CAPTURE_STARTED
-   - Have: pre/post token balances, fee_lamports, inner_instructions
-   - Missing: pool state (CLMM ticks, DLMM bins, bonding curves, fees)
-   - Need prospective capture via getAccountInfo after swap events
+3. MEASURED COVERAGE DENOMINATORS
+   - NonDecodedReason enum: IRRELEVANT_INSTRUCTION, UNSUPPORTED_VERSION,
+     UNKNOWN_DISCRIMINATOR, MALFORMED_PAYLOAD, etc.
+   - measure_coverage_denominators() returns n/N per venue with classified failures
 
-4. TWO-GATE LABEL ENGINE
-   - Gate A: Could the position be purchased? (entry simulation)
-   - Gate B: What could it be liquidated for? (exit simulation)
-   - net_multiple = settlement_received / settlement_spent
-   - Rug after purchase = EXECUTABLE_LOSS (not missing data)
-   - 7 explicit states: ENTRY_INELIGIBLE, EXECUTABLE_LOSS, etc.
-   - Secondary labels: 2x, 5x, 10x, 20x, 50x, 100x
+4. FOUR VALIDITY BOUNDARIES
+   - RAW_COLLECTOR_ACTIVATION (when: first clean 24h collection)
+   - CORRECT_DECODER_ACTIVATION (when: golden fixtures all pass)
+   - EXACT_STATE_CAPTURE_ACTIVATION (when: Geyser/account-change live)
+   - FROZEN_PRIMARY_LABEL_ACTIVATION (when: bit-exact replay passes)
+   - Each boundary has: timestamp, commit_hash, test_count, notes
 
-5. PRIMARY LABEL PREREGISTRATION
-   - Default: T+5m, 0.1 SOL, 2s latency, FIRST_QUALIFYING route
-   - Spec defined but NOT frozen — freeze before opening outcomes
+5. PROVIDER CAPABILITY LEVELS
+   - TX_ONLY_STANDARD_RPC < OBSERVED_ACCOUNT_SNAPSHOT
+     < ACCOUNT_CHANGE_EXACT < HISTORICAL_ACCOUNT_REPLAY
+   - Current: TX_ONLY_STANDARD_RPC (Helius free tier)
+   - No plan upgrade without explicit approval
 
-6. SEASON VAULT
-   - UTC calendar-day assignment from first qualifying launch
-   - Token-disjoint, chronological day groups
-   - Maturity = launch + decision_age + outcome_horizon + finality_buffer
-   - Current: 1 season (2026-08-30), 40 token lineages, 0 mature days
+6-8. EXACT STATE DESIGN, VENUE DEPENDENCIES, BIT-EXACT REPLAY
+   - All DOCUMENTED but NOT ACTIVATED
+   - Blocker: requires ACCOUNT_CHANGE_EXACT capability (paid Geyser)
+   - Venue state dependency maps complete for all 9 programs
 
-7. TRAINING AUTHORIZATION
-   - NOT authorized: need 21 mature days (have 0), 5000 launches (have 40),
-     500 primary positives (have 0)
-   - Allowed now: label-engine code, tests, coverage monitoring, seasons
-   - NOT allowed: AGENT_6_CLEAN_V2 training, alpha claims, trading
+9. PRIMARY LABEL DRAFT
+   - Spec: T+5m, 0.1 SOL, 2s latency, FIRST_QUALIFYING
+   - NOT FROZEN — freeze only after exact-state replay passes
 
-8. CURRENT VERDICT: COLLECTOR_CERTIFICATION_RUNNING
-   - 4,600+ live events, 40 unique tokens, 0.83 hours elapsed
-   - Certification target: 24h continuous collection
+10. PROVIDER CREDIT AUDIT
+    - Measures actual usage from ingestion_log
+    - Estimates credits consumed vs plan limits
+    - No upgrade without approval
+
+11. ROLLING MATURITY
+    - MaturityState: SNAPSHOT_NOT_YET_DUE, OUTCOME_PENDING, MATURE, HOLDOUT
+    - Current: 0 mature days (need 21 + 7 holdout)
+
+12. SEPARATE VERDICTS PER SUBSYSTEM
+    - raw_collector: RAW_COLLECTOR_CERTIFICATION_RUNNING
+    - decoder_production_lock: DECODER_PRODUCTION_LOCK_RUNNING
+    - state_capture: EXACT_STATE_OBSERVED_BLOCKED
+    - primary_label: PRIMARY_LABEL_DRAFTED
+    - seasons: SEASONS_ACCUMULATING
+    - training: TRAINING_UNAUTHORIZED
 
 LIVE COLLECTOR STATUS:
-  Events: ~4,600 and climbing
-  Restarts: 2 (1 original + 1 decoder fix restart)
+  Events: ~46,000 and climbing
+  Unique tokens: 359
+  Collection hours: ~8.0 of 24h target (33.2%)
+  Decode rate: 38.9% (17,911/46,009)
   429s: 0 | Failures: 0
-  Certification: ~3.7% complete
+
+REMAINING WORK (not yet done):
+  - Stage 1 incomplete: old decoded records not yet invalidated with lineage
+  - Re-decode must append versioned records (currently overwrites)
+  - PumpSwap golden fixture still missing
+  - Record correct_decoder_activation boundary in metadata
+  - Exact state capture requires Geyser — needs approval before activating
 
 SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
+CONSTRAINTS: No AGENT_6 training, no outcome inspection, no coin scores,
+             no wallet connections, no paid plan upgrades without approval
+
+=== PREVIOUS: ASCENSION LABEL GENESIS — FRAMEWORK SCAFFOLDED ===
+
+Commit: 0563844
+Tests: 486 passed | Collector started | Decoder bug found and fixed
 
 === PREVIOUS: TITAN PHASE B4 ===
 Verdict: GO — ALL SAFETY BOUNDARIES CERTIFIED
 
 ========================================================
-— Claude Code | Session 078 | Aug 30, 2026
+— Claude Code | Session 079 | Aug 30, 2026
 ========================================================
