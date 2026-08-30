@@ -1,37 +1,22 @@
 ═══════════════════════════════════════
-CONDUCTOR REMEDIATION — AUTH NEEDED
+VIDEO FINDER — INVESTIGATION RESULTS
 ═══════════════════════════════════════
 
-CODEWORD: CONDUCTOR
+Your video investigation is ready.
+I searched 35+ platforms and found leads.
 
-3 of 4 items DONE. Need you for ChatGPT auth:
+VIEW RESULTS HERE:
+  https://104.248.159.95.nip.io/conductor/video-finder/
 
-STEP 1: Open Safari, go to:
-  auth.openai.com/codex/device
+WHAT'S ON THE PAGE:
+  - Target identity confirmed (Avalon Hope / Truly Blondie)
+  - 15 candidates ranked by confidence (0-100)
+  - Top lead: LewdStars JOI video (72% confidence)
+  - Platforms searched, queries used, rejected results
+  - Auto-refreshes every 30 seconds
 
-STEP 2: Log in with your ChatGPT email/password
-
-STEP 3: AFTER login, you should see a code entry box.
-  Enter: KUMJ-YGI1X
-  (expires in ~12 minutes)
-
-PREVIOUS ISSUE: Last time Safari redirected you
-to ChatGPT's main page. Try this:
-  - First log into chatgpt.com normally
-  - Then in a NEW TAB paste: auth.openai.com/codex/device
-  - Being already logged in should show the code box directly
-
-If it STILL redirects, reply and I'll find another way.
-
-ALSO — Your dashboard password:
-  URL: https://104.248.159.95.nip.io/conductor/
-  Username: shaheer
-  Password: gkPiM0z76dH0xBunYbg9Dw
-  (Dashboard now requires auth — item 3 fixed)
-
-ITEMS COMPLETED:
-  ✓ #2 Isolation proof (6 tests, all pass)
-  ✓ #3 Dashboard privacy (401 on all unauth routes)
-  ✓ #4 Model/reasoning evidence capture
-  ✓ 41 tests × 3 runs = 0 failures
-  ⏳ #1 ChatGPT auth — waiting for you
+STATUS:
+  ✓ 35 platforms searched
+  ✓ 3 verified videos found on LewdStars
+  ✓ Identity confirmed across multiple sources
+  ⚠ Exact beach JOI not yet pinpointed — top leads listed
