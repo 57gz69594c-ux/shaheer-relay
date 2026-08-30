@@ -1,105 +1,21 @@
-COPY-PASTE HANDOFF
+═══════════════════════════════════════
+  AUTH_REQUIRED_OPENAI — DUAL-MIND CONDUCTOR
+═══════════════════════════════════════
 
-=== LATEST: ASCENSION EXACT STATE GENESIS + DECODER PRODUCTION LOCK ===
+Phase 0 ✓ Discovery complete, rollback saved
+Phase 1 → Codex CLI v0.151.0 installed
 
-Commit: 6245f7d (crypto-alpha-engine master)
-Tests: 525 passed, 0 failed
-Status: FRAMEWORK_SCAFFOLDED
-Collector: RAW_COLLECTOR_CERTIFICATION_RUNNING (33.2%, ~46,000 events)
+ACTION NEEDED FROM YOU (one time only):
 
-GOVERNANCE CORRECTION:
-  Previous post said "ALL 8 STAGES BUILT" — WRONG.
-  Correct status: FRAMEWORK_SCAFFOLDED.
-  Label engine code exists but is NOT operational.
-  Executable labels require exact pool state capture (not yet activated).
+1. Open: https://auth.openai.com/codex/device
+2. Sign in with your ChatGPT account
+3. Enter code: KSHA-QARPO
+4. Code expires in ~15 minutes
 
-WHAT THIS COMMIT ADDS (12-stage directive):
+⚠️ Do NOT paste credentials into chat.
+   Enter the code yourself on OpenAI's page.
 
-1. EXPLICIT ENCODING CONTRACT
-   - SourceEncoding enum: BASE58, BASE64, BINARY, PROVENANCE_UNKNOWN
-   - RPC_ENCODING_TO_IX_ENCODING: "json" → BASE58, "base64" → BASE64
-   - _decode_ix_data() refuses PROVENANCE_UNKNOWN (returns None, never guesses)
-   - PRODUCTION_IX_ENCODING = BASE58 (Solana JSON RPC reality)
-   - All 9 decoders updated to use explicit encoding, no fallback
+Once you authenticate, I'll detect it automatically
+and continue building the Conductor system.
 
-2. GOLDEN FIXTURE CERTIFICATION
-   - 9 real mainnet fixtures in tests/fixtures/mainnet_golden/
-   - pump_fun, raydium_v4, raydium_clmm, raydium_cpmm, meteora_dlmm,
-     meteora_pools, orca_whirlpool, jupiter_v6, failed_transaction
-   - Missing: PumpSwap (0 events collected for that program)
-   - Each fixture carries: venue, program_id, signature, rpc_encoding,
-     source_encoding, expected_event_type, full transaction payload
-
-3. MEASURED COVERAGE DENOMINATORS
-   - NonDecodedReason enum: IRRELEVANT_INSTRUCTION, UNSUPPORTED_VERSION,
-     UNKNOWN_DISCRIMINATOR, MALFORMED_PAYLOAD, etc.
-   - measure_coverage_denominators() returns n/N per venue with classified failures
-
-4. FOUR VALIDITY BOUNDARIES
-   - RAW_COLLECTOR_ACTIVATION (when: first clean 24h collection)
-   - CORRECT_DECODER_ACTIVATION (when: golden fixtures all pass)
-   - EXACT_STATE_CAPTURE_ACTIVATION (when: Geyser/account-change live)
-   - FROZEN_PRIMARY_LABEL_ACTIVATION (when: bit-exact replay passes)
-   - Each boundary has: timestamp, commit_hash, test_count, notes
-
-5. PROVIDER CAPABILITY LEVELS
-   - TX_ONLY_STANDARD_RPC < OBSERVED_ACCOUNT_SNAPSHOT
-     < ACCOUNT_CHANGE_EXACT < HISTORICAL_ACCOUNT_REPLAY
-   - Current: TX_ONLY_STANDARD_RPC (Helius free tier)
-   - No plan upgrade without explicit approval
-
-6-8. EXACT STATE DESIGN, VENUE DEPENDENCIES, BIT-EXACT REPLAY
-   - All DOCUMENTED but NOT ACTIVATED
-   - Blocker: requires ACCOUNT_CHANGE_EXACT capability (paid Geyser)
-   - Venue state dependency maps complete for all 9 programs
-
-9. PRIMARY LABEL DRAFT
-   - Spec: T+5m, 0.1 SOL, 2s latency, FIRST_QUALIFYING
-   - NOT FROZEN — freeze only after exact-state replay passes
-
-10. PROVIDER CREDIT AUDIT
-    - Measures actual usage from ingestion_log
-    - Estimates credits consumed vs plan limits
-    - No upgrade without approval
-
-11. ROLLING MATURITY
-    - MaturityState: SNAPSHOT_NOT_YET_DUE, OUTCOME_PENDING, MATURE, HOLDOUT
-    - Current: 0 mature days (need 21 + 7 holdout)
-
-12. SEPARATE VERDICTS PER SUBSYSTEM
-    - raw_collector: RAW_COLLECTOR_CERTIFICATION_RUNNING
-    - decoder_production_lock: DECODER_PRODUCTION_LOCK_RUNNING
-    - state_capture: EXACT_STATE_OBSERVED_BLOCKED
-    - primary_label: PRIMARY_LABEL_DRAFTED
-    - seasons: SEASONS_ACCUMULATING
-    - training: TRAINING_UNAUTHORIZED
-
-LIVE COLLECTOR STATUS:
-  Events: ~46,000 and climbing
-  Unique tokens: 359
-  Collection hours: ~8.0 of 24h target (33.2%)
-  Decode rate: 38.9% (17,911/46,009)
-  429s: 0 | Failures: 0
-
-REMAINING WORK (not yet done):
-  - Stage 1 incomplete: old decoded records not yet invalidated with lineage
-  - Re-decode must append versioned records (currently overwrites)
-  - PumpSwap golden fixture still missing
-  - Record correct_decoder_activation boundary in metadata
-  - Exact state capture requires Geyser — needs approval before activating
-
-SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
-CONSTRAINTS: No AGENT_6 training, no outcome inspection, no coin scores,
-             no wallet connections, no paid plan upgrades without approval
-
-=== PREVIOUS: ASCENSION LABEL GENESIS — FRAMEWORK SCAFFOLDED ===
-
-Commit: 0563844
-Tests: 486 passed | Collector started | Decoder bug found and fixed
-
-=== PREVIOUS: TITAN PHASE B4 ===
-Verdict: GO — ALL SAFETY BOUNDARIES CERTIFIED
-
-========================================================
-— Claude Code | Session 079 | Aug 30, 2026
-========================================================
+Status: WAITING_FOR_AUTH
