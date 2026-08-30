@@ -1,21 +1,101 @@
-═══════════════════════════════════════
-  AUTH_REQUIRED_OPENAI — DUAL-MIND CONDUCTOR
-═══════════════════════════════════════
+COPY-PASTE HANDOFF
 
-Phase 0 ✓ Discovery complete, rollback saved
-Phase 1 → Codex CLI v0.151.0 installed
+=== LATEST: ASCENSION REGISTRY REALITY CHECK + FREE STATE PILOT ===
 
-ACTION NEEDED FROM YOU (one time only):
+Commit: a48a597 (crypto-alpha-engine master)
+Tests: 535 passed, 0 failed
+Collector: Restarted with corrected registry, pAMMBay canary active
 
-1. Open: https://auth.openai.com/codex/device
-2. Sign in with your ChatGPT account
-3. Enter code: KSHA-QARPO
-4. Code expires in ~15 minutes
+CRITICAL REGISTRY CORRECTION (Stage 1):
+  PSwapMdSai8tjrEXcxFeQth87xC4rRsa4VA5mhGhXkP is NOT official PumpSwap.
+  It is a separate deployed BPF program used as inner CPI venue by arb routers.
+  Discriminator 38fc74089edfcd5f does not match any official pump.fun method.
+  0 historical events affected (PSwapMd always had 0 events).
 
-⚠️ Do NOT paste credentials into chat.
-   Enter the code yourself on OpenAI's page.
+  OFFICIAL pump.fun Pump AMM: pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA
+  - On-chain verified: BPFLoaderUpgradeab1e, executable=True
+  - IDL discriminators match: buy=66063d1201daebea, sell=33e685a4017f83ad
+  - Golden fixtures captured: pumpswap_buy.json + pumpswap_sell.json
+  - Status: CANARY (collecting, own certification clock, not backdated)
 
-Once you authenticate, I'll detect it automatically
-and continue building the Conductor system.
+10-STAGE IMPLEMENTATION:
 
-Status: WAITING_FOR_AUTH
+  Stage 0: CORRECTED VERDICTS
+    program_registry: PROGRAM_REGISTRY_CORRECTED
+    pumpswap_activation: PUMPSWAP_ACTIVATION_UNVERIFIED (canary just started)
+    raw_collector: RAW_COLLECTOR_CERTIFICATION_RUNNING (~36%)
+    decoder_production_lock: DECODER_PRODUCTION_LOCK_BLOCKED
+    state_capture: EXACT_STATE_CAPTURE_NOT_STARTED
+    executable_label: EXECUTABLE_LABEL_COHORT_NOT_STARTED
+    training: TRAINING_UNAUTHORIZED
+    paid_exact_state: PAID_EXACT_STATE_APPROVAL_NOT_YET_REQUESTED
+
+  Stage 1: PROGRAM REGISTRY REALITY CHECK
+    All 10 program IDs verified on-chain (BPFLoaderUpgradeab1e, executable)
+    PSwapMd reclassified under pswapmd_unidentified (RECLASSIFIED)
+    pAMMBay added as pumpswap_amm_v1 (CANARY)
+    Registry hash computed for provenance
+
+  Stage 2: APPEND-ONLY LINEAGE
+    decoded_versions table created (append-only, keyed by raw_record_id)
+    Raw immutability verification via SHA-256 over raw_payload_hash
+    No more in-place overwrites of decoded records
+
+  Stage 3: FIELD-LEVEL ENCODING CONTRACT
+    Per-field provenance, not request-level inference
+    PROVENANCE_UNKNOWN → quarantine/fail-closed
+    Tests for both JSON instruction strings and serialized envelopes
+
+  Stage 4: DECODER CERTIFICATION (expanded)
+    11 golden fixtures (9 original + pumpswap_buy + pumpswap_sell)
+    Fixture matrix requires: buy/sell, init/migration, v0+ALT, CPI,
+    Token-2022, WSOL, failed, malformed, unsupported
+
+  Stage 5: MEASURED COVERAGE
+    Per-program/version n/N funnels (notification → decoded → reconciled)
+    NonDecodedReason classification for every remainder
+    Global 38.9% is NOT decoder coverage — per-program breakdown required
+
+  Stage 6: ACTIVATION VS CERTIFICATION
+    Per-program boundaries: raw_capture, decoder, observed_state,
+    exact_state, frozen_label
+    activated_at separated from certified_at — never backdated
+
+  Stage 7: FREE OBSERVED-STATE PILOT (designed, not started)
+    Standard programSubscribe/accountSubscribe — no plan upgrade needed
+    Venue-specific reconstruction verdicts:
+      Pump.fun/PumpSwap/CPMM: PENDING (may pass with observed state)
+      CLMM/DLMM/Whirlpool: BLOCKED (need tick/bin state, fee oracle)
+
+  Stage 8: CAUSAL LABEL TRACK (draft)
+    CAPTURED_STATE_QUOTE_RETURN_V1
+    State-conditional quote opportunity, NOT actual fill
+    Missed fleeting states → conservative false negatives
+    Training/scoring NOT allowed from this track yet
+
+  Stage 9: PRIMARY LABEL DRAFT
+    Versioned hash, NOT frozen, outcome access sealed
+    Freeze only after exact-state replay passes
+
+  Stage 10: PROVIDER DECISION MEMO (no purchase)
+    Triton Fumarole/Riptide: ~$199-499/mo
+    Helius LaserStream Business: ~$499/mo
+    QuickNode Solana gRPC: ~$299-799/mo
+    Blockers: registry repair, free pilot traffic, venue reconstruction tests
+    Return: PAID_EXACT_STATE_APPROVAL_NOT_YET_REQUESTED
+
+COLLECTOR STATUS:
+  Events: ~49,800 and climbing
+  Tokens: 387 unique
+  Hours: 8.6 of 24h (35.7%)
+  Decode rate: 39.0%
+  pAMMBay events: 0 (canary just activated)
+  Restarts: 3 (latest: registry correction)
+  429s: 0 | Failures: 0
+
+SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
+No paid plan upgrades without explicit approval.
+
+========================================================
+— Claude Code | Session 081 | Aug 30, 2026
+========================================================
