@@ -1,41 +1,37 @@
 COPY-PASTE HANDOFF
 
-=== ACTION REQUIRED: Install Your Helius API Key ===
+=== LATEST: TITAN PHASE B3 — MUTATION CUTOVER COMPLETE ===
+Packet title: TITAN_PHASE_B3_REPORT_20260830
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B3_REPORT.md
+Commit: 4aecce0 (titan-repair branch)
+Tests: 300 passed (78 new), 0 failed, 0 flaky
+Module: mutation_guard.py (160 lines) + 10 patched files
 
-Everything is built and waiting. You just need to run ONE command on the server.
+VERDICT: GO — READY FOR RELEASE-CANDIDATE REVIEW
 
-STEP 1: Get a free Helius API key
-  Go to https://www.helius.dev
-  Sign up (free tier is fine — no credit card needed)
-  Copy your API key from the dashboard
+KEY ACCOMPLISHMENTS:
+- Exactly ONE physical mutation gateway (ExecutionArbiter)
+- All 14 legacy mutation paths guarded with LegacyMutationBlocked
+- LegacyMutationBlocked inherits BaseException — except Exception can't catch it
+- TITAN_REQUIRED=True — NO fallback to legacy execution
+- Breakeven requires broker readback to confirm (set_breakeven→pending, confirm_breakeven→confirmed)
+- Position ownership: durable DB-backed enum replaces volatile boolean
+- 25 mandatory production-entrypoint scenarios all passing
+- 10-run repetition: zero flakiness
+- Crash/restart: no duplicate or lost mutations
 
-STEP 2: SSH into your server and run this single command:
-  sudo /usr/local/sbin/ascension-set-helius-key
+SAFETY: 0 real orders, 0 credentials, 0 MT5 connections, trading-engine.service untouched
 
-  It will prompt you: "Enter Helius API key:"
-  Paste your key and press Enter.
-  (The key is hidden — nothing will appear on screen as you paste. That's normal.)
-
-STEP 3: Start the collector:
-  sudo systemctl start ascension-event-genesis
-
-STEP 4: Verify it's running:
-  ascension-collector-status
-
-That's it. The 24-hour certification begins automatically.
-
-DO NOT paste your key into Claude, GitHub, or any chat.
-DO NOT pass it as a command-line argument.
-The installer reads it silently and stores it securely.
-
-=== CURRENT STATE ===
+=== PREVIOUS: ASCENSION — HELIUS KEY INSTALL REQUIRED ===
 Verdict: SECURE_CREDENTIAL_BLOCKED
 Tests: 387 passed, 0 failed
 Commit: 03f75f3 (crypto-alpha-engine)
-Relay report: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/ASCENSION_PROVIDER_ACTIVATION.md
 
-SAFETY: 0 orders, 0 signing, 0 wallets, trading DISABLED
+=== PREVIOUS: TITAN PHASE B — ORCHESTRATOR WIRING ===
+Relay URL: https://github.com/57gz69594c-ux/shaheer-relay/blob/master/TITAN_PHASE_B_WIRING_REPORT.md
+Commit: d991630 (titan-repair branch)
+Tests: 222 passed, 0 failed
 
 ========================================================
-— Claude Code | Session 075 | Aug 30, 2026
+— Claude Code | Session 076 | Aug 30, 2026
 ========================================================
