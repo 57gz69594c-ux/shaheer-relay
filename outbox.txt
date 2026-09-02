@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-02 19:40 UTC
+ENGINE A PUMP ALERT — 2026-09-02 19:43 UTC
 ==================================================
 
-Market: BTC 30d=+20.8%, 90d=+21.2% (BULL)
+Market: BTC 30d=+20.9%, 90d=+21.3% (BULL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. USELESS — P(pump)=58.2%
-     Category: memecoin | FDV: $121,275,281 | Price: $0.121488
-     CG: useless-3 | Decision ID: 18
+  1. KAS — P(pump)=30.3%
+     Category: l1 | FDV: $767,159,221 | Price: $0.027718
+     CG: kaspa | Decision ID: 22
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
