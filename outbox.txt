@@ -1,51 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-02 18:30 UTC
+ENGINE A PUMP ALERT — 2026-09-02 19:40 UTC
 ==================================================
 
-Market: BTC 30d=+21.3%, 90d=+21.4% (BULL)
+Market: BTC 30d=+20.8%, 90d=+21.2% (BULL)
 Model: v7b (aecf27f3)
 
-10 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. PENGU — P(pump)=53.2%
-     Category: memecoin | FDV: $629,601,539 | Price: $0.008207
-     CG: pudgy-penguins | Decision ID: 6
-
-  2. CASHCAT — P(pump)=49.1%
-     Category: memecoin | FDV: $244,575,513 | Price: $0.247474
-     CG: cash-cat | Decision ID: 2
-
-  3. PUMP — P(pump)=47.8%
-     Category: memecoin | FDV: $3,440,019,217 | Price: $0.004115
-     CG: pump-fun | Decision ID: 3
-
-  4. PEAQ — P(pump)=36.5%
-     Category: l1 | FDV: $98,145,510 | Price: $0.022108
-     CG: peaq-2 | Decision ID: 11
-
-  5. SKR — P(pump)=33.7%
-     Category: infrastructure | FDV: $250,805,922 | Price: $0.023747
-     CG: seeker | Decision ID: 10
-
-  6. CHIP — P(pump)=32.2%
-     Category: defi | FDV: $415,846,305 | Price: $0.041533
-     CG: chip-2 | Decision ID: 13
-
-  7. PI — P(pump)=31.5%
-     Category: l1 | FDV: $1,612,841,053 | Price: $0.094101
-     CG: pi-network | Decision ID: 12
-
-  8. AERO — P(pump)=29.9%
-     Category: defi | FDV: $903,984,021 | Price: $0.459127
-     CG: aerodrome-finance | Decision ID: 8
-
-  9. ARB — P(pump)=29.0%
-     Category: l2 | FDV: $1,243,848,390 | Price: $0.124633
-     CG: arbitrum | Decision ID: 4
-
-  10. AKE — P(pump)=28.3%
-     Category: other | FDV: $1,615,435,434 | Price: $0.016154
-     CG: akedo | Decision ID: 1
+  1. USELESS — P(pump)=58.2%
+     Category: memecoin | FDV: $121,275,281 | Price: $0.121488
+     CG: useless-3 | Decision ID: 18
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
