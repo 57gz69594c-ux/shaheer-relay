@@ -1,23 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-03 12:07 UTC
+ENGINE A PUMP ALERT — 2026-09-03 17:38 UTC
 ==================================================
 
-Market: BTC 30d=+22.0%, 90d=+25.7% (BULL)
+Market: BTC 30d=+26.8%, 90d=+33.4% (BULL)
 Model: v7b (aecf27f3)
 
 3 ALERTS above threshold:
 
-  1. SOLCAT — P(pump)=63.4%
-     Category: memecoin | FDV: $1,275,608 | Price: $0.001289
-     CG: solcat-3 | Decision ID: 37
+  1. PUMPOOOR — P(pump)=65.7%
+     Category: memecoin | FDV: $827,163 | Price: $0.000834
+     CG: pumpooor | Decision ID: 39
 
-  2. SHRUB — P(pump)=53.5%
-     Category: memecoin | FDV: $30,576,777 | Price: $0.030578
-     CG: lil-shrub | Decision ID: 36
+  2. FARTCOIN — P(pump)=50.8%
+     Category: memecoin | FDV: $171,852,334 | Price: $0.171860
+     CG: fartcoin | Decision ID: 41
 
-  3. ANSEM — P(pump)=46.7%
-     Category: memecoin | FDV: $231,267,886 | Price: $0.231661
-     CG: the-black-bull | Decision ID: 38
+  3. MOS — P(pump)=34.7%
+     Category: other | FDV: $2,129,329 | Price: $0.002253
+     CG: mosaic-3 | Decision ID: 40
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
