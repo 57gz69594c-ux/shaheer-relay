@@ -1,47 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-03 06:07 UTC
+ENGINE A PUMP ALERT — 2026-09-03 12:07 UTC
 ==================================================
 
-Market: BTC 30d=+22.0%, 90d=+24.7% (BULL)
+Market: BTC 30d=+22.0%, 90d=+25.7% (BULL)
 Model: v7b (aecf27f3)
 
-9 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. BITCAT — P(pump)=65.9%
-     Category: memecoin | FDV: $527,825 | Price: $0.000552
-     CG: the-first-crypto-cat | Decision ID: 31
+  1. SOLCAT — P(pump)=63.4%
+     Category: memecoin | FDV: $1,275,608 | Price: $0.001289
+     CG: solcat-3 | Decision ID: 37
 
-  2. CYBERLEEK — P(pump)=63.8%
-     Category: memecoin | FDV: $1,112,863 | Price: $0.001524
-     CG: cyberleek | Decision ID: 33
+  2. SHRUB — P(pump)=53.5%
+     Category: memecoin | FDV: $30,576,777 | Price: $0.030578
+     CG: lil-shrub | Decision ID: 36
 
-  3. MADE — P(pump)=62.9%
-     Category: memecoin | FDV: $1,511,614 | Price: $0.001542
-     CG: selfmade-by-sp3nd | Decision ID: 35
-
-  4. TOAD — P(pump)=60.1%
-     Category: memecoin | FDV: $3,808,633 | Price: $0.003967
-     CG: the-toad-pepe | Decision ID: 34
-
-  5. FONE — P(pump)=55.0%
-     Category: memecoin | FDV: $18,939,472 | Price: $0.019140
-     CG: apeonfone | Decision ID: 30
-
-  6. TROLL — P(pump)=52.4%
-     Category: memecoin | FDV: $41,979,519 | Price: $0.042026
-     CG: troll-2 | Decision ID: 32
-
-  7. AI — P(pump)=45.8%
-     Category: memecoin | FDV: $303,923,183 | Price: $0.306188
-     CG: artificial-inu-3 | Decision ID: 25
-
-  8. PEPE — P(pump)=42.4%
-     Category: memecoin | FDV: $1,450,711,594 | Price: $0.000003
-     CG: pepe | Decision ID: 29
-
-  9. INDEX — P(pump)=24.7%
-     Category: other | FDV: $49,161,286 | Price: $0.050137
-     CG: the-index | Decision ID: 26
+  3. ANSEM — P(pump)=46.7%
+     Category: memecoin | FDV: $231,267,886 | Price: $0.231661
+     CG: the-black-bull | Decision ID: 38
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
