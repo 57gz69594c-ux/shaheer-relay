@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-02 19:43 UTC
+ENGINE A PUMP ALERT — 2026-09-03 00:04 UTC
 ==================================================
 
-Market: BTC 30d=+20.9%, 90d=+21.3% (BULL)
+Market: BTC 30d=+21.8%, 90d=+21.1% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. KAS — P(pump)=30.3%
-     Category: l1 | FDV: $767,159,221 | Price: $0.027718
-     CG: kaspa | Decision ID: 22
+  1. TBB — P(pump)=56.4%
+     Category: memecoin | FDV: $12,026,961 | Price: $0.012030
+     CG: the-bitcoin-bull | Decision ID: 24
+
+  2. MARSCOIN — P(pump)=51.0%
+     Category: memecoin | FDV: $63,222,803 | Price: $0.063191
+     CG: marscoin-4 | Decision ID: 23
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
