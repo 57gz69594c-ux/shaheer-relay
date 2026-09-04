@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-04 11:16 UTC
+ENGINE A PUMP ALERT — 2026-09-04 12:04 UTC
 ==================================================
 
-Market: BTC 30d=+0.0%, 90d=+34.1% (BULL)
+Market: BTC 30d=+26.9%, 90d=+0.0% (BEAR/NEUTRAL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. AMC — P(pump)=43.9%
-     Category: memecoin | FDV: $92,593,624 | Price: $0.092492
-     CG: a-meme-coin | Decision ID: 62
+  1. TROLL — P(pump)=51.9%
+     Category: memecoin | FDV: $71,973,033 | Price: $0.072086
+     CG: troll-2 | Decision ID: 64
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
