@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-04 08:38 UTC
+ENGINE A PUMP ALERT — 2026-09-04 09:48 UTC
 ==================================================
 
-Market: BTC 30d=+26.6%, 90d=+32.3% (BULL)
+Market: BTC 30d=+26.6%, 90d=+33.2% (BULL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. INDEX — P(pump)=25.4%
-     Category: other | FDV: $53,363,937 | Price: $0.054412
-     CG: the-index | Decision ID: 56
+  1. MARSCOIN — P(pump)=50.3%
+     Category: memecoin | FDV: $114,067,301 | Price: $0.114068
+     CG: marscoin-4 | Decision ID: 58
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
