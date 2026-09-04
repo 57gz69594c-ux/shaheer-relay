@@ -1,15 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-04 09:48 UTC
+ENGINE A PUMP ALERT — 2026-09-04 10:04 UTC
 ==================================================
 
-Market: BTC 30d=+26.6%, 90d=+33.2% (BULL)
+Market: BTC 30d=+26.4%, 90d=+33.0% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+3 ALERTS above threshold:
 
-  1. MARSCOIN — P(pump)=50.3%
-     Category: memecoin | FDV: $114,067,301 | Price: $0.114068
-     CG: marscoin-4 | Decision ID: 58
+  1. HEEHAW — P(pump)=67.5%
+     Category: memecoin | FDV: $409,147 | Price: $0.000418
+     CG: justice-for-heehaw | Decision ID: 61
+
+  2. CYBERLEEK — P(pump)=65.4%
+     Category: memecoin | FDV: $906,396 | Price: $0.001241
+     CG: cyberleek | Decision ID: 60
+
+  3. FONE — P(pump)=57.5%
+     Category: memecoin | FDV: $12,511,897 | Price: $0.012640
+     CG: apeonfone | Decision ID: 59
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
