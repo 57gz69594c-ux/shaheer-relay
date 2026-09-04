@@ -1,19 +1,27 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-04 20:08 UTC
+ENGINE A PUMP ALERT — 2026-09-04 22:06 UTC
 ==================================================
 
-Market: BTC 30d=+23.1%, 90d=+31.5% (BULL)
+Market: BTC 30d=+23.2%, 90d=+31.2% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+4 ALERTS above threshold:
 
-  1. FARTCOIN — P(pump)=50.0%
-     Category: memecoin | FDV: $164,325,713 | Price: $0.164343
-     CG: fartcoin | Decision ID: 69
+  1. SUE — P(pump)=67.6%
+     Category: memecoin | FDV: $308,604 | Price: $0.000318
+     CG: cat-wif-helmet | Decision ID: 74
 
-  2. STONK — P(pump)=27.6%
-     Category: other | FDV: $18,281,524 | Price: $0.020628
-     CG: stonk-3 | Decision ID: 68
+  2. BASECAT — P(pump)=51.6%
+     Category: memecoin | FDV: $58,772,202 | Price: $0.058772
+     CG: basecat | Decision ID: 70
+
+  3. ANSEM — P(pump)=47.0%
+     Category: memecoin | FDV: $232,941,114 | Price: $0.233554
+     CG: the-black-bull | Decision ID: 72
+
+  4. OTC — P(pump)=34.9%
+     Category: other | FDV: $1,479,873 | Price: $0.002064
+     CG: otc | Decision ID: 73
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
