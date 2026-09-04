@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-04 18:04 UTC
+ENGINE A PUMP ALERT — 2026-09-04 20:08 UTC
 ==================================================
 
-Market: BTC 30d=+0.0%, 90d=+0.0% (BEAR/NEUTRAL)
+Market: BTC 30d=+23.1%, 90d=+31.5% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. PUMPOOOR — P(pump)=76.2%
-     Category: memecoin | FDV: $7,838 | Price: $0.000008
-     CG: pumpooor | Decision ID: 67
+  1. FARTCOIN — P(pump)=50.0%
+     Category: memecoin | FDV: $164,325,713 | Price: $0.164343
+     CG: fartcoin | Decision ID: 69
+
+  2. STONK — P(pump)=27.6%
+     Category: other | FDV: $18,281,524 | Price: $0.020628
+     CG: stonk-3 | Decision ID: 68
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
