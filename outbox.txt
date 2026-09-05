@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 18:05 UTC
+ENGINE A PUMP ALERT — 2026-09-05 22:06 UTC
 ==================================================
 
-Market: BTC 30d=+24.0%, 90d=+28.8% (BULL)
+Market: BTC 30d=+24.1%, 90d=+29.4% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. BEPE — P(pump)=70.1%
-     Category: memecoin | FDV: $125,444 | Price: $0.000127
-     CG: bepe-4 | Decision ID: 103
+  1. CYBERLEEK — P(pump)=65.3%
+     Category: memecoin | FDV: $758,507 | Price: $0.001039
+     CG: cyberleek | Decision ID: 106
 
-  2. SHRUB — P(pump)=53.9%
-     Category: memecoin | FDV: $31,640,470 | Price: $0.031330
-     CG: lil-shrub | Decision ID: 102
+  2. INDEX — P(pump)=25.2%
+     Category: other | FDV: $47,187,782 | Price: $0.048079
+     CG: the-index | Decision ID: 105
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
