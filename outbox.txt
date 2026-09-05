@@ -1,27 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 08:06 UTC
+ENGINE A PUMP ALERT — 2026-09-05 10:05 UTC
 ==================================================
 
-Market: BTC 30d=+23.1%, 90d=+27.9% (BULL)
+Market: BTC 30d=+23.2%, 90d=+27.4% (BULL)
 Model: v7b (aecf27f3)
 
-4 ALERTS above threshold:
+2 ALERTS above threshold:
 
-  1. USELESS — P(pump)=48.8%
-     Category: memecoin | FDV: $234,292,142 | Price: $0.234127
-     CG: useless-3 | Decision ID: 85
+  1. MARSCOIN — P(pump)=48.9%
+     Category: memecoin | FDV: $226,512,614 | Price: $0.227088
+     CG: marscoin-4 | Decision ID: 88
 
-  2. CASHCAT — P(pump)=46.9%
-     Category: memecoin | FDV: $237,468,705 | Price: $0.240351
-     CG: cash-cat | Decision ID: 84
-
-  3. PENGU — P(pump)=45.3%
-     Category: memecoin | FDV: $659,812,651 | Price: $0.008593
-     CG: pudgy-penguins | Decision ID: 86
-
-  4. PONS — P(pump)=19.4%
-     Category: other | FDV: $540,577,079 | Price: $0.766148
-     CG: pons | Decision ID: 82
+  2. UNI — P(pump)=21.9%
+     Category: defi | FDV: $5,682,553,014 | Price: $6.380000
+     CG: uniswap | Decision ID: 90
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
