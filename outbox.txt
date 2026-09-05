@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 13:51 UTC
+ENGINE A PUMP ALERT — 2026-09-05 14:11 UTC
 ==================================================
 
-Market: BTC 30d=+23.8%, 90d=+0.0% (BEAR/NEUTRAL)
+Market: BTC 30d=+23.7%, 90d=+29.1% (BULL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. PUMP — P(pump)=40.0%
-     Category: memecoin | FDV: $3,421,880,686 | Price: $0.004095
-     CG: pump-fun | Decision ID: 99
+  1. FONE — P(pump)=57.0%
+     Category: memecoin | FDV: $11,872,406 | Price: $0.011970
+     CG: apeonfone | Decision ID: 101
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
