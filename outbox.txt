@@ -1,15 +1,27 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 04:05 UTC
+ENGINE A PUMP ALERT — 2026-09-05 08:06 UTC
 ==================================================
 
-Market: BTC 30d=+23.5%, 90d=+29.1% (BULL)
+Market: BTC 30d=+23.1%, 90d=+27.9% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+4 ALERTS above threshold:
 
-  1. PEPE — P(pump)=42.7%
-     Category: memecoin | FDV: $1,454,858,336 | Price: $0.000003
-     CG: pepe | Decision ID: 80
+  1. USELESS — P(pump)=48.8%
+     Category: memecoin | FDV: $234,292,142 | Price: $0.234127
+     CG: useless-3 | Decision ID: 85
+
+  2. CASHCAT — P(pump)=46.9%
+     Category: memecoin | FDV: $237,468,705 | Price: $0.240351
+     CG: cash-cat | Decision ID: 84
+
+  3. PENGU — P(pump)=45.3%
+     Category: memecoin | FDV: $659,812,651 | Price: $0.008593
+     CG: pudgy-penguins | Decision ID: 86
+
+  4. PONS — P(pump)=19.4%
+     Category: other | FDV: $540,577,079 | Price: $0.766148
+     CG: pons | Decision ID: 82
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
