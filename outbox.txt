@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 00:05 UTC
+ENGINE A PUMP ALERT — 2026-09-05 04:05 UTC
 ==================================================
 
-Market: BTC 30d=+23.3%, 90d=+30.9% (BULL)
+Market: BTC 30d=+23.5%, 90d=+29.1% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. SOLCAT — P(pump)=65.3%
-     Category: memecoin | FDV: $713,865 | Price: $0.000721
-     CG: solcat-3 | Decision ID: 77
-
-  2. TRIPLET — P(pump)=57.0%
-     Category: memecoin | FDV: $11,314,243 | Price: $0.011315
-     CG: tung-tung-tung-sahur-2 | Decision ID: 76
-
-  3. VVV — P(pump)=18.3%
-     Category: other | FDV: $1,469,524,011 | Price: $18.160000
-     CG: venice-token | Decision ID: 75
+  1. PEPE — P(pump)=42.7%
+     Category: memecoin | FDV: $1,454,858,336 | Price: $0.000003
+     CG: pepe | Decision ID: 80
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
