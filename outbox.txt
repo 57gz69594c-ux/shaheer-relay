@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 14:11 UTC
+ENGINE A PUMP ALERT — 2026-09-05 18:05 UTC
 ==================================================
 
-Market: BTC 30d=+23.7%, 90d=+29.1% (BULL)
+Market: BTC 30d=+24.0%, 90d=+28.8% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. FONE — P(pump)=57.0%
-     Category: memecoin | FDV: $11,872,406 | Price: $0.011970
-     CG: apeonfone | Decision ID: 101
+  1. BEPE — P(pump)=70.1%
+     Category: memecoin | FDV: $125,444 | Price: $0.000127
+     CG: bepe-4 | Decision ID: 103
+
+  2. SHRUB — P(pump)=53.9%
+     Category: memecoin | FDV: $31,640,470 | Price: $0.031330
+     CG: lil-shrub | Decision ID: 102
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
