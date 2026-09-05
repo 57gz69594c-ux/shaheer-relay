@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 12:23 UTC
+ENGINE A PUMP ALERT — 2026-09-05 13:51 UTC
 ==================================================
 
-Market: BTC 30d=+0.0%, 90d=+0.0% (BEAR/NEUTRAL)
+Market: BTC 30d=+23.8%, 90d=+0.0% (BEAR/NEUTRAL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. TROLL — P(pump)=45.0%
-     Category: memecoin | FDV: $66,003,117 | Price: $0.066065
-     CG: troll-2 | Decision ID: 98
-
-  2. AI — P(pump)=40.7%
-     Category: memecoin | FDV: $234,691,872 | Price: $0.236744
-     CG: artificial-inu-3 | Decision ID: 97
-
-  3. ZEN — P(pump)=17.8%
-     Category: infrastructure | FDV: $153,403,077 | Price: $7.300000
-     CG: zencash | Decision ID: 95
+  1. PUMP — P(pump)=40.0%
+     Category: memecoin | FDV: $3,421,880,686 | Price: $0.004095
+     CG: pump-fun | Decision ID: 99
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
