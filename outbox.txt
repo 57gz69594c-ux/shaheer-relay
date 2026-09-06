@@ -1,15 +1,43 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-06 06:06 UTC
+ENGINE A PUMP ALERT — 2026-09-06 08:07 UTC
 ==================================================
 
-Market: BTC 30d=+24.4%, 90d=+27.5% (BULL)
+Market: BTC 30d=+24.2%, 90d=+26.2% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+8 ALERTS above threshold:
 
-  1. ZCAT — P(pump)=50.0%
-     Category: memecoin | FDV: $80,039,642 | Price: $0.082594
-     CG: anonymous-cat | Decision ID: 116
+  1. BREADCAT — P(pump)=75.5%
+     Category: memecoin | FDV: $12,602 | Price: $0.000013
+     CG: breadcat | Decision ID: 124
+
+  2. 哈基米 — P(pump)=50.8%
+     Category: memecoin | FDV: $81,920,788 | Price: $0.082089
+     CG: hakimi | Decision ID: 121
+
+  3. USELESS — P(pump)=49.0%
+     Category: memecoin | FDV: $237,022,488 | Price: $0.237398
+     CG: useless-3 | Decision ID: 123
+
+  4. PENGU — P(pump)=45.6%
+     Category: memecoin | FDV: $669,089,455 | Price: $0.008720
+     CG: pudgy-penguins | Decision ID: 119
+
+  5. ZEC — P(pump)=23.2%
+     Category: other | FDV: $108,618,033 | Price: $1170.700000
+     CG: omnibridge-bridged-zcash-solana | Decision ID: 126
+
+  6. RAIL — P(pump)=22.8%
+     Category: infrastructure | FDV: $130,121,921 | Price: $2.170000
+     CG: railgun | Decision ID: 122
+
+  7. PONS — P(pump)=19.1%
+     Category: other | FDV: $658,559,189 | Price: $0.936838
+     CG: pons | Decision ID: 118
+
+  8. SAAR — P(pump)=18.7%
+     Category: other | FDV: N/A | Price: $0.001056
+     CG: saar | Decision ID: 125
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
