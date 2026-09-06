@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-06 20:05 UTC
+ENGINE A PUMP ALERT — 2026-09-06 22:04 UTC
 ==================================================
 
-Market: BTC 30d=+22.9%, 90d=+25.9% (BULL)
+Market: BTC 30d=+23.2%, 90d=+25.4% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. SHRUB — P(pump)=50.2%
-     Category: memecoin | FDV: $88,685,614 | Price: $0.088685
-     CG: lil-shrub | Decision ID: 144
-
-  2. AMC — P(pump)=49.3%
-     Category: memecoin | FDV: $115,852,905 | Price: $0.115940
-     CG: a-meme-coin | Decision ID: 146
-
-  3. NOCK — P(pump)=23.5%
-     Category: infrastructure | FDV: $144,588,319 | Price: $0.033665
-     CG: nockchain | Decision ID: 145
+  1. HACHI — P(pump)=63.2%
+     Category: memecoin | FDV: $1,509,262 | Price: $0.000000
+     CG: hachiko-3 | Decision ID: 147
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
