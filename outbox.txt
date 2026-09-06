@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-06 04:05 UTC
+ENGINE A PUMP ALERT — 2026-09-06 06:06 UTC
 ==================================================
 
-Market: BTC 30d=+24.6%, 90d=+26.8% (BULL)
+Market: BTC 30d=+24.4%, 90d=+27.5% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. SUE — P(pump)=69.4%
-     Category: memecoin | FDV: $175,595 | Price: $0.000181
-     CG: cat-wif-helmet | Decision ID: 115
-
-  2. SOLCAT — P(pump)=66.7%
-     Category: memecoin | FDV: $489,294 | Price: $0.000494
-     CG: solcat-3 | Decision ID: 114
-
-  3. HEEHAW — P(pump)=64.6%
-     Category: memecoin | FDV: $1,012,588 | Price: $0.001034
-     CG: justice-for-heehaw | Decision ID: 113
+  1. ZCAT — P(pump)=50.0%
+     Category: memecoin | FDV: $80,039,642 | Price: $0.082594
+     CG: anonymous-cat | Decision ID: 116
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
