@@ -1,31 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-06 00:07 UTC
+ENGINE A PUMP ALERT — 2026-09-06 04:05 UTC
 ==================================================
 
-Market: BTC 30d=+24.2%, 90d=+26.2% (BULL)
+Market: BTC 30d=+24.6%, 90d=+26.8% (BULL)
 Model: v7b (aecf27f3)
 
-5 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. MARTIANS — P(pump)=66.8%
-     Category: memecoin | FDV: $457,036 | Price: $0.000477
-     CG: martians-2 | Decision ID: 111
+  1. SUE — P(pump)=69.4%
+     Category: memecoin | FDV: $175,595 | Price: $0.000181
+     CG: cat-wif-helmet | Decision ID: 115
 
-  2. BASECAT — P(pump)=50.9%
-     Category: memecoin | FDV: $78,816,350 | Price: $0.078840
-     CG: basecat | Decision ID: 107
+  2. SOLCAT — P(pump)=66.7%
+     Category: memecoin | FDV: $489,294 | Price: $0.000494
+     CG: solcat-3 | Decision ID: 114
 
-  3. ANSEM — P(pump)=47.1%
-     Category: memecoin | FDV: $244,389,683 | Price: $0.245169
-     CG: the-black-bull | Decision ID: 110
-
-  4. OTC — P(pump)=32.0%
-     Category: other | FDV: $4,201,941 | Price: $0.005803
-     CG: otc | Decision ID: 109
-
-  5. STONK — P(pump)=25.8%
-     Category: other | FDV: $39,160,190 | Price: $0.044403
-     CG: stonk-3 | Decision ID: 108
+  3. HEEHAW — P(pump)=64.6%
+     Category: memecoin | FDV: $1,012,588 | Price: $0.001034
+     CG: justice-for-heehaw | Decision ID: 113
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
