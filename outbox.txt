@@ -1,19 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-06 14:05 UTC
+ENGINE A PUMP ALERT — 2026-09-06 16:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.8%, 90d=+25.2% (BULL)
+Market: BTC 30d=+22.8%, 90d=+25.1% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. ADDOG — P(pump)=45.2%
-     Category: other | FDV: $59,380 | Price: $0.000063
-     CG: addog | Decision ID: 138
+  1. FONE — P(pump)=55.8%
+     Category: memecoin | FDV: $15,924,669 | Price: $0.016086
+     CG: apeonfone | Decision ID: 142
 
-  2. UNI — P(pump)=21.6%
-     Category: defi | FDV: $6,207,819,906 | Price: $6.960000
-     CG: uniswap | Decision ID: 135
+  2. TROLL — P(pump)=51.9%
+     Category: memecoin | FDV: $52,571,556 | Price: $0.052652
+     CG: troll-2 | Decision ID: 143
+
+  3. PUMP — P(pump)=39.9%
+     Category: memecoin | FDV: $3,258,105,721 | Price: $0.003901
+     CG: pump-fun | Decision ID: 141
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
