@@ -1,19 +1,31 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-05 22:06 UTC
+ENGINE A PUMP ALERT — 2026-09-06 00:07 UTC
 ==================================================
 
-Market: BTC 30d=+24.1%, 90d=+29.4% (BULL)
+Market: BTC 30d=+24.2%, 90d=+26.2% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+5 ALERTS above threshold:
 
-  1. CYBERLEEK — P(pump)=65.3%
-     Category: memecoin | FDV: $758,507 | Price: $0.001039
-     CG: cyberleek | Decision ID: 106
+  1. MARTIANS — P(pump)=66.8%
+     Category: memecoin | FDV: $457,036 | Price: $0.000477
+     CG: martians-2 | Decision ID: 111
 
-  2. INDEX — P(pump)=25.2%
-     Category: other | FDV: $47,187,782 | Price: $0.048079
-     CG: the-index | Decision ID: 105
+  2. BASECAT — P(pump)=50.9%
+     Category: memecoin | FDV: $78,816,350 | Price: $0.078840
+     CG: basecat | Decision ID: 107
+
+  3. ANSEM — P(pump)=47.1%
+     Category: memecoin | FDV: $244,389,683 | Price: $0.245169
+     CG: the-black-bull | Decision ID: 110
+
+  4. OTC — P(pump)=32.0%
+     Category: other | FDV: $4,201,941 | Price: $0.005803
+     CG: otc | Decision ID: 109
+
+  5. STONK — P(pump)=25.8%
+     Category: other | FDV: $39,160,190 | Price: $0.044403
+     CG: stonk-3 | Decision ID: 108
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
