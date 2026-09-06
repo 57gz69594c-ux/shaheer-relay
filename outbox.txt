@@ -1,27 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-06 12:07 UTC
+ENGINE A PUMP ALERT — 2026-09-06 14:05 UTC
 ==================================================
 
-Market: BTC 30d=+23.0%, 90d=+25.9% (BULL)
+Market: BTC 30d=+22.8%, 90d=+25.2% (BULL)
 Model: v7b (aecf27f3)
 
-4 ALERTS above threshold:
+2 ALERTS above threshold:
 
-  1. STONKGUY — P(pump)=77.7%
-     Category: memecoin | FDV: $3,783 | Price: $0.000004
-     CG: stonk-guy | Decision ID: 133
+  1. ADDOG — P(pump)=45.2%
+     Category: other | FDV: $59,380 | Price: $0.000063
+     CG: addog | Decision ID: 138
 
-  2. ROBIN — P(pump)=55.5%
-     Category: memecoin | FDV: $18,004,669 | Price: $0.018005
-     CG: robin-the-frog | Decision ID: 132
-
-  3. MARSCOIN — P(pump)=49.3%
-     Category: memecoin | FDV: $199,743,235 | Price: $0.199514
-     CG: marscoin-4 | Decision ID: 130
-
-  4. CASHCAT — P(pump)=47.0%
-     Category: memecoin | FDV: $228,876,339 | Price: $0.231550
-     CG: cash-cat | Decision ID: 131
+  2. UNI — P(pump)=21.6%
+     Category: defi | FDV: $6,207,819,906 | Price: $6.960000
+     CG: uniswap | Decision ID: 135
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
