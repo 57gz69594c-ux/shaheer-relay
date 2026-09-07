@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 08:04 UTC
+ENGINE A PUMP ALERT — 2026-09-07 10:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.2%, 90d=+25.7% (BULL)
+Market: BTC 30d=+22.1%, 90d=+26.5% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. ZCAT — P(pump)=47.8%
-     Category: memecoin | FDV: $127,885,015 | Price: $0.132121
-     CG: anonymous-cat | Decision ID: 159
+  1. PENGU — P(pump)=45.0%
+     Category: memecoin | FDV: $666,149,785 | Price: $0.008683
+     CG: pudgy-penguins | Decision ID: 162
+
+  2. PONS — P(pump)=19.0%
+     Category: other | FDV: $581,152,038 | Price: $0.828547
+     CG: pons | Decision ID: 161
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
