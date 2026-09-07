@@ -1,27 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 20:05 UTC
+ENGINE A PUMP ALERT — 2026-09-07 22:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.0%, 90d=+27.9% (BULL)
+Market: BTC 30d=+22.0%, 90d=+28.3% (BULL)
 Model: v7b (aecf27f3)
 
-4 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. HEEHAW — P(pump)=63.3%
-     Category: memecoin | FDV: $1,291,541 | Price: $0.001318
-     CG: justice-for-heehaw | Decision ID: 189
-
-  2. PEPE — P(pump)=42.2%
-     Category: memecoin | FDV: $1,526,609,830 | Price: $0.000004
-     CG: pepe | Decision ID: 187
-
-  3. PENDLE — P(pump)=27.4%
-     Category: defi | FDV: $615,681,896 | Price: $2.190000
-     CG: pendle | Decision ID: 186
-
-  4. UNI — P(pump)=21.5%
-     Category: defi | FDV: $6,192,642,915 | Price: $6.950000
-     CG: uniswap | Decision ID: 188
+  1. OTC — P(pump)=27.0%
+     Category: other | FDV: $20,839,935 | Price: $0.029265
+     CG: otc | Decision ID: 192
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
