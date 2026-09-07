@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 06:05 UTC
+ENGINE A PUMP ALERT — 2026-09-07 08:04 UTC
 ==================================================
 
-Market: BTC 30d=+22.8%, 90d=+26.0% (BULL)
+Market: BTC 30d=+22.2%, 90d=+25.7% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. TOES — P(pump)=59.0%
-     Category: memecoin | FDV: $5,754,823 | Price: $0.005755
-     CG: toescoin | Decision ID: 157
-
-  2. DOOD — P(pump)=45.8%
-     Category: gaming | FDV: $22,607,740 | Price: $0.002266
-     CG: doodles | Decision ID: 155
-
-  3. AGI — P(pump)=30.7%
-     Category: other | FDV: $5,874,093 | Price: $0.005941
-     CG: artificial-gooner-intelligence | Decision ID: 158
+  1. ZCAT — P(pump)=47.8%
+     Category: memecoin | FDV: $127,885,015 | Price: $0.132121
+     CG: anonymous-cat | Decision ID: 159
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
