@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 02:05 UTC
+ENGINE A PUMP ALERT — 2026-09-07 04:04 UTC
 ==================================================
 
-Market: BTC 30d=+23.2%, 90d=+27.3% (BULL)
+Market: BTC 30d=+22.6%, 90d=+26.9% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. BTC — P(pump)=59.0%
-     Category: memecoin | FDV: $6,087,469 | Price: $0.006281
-     CG: buy-the-cat | Decision ID: 151
+  1. KRABBY — P(pump)=71.4%
+     Category: memecoin | FDV: $67,979 | Price: $0.000143
+     CG: krabby | Decision ID: 153
 
-  2. STONK — P(pump)=22.3%
-     Category: other | FDV: $146,886,610 | Price: $0.167602
-     CG: stonk-3 | Decision ID: 150
+  2. FORM — P(pump)=39.2%
+     Category: gaming | FDV: $155,328,513 | Price: $0.271371
+     CG: four | Decision ID: 152
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
