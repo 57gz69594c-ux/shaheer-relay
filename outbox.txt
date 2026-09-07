@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 14:06 UTC
+ENGINE A PUMP ALERT — 2026-09-07 16:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.2%, 90d=+27.4% (BULL)
+Market: BTC 30d=+21.2%, 90d=+29.0% (BULL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. MARSCOIN — P(pump)=49.6%
-     Category: memecoin | FDV: $169,091,690 | Price: $0.168938
-     CG: marscoin-4 | Decision ID: 172
+  1. CASHCAT — P(pump)=47.1%
+     Category: memecoin | FDV: $192,931,789 | Price: $0.194689
+     CG: cash-cat | Decision ID: 174
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
