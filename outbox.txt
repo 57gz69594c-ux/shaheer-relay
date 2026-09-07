@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 00:07 UTC
+ENGINE A PUMP ALERT — 2026-09-07 02:05 UTC
 ==================================================
 
-Market: BTC 30d=+23.8%, 90d=+27.4% (BULL)
+Market: BTC 30d=+23.2%, 90d=+27.3% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. YUJI — P(pump)=73.1%
-     Category: memecoin | FDV: $35,407 | Price: $0.000035
-     CG: yuji | Decision ID: 149
+  1. BTC — P(pump)=59.0%
+     Category: memecoin | FDV: $6,087,469 | Price: $0.006281
+     CG: buy-the-cat | Decision ID: 151
 
-  2. STICKMAN — P(pump)=69.5%
-     Category: memecoin | FDV: $157,067 | Price: $0.000177
-     CG: stickman-3 | Decision ID: 148
+  2. STONK — P(pump)=22.3%
+     Category: other | FDV: $146,886,610 | Price: $0.167602
+     CG: stonk-3 | Decision ID: 150
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
