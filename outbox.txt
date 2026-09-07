@@ -1,19 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 04:04 UTC
+ENGINE A PUMP ALERT — 2026-09-07 06:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.6%, 90d=+26.9% (BULL)
+Market: BTC 30d=+22.8%, 90d=+26.0% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. KRABBY — P(pump)=71.4%
-     Category: memecoin | FDV: $67,979 | Price: $0.000143
-     CG: krabby | Decision ID: 153
+  1. TOES — P(pump)=59.0%
+     Category: memecoin | FDV: $5,754,823 | Price: $0.005755
+     CG: toescoin | Decision ID: 157
 
-  2. FORM — P(pump)=39.2%
-     Category: gaming | FDV: $155,328,513 | Price: $0.271371
-     CG: four | Decision ID: 152
+  2. DOOD — P(pump)=45.8%
+     Category: gaming | FDV: $22,607,740 | Price: $0.002266
+     CG: doodles | Decision ID: 155
+
+  3. AGI — P(pump)=30.7%
+     Category: other | FDV: $5,874,093 | Price: $0.005941
+     CG: artificial-gooner-intelligence | Decision ID: 158
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
