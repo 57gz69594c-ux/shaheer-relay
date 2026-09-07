@@ -1,35 +1,27 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 18:06 UTC
+ENGINE A PUMP ALERT — 2026-09-07 20:05 UTC
 ==================================================
 
-Market: BTC 30d=+21.8%, 90d=+28.4% (BULL)
+Market: BTC 30d=+22.0%, 90d=+27.9% (BULL)
 Model: v7b (aecf27f3)
 
-6 ALERTS above threshold:
+4 ALERTS above threshold:
 
-  1. RAYCAT — P(pump)=63.3%
-     Category: memecoin | FDV: $1,290,174 | Price: $0.001335
-     CG: raydium-cat | Decision ID: 185
+  1. HEEHAW — P(pump)=63.3%
+     Category: memecoin | FDV: $1,291,541 | Price: $0.001318
+     CG: justice-for-heehaw | Decision ID: 189
 
-  2. CHILLGUY — P(pump)=57.8%
-     Category: memecoin | FDV: $13,269,465 | Price: $0.013256
-     CG: chill-guy | Decision ID: 184
+  2. PEPE — P(pump)=42.2%
+     Category: memecoin | FDV: $1,526,609,830 | Price: $0.000004
+     CG: pepe | Decision ID: 187
 
-  3. TROLL — P(pump)=51.9%
-     Category: memecoin | FDV: $47,581,102 | Price: $0.047675
-     CG: troll-2 | Decision ID: 183
+  3. PENDLE — P(pump)=27.4%
+     Category: defi | FDV: $615,681,896 | Price: $2.190000
+     CG: pendle | Decision ID: 186
 
-  4. ANSEM — P(pump)=47.3%
-     Category: memecoin | FDV: $189,869,248 | Price: $0.190047
-     CG: the-black-bull | Decision ID: 182
-
-  5. TRUMP — P(pump)=40.8%
-     Category: memecoin | FDV: $2,269,295,635 | Price: $2.270000
-     CG: official-trump | Decision ID: 181
-
-  6. PUMP — P(pump)=39.2%
-     Category: memecoin | FDV: $3,662,953,296 | Price: $0.004381
-     CG: pump-fun | Decision ID: 179
+  4. UNI — P(pump)=21.5%
+     Category: defi | FDV: $6,192,642,915 | Price: $6.950000
+     CG: uniswap | Decision ID: 188
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
