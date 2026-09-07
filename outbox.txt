@@ -1,35 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-07 12:06 UTC
+ENGINE A PUMP ALERT — 2026-09-07 14:06 UTC
 ==================================================
 
-Market: BTC 30d=+22.3%, 90d=+26.7% (BULL)
+Market: BTC 30d=+22.2%, 90d=+27.4% (BULL)
 Model: v7b (aecf27f3)
 
-6 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. SOLCAT — P(pump)=64.1%
-     Category: memecoin | FDV: $1,037,865 | Price: $0.001049
-     CG: solcat-3 | Decision ID: 168
-
-  2. LOOM — P(pump)=63.7%
-     Category: memecoin | FDV: $1,169,558 | Price: $0.001206
-     CG: loom-4 | Decision ID: 169
-
-  3. USELESS — P(pump)=48.7%
-     Category: memecoin | FDV: $226,784,449 | Price: $0.226590
-     CG: useless-3 | Decision ID: 166
-
-  4. LUNA — P(pump)=34.2%
-     Category: defi | FDV: $66,055,883 | Price: $0.055501
-     CG: terra-luna-2 | Decision ID: 164
-
-  5. LUNC — P(pump)=29.1%
-     Category: defi | FDV: $354,552,017 | Price: $0.000055
-     CG: terra-luna | Decision ID: 165
-
-  6. ZEC — P(pump)=22.7%
-     Category: other | FDV: $114,817,838 | Price: $1194.560000
-     CG: omnibridge-bridged-zcash-solana | Decision ID: 170
+  1. MARSCOIN — P(pump)=49.6%
+     Category: memecoin | FDV: $169,091,690 | Price: $0.168938
+     CG: marscoin-4 | Decision ID: 172
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
