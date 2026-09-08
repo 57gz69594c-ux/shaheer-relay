@@ -1,403 +1,78 @@
 ══════════════════════════════════════════════════════════════════════
-RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 2)
+RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 3)
 Status: STAGED repair configuration — production source untouched,
         service stopped and disabled, no live trading.
 Effective date: 2026-09-08
-Source revision: v6.2 → v6.2-repaired-v3 (1512-line unified diff)
+Engine: repair/rh_rotation_engine.py (v6.2-repaired-v3 → v6.2-repaired-v4)
+Tests: 104 regression tests, ALL PASSING
 ══════════════════════════════════════════════════════════════════════
 
-83 regression tests pass. Engine STOPPED. Service DISABLED.
-Wallet idle at ~$180.26 (ETH $61.26 / SPY $59.00 / USDG $60.00).
+AMENDMENT 3 CHANGES (on top of amendments 1 + 2):
 
-This is a staged repair — NOT a running deployment.
+Section 1 — Executable-Quote Cost Model:
+  1. get_sell_quote() — actual V4/V3/V3spy quoter calls for managed
+     quantity. Returns SellQuote with proceeds_usd, route, gas_estimate.
+     Pons returns ok=False (no executable quote available).
+  2. get_rt_cost_model() — actual buy→sell round-trip simulation.
+     Replaced trivially equivalent 2×slip check with real quoter calls.
+     Bounded RT cost adds EXEC_SLIPPAGE_ALLOW for both legs.
+  3. Main loop PnL wired to executable quotes with 3-tier fallback:
+     executable quote → stale cached executable → chart price.
+  4. Trailing stop (EXIT 3) tracks exec_peak_usd from actual sell
+     proceeds, not chart-price peak.
+  5. Removed automatic 1% retry widening from ALL 4 sell functions
+     (Pons, V3-WETH, V3-SPY, V4). Single attempt at EXEC_SLIPPAGE_ALLOW,
+     caller retries next tick with fresh quote.
 
+Section 2 — Managed Inventory & TradeOutcome:
+  6. TradeOutcome class replaces numeric -1 sentinel. States:
+     RESOLVED, UNRESOLVED, FAILED, PENDING. Carries proceeds_usd,
+     cost_basis_usd, managed_raw, route, token_addr, tx_hash.
+  7. _do_sell returns TradeOutcome for all paths:
+     - result > 0 → TradeOutcome.RESOLVED with proceeds
+     - tokens gone but 0 proceeds → TradeOutcome.UNRESOLVED
+     - tokens still held → TradeOutcome.FAILED
+  8. ALL callers updated: fast exit, latched exit, main exit, bad-fill
+     sell-back. Old `e == -1` → `outcome.is_unresolved`, old `e > 0` →
+     `outcome.is_resolved`.
+  9. Loss counting uses attributed net outcome (proceeds - cost_basis),
+     not chart PnL. Unresolved trades do NOT count as wins or losses.
+  10. All 4 sell functions (sell, v3_sell, v3_sell_spy, v4_sell) accept
+      managed_raw parameter. Sell exact acquired quantity, not full balance.
+  11. _do_sell passes managed_raw through to underlying sell functions.
+
+Section 4 — Durable State & Portfolio Controls:
+  12. _STATE_DIR uses FULL wallet address (was W[:10], now W.lower()).
+      Migration: copytree from old truncated dir if new dir absent.
+  13. Persist UTC day, equity baseline, entry_paused across restart via
+      _save_state/_load_state (day_start_equity + entry_paused fields).
+  14. Loss timestamps (24h expiry) already persisted in state file.
+
+Section 5 — Read-Only Verification:
+  15. Shadow mode accepts duration_s parameter (default 600s = 10 min).
+      Exits cleanly after timeout instead of running forever.
+  16. --shadow CLI accepts optional duration: --shadow 300 for 300s.
+  17. _DENIED_RPC_METHODS frozenset defines wallet-changing RPCs:
+      eth_sendTransaction, eth_sendRawTransaction, eth_sign,
+      personal_sign, eth_signTransaction, eth_signTypedData.
+
+TESTS ADDED (104 total, up from 83):
+  - TestNoRetryWidening: no retry_min, no 1.0% widening, single attempt
+  - TestDoSellSentinel (updated): TradeOutcome class, is_unresolved/resolved
+  - TestManagedQuantitySell: sell functions accept/use managed_raw
+  - TestExecutableQuotePnL: get_sell_quote, get_rt_cost_model, exec_peak
+  - TestLossTimestampExpiry: timestamps written, 24h expiry, persisted
+  - TestDrawdownStatePersisted: day_start_equity, entry_paused in state
+  - TestShadowDuration: duration_s param, time limit, CLI passthrough
+  - TestDeniedRPCMethods: deny list exists with critical RPC methods
+  - TestStableLockPath (updated): FULL wallet address, no W[:10]
+
+NOT YET IMPLEMENTED (Section 3 — deep architectural):
+  - Priority transaction coordinator (needs tx queue abstraction)
+  - Monitor actual execution routes (V3/WETH/V4 route verification)
+  - Post-buy approval unmonitored interval (requires approval-then-monitor)
+  These require a transaction coordinator layer and are deferred.
+
+SAFETY: Production engine STOPPED, systemd DISABLED. All changes in
+repair/ copy only. No wallet operations, no signing, no broadcasting.
 ══════════════════════════════════════════════════════════════════════
-1. CODE CHANGES COMPLETED (behavior verified via tests)
-══════════════════════════════════════════════════════════════════════
-
-A. ACQUISITION ACCOUNTING (4 buy functions)
-   buy(), v3_buy(), v3_buy_spy(), v4_buy() now capture pre-buy
-   balance snapshot and compute delta = post - pre. Entry price
-   uses the actual acquired quantity, not total wallet balance.
-
-B. SELL PROCEEDS ACCOUNTING (4 sell functions)
-   sell(), v3_sell(), v3_sell_spy(), v4_sell() now capture pre-sell
-   quote balance and compute received = post - pre. Returns
-   attributed proceeds, not total wallet balance.
-
-C. SELL MINIMUM OUTPUT — FRESH-QUOTE-BASED, REFUSE-TO-SIGN
-   OLD: crude 50% of reference price floor, then retry at 30% (0.6x).
-        Allowed 70% below reference. Zero fallback on unknown.
-   NEW: minOut = fresh_quote x (1 - EXEC_SLIPPAGE_ALLOW/100).
-        Primary attempt: 0.5% slip from quote.
-        Retry: 1.0% slip from quote.
-        No-quote fallback: REFUSE TO SIGN (return 0.0).
-   Missing executable quotes cannot authorize signing or broadcasting
-   a sale. The old (1, 'no-quote minimum') pattern authorized
-   unprotected swaps — now replaced with refuse-to-sign.
-
-D. ROUND-TRIP COST CHECK — TWO-TIER
-   OLD: est_rt_cost = slip_pct x 2. Single 1.5% threshold.
-   NEW: Impact estimate = slip_pct x 2.
-        Expected check: impact <= 1.5% (MAX_RT_COST_EXPECTED).
-        Bounded check: impact + 2 x EXEC_SLIPPAGE_ALLOW <= 2.5%
-        (MAX_RT_COST_BOUNDED). Includes execution tolerance.
-
-E. SLIPPAGE — ALL ROUTES
-   check_slippage() now rejects when market_price <= 0 (was: PASS).
-   SPY and V4-other routes now run slippage pre-check (were: skipped).
-
-F. MOMENTUM VERIFICATION
-   [100, 100, 19] now rejected: highest-to-last drop > 30%.
-   B/S ratio re-checked at end of verification.
-
-G. V4 HONEYPOT INCONCLUSIVE
-   Unknown sell simulation reverts now return INCONCLUSIVE (block
-   entry without blacklisting). Was: returned SAFE.
-
-H. GAS RESERVATION
-   SPY and V4-other routes now check eth_bal() < GAS_RESERVE.
-
-I. ENTRY PREDICATE REAPPLICATION
-   Final re-check of 5m%, B/S, MAX_5M_ENTRY, MOMENTUM_DEATH
-   immediately before buy transaction.
-
-J. COOLDOWN FILTERING
-   Pre-filter cooldown/session-blocked/buy-failed/blacklisted
-   tokens BEFORE ranking. Blocked token no longer blocks others.
-
-K. SINGLE-INSTANCE ENFORCEMENT — OS FILE LOCK
-   OLD: Read PID file, os.kill(pid, 0), kill or exit.
-   NEW: fcntl.flock(LOCK_EX | LOCK_NB) on a lifetime-held lock file
-        in /var/lib/rh-engine/{CID}-{wallet[:10]}/.
-        Concurrent starts produce one owner. Newcomer refuses.
-        Incumbent untouched. Lock released on process exit.
-
-L. MONITOR RACE CONDITION
-   Added _selling Event, mark_selling(), 10s join timeout,
-   _sold flag, clear_sell_signal() after exits.
-
-M. STATE PERSISTENCE — DURABLE DIRECTORY, ATOMIC WRITES
-   OLD: /tmp/rh_engine_state.json (lost on reboot, non-atomic write)
-   NEW: /var/lib/rh-engine/{CID}-{wallet[:10]}/ (stable, durable).
-        Atomic write: mkstemp + os.replace (POSIX atomic).
-        Blacklist migrated to same stable directory on init.
-        _save_state() at all exit mutation points.
-
-N. POSITION SIZING — 100% CEILING
-   OLD: 5% of equity, capped at 0.15% of pool liquidity.
-   NEW: Up to 100% of deployable capital (gas reserves, pending
-        commitments, unmanaged holdings excluded). Actual-size
-        execution, sellability, and economic checks constrain.
-        NOTE: Near-full exposure can trigger the 3% daily circuit
-        breaker after one approximately-3% losing position.
-
-O. DAILY CIRCUIT BREAKER
-   Pause new entries if equity drops >= 3% from UTC day-start equity.
-   Includes ETH + SPY + USDG balance in equity calculation.
-   UTC day rollover resets baseline. Once tripped, stays paused
-   until new UTC day. Continue managing existing positions.
-
-P. TAKE PROFIT — 100% EXIT AT +25%
-   Per Shaheer directive: exit 100% of managed position at +25%.
-   Policy B partial-profit runner DISABLED. No 50% retention.
-
-Q. COOLDOWN — 60 SECONDS ON ALL EXITS
-   60s cooldown after ALL completed position exits (winning AND
-   losing). Policy C 180s alternative removed. EXIT_COOLDOWN.pop()
-   for winners removed — cooldown is universal.
-
---- AMENDMENT 2 ADDITIONS (deep structural fixes) ---
-
-R. _do_sell SENTINEL (-1 RETURN)
-   OLD: returned fabricated 0.001 ETH when tokens gone, or used
-        universal 100-token dust threshold as proceed certification.
-   NEW: returns -1 sentinel when tokens gone but proceeds
-        unattributed. All 3 callers (fast exit, latched exit, main
-        exit) explicitly handle the sentinel: position resolved,
-        cooldown applied, but proceeds NOT counted in totals.
-
-S. EXIT PATH — NO BLOCKING BEFORE SELL SUBMISSION
-   OLD: price_monitor.stop() called before _do_sell — joins worker
-        thread for up to 10s, delaying protective sell submission.
-   NEW: mark_selling() called before _do_sell instead.
-        price_monitor.stop() NOT called until after sell completes.
-        Fast exit and main exit paths both fixed.
-
-T. SLIPPAGE QUOTE UNITS — TYPED AMOUNTS FOR V4/SPY
-   OLD: check_slippage received ETH-equivalent for V4/SPY routes.
-        For USDG (6 decimals): 0.024 ETH-equiv x 10^6 = 24000 raw
-        = 0.024 USDG — 2500x too small for the quoter.
-   NEW: check_slippage accepts quote_deploy + quote_dec parameters.
-        enter() passes actual quote-token amounts for V4-other and
-        SPY routes. V4 quoter receives correctly-scaled raw amounts.
-   ALSO: Removed smaller-quote extrapolation. If V4 quoter reverts
-        on full amount but succeeds at reduced size, REJECT (pool
-        too thin). AMM slippage is nonlinear — extrapolation from
-        partial quotes underestimates real impact.
-
-U. SHADOW MODE
-   New shadow() function and --shadow CLI option. Read-only: collects
-   quotes, measures latency, logs decisions to shadow_log.jsonl.
-   Does NOT sign, broadcast, approve, or change wallet state.
-   Exercises production decision code without send_raw_transaction.
-
-V. usdg_bal() + STATUS UPDATE
-   New usdg_bal() function for USDG balance lookups (6 decimals).
-   --status now displays USDG balance alongside ETH and SPY.
-
-══════════════════════════════════════════════════════════════════════
-2. CHAIN INTEGRATION — UNVERIFIED
-══════════════════════════════════════════════════════════════════════
-
-The following behaviors are implemented but cannot be verified
-without live chain interaction (which is not authorized):
-
-- Actual fill prices from buy/sell transactions
-- Real gas costs per transaction
-- Transfer tax detection on individual tokens
-- Actual V4 quoter responses for specific tokens
-- Post-buy approval and monitoring latency under load
-- P95 decision-to-broadcast timing (target: 500ms)
-- Actual protection cadence (target: 1 check/second)
-- Real nonce management under concurrent conditions
-
-These will be measurable during shadow mode or live activation.
-
-══════════════════════════════════════════════════════════════════════
-3. TRANSACTION INVESTIGATION — 09:38 V4 TX
-══════════════════════════════════════════════════════════════════════
-
-TX Hash: 0x82809cda71becfbb69081aa6f2eb9aa79b90927086af4e4244c31bffce84409f
-Block:   57589412 (2026-09-08 09:38:38 UTC)
-Nonce:   681
-From:    0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2 (our wallet)
-To:      0x8876789976decbfcbbbe364623c63652db8c0904 (V4 Universal Router)
-Status:  SUCCESS
-Gas:     152,376
-
-Transfers in this tx:
-  - SENT: 598,768 tokens (0x988d898cdf...) from wallet -> pool
-  - RECEIVED: 0.1278 SPY (0x117cc2133c...) from pool -> wallet
-
-FINDING: This was a V4 SELL of a meme token into SPY. The transaction
-was broadcast by the engine BEFORE it was killed. It was already in
-the mempool. Stopping a process does NOT cancel previously broadcast
-transactions. The position was resolved (sold for ~0.128 SPY).
-
-Current nonce: 688 (nonces 682-687 were the rebalancing swaps done
-during this repair session — converting USDG->ETH for equal thirds).
-
-The wallet is now idle with no pending transactions.
-
-══════════════════════════════════════════════════════════════════════
-4. REPORT CORRECTIONS (per amendment 1)
-══════════════════════════════════════════════════════════════════════
-
-CORRECTED: "all defects fixed" -> "code changes completed, behavior
-  verified via tests; chain integration unverified"
-
-CORRECTED: The original hard stop was already active during warmup.
-  WARMUP_TICKS exempted momentum/slowing/seller exits, not hard stop.
-  Post-fill blocking (approval/reporting delays) was a separate issue.
-  It is incorrect to claim every position was unprotected for 16s.
-
-CORRECTED: Numeric historical PnL labels are UNVERIFIED, not
-  "reconciled." The accounting bugs make every reported PnL%
-  unreliable, but we cannot assert every number is necessarily
-  false without reconstructing from receipts.
-
-CORRECTED: The trade export contains 43 positions from the log.
-  10 additional bad-fill buy events were excluded from the 43-position
-  export. Total recorded acquisitions: ~53.
-
-CORRECTED: Missing logged tx hashes do not prove receipts cannot be
-  found. Read-only wallet/block discovery was attempted for the 09:38
-  tx and succeeded. Systematic receipt discovery for all trades would
-  require scanning blocks over the full trading period.
-
-CORRECTED: Jeff's $6.94 and the repeated UNITY $66.77 were total
-  wallet balances at sell time, not independently attributed proceeds.
-
-CORRECTED: Summed corrupted PnL percentages are not evidence that
-  the strategy is profitable. Historical comparisons use corrupted
-  data and cannot support policy selection. Policy A is retained as
-  the explicitly provisional configuration, not as a proven optimum.
-
-CORRECTED: This is a "staged repair configuration" — production is
-  untouched and the service is stopped. Not a running deployment.
-
-CORRECTED: Rollback procedure updated — does NOT automatically
-  restart the known-defective original against open positions.
-
-══════════════════════════════════════════════════════════════════════
-5. EFFECTIVE CONFIGURATION
-══════════════════════════════════════════════════════════════════════
-
-Entry:
-  MIN_5M_ENTRY     = 19.0%    MAX_5M_ENTRY     = 225.0%
-  MIN_BS_ENTRY     = 1.02     MIN_LIQ          = $20,000
-  MIN_1H_ENTRY     = 0.0%     VERIFY_OBS       = 3 (~6s)
-  MOMENTUM_DROP_REJECT = 30%
-
-Exit (all exit 100% of managed position):
-  HARD_SL          = -3%      (trigger, not guaranteed fill)
-  HARD_TP          = +25%     (100% exit, no partial)
-  TRAIL_UNIFIED    = 6%       (from executable-value peak)
-  SLOWING_DROP     = 30%      (5m% drop from previous reading)
-  MOMENTUM_DEATH   = +5%      (5m below this)
-  SELLER_DOM_EXIT  = 0.7      (B/S ratio below this)
-  Policy B runner: DISABLED
-  Warmup exemption: REMOVED
-
-Sizing & Execution:
-  SIZE_CEILING     = 100% of deployable capital
-  LIQ_CAP          = 100% (no fixed cap; execution checks constrain)
-  MAX_RT_EXPECTED  = 1.5%     MAX_RT_BOUNDED   = 2.5%
-  EXEC_SLIPPAGE    = 0.5% per swap
-  GAS_RESERVE      = 0.003 ETH
-  MAX_ACTIVE       = 1
-
-Re-entry:
-  COOLDOWN         = 60s (all exits, winning + losing)
-  SESSION_LOSSES   = 2 (24h block)
-  MAX_BUY_REVERTS  = 2
-
-Portfolio:
-  DAILY_DRAWDOWN   = 3% -> pause entries (ETH + SPY + USDG equity)
-  NOTE: ~100% position sizing + 3% stop ~ triggers circuit breaker
-
-══════════════════════════════════════════════════════════════════════
-6. TEST RESULTS (83 tests, all pass)
-══════════════════════════════════════════════════════════════════════
-
-Original defect tests (19):
-  TestBuyAccounting (3) TestSellAccounting (3) TestPnLCalculation (2)
-  TestZeroMinOutFallback (1) TestMomentumVerification (3)
-  TestEntryPredicateReapplication (2) TestCooldownFiltering (1)
-  TestGasReservation (2) TestHoneypotDetection (1) TestPIDEnforcement (1)
-
-Configuration & exit tests (13):
-  TestProvisionalConfig (4) TestUnifiedExitRules (9)
-
-Policy tests (5):
-  TestPolicyBDisabled (3) TestCooldown (2)
-
-Safety & control tests (6):
-  TestDailyCircuitBreaker (3) TestRoundTripCostCheck (3)
-
-Amendment 1 tests (20):
-  TestSellFloor (5) — refuse-to-sign on no-quote, EXEC_SLIPPAGE_ALLOW
-  TestRoundTripCostBounded (3) — two-tier RT check with exec tolerance
-  TestSizingCeiling (2) — 100% capital ceiling
-  TestAtomicState (2) — durable dir, atomic writes
-  TestOSLock (2) — fcntl.flock, no PID kill
-  TestSlippageRejectsZeroPrice (1) TestStatePersistence (1)
-  TestAllSlippageRoutes (2) TestSlippageRejectsZeroPrice (1)
-
-Amendment 2 tests (20):
-  TestDoSellSentinel (3) — -1 sentinel, no fabricated 0.001, callers handle
-  TestExitPathNoBlock (2) — no stop() before _do_sell
-  TestCooldownAllExits (2) — universal cooldown, no pop for winners
-  TestShadowMode (4) — exists, CLI arg, no send_raw, logs to jsonl
-  TestDrawdownIncludesAllQuotes (3) — usdg_bal, SPY/USDG in drawdown, UTC
-  TestStableLockPath (2) — /var/lib/rh-engine/, chain+wallet parameterized
-  TestStatusShowsUSDG (1) — USDG in status output
-  TestSlippageQuoteUnits (5) — quote_deploy param, typed amounts, no extrapolation
-
-══════════════════════════════════════════════════════════════════════
-7. REMAINING LIMITATIONS
-══════════════════════════════════════════════════════════════════════
-
-NOT YET DONE:
-  - Net-liquidation-return calculation still uses DexScreener price /
-    entry price for PnL display. A fresh full-position sell quote
-    would be more accurate but adds ~300ms latency per tick.
-  - Sell functions do not yet accept a specific managed quantity —
-    they sell the wallet's entire holding of that token.
-  - Monitor still searches for V3/WETH pool for all positions —
-    does not yet monitor actual V4/SPY/USDG execution pools.
-  - Position ledger (per-tx receipts, nonce tracking, partial fills)
-    is not yet implemented. State persists counters only.
-  - Shadow mode collection is designed but requires engine to be
-    running to collect quotes. Cannot collect while stopped.
-  - P95 latency measurement requires live operation.
-  - _unwrap_all_weth not yet limited to managed proceeds.
-  - Crash recovery / exactly-once reconciliation not implemented.
-  - Winning-exit SESSION_LOSSES counting still counts by exit type,
-    not attributed net outcome. TODO comments in code mark this.
-  - Buy retry limits count all failures, not just confirmed reverts.
-
-CANNOT DO WITHOUT LIVE ACTIVATION:
-  - Verify actual fill quality vs. fresh-quote-based minOut
-  - Measure real protective check cadence
-  - Confirm atomic nonce management under actual chain conditions
-  - Collect shadow-mode policy comparison data
-
-══════════════════════════════════════════════════════════════════════
-8. DEPLOYMENT AND ROLLBACK
-══════════════════════════════════════════════════════════════════════
-
-DEPLOYMENT (requires explicit Shaheer authorization):
-  1. systemctl status rh-rotation-engine.service  (confirm stopped)
-  2. pgrep -f rh_rotation_engine  (confirm no processes)
-  3. cp scripts/rh_rotation_engine.py scripts/rh_rotation_engine.py.v6.2.bak
-  4. cp repair/rh_rotation_engine.py scripts/rh_rotation_engine.py
-  5. python3 -c "import ast; ast.parse(open('scripts/rh_rotation_engine.py').read())"
-  6. mkdir -p /var/lib/rh-engine && chmod 700 /var/lib/rh-engine
-  7. Migrate existing state if present:
-     cp /tmp/rh_engine_state.json /var/lib/rh-engine/ 2>/dev/null
-  8. Reconcile any pending transactions (nonce check)
-  9. systemctl enable rh-rotation-engine.service
-  10. systemctl start rh-rotation-engine.service
-  11. Monitor: journalctl -u rh-rotation-engine -f
-
-ROLLBACK (preserves state, does NOT auto-restart defective code):
-  1. systemctl stop rh-rotation-engine.service
-  2. Inspect /var/lib/rh-engine/ for pending positions or transactions
-  3. If position open: manually manage exit before rollback
-  4. cp scripts/rh_rotation_engine.py.v6.2.bak scripts/rh_rotation_engine.py
-  5. Do NOT automatically restart — the original has known defects
-  6. Assess whether restart is safe given current wallet/position state
-
-DO NOT delete state files — they contain loss history and
-cooldowns that must survive across versions.
-
-══════════════════════════════════════════════════════════════════════
-9. SEPARATION OF CLAIMS
-══════════════════════════════════════════════════════════════════════
-
-CODE CHANGES COMPLETED (verified by tests):
-  A-V above: 22 changes across accounting, safety, execution,
-  state management, sizing, exit logic, and structural integrity.
-
-BEHAVIOR VERIFIED (tests pass):
-  83 regression tests covering all defect repairs, configuration,
-  exit rules, sell floor, RT cost, sizing, state, locking,
-  sentinel handling, exit-path timing, shadow mode, quote units,
-  drawdown equity, and cooldown universality.
-
-CHAIN INTEGRATION UNVERIFIED:
-  Actual fill quality, gas costs, latency, nonce management,
-  monitor cadence — all require live chain interaction.
-
-STRATEGY EVIDENCE:
-  None. Historical PnL labels are corrupted. No evidence supports
-  any specific configuration as optimal. All values are engineering
-  defaults labeled PROVISIONAL.
-
-LIVE AUTHORIZATION:
-  NOT GRANTED. Engine stopped, service disabled. Activation requires
-  explicit direction from Shaheer after review.
-
-══════════════════════════════════════════════════════════════════════
-FILES
-══════════════════════════════════════════════════════════════════════
-
-Repair copy:    repair/rh_rotation_engine.py (3421 lines)
-Original copy:  repair/rh_rotation_engine_v6.2_original.py (unchanged)
-Test suite:     repair/tests/test_accounting.py (83 tests)
-Full diff:      /tmp/engine_repair_v3.patch (1512 lines)
-Production:     scripts/rh_rotation_engine.py (UNTOUCHED)
-
-Engine: STOPPED. Service: DISABLED. Wallet: IDLE.
