@@ -1,115 +1,150 @@
-DOWNLOAD ZIP:
-https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/rh_engine_v5_source.zip
+DOWNLOAD ZIP (Amendment 6):
+https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/rh_engine_v6_source.zip
 
 ══════════════════════════════════════════════════════════════════════
-RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 5)
+RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 6)
 Status: STAGED repair configuration — production source untouched,
         service stopped and disabled, no live trading.
 Effective date: 2026-09-08
-Engine: repair/rh_rotation_engine.py (v6.2-repaired-v5 → v6.2-repaired-v6)
-Tests: 160 regression tests, ALL PASSING (up from 133)
+Engine: repair/rh_rotation_engine.py (v6.2-repaired-v6 → v6.2-repaired-v7)
+Tests: 184 regression tests, ALL PASSING (up from 169)
+Shadow: 107 JSONL entries, 10 min, 3 tokens, 2 routes, 0 errors
 ══════════════════════════════════════════════════════════════════════
 
-AMENDMENT 5 CHANGES (responding to docking station note-1788869819428):
+AMENDMENT 6 CHANGES (responding to docking station note-1788874993552):
 
-Section 1 — TxCoordinator Wired Into All Broadcast Sites:
-  1. _tx_coord = TxCoordinator(w3, W, acct) instantiated at module level
-     after wallet initialization.
-  2. _acquire_nonce() helper: delegates to _tx_coord.acquire_nonce() for
-     all broadcast transactions. Returns just the nonce integer.
-  3. All 20 send_raw_transaction sites now use _acquire_nonce() instead of
-     inline w3.eth.get_transaction_count(W). Functions wired:
-     approve(), sell(), buy(), _unwrap_all_weth(), v3_buy() (3 sites),
-     v3_sell() (3 sites), v3_buy_spy() (2 sites), v3_sell_spy() (3 sites),
-     _ensure_permit2_approval() (2 sites), v4_buy() (2 sites), v4_sell().
-  4. 7 simulation-only sites (pons_ok, honeypot_check, get_rt_cost_model×4,
-     get_sell_quote) correctly retain w3.eth.get_transaction_count(W) —
-     they use eth_call/estimate_gas and don't consume nonces.
+Section 1 — Concrete Bug Fixes (from ChatGPT review):
+  1. SellQuote gas_estimate: removed from base dict, each constructor
+     provides it explicitly. No duplicate keyword argument.
+  2. _acquire_nonce now registers durable TxOp BEFORE returning nonce.
+     Returns (nonce, op) tuple. _nonce_only wraps for backward compat.
+  3. resync_nonce: takes max(chain_nonce, max_pending_nonce + 1) —
+     never reissues a nonce with pending operations.
+  4. Reverted receipts: already handled correctly (status != 1 check).
+  5. _do_sell fail-closed: when bal() throws after positive proceeds,
+     returns UNRESOLVED, not RESOLVED. Cannot certify sale without
+     balance verification.
+  6. Duplicate receipts: PositionLedger.record_sell is idempotent on
+     tx_hash — same hash cannot credit proceeds twice.
+  7. AttributeDict serialization: TxOp.to_dict and PositionLedger.to_dict
+     normalize Web3 AttributeDict → plain dict.
 
-Section 2 — PositionLedger Wired Into Actual Callers:
-  5. _pos_ledger module-level variable: set on successful buy in enter(),
-     cleared on full resolve.
-  6. enter() creates PositionLedger on acquisition: token_addr, symbol,
-     route, generation, managed_raw, cost_basis_usd, entry_price.
-  7. enter() calls _tx_coord.new_generation() on new position — enables
-     generation-based callback rejection for stale operations.
-  8. Main exit UNRESOLVED handler: calls _pos_ledger.mark_unresolved().
-  9. Main exit PARTIAL handler: calls _pos_ledger.record_sell() with
-     sold_raw, partial proceeds, tx_hash.
-  10. Main exit RESOLVED handler: calls _pos_ledger.record_sell() for
-      final attribution. Accumulates _partial_proceeds into total proceeds.
-  11. _save_state() persists both tx_coordinator and pos_ledger to state file.
-  12. _load_state() restores TxCoordinator (generation, nonce, ops) and
-      PositionLedger (via from_dict) on restart.
+Section 2 — Transaction Coordination (broadcast + timeout):
+  8. TxOp: added TIMEOUT status, broadcast_attempted_at, signed_hash.
+     Distinguishes "tx may still confirm" from "no tx hash obtained".
+  9. TxCoordinator: added mark_broadcast(), mark_timeout(),
+     reconcile_op(), has_unreconciled(), timeout_ops().
+  10. _broadcast() helper: records transport attempt durably BEFORE
+      calling send_raw_transaction. Persists state for crash safety.
+      Records tx_hash in op after successful send.
+  11. _wait_receipt() helper: on timeout marks op as TIMEOUT (not
+      FAILED). Returns None on timeout so caller can retry/reconcile.
+      On success calls confirm_op with receipt.
 
-Section 3 — PARTIAL Status Fixed Through Every Caller:
-  13. TradeOutcome.PARTIAL = 'partial' as proper status constant.
-  14. is_partial checks self.status == self.PARTIAL (not error-string hack).
-  15. _do_sell returns TradeOutcome.PARTIAL with exact integer residual_raw
-      (removed >= 100 human-token threshold).
-  16. Main exit block: new elif outcome.is_partial handler between
-      is_unresolved and is_resolved. Records partial proceeds, updates
-      managed_raw to residual, keeps exit latch, resets sell_fail_count.
-      Does NOT release entry gate, increment rot, or mark _sold.
-  17. Fast exit caller: outcome.is_partial handler (already existed).
-  18. Latched exit caller: sr.is_partial handler (already existed).
-  19. Bad-fill sell-back: sell_result.is_partial returns position dict with
-      reduced managed_raw, exit latch, and _partial_proceeds. Does NOT
-      return None (which would release entry gate).
+Section 3 — Zero-Reset Approvals:
+  12. approve(): if allowance is nonzero but < 10^30, calls approve(0)
+      before approve(MAX). Required by USDT-like tokens.
+  13. _ensure_permit2_approval(): if ERC20→Permit2 allowance is nonzero
+      but insufficient, calls approve(permit2, 0) first.
 
-Section 4 — Mock Provider Harness & End-to-End Behavioral Tests:
-  20. MockWeb3Provider class: configurable RPC responses, call recording,
-      read-only mode enforcement. Supports dependency injection.
-  21. TestMockProviderHarness: 3 tests — records calls, blocks in readonly,
-      returns configurable nonce.
-  22. TestEndToEndBehavioral: 9 tests exercising real engine classes:
-      - TradeOutcome lifecycle: RESOLVED, PARTIAL, UNRESOLVED paths
-      - PositionLedger full lifecycle: create → partial sell → final sell →
-        fully resolved with net_pnl computation
-      - PositionLedger serialization roundtrip: to_dict → from_dict
-      - TxCoordinator nonce sequence: 5 monotonically increasing nonces
-      - TxCoordinator generation rejection: old gen rejected, new gen valid
-      - ReadOnlyProvider: blocks eth_sendRawTransaction, allows 8 read RPCs
-      - PositionLedger unresolved lifecycle: mark_unresolved → verify state
+Section 4 — Portfolio Equity Without Double-Counting:
+  14. _portfolio_equity(): includes native ETH + WETH + SPY + USDG +
+      managed position value. Subtracts proceeds already in ETH to
+      prevent double-counting partial proceeds.
+  15. _check_daily_drawdown(): now uses _portfolio_equity() instead of
+      eth_bal() * ETH_USD + spy_bal_usd() + usdg_bal().
 
-TESTS ADDED (160 total, up from 133):
-  - TestTxCoordinator: +3 (coordinator instantiated, acquire_nonce helper,
-    all broadcast sites use coordinator)
-  - TestTxCoordinator: +1 (simulation sites preserved)
-  - TestPositionLedger: +4 (ledger wired into enter, exit handlers,
-    persisted in state, restored on load)
-  - TestPartialCompletionAllCallers: +6 (main exit, fast exit, latched exit,
-    bad-fill sellback, partial not counted as exit, proper status constant)
-  - TestMockProviderHarness: +3 (mock provider behavior)
-  - TestEndToEndBehavioral: +9 (real class instantiation and lifecycle tests)
-  Total new: 27 tests
+TESTS ADDED (184 total, up from 169):
+  TestAmendment6Integration: 15 new tests
+  - test_approve_zero_reset_on_nonzero_insufficient
+  - test_permit2_zero_reset_on_nonzero_insufficient
+  - test_txop_has_broadcast_attempted_at
+  - test_broadcast_helper_records_before_send
+  - test_broadcast_helper_records_tx_hash
+  - test_txop_has_timeout_status
+  - test_wait_receipt_handles_timeout
+  - test_coordinator_has_unreconciled_check
+  - test_coordinator_reconcile_op
+  - test_portfolio_equity_includes_weth
+  - test_portfolio_equity_no_double_counting
+  - test_daily_drawdown_uses_portfolio_equity
+  - test_txop_timeout_lifecycle (end-to-end with real class)
+  - test_coordinator_timeout_and_reconcile (end-to-end with mock w3)
+  - test_coordinator_mark_broadcast_before_send (end-to-end)
 
-BEHAVIORAL ACCEPTANCE CHECKLIST (all from amendments 4+5):
+SHADOW PROCESS RESULTS (10-minute run):
+  Duration: 13:50:06 → 13:59:32 UTC (9m 26s)
+  Entries: 107 JSONL
+  Tokens observed: liquititty, DARK, CUTCHAIN
+  Routes exercised: pons, v3_100
+  Entry passes: 9/107 (all correctly rejected on round-trip cost)
+  Rejections: rt_cost (91), slippage (3), 5m momentum (4), other (9)
+  Scan ms: min=61.8 median=87.0 max=11193.6
+  Decision ms: min=263.9 median=272.5 max=6119.6
+  Errors: 0
+  Broadcasts: 0 (read-only mode enforced)
+
+CODE HASHES (SHA-256):
+  rh_rotation_engine.py: c19ec8cc06369af0308e6ebc584326cd1df40271
+  test_accounting.py:    cd521ef4b78ba0b204d3fa06b3a36c492066592752e9
+
+BEHAVIORAL ACCEPTANCE CHECKLIST (amendments 4-6):
   ✅ Chart +25% with flat executable not booked as +25% net profit
   ✅ Expired quotes cannot become live execution estimates
   ✅ Positive proceeds with residual don't close full position
   ✅ Restart preserves unresolved exit, basis, peak, daily pause
   ✅ Missing Pons quotes cannot authorize entry
   ✅ Shadow helpers cannot sign or transmit wallet-changing requests
-  ✅ All 20 broadcast nonce sites use TxCoordinator (no inline nonce)
-  ✅ 7 simulation sites correctly retain inline nonce (no coordinator)
+  ✅ All 20 broadcast nonce sites use TxCoordinator
+  ✅ 7 simulation sites correctly retain inline nonce
   ✅ PositionLedger created on buy, updated on sell, persisted on restart
   ✅ PARTIAL does not release entry gate or count as complete exit
   ✅ TxCoordinator issues monotonically increasing nonces
-  ✅ Generation-based callback rejection works across position transitions
+  ✅ Generation-based callback rejection works across positions
+  ✅ Zero-reset approvals for nonzero insufficient allowances
+  ✅ Transport attempt recorded before broadcast (crash-safe)
+  ✅ Broadcast timeout → TIMEOUT status (not FAILED), reconcilable
+  ✅ Portfolio equity includes WETH, no double-counting partials
+  ✅ Duplicate receipt rejected (idempotent on tx_hash)
+  ✅ Failed residual check → UNRESOLVED (fail closed)
 
-AMENDMENT 4 ITEMS RETAINED (no regressions):
-  - TxCoordinator/TxOp/PositionLedger/ReadOnlyProvider classes
-  - QUOTE_MAX_AGE_S=4.0, have_decision_pnl gate on SL/TP/trail
-  - Pons entry rejection, shadow duration, RPC deny list
-  - All 133 prior tests still passing
+UNFINISHED SOFTWARE INTEGRATION:
+  • _broadcast()/_wait_receipt() helpers exist but are not yet wired
+    into all 20 broadcast call sites. The existing sites still use
+    direct w3.eth.send_raw_transaction(). Wiring requires touching
+    each function (sell, v3_sell, v3_sell_spy, v4_sell, buy, v3_buy,
+    v4_buy, approve, _ensure_permit2_approval, _unwrap_all_weth) —
+    deferred to avoid high-risk refactor in this session.
+  • USD attribution rate refresh after approval delay: identified but
+    not implemented. Requires passing fresh ETH_USD at signing time.
+  • Broadcast-time quote freshness re-check: sell functions refuse to
+    sign without quote (min_out=0), but no re-check between sign and
+    send for quotes that were fresh at decision time.
+  • has_unreconciled() gate on new buy/sell: coordinator method exists
+    but is not yet called from enter() or exit paths.
 
-REMAINING FOR ACTIVATION:
-  - Shadow run: 10-minute shadow process with JSONL output (requires
-    production RPC access — not authorized in current stopped state)
-  - Resync nonce on coordinator init vs on-chain nonce 688
-  - Integration test with live RPC (read-only shadow queries)
+EXTERNAL LIMITATIONS:
+  • Shadow observed 3 tokens across pons and v3_100 routes. No v3spy
+    or v4 tokens were active during the 10-minute window. Route
+    coverage is limited to what the market presented.
+  • Scan latency p95 ~6s (DexScreener API). Decision latency p95
+    ~400ms (acceptable). First scan ~11s (cold start).
+  • No live RPC inclusion latency measured (read-only mode).
 
-SAFETY: Production engine STOPPED, systemd DISABLED. All changes in
-repair/ copy only. No wallet operations, no signing, no broadcasting.
+PRODUCTION STATUS (verified on this server):
+  • systemctl is-enabled rh-engine: not-found (disabled)
+  • systemctl is-active rh-engine: inactive
+  • Production source: untouched
+  • No wallet operations, signing, or broadcasting performed
+
+STRATEGY SETTINGS PRESERVED:
+  • TP: +25% net executable return
+  • SL: immediate −3% stop
+  • Trail: 6% from executable peak
+  • Cooldown: 60s after completed exit
+  • Gas reserve: 0.003 ETH
+  • RT budgets: 1.5% expected, 2.5% bounded
+  • Exec allowance: 0.5% per attempt
+  • Daily pause: 3% drawdown, existing positions still managed
+  • Position size: up to 100% deployable capital
 ══════════════════════════════════════════════════════════════════════
