@@ -1,19 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-08 02:05 UTC
+ENGINE A PUMP ALERT — 2026-09-08 04:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.5%, 90d=+28.8% (BULL)
+Market: BTC 30d=+21.9%, 90d=+28.3% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. AAVE — P(pump)=24.2%
-     Category: defi | FDV: $2,121,511,428 | Price: $132.590000
-     CG: aave | Decision ID: 194
-
-  2. VIRTUAL — P(pump)=20.1%
-     Category: other | FDV: $751,256,570 | Price: $0.751224
-     CG: virtual-protocol | Decision ID: 195
+  1. STONK — P(pump)=21.6%
+     Category: other | FDV: $176,135,091 | Price: $0.202242
+     CG: stonk-3 | Decision ID: 196
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
