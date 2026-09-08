@@ -1,22 +1,4 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-08 12:04 UTC
-==================================================
-
-Market: BTC 30d=+20.8%, 90d=+28.6% (BULL)
-Model: v7b (aecf27f3)
-
-2 ALERTS above threshold:
-
-  1. PENGU — P(pump)=44.8%
-     Category: memecoin | FDV: $630,174,719 | Price: $0.008210
-     CG: pudgy-penguins | Decision ID: 210
-
-  2. PONS — P(pump)=19.1%
-     Category: other | FDV: $510,174,815 | Price: $0.728798
-     CG: pons | Decision ID: 209
-
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================══════════════════════════════════════════════════════════════════════
+══════════════════════════════════════════════════════════════════════
 RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 4)
 Status: STAGED repair configuration — production source untouched,
         service stopped and disabled, no live trading.
