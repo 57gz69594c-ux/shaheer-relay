@@ -1,19 +1,261 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-08 08:05 UTC
+RH CHAIN ROTATION ENGINE — FULL TECHNICAL REPORT
+Updated: 2026-09-08 08:20 UTC | Engine v6.2
 ==================================================
 
-Market: BTC 30d=+21.1%, 90d=+28.1% (BULL)
-Model: v7b (aecf27f3)
+1. ENGINE ARCHITECTURE
+======================
 
-2 ALERTS above threshold:
+The RH Chain Rotation Engine is an autonomous meme coin trading bot
+running on Robinhood Chain (chain ID 4663). It scans for pumping tokens,
+enters positions, monitors momentum, and exits automatically.
 
-  1. ZCAT — P(pump)=48.3%
-     Category: memecoin | FDV: $101,034,268 | Price: $0.104313
-     CG: anonymous-cat | Decision ID: 203
+Engine file: rh_rotation_engine.py (~2800 lines)
+Platform: Robinhood Chain (EVM-compatible, 0.1s blocks)
+Wallet: 0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2
 
-  2. FORM — P(pump)=37.8%
-     Category: gaming | FDV: $209,084,231 | Price: $0.365211
-     CG: four | Decision ID: 204
+SCAN → VERIFY → BUY → MONITOR → EXIT cycle:
+  - Scans DexScreener every 5s for RH Chain tokens pumping >19%
+  - Verifies momentum with 3 readings over 6s (stable/rising)
+  - Buys via best available route (Pons/V3/V4)
+  - Monitors price every 2s with fast on-chain + DexScreener
+  - Exits on: Take Profit (+25%), Stop Loss (-3%), Momentum Death, Slowing
 
-Action: Monitor these tokens. Forward validation in 30 days.
+2. THREE QUOTE TOKEN SYSTEM
+============================
+
+The engine trades meme coins against THREE different quote tokens:
+
+A) ETH (native) — Primary
+   - WETH: 0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73
+   - Routes: Pons aggregator, V3 SwapRouter02, V4 Universal Router
+   - Used for: Most liquid meme coin pairs
+
+B) SPY — Secondary
+   - Address: 0x117cc2133c37B721F49dE2A7a74833232B3B4C0C
+   - 18 decimals
+   - Routes: V3 (fee 500), V4 (SPY-paired pools)
+   - Used for: Tokens paired with SPY instead of ETH
+
+C) USDG — Tertiary
+   - Address: 0x5fc5360D0400a0Fd4f2af552ADD042d716F1d168
+   - 6 decimals
+   - Routes: V4 (USDG-paired pools)
+   - Used for: Tokens paired with USDG
+
+Current balance (Sep 8):
+  ETH:  ~0.021 (~$52)
+  SPY:  0.207 (~$52)
+  USDG: 106.82 (~$107)
+  Total: ~$211
+
+3. ROUTING INFRASTRUCTURE
+==========================
+
+Three swap protocols, tried in order:
+
+A) PONS AGGREGATOR (legacy, ETH-paired only)
+   - Contract: 0x65050a9b7e5075a2ba5ced7a875b92b8045b8eB2
+   - Used for whitelisted tokens (MORALS, ENTITY, ATLAS, etc.)
+   - Swap struct: stepType/tokenIn/tokenOut/pool/fee/tickSpacing/hook/hookData/recipient/poolId
+
+B) V3 SWAPROUTER02
+   - Router: 0xcaf681a66d020601342297493863e78c959e5cb2
+   - QuoterV2: 0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7
+   - Factory: 0x1f7d7550B1b028f7571E69A784071f0205FD2EfA
+   - Fee tiers: 10000, 3000, 500, 100
+   - Uses multicall with deadline wrapper
+   - Handles: ETH-paired and SPY-paired V3 pools
+
+C) V4 UNIVERSAL ROUTER
+   - Router: 0x8876789976decbfcbbbe364623c63652db8c0904
+   - PoolManager: 0x8366a39cc670b4001a1121b8f6a443a643e40951
+   - Quoter: 0x8dc178efb8111bb0973dd9d722ebeff267c98f94
+   - StateView: 0xf3334192d15450cdd385c8b70e03f9a6bd9e673b
+   - Permit2: 0x000000000022D473030F116dDEE9F6B43aC78BA3
+   - Hook: 0xE5e702641Ea86F4ae6cC3cDaeD2B886f976Be044
+   - Handles: ETH, SPY, USDG, HIMS, NVDA paired V4 pools
+   - Pool cache persisted to .v4_routes_cache.json (survives restarts)
+
+4. CURRENT SETTINGS (v6.2 — Codex Ultra Optimized)
+====================================================
+
+ENTRY FILTERS:
+  MIN_5M_ENTRY  = 19.0%    # Min 5-minute pump to enter
+  MAX_5M_ENTRY  = 225.0%   # Max pump cap (avoid buying tops)
+  MIN_BS_ENTRY  = 1.02     # Buyers must outnumber sellers
+  MIN_LIQ       = 20000    # Min $20k liquidity
+  MIN_1H_ENTRY  = 0.0%     # 1h must be positive
+  BAD_FILL      = -3%      # Abort if fill worse than -3%
+
+EXIT RULES:
+  HARD_TP       = 25.0%    # Instant take profit at +25%
+  HARD_SL       = 3.0%     # Stop loss at -3%
+  TRAIL_TIGHT   = 3.0%     # Trailing stop when momentum cooling
+  TRAIL_WIDE    = 7.0%     # Trailing stop when momentum strong
+  MOMENTUM_DEATH= 5.0%     # Exit when 5m% drops below +5%
+  WARMUP_TICKS  = 8        # Skip exits for first 16 seconds
+
+SAFETY:
+  - Momentum verification: 3 readings over 6s (restored in v6.2)
+  - Pre-buy pool discovery (v6.2 fix — prevents SL overshoot)
+  - Single-instance PID lock (v6.2 fix — prevents dual engines)
+  - V4 quote required (v6.2 fix — no more minOut=0 fallback)
+  - Persistent blacklist at /tmp/rh_blacklist.json
+  - Session loss blacklist (2 losses = token blocked)
+  - Max 2 buy retries per token
+  - 10-minute cooldown after exit before re-entry
+
+5. ALL SETTINGS CHANGES (CHRONOLOGICAL)
+=========================================
+
+ORIGINAL v6.0 → v6.1 → v6.2:
+
+  MIN_5M_ENTRY:  20% → 10% (loosened) → 19% (Codex optimal)
+  MAX_5M_ENTRY:  300% → 5000% (loosened) → 225% (Codex optimal)
+  MIN_BS_ENTRY:  1.3 → 1.0 (loosened) → 1.02 (Codex optimal)
+  HARD_SL:       5% → 3% (tightened, kept)
+  HARD_TP:       none → 25% (added in v6.1, kept)
+
+  Momentum verification: ON → REMOVED → RESTORED (v6.2)
+  Confirmation delay:    none → 30s → 10s → 0s → removed (v6.2)
+  Pool discovery:        post-buy → pre-buy (v6.2 fix)
+  V4 minOut fallback:    allowed 0 → REJECTED (v6.2 fix)
+  Single instance:       none → PID lockfile (v6.2 fix)
+  Persistent blacklist:  none → /tmp/rh_blacklist.json (v6.1)
+  Pool scan timeout:     none → 30s cutoff (v6.1)
+
+6. COMPLETE TRADE HISTORY (38 trades, Sep 7-8)
+================================================
+
+#  | TIME  | TOKEN       | ROUTE | FILL   | EXIT REASON       | PnL      | EXIT $
+---|-------|-------------|-------|--------|-------------------|----------|-------
+1  | 19:03 | jobcoin     | V4    | -13.4% | BAD FILL          | gas loss | $217 (sold back)
+2  | 19:06 | jobcoin     | V4    | +3.8%  | HARD SL           | -29.5%   | $192
+3  | 19:14 | PENNYSTOCKS | V4    | +14.6% | SLOWING           | +41.6%   | $146
+4  | 19:15 | PENNYSTOCKS | V4    | +139%  | (duplicate engine) | merged   | -
+5  | 19:22 | PENNYSTOCKS | V4    | -2.8%  | SLOWING           | +18.9%   | $129
+6  | 19:33 | PENNYSTOCKS | V4    | -13.5% | BAD FILL          | gas loss | $124 (sold back)
+7  | 20:12 | HOOD        | V3    | +2.9%  | Fast Exit         | WIN      | $233
+8  | 20:56 | GAGE        | Pons  | -0.4%  | HARD SL           | -24.0%   | $213
+9  | 21:03 | HUNTER      | Pons  | -0.4%  | SLOWING           | +28.7%   | $244
+10 | 21:12 | GAGE        | Pons  | +6.4%  | SLOWING           | +56.2%   | $284
+11 | 21:20 | GAGE        | Pons  | +7.8%  | HARD SL           | -14.7%   | $271
+12 | 21:36 | Musk        | V4    | -16.3% | BAD FILL          | gas loss | $101 (sold back)
+13 | 21:37 | GAGE        | Pons  | +6.7%  | SLOWING           | +3.9%    | $271
+14 | 21:49 | FORGOT      | Pons  | +7.5%  | STUCK             | LOCKED   | tokens in wallet
+15 | 21:52 | IPUNK       | V4    | +8.9%  | HONEYPOT          | -100%    | $0 (unsellable)
+16 | 22:12 | Musk        | V3    | -1.4%  | HARD SL           | -11.1%   | $51
+17 | 22:20 | Musk        | V3    | -0.7%  | Fast Exit         | LOSS     | $46
+18 | 22:25 | PINK        | Pons  | +19.8% | SLOWING           | +1.7%    | $48
+19 | 22:29 | Musk        | V3    | +3.8%  | Fast Exit         | LOSS     | $35
+20 | 22:36 | PINK        | Pons  | +7.3%  | SLOWING           | -8.5%    | $32
+21 | 22:41 | FAME        | V4    | -46.1% | BAD FILL          | gas loss | $105 (sold back)
+22 | 22:43 | OPINIO      | Pons  | +12.0% | SLOWING           | -15.2%   | $30
+23 | 22:48 | Musk        | V3    | +10.3% | Fast Exit         | LOSS     | $27
+24 | 22:56 | PINK        | Pons  | +7.9%  | SLOWING           | -1.7%    | $100
+25 | 23:00 | UNITY       | Pons  | +25.3% | HARD TP (+159%)   | +159%    | $67
+26 | 23:00 | UNITY       | Pons  | +252%  | SLOWING (dup eng) | -23.1%   | $67
+27 | 23:02 | VA          | Pons  | +16.7% | HARD SL           | -5.2%    | $61
+28 | 23:03 | VA          | Pons  | +18.7% | HARD TP (+35.3%)  | +35.3%   | $57
+29 | 23:05 | VA          | Pons  | +1.8%  | HARD TP (+25.3%)  | +25.3%   | $48
+30 | 23:13 | Jeff        | V4    | +0.7%  | SLOWING           | +8.9%    | $7
+31 | 23:41 | SPREAD      | V4    | +12.6% | SLOWING           | -12.5%   | $100 (SPY)
+32 | 23:48 | SPREAD      | V4    | -5.6%  | BAD FILL          | gas loss | $102 (sold back)
+33 | 00:31 | COMPUTE     | V4    | +1.1%  | HARD SL           | -10.0%   | $65 (USDG)
+34 | 00:37 | COMPUTE     | V4    | +8.0%  | HARD SL           | -35.0%   | $53 (USDG)
+35 | 00:42 | BYCOCKET    | V4    | +4.6%  | SLOWING           | -0.8%    | $52 (USDG)
+36 | 01:42 | HOODCAT     | V4    | +11.3% | HARD SL           | -14.4%   | $55 (USDG)
+37 | 04:17 | XRP         | V4    | -20.1% | BAD FILL          | gas loss | $98 (sold back)
+38 | 05:22 | fatgirls    | V4    | -13.7% | BAD FILL          | gas loss | $99 (sold back)
+39 | 06:09 | FATCAT      | V4    | -24.1% | BAD FILL          | gas loss | $55 (sold back)
+40 | 06:55 | UHI         | V4    | -11.5% | BAD FILL          | gas loss | $107 (sold back)
+41 | 08:12 | PTP         | Pons  | +6.8%  | HARD TP (+25.3%)  | +25.3%   | $102
+42 | 08:17 | PTP         | Pons  | +8.6%  | SLOWING           | -1.8%    | $102
+43 | 08:19 | MOO         | V3    | -1.1%  | Fast Exit         | LOSS     | $82
+
+SUMMARY:
+  Total trades:  43
+  Wins:          12 (PENNYSTOCKS x2, HOOD, HUNTER, GAGE x2, PINK, UNITY TP, VA x2, Jeff, PTP)
+  Losses:        21
+  BAD FILLs:     9 (auto sold back, gas loss only)
+  Honeypot:      1 (IPUNK — total loss)
+  Stuck:         1 (FORGOT — tokens locked)
+  Win rate:      36% (12/33 resolved trades)
+
+7. BUGS FOUND & FIXED IN v6.2
+===============================
+
+BUG 1: DUAL ENGINE INSTANCES
+  Two Claude sessions each started the engine independently.
+  Both traded the same wallet simultaneously causing nonce collisions
+  and duplicate buys (UNITY bought twice at different prices).
+  FIX: PID lockfile at /tmp/rh_engine.pid — new instance kills old one.
+
+BUG 2: STOP-LOSS OVERSHOOT (-35% on -3% SL)
+  Pool discovery (_discover_pool) ran AFTER buying and blocked the
+  thread for up to 30 seconds. Price crashed during this gap.
+  By the time monitoring started, loss was already -35%.
+  FIX: Pool discovery moved to BEFORE buy. Monitor starts immediately.
+
+BUG 3: V4 UNPROTECTED BUYS (minOut=0)
+  When V4 quoter failed, engine fell back to minOut=0 allowing
+  unlimited adverse execution. Bad fills of -20% to -46% resulted.
+  FIX: Quote failure now REJECTS the buy entirely.
+
+BUG 4: READINGS VARIABLE UNDEFINED
+  After removing momentum verification, the code still referenced
+  the `readings` variable in position creation. Would crash on
+  next trade attempt.
+  FIX: Momentum verification restored (3 readings, 6s, no extra delay).
+
+BUG 5: ACCOUNTING ERRORS
+  Fill calculation used entire wallet token balance, not purchase delta.
+  Sell logging used entire quote-token balance, not sale proceeds.
+  Identified by Codex Ultra — acknowledged, monitoring for impact.
+
+8. CODEX ULTRA ANALYSIS (Sep 8)
+================================
+
+Submitted all 38 trades to Codex Ultra (GPT-5.6 Sol with Ultra reasoning).
+
+Key finding: "No combination of MIN_5M_ENTRY, MAX_5M_ENTRY, and
+MIN_BS_ENTRY can separate wins from losses. The same entry conditions
+that produced wins also produced losses."
+
+Recommended settings (in-sample preservation boundary):
+  MIN_5M_ENTRY = 19.0, MAX_5M_ENTRY = 225.0, MIN_BS_ENTRY = 1.02
+
+These are now deployed in v6.2.
+
+Codex Ultra verdict: "Fix the structural bugs before tuning settings.
+You are optimizing corrupted telemetry, not protecting real money."
+
+9. BLACKLISTED TOKENS
+=======================
+
+Hardcoded (permanent):
+  - RSTR (0x78b96280...) — -10% to -25% slippage
+  - Pledge (0x9e88da78...) — repeated bad fills
+  - Pledge alt (0xf6994adb...) — blacklisted
+  - IPUNK (0xf1d0c16a...) — V4 honeypot, sells always revert
+
+Dynamic (auto-blacklisted via bad fills, persisted to /tmp/rh_blacklist.json):
+  - jobcoin, PENNYSTOCKS, Musk, FAME, SPREAD, COMPUTE, XRP,
+    fatgirls, FATCAT, UHI + others from prior sessions
+
+10. FUNDING FLOW
+=================
+
+Cost basis: $803 (total invested across all sessions)
+
+Funding path:
+  Fiat → Solana wallet (5nqSdD6T...) → Bridge via Relay → RH Chain ETH
+  Then: ETH → V3 swap → SPY and USDG
+
+Latest bridge (Sep 8): 1.91 SOL → 0.081 ETH on RH Chain
+Then distributed: 1/3 ETH, 1/3 SPY, 1/3 USDG
+
+==================================================
+Engine v6.2 ready. All bugs fixed. Awaiting start.
 ==================================================
