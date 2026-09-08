@@ -1,19 +1,379 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-08 10:05 UTC
-==================================================
+══════════════════════════════════════════════════════════════════════
+RH CHAIN ROTATION ENGINE — REPAIR REPORT
+Version: PROVISIONAL v1.0 — 2026-09-08
+Source Revision: v6.2 → v6.2-repaired (1006-line unified diff)
+══════════════════════════════════════════════════════════════════════
 
-Market: BTC 30d=+21.4%, 90d=+28.4% (BULL)
-Model: v7b (aecf27f3)
+STATUS: ALL CODE DEFECTS FIXED. 49/49 REGRESSION TESTS PASS.
+        Policy A deployed as provisional baseline.
+        Engine remains STOPPED and systemd service DISABLED.
+        Wallet idle at ~$180.26 (ETH $61.26 / SPY $59.00 / USDG $60.00).
 
-2 ALERTS above threshold:
+══════════════════════════════════════════════════════════════════════
+1. SOFTWARE DEFECTS FIXED (14 confirmed)
+══════════════════════════════════════════════════════════════════════
 
-  1. CHUMP — P(pump)=52.9%
-     Category: memecoin | FDV: $34,983,060 | Price: $0.034970
-     CG: chump-coin | Decision ID: 205
+A. ACQUISITION ACCOUNTING (4 buy functions)
+   DEFECT: buy(), v3_buy(), v3_buy_spy(), v4_buy() all used
+           bal(token_addr) — the TOTAL wallet balance — as acquired
+           quantity. A wallet holding 1000 tokens that buys 1000 more
+           would record 2000 acquired at $0.05 instead of 1000 at $0.10.
+   FIX: All 4 functions now capture pre-buy balance snapshot and compute
+        delta = post_balance - pre_balance. Entry price = cost / delta.
 
-  2. CAKE — P(pump)=26.7%
-     Category: defi | FDV: $777,077,300 | Price: $2.340000
-     CG: pancakeswap-token | Decision ID: 207
+B. SELL PROCEEDS ACCOUNTING (4 sell functions)
+   DEFECT: sell(), v3_sell(), v3_sell_spy(), v4_sell() returned the
+           entire quote-token wallet balance as sale proceeds.
+   FIX: All 4 functions now capture pre-sell quote balance and compute
+        received = post_balance - pre_balance.
 
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+C. ZERO-MINIMUM-OUTPUT EXIT FALLBACK
+   DEFECT: All 4 sell functions retried with amountOutMinimum=0 on revert.
+           This exposes the position to unlimited slippage (sandwich attacks).
+   FIX: Replaced (0, 'EMERGENCY min_out=0') with (int(min_out * 0.6),
+        '30% floor retry') in all 4 sell functions.
+
+D. SLIPPAGE CHECK — ZERO PRICE
+   DEFECT: check_slippage() returned (True, 0.0) when market_price <= 0,
+           treating unknown slippage as PASS.
+   FIX: Now returns (False, 100.0) — rejects with 100% assumed slippage.
+
+E. SLIPPAGE CHECK — SPY AND V4-OTHER ROUTES
+   DEFECT: Slippage pre-check was skipped entirely for SPY-paired and
+           V4-other (USDG/HIMS/NVDA) routes.
+   FIX: All routes now run slippage check, converting deploy amounts
+        to ETH-equivalent for comparison.
+
+F. MOMENTUM VERIFICATION
+   DEFECT: [100, 100, 19] passed because decline check required strict
+           monotonic readings[2] < readings[1] < readings[0].
+   FIX: Now computes highest-to-last drop: if drop > 30%, reject.
+        Also re-checks B/S ratio at end of verification.
+
+G. V4 HONEYPOT INCONCLUSIVE
+   DEFECT: Universal Router sell simulation that reverted with unknown
+           error returned True (SAFE).
+   FIX: Inconclusive results now return False (block entry without
+        blacklisting). Same fix for transfer simulation.
+
+H. GAS RESERVATION
+   DEFECT: SPY and V4-other routes did not check ETH balance for gas.
+   FIX: Added eth_bal() < GAS_RESERVE check for both routes.
+
+I. ENTRY PREDICATE REAPPLICATION
+   DEFECT: 2-15 seconds between momentum verification and buy call.
+           Conditions never re-checked.
+   FIX: Final re-check of 5m%, B/S ratio, MAX_5M_ENTRY, MOMENTUM_DEATH
+        right before buy transaction executes.
+
+J. COOLDOWN FILTERING
+   DEFECT: scan() returned only 1 candidate. If it was on cooldown,
+           enter() returned None instead of trying 2nd-best.
+   FIX: Pre-filter cooldown, session-blocked, buy-failed, and blacklisted
+        tokens BEFORE ranking/pick logic.
+
+K. PID ENFORCEMENT
+   DEFECT: New engine instance killed the incumbent process.
+   FIX: Newcomer calls sys.exit(1) if incumbent is alive.
+
+L. MONITOR RACE CONDITION
+   DEFECT: PriceMonitor thread join timeout of 2s allowed stale thread
+           to survive and fire sell signals against a new position.
+   FIX: Added _selling threading.Event, mark_selling() method, increased
+        join timeout to 10s, added _sold position flag.
+
+M. STATE PERSISTENCE
+   DEFECT: Cooldowns, losses, buy fail counts were only in-memory.
+           Restart erased all loss history.
+   FIX: Added _load_state()/_save_state() with /tmp/rh_engine_state.json.
+        _save_state() called at ALL exit mutation points (7 locations).
+
+N. ROUND-TRIP COST CHECK
+   DEFECT: No pre-buy check for whether the position could break even
+           after round-trip execution costs.
+   FIX: Estimates RT cost as slippage × 2. Rejects if > 1.5%.
+
+══════════════════════════════════════════════════════════════════════
+2. PROVISIONAL CONFIGURATION (centralized, labeled PROVISIONAL)
+══════════════════════════════════════════════════════════════════════
+
+Entry:
+  MIN_5M_ENTRY    = 19.0%     MAX_5M_ENTRY     = 225.0%
+  MIN_BS_ENTRY    = 1.02      MIN_LIQ          = $20,000
+  MIN_1H_ENTRY    = 0.0%      VERIFY_OBS       = 3 (~6 seconds)
+  MOMENTUM_DROP_REJECT = 30%  (highest-to-last during verification)
+
+Exit (unified across all policies):
+  HARD_SL         = -3%       (net liquidation return)
+  HARD_TP         = +25%      (net liquidation return)
+  TRAIL_UNIFIED   = 6%        (decline from executable-value peak)
+  SLOWING_DROP    = 30%       (5m momentum drop from previous reading)
+  MOMENTUM_DEATH  = +5%       (5m below this = dead)
+  SELLER_DOM_EXIT = 0.7       (B/S ratio below this = exit)
+
+Position Sizing:
+  MAX_ACTIVE      = 1
+  SIZE_PCT        = 5% of deployable equity
+  LIQ_CAP         = 0.05% of pool USD liquidity
+  MAX_RT_COST     = 1.5% expected, 2.5% bounded
+  EXEC_SLIPPAGE   = 0.5% per swap allowance
+  GAS_RESERVE     = 0.003 ETH
+
+Re-entry:
+  COOLDOWN        = 60s (Policy A/B), 180s (Policy C)
+  SESSION_LOSSES  = 2 (same token = 24h block)
+  MAX_BUY_REVERTS = 2 per setup
+
+Monitoring:
+  SCAN_INTERVAL   = 5s        POLL_SEC         = 2s
+  FAST_POLL       = 0.4s      FAST_PEAK_DROP   = 6%
+  EXEC_QUOTE_AGE  = 1s max    PRICE_OBS_AGE    = 2s max
+
+Portfolio Control:
+  DAILY_DRAWDOWN  = 3% → pause new entries
+  WARMUP_TICKS    = 0 (no warmup exemption — all exits active immediately)
+
+Exit Precedence (highest first):
+  0. LATCHED EXIT  (retry previous failed sell)
+  1. HARD STOP     (-3%)
+  2. HARD TP       (+25%, or partial sell in Policy B)
+  3. TRAIL STOP    (6% from peak, or 7%/3% in Policy B)
+  4. SLOWING       (30% momentum drop)
+  5. MOMENTUM DEAD (5m < +5%)
+  6. SELLERS DOM   (B/S < 0.7)
+
+NOTE: Unified trailing stop is now ACTIVE. It was disabled in v6.2.
+NOTE: Warmup exemption REMOVED. Hard stop is active from tick 0.
+
+══════════════════════════════════════════════════════════════════════
+3. POLICY A / B / C COMPARISON
+══════════════════════════════════════════════════════════════════════
+
+Policy A — Repaired Baseline:
+  All settings above. Full exit at +25%. Unified 6% trail. 60s cooldown.
+
+Policy B — Partial Profit with Runner:
+  Same entry, sizing, cost limits, and initial protection as A.
+  At +25%: sell 50%, trail remainder at 7% from peak.
+  On slowing signal after partial: tighten trail to 3% (irreversible).
+  Hard stop / momentum death / seller dominance still force full exit.
+  Extra sale fees and correct cost allocation between sold/remaining.
+
+Policy C — Slower Re-entry:
+  Identical to A except cooldown = 180s after completed position exit.
+
+─── HISTORICAL EVALUATION ───
+
+43 trades extracted from engine log (Sep 7-8, 2026).
+34 have numeric PnL. 9 have unknown PnL (MERGED, NOT_RECORDED, etc.).
+
+WARNING: ALL historical PnL labels are corrupted by the buy/sell
+accounting bugs (defects A+B). Every reported PnL% is unreliable.
+Corrected values cannot be reconstructed without original tx receipts
+and independent price snapshots at buy/sell time.
+
+With that caveat (reported numbers, not corrected):
+  Win rate:  38.2% (13W / 21L)
+  Sum PnL:   +273.5%
+  Avg PnL:   +8.04%
+  Best:      +159.0% (UNITY)
+  Worst:     -35.0% (COMPUTE)
+
+Trades that hit ≥ +25% (TP territory): 9
+  PENNYSTOCKS: +41.6%    HUNTER: +28.7%      GAGE: +56.2%
+  UNITY: +159.0%         VA: +35.3%          VA: +25.3%
+  PTP: +25.3%            MOO: +52.2%         Anthropic: +58.6%
+
+Policy C would have blocked: 16 trades (entered <180s after prior exit)
+  Of those with known PnL: 14 (8 wins, 6 losses, sum +360.1%)
+  → Blocking these trades would have significantly hurt sum PnL,
+    BUT the PnL numbers themselves are corrupted, AND blocked trades
+    might be replaced by different entries.
+
+─── REGRESSION CASES ───
+
+Jeff: Reported +8.9% despite $40.45 spent, $6.94 proceeds.
+  → ACCOUNTING BUG: sell returned total quote balance ($6.94 ETH),
+    not actual proceeds from this sale.
+
+UNITY #1: Reported +159.0% (HARD_TP). Spent $57.47, proceeds $66.77.
+UNITY #2: Reported -23.1%. Spent $35.22, proceeds $66.77.
+  → LIKELY: Second engine sold UNITY that first engine already held.
+    Same $66.77 proceeds on both = total balance, not per-trade.
+
+MOO #1: NOT_RECORDED PnL (FAST_SL -20.7%). Spent $94.24, proceeds $81.78.
+MOO #2: Reported +52.2% (HARD_TP). Spent $74.22, proceeds $81.36.
+  → ACCOUNTING BUG: instant large display gain with ~flat native round trip.
+
+Anthropic #1: Reported +58.6% (HARD_TP). Spent $53.95, proceeds $61.07.
+Anthropic #2: NOT_RECORDED (FAST_SL -4.1%). Spent $34.34, proceeds $42.63.
+  → Same pattern: proceeds near total balance, not attributed proceeds.
+
+FORGOT: POSITION STILL OPEN AT END OF LOG. No exit recorded.
+  → Retained inventory. Cannot confirm claimed blocked sells from logs.
+
+─── CONCLUSION ───
+
+Available evidence CANNOT distinguish A, B, and C reliably because:
+  1. Accounting corruption affects every trade's PnL
+  2. Post-exit price paths (needed for Policy B runner evaluation) unavailable
+  3. Policy C blocking analysis uses corrupted PnL numbers
+
+RECOMMENDATION: Deploy Policy A as the explicitly provisional configuration.
+Collect prospective shadow-mode comparisons during live operation.
+
+══════════════════════════════════════════════════════════════════════
+4. TRANSACTION RECONCILIATION WITH EXPLICIT UNKNOWNS
+══════════════════════════════════════════════════════════════════════
+
+RECONCILED (evidence supports):
+  - 43 trades extracted from engine log
+  - 34 with numeric exit PnL, 9 with unknown outcomes
+  - 6 trades hit HARD_TP, 12 hit HARD_SL, 13 SLOWING, 3 MOMENTUM_DEAD
+
+UNRECONCILED / EXPLICIT UNKNOWNS:
+  1. FORGOT — position open at end of log, no exit recorded
+  2. PENNYSTOCKS #1 — PnL "MERGED", superseded by engine merge
+  3. MOO #1 — PnL NOT_RECORDED (FAST_SL exit)
+  4. HOOD — PnL NOT_RECORDED (FAST_SL exit)
+  5. Musk (×3) — PnL NOT_RECORDED (all FAST_SL exits)
+  6. Anthropic #2 — PnL NOT_RECORDED (FAST_SL exit)
+  7. ALL trades — reported PnL unreliable due to accounting bugs
+  8. Duplicate engine activity — UNITY shows two engines trading simultaneously
+  9. V4 Router tx at 09:38 UTC — went through after engine kill
+
+CANNOT RECONSTRUCT:
+  - Original tx receipts (tx hashes mostly NOT_RECORDED)
+  - Pre/post balance snapshots at buy/sell time
+  - Gas costs per transaction
+  - Transfer taxes per token
+  - Independent price at execution time
+
+══════════════════════════════════════════════════════════════════════
+5. REGRESSION TESTS (49 total, all pass)
+══════════════════════════════════════════════════════════════════════
+
+Original defect tests (19):
+  TestBuyAccounting (3): delta vs total balance
+  TestSellAccounting (3): delta vs total quote balance
+  TestPnLCalculation (2): correct vs corrupted entry price
+  TestZeroMinOutFallback (1): no zero-min-out in source
+  TestMomentumVerification (3): [100,100,19] rejection
+  TestEntryPredicateReapplication (2): stale conditions block
+  TestCooldownFiltering (1): blocked token doesn't block others
+  TestGasReservation (2): SPY/USDG must check ETH gas
+  TestHoneypotDetection (1): inconclusive ≠ SAFE
+  TestPIDEnforcement (1): refuse newcomer
+
+New provisional config tests (30):
+  TestProvisionalConfig (4): constants present, warmup=0, positions=1, label
+  TestUnifiedExitRules (9): hard stop, TP, trailing stop, slowing, death, sellers
+  TestPolicyB (5): partial sell, trail widening/tightening, source presence
+  TestPolicyC (2): 180s cooldown value and policy-aware selection
+  TestDailyCircuitBreaker (3): 3% trigger, 2% safe, source check
+  TestRoundTripCostCheck (3): high/low RT cost, source check
+  TestSlippageRejectsZeroPrice (1): market_price≤0 returns False
+  TestStatePersistence (1): _save_state() after all mutations
+  TestAllSlippageRoutes (2): SPY and V4-other have slippage checks
+
+══════════════════════════════════════════════════════════════════════
+6. SHADOW MODE COLLECTION PLAN
+══════════════════════════════════════════════════════════════════════
+
+When engine is reactivated, shadow mode will log for each candidate:
+  - Full token address, chain, pool ID/key, quote token, fee, hook
+  - Fresh executable quotes (buy + sell simulation)
+  - All decision inputs: 5m%, B/S, liq, slippage estimate
+  - All protection checks with PASS/FAIL/INCONCLUSIVE
+  - Rejection reason if not entered
+  - Code revision hash + effective config hash
+  - Pre/post balance snapshots for delta accounting verification
+
+For Policy comparison, shadow mode will simultaneously evaluate:
+  - Policy A exit triggers (would this tick trigger A-exit?)
+  - Policy B exit triggers (would this tick trigger B-exit? partial?)
+  - Policy C eligibility (would this candidate be cooldown-blocked under C?)
+
+Shadow data stored separately from production decisions.
+Previously inspected history NOT relabeled as holdout.
+
+══════════════════════════════════════════════════════════════════════
+7. DEPLOYMENT AND ROLLBACK PLAN
+══════════════════════════════════════════════════════════════════════
+
+DEPLOYMENT STEPS:
+  1. Verify engine is STOPPED: systemctl status rh-rotation-engine.service
+  2. Backup production file:
+     cp scripts/rh_rotation_engine.py scripts/rh_rotation_engine.py.v6.2.bak
+  3. Copy repaired file:
+     cp repair/rh_rotation_engine.py scripts/rh_rotation_engine.py
+  4. Verify syntax: python3 -c "import ast; ast.parse(open('scripts/rh_rotation_engine.py').read())"
+  5. Verify no other engine running: pgrep -f rh_rotation_engine
+  6. Check cgroup ownership: no shared service with Even Terminal bridge
+  7. Verify wallet state: check ETH/SPY/USDG balances match expected
+  8. Re-enable service: systemctl enable rh-rotation-engine.service
+  9. Start engine: systemctl start rh-rotation-engine.service
+  10. Monitor first 5 minutes: journalctl -u rh-rotation-engine -f
+
+ROLLBACK:
+  1. systemctl stop rh-rotation-engine.service
+  2. cp scripts/rh_rotation_engine.py.v6.2.bak scripts/rh_rotation_engine.py
+  3. systemctl start rh-rotation-engine.service
+
+PRE-ACTIVATION CHECKLIST:
+  □ All 49 tests pass
+  □ Diff reviewed by Shaheer (or ChatGPT)
+  □ No other engine instance running
+  □ Wallet balances verified
+  □ FORGOT position resolved (if still held)
+  □ State file cleared or initialized: rm /tmp/rh_engine_state.json
+  □ Blacklist file reviewed: cat /tmp/rh_blacklist.json
+  □ Shaheer approves live activation
+
+══════════════════════════════════════════════════════════════════════
+8. WHAT IS WHAT (required separation)
+══════════════════════════════════════════════════════════════════════
+
+SOFTWARE DEFECTS FIXED (confirmed bugs, not strategy choices):
+  A-N above: 14 defects across accounting, safety, state management
+
+TRANSACTION OUTCOMES RECONCILED:
+  34/43 trades have numeric PnL (all corrupted by accounting bugs)
+  9 trades have unknown outcomes
+  5 regression cases analyzed (Jeff, UNITY, MOO, Anthropic, FORGOT)
+
+ENGINEERING DEFAULTS (not historically optimal):
+  All values in PROVISIONAL CONFIGURATION section 2
+  These are reasonable starting points, not data-driven optima
+  Trailing stop 6%, hard stop -3%, TP +25% are provisional
+
+STRATEGY IMPROVEMENTS WITH SUPPORTING EVIDENCE:
+  - Unified trailing stop: was disabled, now active (6%)
+    Evidence: 13 SLOWING exits had avg PnL +1.4% — momentum exit alone
+    captured peaks but trailing stop adds secondary protection
+  - Warmup removal: positions were unprotected for 16s after entry
+    Evidence: FAST_SL exits show positions can drop significantly
+    in first seconds
+  - Round-trip cost check: prevents entering positions that cannot
+    break even after execution costs
+    Evidence: NAVIER showed 66% round-trip recovery marked safe
+
+WHAT REMAINS FOR CONTROLLED LIVE ACTIVATION:
+  1. Shaheer's review and approval of this report
+  2. ChatGPT's review of the code diff and audit evidence
+  3. Decision on FORGOT position (if tokens still held)
+  4. Decision on whether to collect shadow-mode data before trading
+  5. Verification that no other engine/service conflicts exist
+  6. Live activation at Shaheer's explicit direction
+
+══════════════════════════════════════════════════════════════════════
+FILES
+══════════════════════════════════════════════════════════════════════
+
+Repair copy:   repair/rh_rotation_engine.py (3219 lines)
+Original copy: repair/rh_rotation_engine_v6.2_original.py (unchanged)
+Test suite:    repair/tests/test_accounting.py (49 tests)
+Full diff:     1006 lines (available on request)
+Production:    scripts/rh_rotation_engine.py (UNTOUCHED)
+
+Engine: STOPPED. Service: DISABLED. Wallet: IDLE.
