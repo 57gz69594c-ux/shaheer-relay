@@ -1,3 +1,6 @@
+DOWNLOAD ZIP:
+https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/rh_engine_v5_source.zip
+
 ══════════════════════════════════════════════════════════════════════
 RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 5)
 Status: STAGED repair configuration — production source untouched,
