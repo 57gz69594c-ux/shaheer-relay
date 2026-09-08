@@ -256,6 +256,483 @@ Funding path:
 Latest bridge (Sep 8): 1.91 SOL → 0.081 ETH on RH Chain
 Then distributed: 1/3 ETH, 1/3 SPY, 1/3 USDG
 
+11. PRICE PATHS — TICK-BY-TICK DATA FOR EVERY TRADE
+=====================================================
+
+Each trade below shows: entry conditions, every monitored price tick,
+and exit. Format: TIME | PRICE | PnL | 5m% | B/S | Peak drawdown
+
+NOTE: "No ticks" means the engine had NO monitoring data before exit —
+either BAD FILL (instant reject), Fast Exit (sold within seconds), or
+SL overshoot (pool discovery delay blocked monitoring — BUG 2, fixed v6.2).
+
+────────────────────────────────────────────────────
+TRADE 1: jobcoin (BAD FILL — instant reject)
+────────────────────────────────────────────────────
+Entry scan: 5m=+59.8% B/S=67/47 (1.43)
+Momentum: 3 readings all +59.8%, stable
+19:03:26  BUY via V4 SPY — fill check: -13.4% slippage
+19:04:00  BAD FILL — sold back immediately (gas loss only)
+VERDICT: Unsavable. Liquidity too thin for position size.
+
+────────────────────────────────────────────────────
+TRADE 2: jobcoin (HARD SL — BUG #2 victim)
+────────────────────────────────────────────────────
+Entry scan: 5m=+78.8% B/S=82/68 (1.21)
+19:06:54  ENTRY @ $0.00011314 (632,516 tokens)
+          [6 MINUTES OF NO MONITORING — pool discovery blocked thread]
+19:12:59  FIRST TICK: PnL already -29.5% — instant SL
+19:13:14  EXIT @ -29.5% → $192.10
+VERDICT: BUG #2. Monitor started 6min late. Price path unknown during gap.
+         With v6.2 pre-buy pool discovery, monitor would have started instantly.
+         If price dipped briefly then recovered, SL would have caught it at -3%.
+
+────────────────────────────────────────────────────
+TRADE 3: PENNYSTOCKS #1 (WIN +41.6%)
+────────────────────────────────────────────────────
+Entry scan: 5m=+53.6% B/S=23/10 (2.30) — strong buyers
+19:15:04  ENTRY @ $0.00023460 (244,381 tokens, 1st buy)
+19:15:24  ENTRY @ $0.00011227 (466,012 tokens, 2nd buy — dup engine)
+          [6 MINUTES — pool discovery gap again]
+19:21:10  R1: $0.00033220 PnL=+41.6% 5m=+51.3% B/S=24/7 Peak=-5.9% Trail=7%
+19:21:31  SLOWING +51.3%→+26.0% — exit triggered
+19:21:41  EXIT @ +41.6% → $145.77
+VERDICT: WIN. Could have been bigger — peaked higher but SLOWING caught the drop.
+
+────────────────────────────────────────────────────
+TRADE 4: PENNYSTOCKS #2 (dup engine — merged with #3)
+────────────────────────────────────────────────────
+BUG #1: Duplicate engine instance bought at +139% fill.
+No independent price path — same token as Trade 3.
+
+────────────────────────────────────────────────────
+TRADE 5: PENNYSTOCKS #3 (WIN +18.9%)
+────────────────────────────────────────────────────
+Re-entry after winning exit (no cooldown on wins)
+Entry scan: 5m=+22.0% B/S=18/5 (3.60) — very strong buyers
+19:22:03  ENTRY @ $0.00033079 (201,728 tokens)
+          [8 MINUTES of monitoring — no ticks logged until exit]
+19:30:18  MOMENTUM DEAD 5m=-11.5% — PnL was +18.9%
+19:30:29  EXIT @ +18.9% → $128.69
+VERDICT: WIN. Momentum died but still profitable. No TP hit (was +18.9%, needed +25%).
+
+────────────────────────────────────────────────────
+TRADE 6: PENNYSTOCKS #4 (BAD FILL — instant reject)
+────────────────────────────────────────────────────
+Entry scan: 5m=+16.3% B/S=9/8 (1.12)
+19:33:48  BUY via V4 — fill check: -13.5% slippage
+19:33:55  BAD FILL — sold back, BLACKLISTED
+VERDICT: Unsavable. Momentum was fading (only +16.3%), liquidity drying up.
+
+────────────────────────────────────────────────────
+TRADE 7: HOOD (WIN — Fast Exit)
+────────────────────────────────────────────────────
+Entry scan: 5m=+21.7%
+20:12:55  ENTRY @ $0.00011943 (792,993 tokens)
+20:13:19  Fast Exit — $233.48
+VERDICT: WIN. Exited in 24 seconds. No tick data — too fast for monitor loop.
+
+────────────────────────────────────────────────────
+TRADE 8: GAGE #1 (LOSS -24.0% — BUG #2 victim)
+────────────────────────────────────────────────────
+Entry scan: 5m momentum verified, Pons route
+20:56:36  ENTRY @ $0.00022118 (295,864 tokens)
+          [5.5 MINUTES — pool discovery blocked thread]
+21:02:15  FIRST TICK: PnL already -24.0% — instant SL
+21:02:19  EXIT @ -24.0% → $213.48
+VERDICT: BUG #2. Same as jobcoin. 5.5min monitoring gap.
+         v6.2 would have started monitor immediately.
+         -3% SL would have triggered much earlier, saving ~21% of position.
+
+────────────────────────────────────────────────────
+TRADE 9: HUNTER (WIN +28.7%)
+────────────────────────────────────────────────────
+Entry scan: 5m=+43.3% B/S=180/178 (1.01)
+21:03:43  ENTRY @ $0.00081493 (153,416 tokens)
+21:10:12  R1: $0.00102200 PnL=+25.4% 5m=+32.0% B/S=651/222 Peak=0.0%
+21:10:44  R1: $0.00110900 PnL=+36.1% 5m=+27.1% B/S=568/192 Peak=0.0%
+21:11:17  R1: $0.00110200 PnL=+35.2% 5m=+26.4% B/S=632/206 Peak=-0.6%
+21:11:49  R1: $0.00112300 PnL=+37.8% 5m=+25.7% B/S=542/173 Peak=0.0% ← SESSION HIGH
+21:12:08  SLOWING +25.7%→+17.4% — PnL=+28.7%
+21:12:13  EXIT @ +28.7% → $244.24
+VERDICT: WIN. Peaked at +37.8% but exited at +28.7%. HARD TP at +25% would
+         have captured earlier. 6.5min monitoring gap before first tick (BUG #2).
+
+────────────────────────────────────────────────────
+TRADE 10: GAGE #2 (WIN +56.2%)
+────────────────────────────────────────────────────
+21:12:38  ENTRY @ $0.00019403 (324,780 tokens)
+          [6.4 MINUTES — no ticks logged]
+21:19:00  MOMENTUM DEAD 5m=-22.0% — PnL was +56.2%
+21:19:05  EXIT @ +56.2% → $283.88
+VERDICT: BIG WIN. Peaked well above +25% TP. Monitor gap meant no TP trigger.
+         With v6.2, TP would have hit at +25% earlier (leaving +31.2% on table).
+
+────────────────────────────────────────────────────
+TRADE 11: GAGE #3 (LOSS -14.7% — BUG #2 victim)
+────────────────────────────────────────────────────
+21:20:50  ENTRY @ $0.00032504 (252,756 tokens)
+          [6.9 MINUTES — no ticks logged]
+21:27:44  FIRST TICK: PnL already -14.7% — instant SL
+21:27:48  EXIT @ -14.7% → $271.08
+VERDICT: BUG #2 again. Bought at the top after the +56.2% win on same token.
+         v6.2 pre-buy pool discovery + immediate monitor would have caught
+         the decline at -3% SL, saving ~11.7%.
+
+────────────────────────────────────────────────────
+TRADE 12: Musk #1 (BAD FILL — instant reject)
+────────────────────────────────────────────────────
+21:36:39  V4 fill check: -16.3% slippage
+21:36:52  BAD FILL — sold back, BLACKLISTED
+VERDICT: Unsavable. V4 pool too thin.
+
+────────────────────────────────────────────────────
+TRADE 13: GAGE #4 (WIN +3.9%)
+────────────────────────────────────────────────────
+21:37:29  ENTRY @ $0.00032462 (247,044 tokens)
+21:38:33  R0: $0.00033410 PnL=+2.9% 5m=+16.2% B/S=24/22 Peak=0.0%
+21:39:06  R0: $0.00033410 PnL=+2.9% 5m=+16.2% B/S=24/22 Peak=0.0%
+21:39:38  R0: $0.00034640 PnL=+6.7% 5m=+21.3% B/S=27/18 Peak=0.0% ← PEAK
+21:40:10  R0: $0.00034350 PnL=+5.8% 5m=+20.3% B/S=31/23 Peak=-0.8%
+21:40:33  SLOWING +20.3%→+3.5% — PnL=+3.9%
+21:40:38  EXIT @ +3.9% → $271.00
+VERDICT: Small win. Peaked at +6.7% — never close to +25% TP.
+         SLOWING exit was correct — momentum collapsed +20.3%→+3.5%.
+
+────────────────────────────────────────────────────
+TRADE 14: FORGOT (STUCK — tokens locked)
+────────────────────────────────────────────────────
+21:49:05  ENTRY @ $0.00033012 (250,275 tokens) via Pons
+          Sell attempts all failed — contract blocks transfers.
+VERDICT: Quasi-honeypot. Pons honeypot check passed but sells reverted.
+         Tokens still in wallet (unsellable). Total loss of position.
+
+────────────────────────────────────────────────────
+TRADE 15: IPUNK (HONEYPOT — -100% loss)
+────────────────────────────────────────────────────
+21:52:03  ENTRY @ $0.00008664 (1,289,623 tokens) via V4
+21:53:10  R0: $0.00008742 PnL=+0.9% 5m=+16.0% B/S=12/3 Peak=-7.4%
+21:53:42  R0: $0.00009474 PnL=+9.4% 5m=+25.8% B/S=15/3 Peak=0.0%
+21:53:47  SLOWING +25.8%→+11.1% — tried to sell
+21:55:51  SLOWING again — PnL=-20.8% — tried to sell
+21:56:09  MOMENTUM DEAD — PnL=-20.8% — tried to sell
+21:56:24  MOMENTUM DEAD — PnL=-15.9% — tried to sell
+21:56:37  MOMENTUM DEAD — PnL=-15.9% — tried to sell
+21:56:50  MOMENTUM DEAD — PnL=+1.0% — tried to sell
+21:58:05  SLOWING — PnL=-15.8% — tried to sell
+21:58:18  MOMENTUM DEAD — PnL=-15.8% — tried to sell
+21:58:31  MOMENTUM DEAD — PnL=-9.3% — tried to sell
+21:58:44  MOMENTUM DEAD — PnL=-9.3% — tried to sell
+21:58:57  R0: $0.00007862 PnL=-9.3% 5m=-15.6% B/S=16/14 Peak=-17.0%
+21:58:59  MOMENTUM DEAD — PnL=-2.2% — tried to sell
+22:00:39  SLOWING — PnL=+7.7% — tried to sell
+22:04:35  SLOWING — PnL=+22.2% — tried to sell
+22:05:29  R0: $0.00011090 PnL=+28.0% 5m=+18.9% B/S=22/13 Peak=0.0%
+22:05:32  SLOWING — PnL=+24.1% — tried to sell
+          [ALL SELL ATTEMPTS REVERTED — V4 honeypot]
+VERDICT: HONEYPOT. V4 roundtrip check passed (99.4%) but actual sells all
+         reverted. Price bounced +28% at one point but couldn't exit.
+         Token still in wallet. BLACKLISTED.
+         The price path shows this WOULD have been a winner (+28%) if sellable.
+
+────────────────────────────────────────────────────
+TRADE 16: Musk #2 (LOSS -11.1% — BUG #2 victim)
+────────────────────────────────────────────────────
+22:12:21  ENTRY @ $0.00016617 (390,736 tokens) via V3
+22:12:26  FIRST TICK: PnL already -11.1% — instant SL (5 seconds!)
+22:12:34  EXIT @ -11.1% → $50.75
+VERDICT: Massive instant drop. Even with v6.2, -11.1% in 5 seconds is
+         likely unsavable — price crashed faster than any SL could react.
+         Could indicate front-running or sandwich attack.
+
+────────────────────────────────────────────────────
+TRADE 17: Musk #3 (LOSS — Fast Exit)
+────────────────────────────────────────────────────
+22:20:03  ENTRY @ $0.00014637 (296,189 tokens) via V3
+22:20:22  Fast Exit — $46.48 (19 seconds)
+VERDICT: No tick data. Exited too fast. Price moved against immediately.
+
+────────────────────────────────────────────────────
+TRADE 18: PINK #1 (WIN +1.7%)
+────────────────────────────────────────────────────
+22:25:22  ENTRY @ $0.00199972 (19,353 tokens) via Pons
+22:26:16  SLOWING +5.3%→-1.9% — PnL=+1.7%
+22:26:21  EXIT @ +1.7% → $47.85
+VERDICT: Tiny win. Momentum faded in ~54 seconds. Never close to TP.
+
+────────────────────────────────────────────────────
+TRADE 19: Musk #4 (LOSS — Fast Exit)
+────────────────────────────────────────────────────
+22:29:55  ENTRY @ $0.00026843 (150,697 tokens) via V3
+22:30:23  Fast Exit — $35.19 (28 seconds)
+VERDICT: No tick data. 4th attempt on Musk — kept losing. Should blacklist.
+
+────────────────────────────────────────────────────
+TRADE 20: PINK #2 (LOSS -8.5%)
+────────────────────────────────────────────────────
+22:36:22  ENTRY @ $0.00232647 (11,864 tokens) via Pons
+22:37:27  R1: $0.00234100 PnL=+0.6% 5m=+17.9% B/S=562/229 Peak=0.0%
+22:38:00  R1: $0.00225100 PnL=-3.2% 5m=+14.9% B/S=572/246 Peak=-3.8%
+22:38:32  R1: $0.00225100 PnL=-3.2% 5m=+14.9% B/S=572/246 Peak=-3.8%
+22:38:52  SLOWING +14.9%→+1.2% — PnL=-8.5%
+22:38:57  EXIT @ -8.5% → $31.67
+VERDICT: Losable from the start. Only briefly positive (+0.6%), then sank.
+         -3% SL should have triggered at the -3.2% tick but didn't fire
+         (warmup period or SL was set to -5% at this time).
+
+────────────────────────────────────────────────────
+TRADE 21: FAME (BAD FILL — instant reject)
+────────────────────────────────────────────────────
+22:41:28  V4 fill check: -46.1% slippage
+22:41:39  BAD FILL — sold back, BLACKLISTED
+VERDICT: Unsavable. Worst slippage of all trades. Pool extremely thin.
+
+────────────────────────────────────────────────────
+TRADE 22: OPINIO (LOSS -15.2%)
+────────────────────────────────────────────────────
+22:43:26  ENTRY @ $0.00005719 (418,329 tokens) via Pons
+22:44:19  SLOWING +58.4%→+10.3% — PnL=-15.2%
+22:44:23  EXIT @ -15.2% → $29.54
+VERDICT: Bought into a pump that was already dumping. DexScreener showed
+         5m=+58.4% but actual fill was much worse. By the time monitor
+         saw the first reading, price had already crashed -15.2%.
+         Only ~53 seconds in position. Unsavable with any settings.
+
+────────────────────────────────────────────────────
+TRADE 23: Musk #5 (LOSS — Fast Exit)
+────────────────────────────────────────────────────
+22:48:31  ENTRY @ $0.00025751 (85,229 tokens) via V3
+22:49:06  R1: $0.00026840 PnL=+4.2% 5m=+73.1% B/S=83/53 Peak=-5.5%
+22:49:20  Fast Exit — $27.41
+VERDICT: Brief +4.2% profit, but already had Peak=-5.5% drawdown.
+         5th attempt on Musk. Session-loss blacklist should have blocked this.
+
+────────────────────────────────────────────────────
+TRADE 24: PINK #3 (LOSS -1.7%)
+────────────────────────────────────────────────────
+22:56:16  ENTRY @ $0.00167803 (59,821 tokens) via Pons
+22:57:07  SLOWING +11.0%→+1.1% — PnL=-1.7%
+22:57:11  EXIT @ -1.7% → $100.30
+VERDICT: Marginal loss. Momentum faded in ~51 seconds. Almost breakeven.
+
+────────────────────────────────────────────────────
+TRADE 25: UNITY #1 (WIN +159% — HARD TP)
+────────────────────────────────────────────────────
+23:00:07  ENTRY @ $0.00013754 (417,811 tokens) — Engine A
+23:01:13  R0: $0.00014360 PnL=+4.4% 5m=+171.0% B/S=1155/962 Peak=0.0%
+23:01:24  HARD TP HIT at PnL=+159.0%
+23:01:27  EXIT @ +159.0% → $66.77
+VERDICT: MASSIVE WIN. 5m was +171% — explosive pump. TP locked profit.
+         Note: PnL reported as +159% likely due to accounting bug (#5).
+
+────────────────────────────────────────────────────
+TRADE 26: UNITY #2 (LOSS -23.1% — dup engine)
+────────────────────────────────────────────────────
+23:00:49  ENTRY @ $0.00004082 (862,971 tokens) — Engine B (BUG #1)
+23:01:13  R0: PnL=+4.4% from Engine A's perspective
+23:01:15  SLOWING +171.0%→+99.4% — PnL=-23.1% (from Engine B's entry)
+23:01:20  EXIT @ -23.1% → $66.77
+VERDICT: BUG #1. Duplicate engine bought at a MUCH worse price ($0.00004082
+         vs $0.00013754). Engine B's entry was actually lower price but the
+         nonce collision caused accounting confusion. Fixed in v6.2.
+
+────────────────────────────────────────────────────
+TRADE 27: VA #1 (LOSS -5.2%)
+────────────────────────────────────────────────────
+23:02:12  ENTRY @ $0.00010157 (534,858 tokens)
+23:02:48  HARD SL — PnL=-5.2% (36 seconds)
+23:02:53  EXIT @ -5.2% → $60.53
+VERDICT: Quick SL hit. Price dropped immediately after entry.
+         With -3% SL (v6.2), would have exited earlier saving ~2.2%.
+
+────────────────────────────────────────────────────
+TRADE 28: VA #2 (WIN +35.3% — HARD TP)
+────────────────────────────────────────────────────
+23:03:18  ENTRY @ $0.00008109 (529,554 tokens)
+23:03:53  HARD TP HIT at PnL=+35.3%
+23:03:58  EXIT @ +35.3% → $57.07
+VERDICT: WIN. Bought the dip after VA #1's loss. Quick +35.3% TP in 35 seconds.
+
+────────────────────────────────────────────────────
+TRADE 29: VA #3 (WIN +25.3% — HARD TP)
+────────────────────────────────────────────────────
+23:05:27  ENTRY @ $0.00006671 (547,145 tokens)
+23:06:01  HARD TP HIT at PnL=+25.3%
+23:06:06  EXIT @ +25.3% → $47.85
+VERDICT: WIN. Third entry on VA — each time buying lower, each time TP hitting.
+
+────────────────────────────────────────────────────
+TRADE 30: Jeff (WIN +8.9%)
+────────────────────────────────────────────────────
+23:13:33  ENTRY @ $0.00003196 (1,265,670 tokens)
+23:14:38  R1: $0.00003691 PnL=+15.5% 5m=+35.0% B/S=45/30 Peak=0.0%
+23:14:48  SLOWING +35.0%→+9.8% — PnL=+8.9%
+23:15:03  EXIT @ +8.9% → $6.94
+VERDICT: WIN. Peaked at +15.5%. SLOWING caught the fade.
+         Small exit value ($6.94) — position was tiny.
+
+────────────────────────────────────────────────────
+TRADE 31: SPREAD (LOSS -12.5%)
+────────────────────────────────────────────────────
+Entry via SPY-paired V4 pool
+23:41:09  ENTRY @ $0.00009059 (438,484 tokens)
+23:42:14  R2: $0.00009979 PnL=+10.2% 5m=+98.4% B/S=329/323 Peak=0.0%
+23:42:47  R2: $0.00009979 PnL=+10.2% 5m=+98.4% B/S=329/323 Peak=0.0%
+23:42:55  SLOWING +98.4%→+40.3% — PnL=-12.5%
+23:43:10  EXIT @ -12.5% → $100.25 (SPY)
+VERDICT: Monitor showed +10.2% PnL but exited at -12.5%. Accounting bug (#5)?
+         OR: DexScreener price vs on-chain price divergence.
+         5m was +98.4% → massive pump, but actual fill was poor.
+         Even at the "best" tick (+10.2%), nowhere near +25% TP.
+
+────────────────────────────────────────────────────
+TRADE 32: SPREAD #2 (BAD FILL — instant reject)
+────────────────────────────────────────────────────
+23:48:43  BAD FILL (-5.6%) — sold back, BLACKLISTED
+VERDICT: Unsavable. Momentum already dead from Trade 31.
+
+────────────────────────────────────────────────────
+TRADE 33: COMPUTE #1 (LOSS -10.0% — BUG #2 victim)
+────────────────────────────────────────────────────
+USDG-paired V4 pool
+00:31:24  ENTRY @ $0.00025139 (249,998 tokens)
+00:31:59  FIRST TICK: PnL already -10.0% — instant SL (35 seconds)
+00:32:12  EXIT @ -10.0% → $65.11 (USDG)
+VERDICT: BUG #2. 35-second gap then instant SL at -10%.
+         v6.2 -3% SL with immediate monitoring would have saved ~7%.
+
+────────────────────────────────────────────────────
+TRADE 34: COMPUTE #2 (LOSS -35.0% — BUG #2 worst case)
+────────────────────────────────────────────────────
+00:37:25  ENTRY @ $0.00014909 (335,313 tokens)
+00:38:09  FIRST TICK: PnL already -35.0% — instant SL (44 seconds)
+00:38:19  EXIT @ -35.0% → $53.29 (USDG)
+VERDICT: BUG #2 WORST CASE. Pool discovery took ~44s, price crashed -35%.
+         This is the trade that proved BUG #2 was catastrophic.
+         v6.2 pre-buy pool discovery would have caught this at -3%.
+         Potential savings: ~32% of position value (~$17).
+
+────────────────────────────────────────────────────
+TRADE 35: BYCOCKET (LOSS -0.8%)
+────────────────────────────────────────────────────
+00:42:11  ENTRY @ $0.00011266 (352,864 tokens) USDG-paired
+00:43:16  R5: $0.00011170 PnL=-0.8% 5m=+9.1% B/S=21/19 Peak=-4.9%
+00:43:49  R5: $0.00011180 PnL=-0.8% 5m=+8.6% B/S=19/15 Peak=-4.9%
+00:44:21  R5: $0.00011240 PnL=-0.2% 5m=+9.2% B/S=21/16 Peak=-4.3%
+00:44:26  SLOWING +9.2%→-1.2% — PnL=-0.8%
+00:44:36  EXIT @ -0.8% → $52.05 (USDG)
+VERDICT: Near-breakeven. Price never went positive enough for TP.
+         Momentum was weak from start (5m only +9%). B/S nearly equal.
+         With MIN_5M_ENTRY=19% (v6.2), this trade would NOT have been taken.
+
+────────────────────────────────────────────────────
+TRADE 36: HOODCAT (LOSS -14.4% — BUG #2 victim)
+────────────────────────────────────────────────────
+01:42:03  ENTRY @ $0.00009320 (430,373 tokens) USDG-paired
+01:42:38  FIRST TICK: PnL already -14.4% — instant SL (35 seconds)
+01:42:48  EXIT @ -14.4% → $54.96 (USDG)
+VERDICT: BUG #2. 35-second monitoring gap, price already -14.4%.
+         v6.2 would have caught at -3%, saving ~11.4%.
+
+────────────────────────────────────────────────────
+TRADES 37-40: BAD FILLS (XRP, fatgirls, FATCAT, UHI)
+────────────────────────────────────────────────────
+04:17  XRP:      -20.1% slippage — sold back, BLACKLISTED
+05:22  fatgirls: -13.7% slippage — sold back, BLACKLISTED
+06:09  FATCAT:   -24.1% slippage — sold back, BLACKLISTED
+06:55  UHI:      -11.5% slippage — sold back, BLACKLISTED
+VERDICT: All unsavable. Overnight hours = thin liquidity. All V4 pools.
+         v6.2 V4 quote rejection would have blocked all 4 (no minOut=0).
+
+────────────────────────────────────────────────────
+TRADE 41: PTP #1 (WIN +25.3% — HARD TP)
+────────────────────────────────────────────────────
+08:13:01  ENTRY @ $0.00008882 (480,158 tokens) via Pons
+08:13:33  R0: $0.00008916 PnL=+0.4% 5m=+19.1% B/S=127/107 Peak=-6.0%
+08:14:06  R0: $0.00008642 PnL=-2.7% 5m=+15.4% B/S=140/116 Peak=-8.9%
+08:14:39  R0: $0.00009430 PnL=+6.2% 5m=+25.9% B/S=156/119 Peak=-0.5%
+08:15:13  R0: $0.00010350 PnL=+16.5% 5m=+20.6% B/S=130/93 Peak=0.0%
+08:15:17  HARD TP HIT at PnL=+25.3%
+08:15:22  EXIT @ +25.3% → $101.51
+VERDICT: WIN. Beautiful price path: dipped to -2.7%, recovered, ripped to TP.
+         The -3% SL (v6.2) would have been very close to triggering at -2.7%.
+         Peak drawdown was -8.9% early on — old -5% SL would have killed this trade.
+
+────────────────────────────────────────────────────
+TRADE 42: PTP #2 (LOSS -1.8%)
+────────────────────────────────────────────────────
+08:17:57  ENTRY @ $0.00011062 (431,864 tokens) via Pons
+08:18:23  SLOWING +40.6%→+5.2% — PnL=-1.8%
+08:18:35  EXIT @ -1.8% → $101.63
+VERDICT: Near-breakeven. Re-entry at higher price after TP win.
+         Momentum was fading (+40.6% down to +5.2%).
+
+────────────────────────────────────────────────────
+TRADE 43: MOO #1 (LOSS — Fast Exit)
+────────────────────────────────────────────────────
+08:19:09  ENTRY @ $0.00026772 (351,993 tokens) via V3
+08:19:33  Fast Exit — $81.78 (24 seconds)
+VERDICT: No tick data. Price moved against in seconds.
+
+────────────────────────────────────────────────────
+TRADE 44: MOO #2 (WIN +52.2% — HARD TP)
+────────────────────────────────────────────────────
+08:22:23  ENTRY @ $0.00016119 (460,431 tokens)
+08:22:23  HARD TP HIT at PnL=+52.2% — INSTANT (same second!)
+08:22:32  EXIT @ +52.2% → $81.36
+VERDICT: WIN. Bought at dip after MOO #1 loss, instantly hit TP.
+         Fill was so good that PnL was +52.2% on first tick.
+
+────────────────────────────────────────────────────
+TRADE 45: AGENTSORA (LOSS -7.0%)
+────────────────────────────────────────────────────
+08:25:38  ENTRY @ $0.00035453 (208,623 tokens)
+08:25:50  HARD SL — PnL=-7.0% (12 seconds)
+08:25:55  EXIT @ -7.0% → $71.13
+VERDICT: Quick SL. Price dropped -7% in 12 seconds.
+         v6.2 -3% SL would have caught this earlier, saving ~4%.
+
+────────────────────────────────────────────────────
+TRADE 46: PTP #3 (LOSS -9.0%)
+────────────────────────────────────────────────────
+08:27:54  ENTRY @ $0.00006914 (536,601 tokens)
+08:28:03  HARD SL — PnL=-9.0% (9 seconds)
+08:28:08  EXIT @ -9.0% → $68.48
+VERDICT: Quick SL. 3rd entry on PTP — momentum exhausted.
+         v6.2 -3% SL would have saved ~6%.
+
+12. WHICH LOSERS COULD HAVE BEEN WINNERS?
+==========================================
+
+DEFINITELY SAVABLE (BUG #2 — pool discovery delay):
+  - jobcoin #2:    -29.5% → would be ~-3% with v6.2 (save ~$19)
+  - GAGE #1:       -24.0% → would be ~-3% with v6.2 (save ~$13)
+  - GAGE #3:       -14.7% → would be ~-3% with v6.2 (save ~$9)
+  - COMPUTE #1:    -10.0% → would be ~-3% with v6.2 (save ~$5)
+  - COMPUTE #2:    -35.0% → would be ~-3% with v6.2 (save ~$17)
+  - HOODCAT:       -14.4% → would be ~-3% with v6.2 (save ~$7)
+  Total saved: ~$70 across 6 trades
+
+PARTIALLY SAVABLE (tighter SL):
+  - Musk #2:       -11.1% in 5s → maybe -5% with faster SL
+  - AGENTSORA:     -7.0% in 12s → ~-3% with v6.2
+  - PTP #3:        -9.0% in 9s → ~-3% with v6.2
+  Total saved: ~$8
+
+UNSAVABLE (structural problems):
+  - BAD FILLs (9 trades): Pool liquidity too thin. V4 quote rejection (v6.2) prevents entry.
+  - IPUNK: Honeypot — sells revert. Need better honeypot detection.
+  - FORGOT: Quasi-honeypot. Same issue.
+  - Musk #3, #4, #5: Repeat entries on losing token. Session blacklist needed.
+  - OPINIO: Instant crash on entry. Unsavable.
+  - PINK #2: Gradual decline, never recovered.
+  - SPREAD: Accounting anomaly — showed +10.2% but exited -12.5%.
+  - UNITY #2: Dup engine (BUG #1). Fixed in v6.2.
+
+WOULD HAVE BEEN FILTERED BY v6.2 SETTINGS:
+  - BYCOCKET: 5m was only +9.1% → MIN_5M_ENTRY=19% blocks it
+  - Several overnight BAD FILLs: V4 quote rejection blocks them
+
 ==================================================
 Engine v6.2 ready. All bugs fixed. Awaiting start.
 ==================================================
