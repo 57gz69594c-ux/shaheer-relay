@@ -1,0 +1,4374 @@
+{
+  "extraction_timestamp": "2026-09-08T09:00:00Z",
+  "source_file": "/root/shaheer-project/crypto-alpha-engine/logs/engine.log",
+  "total_trades": 43,
+  "date_range": "2026-09-07 17:53:55 to 2026-09-08 09:02:42",
+  "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+  "notes": [
+    "tx_hash fields marked NOT_RECORDED \u2014 engine log does not emit on-chain tx hashes",
+    "gas_cost fields show estimates where available from honeypot check gas simulation",
+    "IPUNK position had repeated sell reversions (EXIT_BLOCKED) and tokens remained in wallet",
+    "Some PENNYSTOCKS/UNITY positions had multiple entries for the same token in rapid succession"
+  ],
+  "trades": [
+    {
+      "trade_id": 1,
+      "token": "jobcoin",
+      "token_address": "0xc896473d",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4spy_100_1",
+      "entry_timestamp_utc": "2026-09-07 19:06:53,914",
+      "entry_price_usd": "0.00011314",
+      "tokens_bought": "632516",
+      "quote_currency": "SPY",
+      "quote_spent_usd": "71.57",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 19:03:18,855",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 59.8\u219259.8\u219259.8"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:26,484",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:03:26,484 INFO V4 BUY jobcoin with 0.081097 SPY (~$61.98) fee=100 tick=1"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:26,642",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:03:26,642 INFO V4 BUY jobcoin with 0.081097 SPY (~$61.98) fee=100 tick=1"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:33,955",
+          "type": "PICK",
+          "detail": "PICK (cached): jobcoin 5m=+59.8% route=v4spy_100_1"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:36,976",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+36.9% B/S=63/44"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:39,994",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+36.9% B/S=63/44"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:39,994",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 59.8\u219236.9\u219236.9"
+        },
+        {
+          "timestamp": "2026-09-07 19:03:46,709",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:03:46,709 INFO V4 BUY jobcoin with 0.078355 SPY (~$59.88) fee=100 tick=1"
+        },
+        {
+          "timestamp": "2026-09-07 19:04:36,197",
+          "type": "PICK",
+          "detail": "PICK (cached): jobcoin 5m=+63.7% route=v4spy_100_1"
+        },
+        {
+          "timestamp": "2026-09-07 19:04:39,217",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+30.6% B/S=71/51"
+        },
+        {
+          "timestamp": "2026-09-07 19:04:42,234",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+30.6% B/S=71/51"
+        },
+        {
+          "timestamp": "2026-09-07 19:04:42,234",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 63.7\u219230.6\u219230.6"
+        },
+        {
+          "timestamp": "2026-09-07 19:04:49,135",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:04:49,135 INFO V4 BUY jobcoin with 0.076396 SPY (~$58.38) fee=100 tick=1"
+        },
+        {
+          "timestamp": "2026-09-07 19:04:58,280",
+          "type": "PICK",
+          "detail": "PICK (cached): jobcoin 5m=+63.7% route=v4spy_100_1"
+        },
+        {
+          "timestamp": "2026-09-07 19:05:01,380",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+125.0% B/S=75/57"
+        },
+        {
+          "timestamp": "2026-09-07 19:06:33,597",
+          "type": "PICK",
+          "detail": "PICK (cached): jobcoin 5m=+78.8% route=v4spy_100_1"
+        },
+        {
+          "timestamp": "2026-09-07 19:06:36,613",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+78.8% B/S=82/68"
+        },
+        {
+          "timestamp": "2026-09-07 19:06:39,628",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+78.8% B/S=82/68"
+        },
+        {
+          "timestamp": "2026-09-07 19:06:39,628",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 78.8\u219278.8\u219278.8"
+        },
+        {
+          "timestamp": "2026-09-07 19:06:46,504",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:06:46,504 INFO V4 BUY jobcoin with 0.093647 SPY (~$71.57) fee=100 tick=1"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 19:13:14,565",
+      "exit_reason": "HARD_SL (-29.5%)",
+      "exit_pnl_pct": "-29.5",
+      "exit_proceeds_usd": "192.10",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 2,
+      "token": "PENNYSTOCKS",
+      "token_address": "0xfEaf46c2",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_0_200",
+      "entry_timestamp_utc": "2026-09-07 19:15:03,857",
+      "entry_price_usd": "0.00023460",
+      "tokens_bought": "244381",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "57.33",
+      "buy_fee_tier": "0",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 19:14:32,859",
+          "type": "TESTING",
+          "detail": "2026-09-07 19:14:32,859 INFO Testing PENNYSTOCKS 5m=+53.6%..."
+        },
+        {
+          "timestamp": "2026-09-07 19:14:35,756",
+          "type": "TESTING",
+          "detail": "2026-09-07 19:14:35,756 INFO Testing PENNYSTOCKS 5m=+53.6%..."
+        },
+        {
+          "timestamp": "2026-09-07 19:14:47,051",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+53.6% B/S=23/10"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:50,066",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+53.6% B/S=23/10"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:50,066",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 53.6\u219253.6\u219253.6"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:50,620",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+53.6% B/S=23/10"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:53,074",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:14:53,074 INFO V4 BUY PENNYSTOCKS with 57.332182 USDG (~$57.33) fee=0 tick=200"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:53,635",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+53.6% B/S=23/10"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:53,635",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 53.6\u219253.6\u219253.6"
+        },
+        {
+          "timestamp": "2026-09-07 19:14:56,918",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:14:56,918 INFO V4 BUY PENNYSTOCKS with 57.332182 USDG (~$57.33) fee=0 tick=200"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 19:17:24,371",
+      "exit_reason": "SUPERSEDED_BY_ENGINE_MERGE",
+      "exit_pnl_pct": "MERGED",
+      "exit_proceeds_usd": "MERGED_INTO_NEXT_POSITION",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Engine restart detected combined position (466012 tokens). This 244381-token position was merged/superseded. Value captured in subsequent position exit."
+      ]
+    },
+    {
+      "trade_id": 3,
+      "token": "PENNYSTOCKS",
+      "token_address": "0xfEaf46c2",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_0_200",
+      "entry_timestamp_utc": "2026-09-07 19:15:24,193",
+      "entry_price_usd": "0.00011227",
+      "tokens_bought": "466012",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "52.32",
+      "buy_fee_tier": "0",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 19:15:06,399",
+          "type": "PICK",
+          "detail": "PICK (cached): PENNYSTOCKS 5m=+68.8% route=v4usdg_0_200"
+        },
+        {
+          "timestamp": "2026-09-07 19:15:09,415",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+68.8% B/S=31/12"
+        },
+        {
+          "timestamp": "2026-09-07 19:15:12,431",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+68.8% B/S=31/12"
+        },
+        {
+          "timestamp": "2026-09-07 19:15:12,431",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 68.8\u219268.8\u219268.8"
+        },
+        {
+          "timestamp": "2026-09-07 19:15:15,566",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:15:15,566 INFO V4 BUY PENNYSTOCKS with 52.318285 USDG (~$52.32) fee=0 tick=200"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 19:21:10,668",
+          "rotation_slot": "R1",
+          "price_usd": "0.00033220",
+          "pnl_pct": "+41.6",
+          "momentum_5m_pct": "+51.3",
+          "buy_sell_ratio": "24/7",
+          "peak_drawdown_pct": "-5.9",
+          "trail_width_pct": "7",
+          "position_value_usd": "154.81",
+          "portfolio_total_usd": "385.64"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 19:21:41,554",
+      "exit_reason": "SLOWING (+51.3%\u2192+26.0%)",
+      "exit_pnl_pct": "+41.6",
+      "exit_proceeds_usd": "145.77",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-5.9%",
+      "notes": [
+        "Sell fee tier: 0"
+      ]
+    },
+    {
+      "trade_id": 4,
+      "token": "PENNYSTOCKS",
+      "token_address": "0xfEaf46c2",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_0_200",
+      "entry_timestamp_utc": "2026-09-07 19:22:03,164",
+      "entry_price_usd": "0.00033079",
+      "tokens_bought": "201728",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "66.73",
+      "buy_fee_tier": "0",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 19:21:46,947",
+          "type": "PICK",
+          "detail": "PICK (cached): PENNYSTOCKS 5m=+22.0% route=v4usdg_0_200"
+        },
+        {
+          "timestamp": "2026-09-07 19:21:49,963",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+26.0% B/S=18/5"
+        },
+        {
+          "timestamp": "2026-09-07 19:21:52,978",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+26.0% B/S=18/5"
+        },
+        {
+          "timestamp": "2026-09-07 19:21:52,979",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 22.0\u219226.0\u219226.0"
+        },
+        {
+          "timestamp": "2026-09-07 19:21:55,930",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 19:21:55,930 INFO V4 BUY PENNYSTOCKS with 66.729287 USDG (~$66.73) fee=0 tick=200"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 19:30:29,233",
+      "exit_reason": "MOMENTUM_DEAD (5m=-11.5%)",
+      "exit_pnl_pct": "+18.9",
+      "exit_proceeds_usd": "128.69",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 0"
+      ]
+    },
+    {
+      "trade_id": 5,
+      "token": "HOOD",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "0xAb11dD31",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-07 20:12:55,343",
+      "entry_price_usd": "0.00011943",
+      "tokens_bought": "792993",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "94.71",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 20:11:42,130",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+16.2% B/S=66/53"
+        },
+        {
+          "timestamp": "2026-09-07 20:11:45,144",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+16.2% B/S=66/53"
+        },
+        {
+          "timestamp": "2026-09-07 20:11:45,144",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 16.2\u219216.2\u219216.2"
+        },
+        {
+          "timestamp": "2026-09-07 20:11:53,133",
+          "type": "PICK",
+          "detail": "PICK (cached): HOOD 5m=+16.2% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 20:11:56,151",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+16.2% B/S=66/53"
+        },
+        {
+          "timestamp": "2026-09-07 20:11:59,169",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+16.2% B/S=66/53"
+        },
+        {
+          "timestamp": "2026-09-07 20:11:59,169",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 16.2\u219216.2\u219216.2"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:07,146",
+          "type": "PICK",
+          "detail": "PICK (cached): HOOD 5m=+16.2% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:10,165",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+16.2% B/S=66/53"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:13,182",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.1% B/S=67/54"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:13,182",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 16.2\u219216.2\u219219.1"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:21,437",
+          "type": "PICK",
+          "detail": "PICK (cached): HOOD 5m=+19.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:24,456",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.1% B/S=67/54"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:27,471",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.1% B/S=67/54"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:27,471",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 19.1\u219219.1\u219219.1"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:35,440",
+          "type": "PICK",
+          "detail": "PICK (cached): HOOD 5m=+19.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:38,457",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.1% B/S=67/54"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:41,477",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.1% B/S=67/54"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:41,477",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 19.1\u219219.1\u219219.1"
+        },
+        {
+          "timestamp": "2026-09-07 20:12:46,180",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 20:12:46,180 INFO V3 BUY HOOD with 0.038404 ETH ($94.71) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 20:13:19,635",
+      "exit_reason": "FAST_SL (-15.1%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "233.48",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 6,
+      "token": "GAGE",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 20:56:36,544",
+      "entry_price_usd": "0.00022118",
+      "tokens_bought": "295864",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "65.44",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267886 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 20:55:29,480",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+16.9% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:55:32,744",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.2% B/S=46/34"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:35,763",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.2% B/S=46/34"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:35,763",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 16.9\u219219.2\u219219.2"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:38,631",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 20:55:38,631 INFO BUY GAGE with 0.025137 ETH ($61.99)"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:46,242",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+19.2% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:55:49,262",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.2% B/S=46/34"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:52,282",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.2% B/S=46/34"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:52,282",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 19.2\u219219.2\u219219.2"
+        },
+        {
+          "timestamp": "2026-09-07 20:55:55,143",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 20:55:55,143 INFO BUY GAGE with 0.025137 ETH ($61.99)"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:02,740",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+19.2% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:56:05,755",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+33.4% B/S=51/37"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:08,779",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+33.4% B/S=51/37"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:08,780",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 19.2\u219233.4\u219233.4"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:11,626",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 20:56:11,626 INFO BUY GAGE with 0.026537 ETH ($65.44)"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:19,623",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+32.1% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:56:22,641",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+33.4% B/S=51/37"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:25,657",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+33.4% B/S=51/37"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:25,657",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 32.1\u219233.4\u219233.4"
+        },
+        {
+          "timestamp": "2026-09-07 20:56:28,415",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 20:56:28,415 INFO BUY GAGE with 0.026537 ETH ($65.44)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 21:02:19,875",
+      "exit_reason": "HARD_SL (-24.0%)",
+      "exit_pnl_pct": "-24.0",
+      "exit_proceeds_usd": "213.48",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 7,
+      "token": "HUNTER",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 21:03:43,543",
+      "entry_price_usd": "0.00081493",
+      "tokens_bought": "153416",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "125.02",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267756 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 20:37:36,653",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.2% B/S=566/219"
+        },
+        {
+          "timestamp": "2026-09-07 20:37:39,875",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+10.4% B/S=510/196"
+        },
+        {
+          "timestamp": "2026-09-07 20:43:40,357",
+          "type": "PICK",
+          "detail": "PICK (WL): HUNTER 5m=+17.3% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:43:43,376",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+10.6% B/S=595/198"
+        },
+        {
+          "timestamp": "2026-09-07 20:43:46,595",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+17.3% B/S=568/181"
+        },
+        {
+          "timestamp": "2026-09-07 20:43:46,595",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 17.3\u219210.6\u219217.3"
+        },
+        {
+          "timestamp": "2026-09-07 20:43:54,555",
+          "type": "PICK",
+          "detail": "PICK (WL): HUNTER 5m=+17.3% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:43:57,572",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+17.3% B/S=568/181"
+        },
+        {
+          "timestamp": "2026-09-07 20:44:00,592",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+17.3% B/S=568/181"
+        },
+        {
+          "timestamp": "2026-09-07 20:44:00,592",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 17.3\u219217.3\u219217.3"
+        },
+        {
+          "timestamp": "2026-09-07 20:44:08,388",
+          "type": "PICK",
+          "detail": "PICK (WL): HUNTER 5m=+17.3% route="
+        },
+        {
+          "timestamp": "2026-09-07 20:44:11,406",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+17.3% B/S=568/181"
+        },
+        {
+          "timestamp": "2026-09-07 20:44:14,632",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+17.3% B/S=568/181"
+        },
+        {
+          "timestamp": "2026-09-07 20:44:14,632",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 17.3\u219217.3\u219217.3"
+        },
+        {
+          "timestamp": "2026-09-07 21:03:26,377",
+          "type": "TESTING",
+          "detail": "2026-09-07 21:03:26,377 INFO Testing HUNTER 5m=+19.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 21:03:27,634",
+          "type": "PICK",
+          "detail": "PICK (new/pons): HUNTER"
+        },
+        {
+          "timestamp": "2026-09-07 21:03:30,650",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+11.8% B/S=628/202"
+        },
+        {
+          "timestamp": "2026-09-07 21:03:34,000",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.0% B/S=550/175"
+        },
+        {
+          "timestamp": "2026-09-07 21:03:34,001",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 19.0\u219211.8\u219219.0"
+        },
+        {
+          "timestamp": "2026-09-07 21:03:36,795",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:03:36,795 INFO BUY HUNTER with 0.050699 ETH ($125.02)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 21:10:12,278",
+          "rotation_slot": "R1",
+          "price_usd": "0.00102200",
+          "pnl_pct": "+25.4",
+          "momentum_5m_pct": "+32.0",
+          "buy_sell_ratio": "651/222",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "156.79",
+          "portfolio_total_usd": "245.04"
+        },
+        {
+          "timestamp": "2026-09-07 21:10:44,713",
+          "rotation_slot": "R1",
+          "price_usd": "0.00110900",
+          "pnl_pct": "+36.1",
+          "momentum_5m_pct": "+27.1",
+          "buy_sell_ratio": "568/192",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "170.14",
+          "portfolio_total_usd": "258.39"
+        },
+        {
+          "timestamp": "2026-09-07 21:11:17,158",
+          "rotation_slot": "R1",
+          "price_usd": "0.00110200",
+          "pnl_pct": "+35.2",
+          "momentum_5m_pct": "+26.4",
+          "buy_sell_ratio": "632/206",
+          "peak_drawdown_pct": "-0.6",
+          "trail_width_pct": "7",
+          "position_value_usd": "169.06",
+          "portfolio_total_usd": "257.31"
+        },
+        {
+          "timestamp": "2026-09-07 21:11:49,673",
+          "rotation_slot": "R1",
+          "price_usd": "0.00112300",
+          "pnl_pct": "+37.8",
+          "momentum_5m_pct": "+25.7",
+          "buy_sell_ratio": "542/173",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "172.29",
+          "portfolio_total_usd": "260.53"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 21:12:13,468",
+      "exit_reason": "SLOWING (+25.7%\u2192+17.4%)",
+      "exit_pnl_pct": "+28.7",
+      "exit_proceeds_usd": "244.24",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-0.6%",
+      "notes": []
+    },
+    {
+      "trade_id": 8,
+      "token": "GAGE",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 21:12:38,140",
+      "entry_price_usd": "0.00019403",
+      "tokens_bought": "324780",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "63.02",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267923 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 21:12:18,923",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+64.4% route="
+        },
+        {
+          "timestamp": "2026-09-07 21:12:23,972",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+64.4% route="
+        },
+        {
+          "timestamp": "2026-09-07 21:12:27,202",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+57.8% B/S=37/8"
+        },
+        {
+          "timestamp": "2026-09-07 21:12:30,218",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+57.8% B/S=37/8"
+        },
+        {
+          "timestamp": "2026-09-07 21:12:30,219",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 64.4\u219257.8\u219257.8"
+        },
+        {
+          "timestamp": "2026-09-07 21:12:33,118",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:12:33,118 INFO BUY GAGE with 0.025555 ETH ($63.02)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 21:19:05,411",
+      "exit_reason": "MOMENTUM_DEAD (5m=-22.0%)",
+      "exit_pnl_pct": "+56.2",
+      "exit_proceeds_usd": "283.88",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 9,
+      "token": "GAGE",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 21:20:50,940",
+      "entry_price_usd": "0.00032504",
+      "tokens_bought": "252756",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "82.16",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267890 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 21:20:25,556",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+15.9% route="
+        },
+        {
+          "timestamp": "2026-09-07 21:20:28,574",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+3.4% B/S=74/67"
+        },
+        {
+          "timestamp": "2026-09-07 21:20:31,590",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+3.4% B/S=74/67"
+        },
+        {
+          "timestamp": "2026-09-07 21:20:36,644",
+          "type": "PICK",
+          "detail": "PICK (WL): GAGE 5m=+15.9% route="
+        },
+        {
+          "timestamp": "2026-09-07 21:20:39,876",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+15.9% B/S=59/48"
+        },
+        {
+          "timestamp": "2026-09-07 21:20:42,896",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+15.9% B/S=59/48"
+        },
+        {
+          "timestamp": "2026-09-07 21:20:42,896",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 15.9\u219215.9\u219215.9"
+        },
+        {
+          "timestamp": "2026-09-07 21:20:45,875",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:20:45,875 INFO BUY GAGE with 0.033315 ETH ($82.16)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 21:27:48,876",
+      "exit_reason": "HARD_SL (-14.7%)",
+      "exit_pnl_pct": "-14.7",
+      "exit_proceeds_usd": "271.08",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 10,
+      "token": "GAGE",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 21:37:29,367",
+      "entry_price_usd": "0.00032462",
+      "tokens_bought": "247044",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "80.20",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267858 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 21:37:10,167",
+          "type": "TESTING",
+          "detail": "2026-09-07 21:37:10,167 INFO Testing GAGE 5m=+26.8%..."
+        },
+        {
+          "timestamp": "2026-09-07 21:37:11,401",
+          "type": "PICK",
+          "detail": "PICK (new/pons): GAGE"
+        },
+        {
+          "timestamp": "2026-09-07 21:37:14,416",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+26.8% B/S=30/15"
+        },
+        {
+          "timestamp": "2026-09-07 21:37:17,435",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+26.8% B/S=30/15"
+        },
+        {
+          "timestamp": "2026-09-07 21:37:17,435",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 26.8\u219226.8\u219226.8"
+        },
+        {
+          "timestamp": "2026-09-07 21:37:21,804",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:37:21,804 INFO BUY GAGE with 0.032521 ETH ($80.20)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 21:38:33,565",
+          "rotation_slot": "R0",
+          "price_usd": "0.00033410",
+          "pnl_pct": "+2.9",
+          "momentum_5m_pct": "+16.2",
+          "buy_sell_ratio": "24/22",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "82.54",
+          "portfolio_total_usd": "272.96"
+        },
+        {
+          "timestamp": "2026-09-07 21:39:06,007",
+          "rotation_slot": "R0",
+          "price_usd": "0.00033410",
+          "pnl_pct": "+2.9",
+          "momentum_5m_pct": "+16.2",
+          "buy_sell_ratio": "24/22",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "82.54",
+          "portfolio_total_usd": "272.96"
+        },
+        {
+          "timestamp": "2026-09-07 21:39:38,481",
+          "rotation_slot": "R0",
+          "price_usd": "0.00034640",
+          "pnl_pct": "+6.7",
+          "momentum_5m_pct": "+21.3",
+          "buy_sell_ratio": "27/18",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "85.58",
+          "portfolio_total_usd": "276.00"
+        },
+        {
+          "timestamp": "2026-09-07 21:40:10,951",
+          "rotation_slot": "R0",
+          "price_usd": "0.00034350",
+          "pnl_pct": "+5.8",
+          "momentum_5m_pct": "+20.3",
+          "buy_sell_ratio": "31/23",
+          "peak_drawdown_pct": "-0.8",
+          "trail_width_pct": "7",
+          "position_value_usd": "84.86",
+          "portfolio_total_usd": "275.28"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 21:40:38,280",
+      "exit_reason": "SLOWING (+20.3%\u2192+3.5%)",
+      "exit_pnl_pct": "+3.9",
+      "exit_proceeds_usd": "271.00",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-0.8%",
+      "notes": []
+    },
+    {
+      "trade_id": 11,
+      "token": "FORGOT",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4eth_3000_60",
+      "entry_timestamp_utc": "2026-09-07 21:49:05,801",
+      "entry_price_usd": "0.00033012",
+      "tokens_bought": "250275",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "82.62",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273183 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 21:47:14,522",
+          "type": "TESTING",
+          "detail": "2026-09-07 21:47:14,522 INFO Testing FORGOT 5m=+16.6%..."
+        },
+        {
+          "timestamp": "2026-09-07 21:47:15,759",
+          "type": "PICK",
+          "detail": "PICK (new/pons): FORGOT"
+        },
+        {
+          "timestamp": "2026-09-07 21:47:18,774",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+4.5% B/S=1042/867"
+        },
+        {
+          "timestamp": "2026-09-07 21:47:21,792",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+4.5% B/S=1042/867"
+        },
+        {
+          "timestamp": "2026-09-07 21:47:26,852",
+          "type": "PICK",
+          "detail": "PICK (WL): FORGOT 5m=+16.6% route="
+        },
+        {
+          "timestamp": "2026-09-07 21:47:29,867",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+68.0% B/S=968/765"
+        },
+        {
+          "timestamp": "2026-09-07 21:47:32,884",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+68.0% B/S=968/765"
+        },
+        {
+          "timestamp": "2026-09-07 21:47:32,884",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 16.6\u219268.0\u219268.0"
+        },
+        {
+          "timestamp": "2026-09-07 21:47:35,624",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:47:35,624 INFO BUY FORGOT with 0.030910 ETH ($76.22)"
+        },
+        {
+          "timestamp": "2026-09-07 21:48:49,915",
+          "type": "PICK",
+          "detail": "PICK (WL): FORGOT 5m=+50.1% route="
+        },
+        {
+          "timestamp": "2026-09-07 21:48:53,163",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+50.1% B/S=915/897"
+        },
+        {
+          "timestamp": "2026-09-07 21:48:56,179",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+50.1% B/S=915/897"
+        },
+        {
+          "timestamp": "2026-09-07 21:48:56,179",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 50.1\u219250.1\u219250.1"
+        },
+        {
+          "timestamp": "2026-09-07 21:48:58,946",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:48:58,946 INFO BUY FORGOT with 0.033504 ETH ($82.62)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "NOT_RECORDED",
+      "exit_reason": "NOT_RECORDED",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "NOT_RECORDED",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "POSITION STILL OPEN AT END OF LOG \u2014 EXIT NOT RECORDED"
+      ]
+    },
+    {
+      "trade_id": 12,
+      "token": "IPUNK",
+      "token_address": "0xf1D0c16A",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4eth_3000_60",
+      "entry_timestamp_utc": "2026-09-07 21:52:03,634",
+      "entry_price_usd": "0.00008664",
+      "tokens_bought": "1289623",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "111.73",
+      "buy_fee_tier": "3000",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 21:48:44,278",
+          "type": "READING",
+          "detail": "Reading 3: 5m=-0.6% B/S=12/6"
+        },
+        {
+          "timestamp": "2026-09-07 21:50:14,498",
+          "type": "PICK",
+          "detail": "PICK (cached): IPUNK 5m=+31.5% route=v4eth_3000_60"
+        },
+        {
+          "timestamp": "2026-09-07 21:50:17,605",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+31.5% B/S=15/7"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:01,464",
+          "type": "PICK",
+          "detail": "PICK (cached): IPUNK 5m=+36.2% route=v4eth_3000_60"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:04,479",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+31.5% B/S=13/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:07,496",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+31.5% B/S=13/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:07,496",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 36.2\u219231.5\u219231.5"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:14,331",
+          "type": "PICK",
+          "detail": "PICK (cached): IPUNK 5m=+36.2% route=v4eth_3000_60"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:17,345",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+36.2% B/S=15/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:20,365",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+36.2% B/S=15/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:20,365",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 36.2\u219236.2\u219236.2"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:27,123",
+          "type": "PICK",
+          "detail": "PICK (cached): IPUNK 5m=+36.2% route=v4eth_3000_60"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:30,138",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+36.2% B/S=15/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:33,154",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+36.2% B/S=15/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:33,154",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 36.2\u219236.2\u219236.2"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:40,275",
+          "type": "PICK",
+          "detail": "PICK (cached): IPUNK 5m=+39.3% route=v4eth_3000_60"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:43,290",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+36.2% B/S=15/4"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:46,341",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+39.3% B/S=15/3"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:46,341",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 39.3\u219236.2\u219239.3"
+        },
+        {
+          "timestamp": "2026-09-07 21:51:50,253",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:51:50,253 INFO V4 BUY IPUNK with 0.045308 ETH (~$111.73) fee=3000 tick=60"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 21:53:10,079",
+          "rotation_slot": "R0",
+          "price_usd": "0.00008742",
+          "pnl_pct": "+0.9",
+          "momentum_5m_pct": "+16.0",
+          "buy_sell_ratio": "12/3",
+          "peak_drawdown_pct": "-7.4",
+          "trail_width_pct": "7",
+          "position_value_usd": "112.74",
+          "portfolio_total_usd": "187.57"
+        },
+        {
+          "timestamp": "2026-09-07 21:53:42,702",
+          "rotation_slot": "R0",
+          "price_usd": "0.00009474",
+          "pnl_pct": "+9.4",
+          "momentum_5m_pct": "+25.8",
+          "buy_sell_ratio": "15/3",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "122.18",
+          "portfolio_total_usd": "197.01"
+        },
+        {
+          "timestamp": "2026-09-07 21:58:57,779",
+          "rotation_slot": "R0",
+          "price_usd": "0.00007862",
+          "pnl_pct": "-9.3",
+          "momentum_5m_pct": "-15.6",
+          "buy_sell_ratio": "16/14",
+          "peak_drawdown_pct": "-17.0",
+          "trail_width_pct": "3",
+          "position_value_usd": "101.39",
+          "portfolio_total_usd": "175.02"
+        },
+        {
+          "timestamp": "2026-09-07 22:05:29,662",
+          "rotation_slot": "R0",
+          "price_usd": "0.00011090",
+          "pnl_pct": "+28.0",
+          "momentum_5m_pct": "+18.9",
+          "buy_sell_ratio": "22/13",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "143.02",
+          "portfolio_total_usd": "215.43"
+        }
+      ],
+      "exit_timestamp_utc": "NOT_RECORDED",
+      "exit_reason": "SLOWING (+18.9%\u2192+9.0%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "NOT_RECORDED",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-17.0%",
+      "notes": [
+        "Sell fee tier: 3000",
+        "EXIT_BLOCKED: Sell failed repeatedly, tokens stuck in wallet",
+        "POSITION STILL OPEN AT END OF LOG \u2014 EXIT NOT RECORDED"
+      ]
+    },
+    {
+      "trade_id": 13,
+      "token": "Musk",
+      "token_address": "0xd5C969A7",
+      "pool_info": {
+        "pool_address": "0x368F6444",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-07 22:12:21,540",
+      "entry_price_usd": "0.00016617",
+      "tokens_bought": "390736",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "64.93",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 21:36:18,098",
+          "type": "TESTING",
+          "detail": "2026-09-07 21:36:18,098 INFO Testing Musk 5m=+39.9%..."
+        },
+        {
+          "timestamp": "2026-09-07 21:36:33,197",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+44.8% B/S=871/938"
+        },
+        {
+          "timestamp": "2026-09-07 21:36:36,215",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+44.8% B/S=871/938"
+        },
+        {
+          "timestamp": "2026-09-07 21:36:36,215",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 39.9\u219244.8\u219244.8"
+        },
+        {
+          "timestamp": "2026-09-07 21:36:39,240",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 21:36:39,240 INFO V4 BUY Musk with 112.126025 USDG (~$112.13) fee=47700 tick=477"
+        },
+        {
+          "timestamp": "2026-09-07 22:10:40,442",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:10:40,442 INFO Testing Musk 5m=+60.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:10:52,343",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+60.0% B/S=96/51"
+        },
+        {
+          "timestamp": "2026-09-07 22:10:55,572",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+15.0% B/S=99/60"
+        },
+        {
+          "timestamp": "2026-09-07 22:11:31,465",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+24.6% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:11:34,706",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+24.6% B/S=86/56"
+        },
+        {
+          "timestamp": "2026-09-07 22:11:37,722",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+24.6% B/S=86/56"
+        },
+        {
+          "timestamp": "2026-09-07 22:11:37,723",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 24.6\u219224.6\u219224.6"
+        },
+        {
+          "timestamp": "2026-09-07 22:12:07,738",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+51.7% B/S=1.63"
+        },
+        {
+          "timestamp": "2026-09-07 22:12:12,280",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:12:12,280 INFO V3 BUY Musk with 0.026330 ETH ($64.93) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 22:12:34,166",
+      "exit_reason": "HARD_SL (-11.1%)",
+      "exit_pnl_pct": "-11.1",
+      "exit_proceeds_usd": "50.75",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 14,
+      "token": "Musk",
+      "token_address": "0xd5C969A7",
+      "pool_info": {
+        "pool_address": "0x368F6444",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-07 22:20:03,832",
+      "entry_price_usd": "0.00014637",
+      "tokens_bought": "296189",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "43.35",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:12:39,489",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:12:44,846",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:12:49,897",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:12:54,951",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:13:00,000",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:13:05,049",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:13:10,104",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+36.1% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:18:21,988",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:18:21,988 INFO Testing Musk 5m=+29.7%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:18:33,554",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+42.2% B/S=62/40"
+        },
+        {
+          "timestamp": "2026-09-07 22:18:36,570",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+42.2% B/S=62/40"
+        },
+        {
+          "timestamp": "2026-09-07 22:18:36,570",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 29.7\u219242.2\u219242.2"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:06,818",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+33.0% B/S=1.48"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:15,204",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+40.4% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:18,220",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+33.0% B/S=71/48"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:21,238",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+33.0% B/S=71/48"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:21,238",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 40.4\u219233.0\u219233.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:51,255",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+45.0% B/S=1.50"
+        },
+        {
+          "timestamp": "2026-09-07 22:19:55,788",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:19:55,788 INFO V3 BUY Musk with 0.017580 ETH ($43.35) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 22:20:22,472",
+      "exit_reason": "FAST_SL (-12.3%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "46.48",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 15,
+      "token": "PINK",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 22:25:22,194",
+      "entry_price_usd": "0.00199972",
+      "tokens_bought": "19353",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "38.70",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "272996 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:23:00,147",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:23:00,147 INFO Testing PINK 5m=+36.1%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:23:01,402",
+          "type": "PICK",
+          "detail": "PICK (new/pons): PINK"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:04,418",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+36.1% B/S=322/233"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:07,433",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+36.1% B/S=322/233"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:07,433",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 36.1\u219236.1\u219236.1"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:37,453",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: PINK 5m=+38.8% B/S=1.32"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:40,229",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:23:40,229 INFO BUY PINK with 0.015848 ETH ($39.08)"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:48,099",
+          "type": "PICK",
+          "detail": "PICK (WL): PINK 5m=+39.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 22:23:51,115",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+39.5% B/S=498/405"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:54,132",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+39.5% B/S=498/405"
+        },
+        {
+          "timestamp": "2026-09-07 22:23:54,132",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 39.5\u219239.5\u219239.5"
+        },
+        {
+          "timestamp": "2026-09-07 22:24:24,148",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: PINK 5m=+34.6% B/S=1.16"
+        },
+        {
+          "timestamp": "2026-09-07 22:24:27,002",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:24:27,002 INFO BUY PINK with 0.015770 ETH ($38.89)"
+        },
+        {
+          "timestamp": "2026-09-07 22:24:36,594",
+          "type": "PICK",
+          "detail": "PICK (WL): PINK 5m=+30.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 22:24:39,613",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+34.6% B/S=591/509"
+        },
+        {
+          "timestamp": "2026-09-07 22:24:42,629",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+34.6% B/S=591/509"
+        },
+        {
+          "timestamp": "2026-09-07 22:24:42,629",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 30.5\u219234.6\u219234.6"
+        },
+        {
+          "timestamp": "2026-09-07 22:25:12,650",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: PINK 5m=+30.5% B/S=1.02"
+        },
+        {
+          "timestamp": "2026-09-07 22:25:15,521",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:25:15,521 INFO BUY PINK with 0.015693 ETH ($38.70)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 22:26:21,063",
+      "exit_reason": "SLOWING (+5.3%\u2192-1.9%)",
+      "exit_pnl_pct": "+1.7",
+      "exit_proceeds_usd": "47.85",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 16,
+      "token": "Musk",
+      "token_address": "0xd5C969A7",
+      "pool_info": {
+        "pool_address": "0x368F6444",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-07 22:29:55,520",
+      "entry_price_usd": "0.00026843",
+      "tokens_bought": "150697",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "40.45",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:21:13,718",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+14.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:21:18,765",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+14.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:21:23,820",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+14.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:21:26,835",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+14.0% B/S=74/51"
+        },
+        {
+          "timestamp": "2026-09-07 22:21:29,852",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+14.0% B/S=74/51"
+        },
+        {
+          "timestamp": "2026-09-07 22:21:29,852",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 14.0\u219214.0\u219214.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:21:59,866",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+4.3% B/S=1.47"
+        },
+        {
+          "timestamp": "2026-09-07 22:22:05,195",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+19.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:22:08,212",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.0% B/S=77/50"
+        },
+        {
+          "timestamp": "2026-09-07 22:22:11,228",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.0% B/S=77/50"
+        },
+        {
+          "timestamp": "2026-09-07 22:22:11,228",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 19.0\u219219.0\u219219.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:22:41,244",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+8.3% B/S=1.33"
+        },
+        {
+          "timestamp": "2026-09-07 22:28:50,743",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:28:50,743 INFO Testing Musk 5m=+12.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:29:02,438",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+1.0% B/S=67/43"
+        },
+        {
+          "timestamp": "2026-09-07 22:29:07,483",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+12.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:29:10,497",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+12.0% B/S=76/48"
+        },
+        {
+          "timestamp": "2026-09-07 22:29:13,512",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+12.0% B/S=76/48"
+        },
+        {
+          "timestamp": "2026-09-07 22:29:13,512",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 12.0\u219212.0\u219212.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:29:43,526",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+75.7% B/S=1.72"
+        },
+        {
+          "timestamp": "2026-09-07 22:29:48,037",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:29:48,037 INFO V3 BUY Musk with 0.016404 ETH ($40.45) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 22:30:23,779",
+      "exit_reason": "FAST_SL (-4.5%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "35.19",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 17,
+      "token": "PINK",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 22:36:22,585",
+      "entry_price_usd": "0.00232647",
+      "tokens_bought": "11864",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "27.60",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273126 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:34:26,554",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:34:26,554 INFO Testing PINK 5m=+12.5%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:34:27,836",
+          "type": "PICK",
+          "detail": "PICK (new/pons): PINK"
+        },
+        {
+          "timestamp": "2026-09-07 22:34:30,851",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+2.2% B/S=337/226"
+        },
+        {
+          "timestamp": "2026-09-07 22:34:35,896",
+          "type": "PICK",
+          "detail": "PICK (WL): PINK 5m=+12.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 22:34:38,914",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+2.2% B/S=337/226"
+        },
+        {
+          "timestamp": "2026-09-07 22:34:43,960",
+          "type": "PICK",
+          "detail": "PICK (WL): PINK 5m=+12.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 22:34:46,977",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+2.2% B/S=337/226"
+        },
+        {
+          "timestamp": "2026-09-07 22:34:52,023",
+          "type": "PICK",
+          "detail": "PICK (WL): PINK 5m=+12.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 22:34:55,038",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+11.5% B/S=390/237"
+        },
+        {
+          "timestamp": "2026-09-07 22:34:58,054",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+11.5% B/S=390/237"
+        },
+        {
+          "timestamp": "2026-09-07 22:34:58,054",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 12.5\u219211.5\u219211.5"
+        },
+        {
+          "timestamp": "2026-09-07 22:35:28,073",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: PINK 5m=+12.8% B/S=2.09"
+        },
+        {
+          "timestamp": "2026-09-07 22:35:30,893",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:35:30,893 INFO BUY PINK with 0.011270 ETH ($27.79)"
+        },
+        {
+          "timestamp": "2026-09-07 22:35:38,733",
+          "type": "PICK",
+          "detail": "PICK (WL): PINK 5m=+21.9% route="
+        },
+        {
+          "timestamp": "2026-09-07 22:35:41,748",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+12.8% B/S=356/170"
+        },
+        {
+          "timestamp": "2026-09-07 22:35:44,765",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+12.8% B/S=356/170"
+        },
+        {
+          "timestamp": "2026-09-07 22:35:44,765",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 21.9\u219212.8\u219212.8"
+        },
+        {
+          "timestamp": "2026-09-07 22:36:14,781",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: PINK 5m=+21.9% B/S=2.07"
+        },
+        {
+          "timestamp": "2026-09-07 22:36:17,652",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:36:17,652 INFO BUY PINK with 0.011193 ETH ($27.60)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 22:37:27,871",
+          "rotation_slot": "R1",
+          "price_usd": "0.00234100",
+          "pnl_pct": "+0.6",
+          "momentum_5m_pct": "+17.9",
+          "buy_sell_ratio": "562/229",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "27.77",
+          "portfolio_total_usd": "34.99"
+        },
+        {
+          "timestamp": "2026-09-07 22:38:00,374",
+          "rotation_slot": "R1",
+          "price_usd": "0.00225100",
+          "pnl_pct": "-3.2",
+          "momentum_5m_pct": "+14.9",
+          "buy_sell_ratio": "572/246",
+          "peak_drawdown_pct": "-3.8",
+          "trail_width_pct": "7",
+          "position_value_usd": "26.71",
+          "portfolio_total_usd": "33.92"
+        },
+        {
+          "timestamp": "2026-09-07 22:38:32,833",
+          "rotation_slot": "R1",
+          "price_usd": "0.00225100",
+          "pnl_pct": "-3.2",
+          "momentum_5m_pct": "+14.9",
+          "buy_sell_ratio": "572/246",
+          "peak_drawdown_pct": "-3.8",
+          "trail_width_pct": "7",
+          "position_value_usd": "26.71",
+          "portfolio_total_usd": "33.92"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 22:38:57,485",
+      "exit_reason": "SLOWING (+14.9%\u2192+1.2%)",
+      "exit_pnl_pct": "-8.5",
+      "exit_proceeds_usd": "31.67",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-3.8%",
+      "notes": []
+    },
+    {
+      "trade_id": 18,
+      "token": "OPINIO",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 22:43:26,880",
+      "entry_price_usd": "0.00005719",
+      "tokens_bought": "418329",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "23.93",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273159 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:42:39,305",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:42:39,305 INFO Testing OPINIO 5m=+33.1%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:42:40,566",
+          "type": "PICK",
+          "detail": "PICK (new/pons): OPINIO"
+        },
+        {
+          "timestamp": "2026-09-07 22:42:43,583",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+30.5% B/S=104/68"
+        },
+        {
+          "timestamp": "2026-09-07 22:42:46,868",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+33.1% B/S=94/72"
+        },
+        {
+          "timestamp": "2026-09-07 22:42:46,868",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 33.1\u219230.5\u219233.1"
+        },
+        {
+          "timestamp": "2026-09-07 22:43:17,118",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: OPINIO 5m=+45.8% B/S=1.32"
+        },
+        {
+          "timestamp": "2026-09-07 22:43:19,911",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:43:19,911 INFO BUY OPINIO with 0.009702 ETH ($23.93)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 22:44:23,991",
+      "exit_reason": "SLOWING (+58.4%\u2192+10.3%)",
+      "exit_pnl_pct": "-15.2",
+      "exit_proceeds_usd": "29.54",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 19,
+      "token": "Musk",
+      "token_address": "0xd5C969A7",
+      "pool_info": {
+        "pool_address": "0x368F6444",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-07 22:48:31,084",
+      "entry_price_usd": "0.00025751",
+      "tokens_bought": "85229",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "21.95",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:44:40,723",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+26.8% B/S=52/41"
+        },
+        {
+          "timestamp": "2026-09-07 22:44:43,739",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+26.8% B/S=52/41"
+        },
+        {
+          "timestamp": "2026-09-07 22:44:43,739",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 26.8\u219226.8\u219226.8"
+        },
+        {
+          "timestamp": "2026-09-07 22:45:13,754",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+24.0% B/S=1.33"
+        },
+        {
+          "timestamp": "2026-09-07 22:46:14,282",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+33.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:46:17,297",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+47.5% B/S=71/49"
+        },
+        {
+          "timestamp": "2026-09-07 22:46:20,316",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+47.5% B/S=71/49"
+        },
+        {
+          "timestamp": "2026-09-07 22:46:20,316",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 33.0\u219247.5\u219247.5"
+        },
+        {
+          "timestamp": "2026-09-07 22:46:50,332",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+16.3% B/S=1.42"
+        },
+        {
+          "timestamp": "2026-09-07 22:46:58,629",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+64.7% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:01,877",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+64.7% B/S=79/53"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:04,891",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+64.7% B/S=79/53"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:04,892",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 64.7\u219264.7\u219264.7"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:35,128",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+41.7% B/S=1.57"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:43,465",
+          "type": "PICK",
+          "detail": "PICK (cached): Musk 5m=+75.2% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:46,479",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+41.7% B/S=66/42"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:49,495",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+41.7% B/S=66/42"
+        },
+        {
+          "timestamp": "2026-09-07 22:47:49,495",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 75.2\u219241.7\u219241.7"
+        },
+        {
+          "timestamp": "2026-09-07 22:48:19,511",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: Musk 5m=+74.4% B/S=1.53"
+        },
+        {
+          "timestamp": "2026-09-07 22:48:23,970",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:48:23,970 INFO V3 BUY Musk with 0.008900 ETH ($21.95) fee=100"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 22:49:06,592",
+          "rotation_slot": "R1",
+          "price_usd": "0.00026840",
+          "pnl_pct": "+4.2",
+          "momentum_5m_pct": "+73.1",
+          "buy_sell_ratio": "83/53",
+          "peak_drawdown_pct": "-5.5",
+          "trail_width_pct": "7",
+          "position_value_usd": "22.88",
+          "portfolio_total_usd": "30.13"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 22:49:20,171",
+      "exit_reason": "FAST_SL (-7.0%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "27.41",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-5.5%",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 20,
+      "token": "PINK",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 22:56:16,084",
+      "entry_price_usd": "0.00167803",
+      "tokens_bought": "59821",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "100.38",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273098 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:55:31,128",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:55:31,128 INFO Testing PINK 5m=+163.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:55:32,365",
+          "type": "PICK",
+          "detail": "PICK (new/pons): PINK"
+        },
+        {
+          "timestamp": "2026-09-07 22:55:35,380",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+163.0% B/S=669/583"
+        },
+        {
+          "timestamp": "2026-09-07 22:55:38,399",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+163.0% B/S=669/583"
+        },
+        {
+          "timestamp": "2026-09-07 22:55:38,399",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 163.0\u2192163.0\u2192163.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:56:08,416",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: PINK 5m=+173.0% B/S=1.17"
+        },
+        {
+          "timestamp": "2026-09-07 22:56:11,136",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:56:11,136 INFO BUY PINK with 0.040706 ETH ($100.38)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 22:57:11,675",
+      "exit_reason": "SLOWING (+11.0%\u2192+1.1%)",
+      "exit_pnl_pct": "-1.7",
+      "exit_proceeds_usd": "100.30",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 21,
+      "token": "UNITY",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 23:00:07,250",
+      "entry_price_usd": "0.00013754",
+      "tokens_bought": "417811",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "57.47",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273094 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 22:59:17,241",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:59:17,241 INFO Testing UNITY 5m=+185.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:59:17,927",
+          "type": "TESTING",
+          "detail": "2026-09-07 22:59:17,927 INFO Testing UNITY 5m=+185.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 22:59:18,531",
+          "type": "PICK",
+          "detail": "PICK (new/pons): UNITY"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:19,144",
+          "type": "PICK",
+          "detail": "PICK (new/pons): UNITY"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:21,551",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+185.0% B/S=643/617"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:22,165",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+185.0% B/S=643/617"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:24,567",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+185.0% B/S=643/617"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:24,567",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 185.0\u2192185.0\u2192185.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:25,183",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+185.0% B/S=643/617"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:25,183",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 185.0\u2192185.0\u2192185.0"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:54,674",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: UNITY 5m=+225.0% B/S=1.08"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:55,196",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: UNITY 5m=+225.0% B/S=1.08"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:57,594",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:59:57,594 INFO BUY UNITY with 0.023303 ETH ($57.47)"
+        },
+        {
+          "timestamp": "2026-09-07 22:59:57,897",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 22:59:57,897 INFO BUY UNITY with 0.023303 ETH ($57.47)"
+        },
+        {
+          "timestamp": "2026-09-07 23:00:05,269",
+          "type": "PICK",
+          "detail": "PICK (WL): UNITY 5m=+181.0% route="
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 23:01:27,810",
+      "exit_reason": "HARD_TP (+159.0%)",
+      "exit_pnl_pct": "+159.0",
+      "exit_proceeds_usd": "66.77",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 22,
+      "token": "UNITY",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 23:00:49,682",
+      "entry_price_usd": "0.00004082",
+      "tokens_bought": "862971",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "35.22",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "255791 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 23:00:08,286",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+225.0% B/S=761/703"
+        },
+        {
+          "timestamp": "2026-09-07 23:00:11,596",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+181.0% B/S=983/841"
+        },
+        {
+          "timestamp": "2026-09-07 23:00:11,596",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 181.0\u2192225.0\u2192181.0"
+        },
+        {
+          "timestamp": "2026-09-07 23:00:42,001",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: UNITY 5m=+171.0% B/S=1.20"
+        },
+        {
+          "timestamp": "2026-09-07 23:00:44,708",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:00:44,708 INFO BUY UNITY with 0.014284 ETH ($35.22)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 23:01:13,494",
+          "rotation_slot": "R0",
+          "price_usd": "0.00014360",
+          "pnl_pct": "+4.4",
+          "momentum_5m_pct": "+171.0",
+          "buy_sell_ratio": "1155/962",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "123.92",
+          "portfolio_total_usd": "131.16"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 23:01:20,436",
+      "exit_reason": "SLOWING (+171.0%\u2192+99.4%)",
+      "exit_pnl_pct": "-23.1",
+      "exit_proceeds_usd": "66.77",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-0.0%",
+      "notes": []
+    },
+    {
+      "trade_id": 23,
+      "token": "VA",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 23:02:12,888",
+      "entry_price_usd": "0.00010157",
+      "tokens_bought": "534858",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "54.33",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273150 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 23:01:25,755",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:01:25,755 INFO Testing VA 5m=+190.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:01:27,048",
+          "type": "PICK",
+          "detail": "PICK (new/pons): VA"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:30,065",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+46.5% B/S=23/2"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:33,080",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+46.5% B/S=23/2"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:33,080",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 190.0\u219246.5\u219246.5"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:33,133",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:01:33,133 INFO Testing VA 5m=+190.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:01:34,351",
+          "type": "PICK",
+          "detail": "PICK (new/pons): VA"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:37,611",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+190.0% B/S=173/109"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:40,630",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+190.0% B/S=173/109"
+        },
+        {
+          "timestamp": "2026-09-07 23:01:40,630",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 190.0\u2192190.0\u2192190.0"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:03,097",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: VA 5m=+190.0% B/S=1.59"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:05,955",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:02:05,955 INFO BUY VA with 0.022030 ETH ($54.33)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 23:02:53,128",
+      "exit_reason": "HARD_SL (-5.2%)",
+      "exit_pnl_pct": "-5.2",
+      "exit_proceeds_usd": "60.53",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 24,
+      "token": "VA",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 23:03:18,427",
+      "entry_price_usd": "0.00008109",
+      "tokens_bought": "529554",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "42.94",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273150 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 23:02:31,080",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:02:31,080 INFO Testing VA 5m=+81.5%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:02:32,435",
+          "type": "PICK",
+          "detail": "PICK (new/pons): VA"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:35,451",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+123.0% B/S=363/274"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:38,468",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+123.0% B/S=363/274"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:38,468",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 81.5\u2192123.0\u2192123.0"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:48,491",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: VA 5m=+81.5% B/S=1.24"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:53,806",
+          "type": "PICK",
+          "detail": "PICK (WL): VA 5m=+81.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 23:02:56,823",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+81.5% B/S=424/342"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:58,447",
+          "type": "PICK",
+          "detail": "PICK (WL): VA 5m=+81.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 23:02:59,840",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+81.5% B/S=424/342"
+        },
+        {
+          "timestamp": "2026-09-07 23:02:59,840",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 81.5\u219281.5\u219281.5"
+        },
+        {
+          "timestamp": "2026-09-07 23:03:03,509",
+          "type": "PICK",
+          "detail": "PICK (WL): VA 5m=+81.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 23:03:08,559",
+          "type": "PICK",
+          "detail": "PICK (WL): VA 5m=+81.5% route="
+        },
+        {
+          "timestamp": "2026-09-07 23:03:09,857",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: VA 5m=+81.5% B/S=1.24"
+        },
+        {
+          "timestamp": "2026-09-07 23:03:12,826",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:03:12,826 INFO BUY VA with 0.017414 ETH ($42.94)"
+        },
+        {
+          "timestamp": "2026-09-07 23:03:13,621",
+          "type": "PICK",
+          "detail": "PICK (WL): VA 5m=+81.5% route="
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 23:03:58,210",
+      "exit_reason": "HARD_TP (+35.3%)",
+      "exit_pnl_pct": "+35.3",
+      "exit_proceeds_usd": "57.07",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 25,
+      "token": "VA",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-07 23:05:27,179",
+      "entry_price_usd": "0.00006671",
+      "tokens_bought": "547145",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "36.50",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "272219 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 23:04:09,574",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+40.9% B/S=513/408"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:09,575",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 40.9\u219240.9\u219240.9"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:19,589",
+          "type": "CONFIRMATION_CHECK",
+          "detail": "CONFIRMATION CHECK: VA 5m=+40.9% B/S=1.26"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:47,335",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:04:47,335 INFO Testing VA 5m=+28.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:04:48,587",
+          "type": "PICK",
+          "detail": "PICK (new/pons): VA"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:51,834",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+19.7% B/S=530/429"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:54,849",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+19.7% B/S=530/429"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:54,849",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 28.0\u219219.7\u219219.7"
+        },
+        {
+          "timestamp": "2026-09-07 23:04:57,642",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:04:57,642 INFO BUY VA with 0.014173 ETH ($34.95)"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:05,368",
+          "type": "PICK",
+          "detail": "PICK (WL): VA 5m=+28.0% route="
+        },
+        {
+          "timestamp": "2026-09-07 23:05:08,610",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+28.0% B/S=552/438"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:11,626",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+28.0% B/S=552/438"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:11,626",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 28.0\u219228.0\u219228.0"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:11,917",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:05:11,917 INFO Testing VA 5m=+28.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:05:13,131",
+          "type": "PICK",
+          "detail": "PICK (new/pons): VA"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:14,353",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:05:14,353 INFO BUY VA with 0.014800 ETH ($36.50)"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:16,147",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+28.0% B/S=552/438"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:19,169",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+28.0% B/S=552/438"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:19,169",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 28.0\u219228.0\u219228.0"
+        },
+        {
+          "timestamp": "2026-09-07 23:05:21,900",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:05:21,900 INFO BUY VA with 0.014800 ETH ($36.50)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-07 23:06:06,032",
+      "exit_reason": "HARD_TP (+25.3%)",
+      "exit_pnl_pct": "+25.3",
+      "exit_proceeds_usd": "47.85",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 26,
+      "token": "Jeff",
+      "token_address": "0xe01a027D",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4eth_100_1",
+      "entry_timestamp_utc": "2026-09-07 23:13:33,595",
+      "entry_price_usd": "0.00003196",
+      "tokens_bought": "1265670",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "40.45",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 23:12:50,656",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:12:50,656 INFO Testing Jeff 5m=+21.1%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:12:51,734",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:12:51,734 INFO Testing Jeff 5m=+21.1%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:13:08,633",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+21.1% B/S=44/32"
+        },
+        {
+          "timestamp": "2026-09-07 23:13:11,648",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+21.1% B/S=44/32"
+        },
+        {
+          "timestamp": "2026-09-07 23:13:11,648",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 21.1\u219221.1\u219221.1"
+        },
+        {
+          "timestamp": "2026-09-07 23:13:17,066",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:13:17,066 INFO V4 BUY Jeff with 0.016404 ETH (~$40.45) fee=100 tick=1"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 23:14:38,136",
+          "rotation_slot": "R1",
+          "price_usd": "0.00003691",
+          "pnl_pct": "+15.5",
+          "momentum_5m_pct": "+35.0",
+          "buy_sell_ratio": "45/30",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "46.72",
+          "portfolio_total_usd": "53.88"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 23:15:03,903",
+      "exit_reason": "SLOWING (+35.0%\u2192+9.8%)",
+      "exit_pnl_pct": "+8.9",
+      "exit_proceeds_usd": "6.94",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-0.0%",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 27,
+      "token": "SPREAD",
+      "token_address": "0x4243D0f6",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4spy_0_200",
+      "entry_timestamp_utc": "2026-09-07 23:41:09,450",
+      "entry_price_usd": "0.00009059",
+      "tokens_bought": "438484",
+      "quote_currency": "SPY",
+      "quote_spent_usd": "39.72",
+      "buy_fee_tier": "0",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-07 23:40:35,710",
+          "type": "TESTING",
+          "detail": "2026-09-07 23:40:35,710 INFO Testing SPREAD 5m=+142.0%..."
+        },
+        {
+          "timestamp": "2026-09-07 23:40:46,492",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+142.0% B/S=235/171"
+        },
+        {
+          "timestamp": "2026-09-07 23:40:49,506",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+142.0% B/S=235/171"
+        },
+        {
+          "timestamp": "2026-09-07 23:40:49,506",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 142.0\u2192142.0\u2192142.0"
+        },
+        {
+          "timestamp": "2026-09-07 23:40:57,635",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-07 23:40:57,635 INFO V4 BUY SPREAD with 0.051849 SPY (~$39.72) fee=0 tick=200"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-07 23:42:14,800",
+          "rotation_slot": "R2",
+          "price_usd": "0.00009979",
+          "pnl_pct": "+10.2",
+          "momentum_5m_pct": "+98.4",
+          "buy_sell_ratio": "329/323",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "43.76",
+          "portfolio_total_usd": "50.48"
+        },
+        {
+          "timestamp": "2026-09-07 23:42:47,212",
+          "rotation_slot": "R2",
+          "price_usd": "0.00009979",
+          "pnl_pct": "+10.2",
+          "momentum_5m_pct": "+98.4",
+          "buy_sell_ratio": "329/323",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "43.76",
+          "portfolio_total_usd": "50.48"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-07 23:43:10,221",
+      "exit_reason": "SLOWING (+98.4%\u2192+40.3%)",
+      "exit_pnl_pct": "-12.5",
+      "exit_proceeds_usd": "100.25",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-0.0%",
+      "notes": [
+        "Sell fee tier: 0"
+      ]
+    },
+    {
+      "trade_id": 28,
+      "token": "COMPUTE",
+      "token_address": "0x8b59adf6",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_71000_1420",
+      "entry_timestamp_utc": "2026-09-08 00:31:24,361",
+      "entry_price_usd": "0.00025139",
+      "tokens_bought": "249998",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "62.85",
+      "buy_fee_tier": "71000",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 00:30:51,319",
+          "type": "TESTING",
+          "detail": "2026-09-08 00:30:51,319 INFO Testing COMPUTE 5m=+637.0%..."
+        },
+        {
+          "timestamp": "2026-09-08 00:31:05,645",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+637.0% B/S=3757/3132"
+        },
+        {
+          "timestamp": "2026-09-08 00:31:08,661",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+637.0% B/S=3757/3132"
+        },
+        {
+          "timestamp": "2026-09-08 00:31:08,661",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 637.0\u2192637.0\u2192637.0"
+        },
+        {
+          "timestamp": "2026-09-08 00:31:12,864",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 00:31:12,864 INFO V4 BUY COMPUTE with 62.847659 USDG (~$62.85) fee=71000 tick=1420"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 00:32:12,642",
+      "exit_reason": "HARD_SL (-10.0%)",
+      "exit_pnl_pct": "-10.0",
+      "exit_proceeds_usd": "65.11",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 71000"
+      ]
+    },
+    {
+      "trade_id": 29,
+      "token": "COMPUTE",
+      "token_address": "0x8b59adf6",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_71000_1420",
+      "entry_timestamp_utc": "2026-09-08 00:37:25,575",
+      "entry_price_usd": "0.00014909",
+      "tokens_bought": "335313",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "49.99",
+      "buy_fee_tier": "71000",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 00:37:07,555",
+          "type": "PICK",
+          "detail": "PICK (cached): COMPUTE 5m=+78.7% route=v4usdg_71000_1420"
+        },
+        {
+          "timestamp": "2026-09-08 00:37:10,571",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+78.7% B/S=761/633"
+        },
+        {
+          "timestamp": "2026-09-08 00:37:13,592",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+78.7% B/S=761/633"
+        },
+        {
+          "timestamp": "2026-09-08 00:37:13,593",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 78.7\u219278.7\u219278.7"
+        },
+        {
+          "timestamp": "2026-09-08 00:37:17,796",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 00:37:17,796 INFO V4 BUY COMPUTE with 49.993332 USDG (~$49.99) fee=71000 tick=1420"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 00:38:19,585",
+      "exit_reason": "HARD_SL (-35.0%)",
+      "exit_pnl_pct": "-35.0",
+      "exit_proceeds_usd": "53.29",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 71000"
+      ]
+    },
+    {
+      "trade_id": 30,
+      "token": "BYCOCKET",
+      "token_address": "0x173727CD",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_0_200",
+      "entry_timestamp_utc": "2026-09-08 00:42:11,678",
+      "entry_price_usd": "0.00011266",
+      "tokens_bought": "352864",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "39.75",
+      "buy_fee_tier": "0",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 00:41:38,117",
+          "type": "TESTING",
+          "detail": "2026-09-08 00:41:38,117 INFO Testing BYCOCKET 5m=+15.0%..."
+        },
+        {
+          "timestamp": "2026-09-08 00:41:52,493",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+15.0% B/S=23/15"
+        },
+        {
+          "timestamp": "2026-09-08 00:41:55,739",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+15.2% B/S=24/16"
+        },
+        {
+          "timestamp": "2026-09-08 00:41:55,739",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 15.0\u219215.0\u219215.2"
+        },
+        {
+          "timestamp": "2026-09-08 00:41:59,972",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 00:41:59,972 INFO V4 BUY BYCOCKET with 39.752669 USDG (~$39.75) fee=0 tick=200"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-08 00:43:16,723",
+          "rotation_slot": "R5",
+          "price_usd": "0.00011170",
+          "pnl_pct": "-0.8",
+          "momentum_5m_pct": "+9.1",
+          "buy_sell_ratio": "21/19",
+          "peak_drawdown_pct": "-4.9",
+          "trail_width_pct": "3",
+          "position_value_usd": "39.41",
+          "portfolio_total_usd": "44.95"
+        },
+        {
+          "timestamp": "2026-09-08 00:43:49,243",
+          "rotation_slot": "R5",
+          "price_usd": "0.00011180",
+          "pnl_pct": "-0.8",
+          "momentum_5m_pct": "+8.6",
+          "buy_sell_ratio": "19/15",
+          "peak_drawdown_pct": "-4.9",
+          "trail_width_pct": "3",
+          "position_value_usd": "39.45",
+          "portfolio_total_usd": "44.99"
+        },
+        {
+          "timestamp": "2026-09-08 00:44:21,791",
+          "rotation_slot": "R5",
+          "price_usd": "0.00011240",
+          "pnl_pct": "-0.2",
+          "momentum_5m_pct": "+9.2",
+          "buy_sell_ratio": "21/16",
+          "peak_drawdown_pct": "-4.3",
+          "trail_width_pct": "3",
+          "position_value_usd": "39.66",
+          "portfolio_total_usd": "45.20"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-08 00:44:36,530",
+      "exit_reason": "SLOWING (+9.2%\u2192-1.2%)",
+      "exit_pnl_pct": "-0.8",
+      "exit_proceeds_usd": "52.05",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-4.9%",
+      "notes": [
+        "Sell fee tier: 0"
+      ]
+    },
+    {
+      "trade_id": 31,
+      "token": "HOODCAT",
+      "token_address": "0x2539b45B",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4usdg_0_200",
+      "entry_timestamp_utc": "2026-09-08 01:42:03,522",
+      "entry_price_usd": "0.00009320",
+      "tokens_bought": "430373",
+      "quote_currency": "USDG",
+      "quote_spent_usd": "40.11",
+      "buy_fee_tier": "0",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 01:41:29,786",
+          "type": "TESTING",
+          "detail": "2026-09-08 01:41:29,786 INFO Testing HOODCAT 5m=+70.9%..."
+        },
+        {
+          "timestamp": "2026-09-08 01:41:44,558",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+70.9% B/S=276/258"
+        },
+        {
+          "timestamp": "2026-09-08 01:41:47,578",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+70.9% B/S=276/258"
+        },
+        {
+          "timestamp": "2026-09-08 01:41:47,578",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 70.9\u219270.9\u219270.9"
+        },
+        {
+          "timestamp": "2026-09-08 01:41:51,995",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 01:41:51,995 INFO V4 BUY HOODCAT with 40.112767 USDG (~$40.11) fee=0 tick=200"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 01:42:48,613",
+      "exit_reason": "HARD_SL (-14.4%)",
+      "exit_pnl_pct": "-14.4",
+      "exit_proceeds_usd": "54.96",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 0"
+      ]
+    },
+    {
+      "trade_id": 32,
+      "token": "PTP",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 08:13:01,977",
+      "entry_price_usd": "0.00008882",
+      "tokens_bought": "480158",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "42.65",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273130 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:04:08,774",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:04:08,774 INFO Testing PTP 5m=+32.7%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:04:10,055",
+          "type": "PICK",
+          "detail": "PICK (new/pons): PTP"
+        },
+        {
+          "timestamp": "2026-09-08 08:10:37,438",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:10:37,438 INFO Testing PTP 5m=+76.9%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:10:38,728",
+          "type": "PICK",
+          "detail": "PICK (new/pons): PTP"
+        },
+        {
+          "timestamp": "2026-09-08 08:10:41,749",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+76.9% B/S=126/66"
+        },
+        {
+          "timestamp": "2026-09-08 08:10:44,768",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+76.9% B/S=126/66"
+        },
+        {
+          "timestamp": "2026-09-08 08:10:44,768",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 76.9\u219276.9\u219276.9"
+        },
+        {
+          "timestamp": "2026-09-08 08:10:44,768",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: PTP 5m=+76.9% B/S=1.91"
+        },
+        {
+          "timestamp": "2026-09-08 08:11:25,463",
+          "type": "PICK",
+          "detail": "PICK (WL): PTP 5m=+40.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:11:28,496",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+121.0% B/S=148/81"
+        },
+        {
+          "timestamp": "2026-09-08 08:11:31,526",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+121.0% B/S=148/81"
+        },
+        {
+          "timestamp": "2026-09-08 08:11:31,526",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 40.6\u2192121.0\u2192121.0"
+        },
+        {
+          "timestamp": "2026-09-08 08:11:31,526",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: PTP 5m=+121.0% B/S=1.48"
+        },
+        {
+          "timestamp": "2026-09-08 08:12:11,703",
+          "type": "PICK",
+          "detail": "PICK (WL): PTP 5m=+49.8% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:12:14,725",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+49.8% B/S=143/95"
+        },
+        {
+          "timestamp": "2026-09-08 08:12:17,745",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+49.8% B/S=143/95"
+        },
+        {
+          "timestamp": "2026-09-08 08:12:17,745",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 49.8\u219249.8\u219249.8"
+        },
+        {
+          "timestamp": "2026-09-08 08:12:17,745",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: PTP 5m=+49.8% B/S=1.51"
+        },
+        {
+          "timestamp": "2026-09-08 08:12:54,685",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:12:54,685 INFO BUY PTP with 0.017295 ETH ($42.65)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-08 08:13:33,158",
+          "rotation_slot": "R0",
+          "price_usd": "0.00008916",
+          "pnl_pct": "+0.4",
+          "momentum_5m_pct": "+19.1",
+          "buy_sell_ratio": "127/107",
+          "peak_drawdown_pct": "-6.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "42.81",
+          "portfolio_total_usd": "198.66"
+        },
+        {
+          "timestamp": "2026-09-08 08:14:06,442",
+          "rotation_slot": "R0",
+          "price_usd": "0.00008642",
+          "pnl_pct": "-2.7",
+          "momentum_5m_pct": "+15.4",
+          "buy_sell_ratio": "140/116",
+          "peak_drawdown_pct": "-8.9",
+          "trail_width_pct": "7",
+          "position_value_usd": "41.50",
+          "portfolio_total_usd": "93.20"
+        },
+        {
+          "timestamp": "2026-09-08 08:14:39,083",
+          "rotation_slot": "R0",
+          "price_usd": "0.00009430",
+          "pnl_pct": "+6.2",
+          "momentum_5m_pct": "+25.9",
+          "buy_sell_ratio": "156/119",
+          "peak_drawdown_pct": "-0.5",
+          "trail_width_pct": "7",
+          "position_value_usd": "45.28",
+          "portfolio_total_usd": "96.98"
+        },
+        {
+          "timestamp": "2026-09-08 08:15:13,254",
+          "rotation_slot": "R0",
+          "price_usd": "0.00010350",
+          "pnl_pct": "+16.5",
+          "momentum_5m_pct": "+20.6",
+          "buy_sell_ratio": "130/93",
+          "peak_drawdown_pct": "-0.0",
+          "trail_width_pct": "7",
+          "position_value_usd": "49.70",
+          "portfolio_total_usd": "101.40"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-08 08:15:22,194",
+      "exit_reason": "HARD_TP (+25.3%)",
+      "exit_pnl_pct": "+25.3",
+      "exit_proceeds_usd": "101.51",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-8.9%",
+      "notes": []
+    },
+    {
+      "trade_id": 33,
+      "token": "PTP",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-08 08:17:57,177",
+      "entry_price_usd": "0.00011062",
+      "tokens_bought": "431864",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "47.77",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273230 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:15:27,544",
+          "type": "PICK",
+          "detail": "PICK (WL): PTP 5m=+29.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:15:30,565",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+29.7% B/S=167/127"
+        },
+        {
+          "timestamp": "2026-09-08 08:15:33,600",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+29.7% B/S=167/127"
+        },
+        {
+          "timestamp": "2026-09-08 08:15:33,600",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 29.7\u219229.7\u219229.7"
+        },
+        {
+          "timestamp": "2026-09-08 08:15:33,601",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: PTP 5m=+29.7% B/S=1.31"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:11,851",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:16:11,851 INFO BUY PTP with 0.018351 ETH ($45.25)"
+        },
+        {
+          "timestamp": "2026-09-08 08:17:07,219",
+          "type": "PICK",
+          "detail": "PICK (WL): PTP 5m=+52.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:17:10,239",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+34.5% B/S=124/87"
+        },
+        {
+          "timestamp": "2026-09-08 08:17:13,257",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+34.5% B/S=124/87"
+        },
+        {
+          "timestamp": "2026-09-08 08:17:13,257",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 52.6\u219234.5\u219234.5"
+        },
+        {
+          "timestamp": "2026-09-08 08:17:13,258",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: PTP 5m=+34.5% B/S=1.40"
+        },
+        {
+          "timestamp": "2026-09-08 08:17:52,384",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:17:52,384 INFO BUY PTP with 0.019373 ETH ($47.77)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:18:35,035",
+      "exit_reason": "SLOWING (+40.6%\u2192+5.2%)",
+      "exit_pnl_pct": "-1.8",
+      "exit_proceeds_usd": "101.63",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 34,
+      "token": "MOO",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "0xD6177b59",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-08 08:19:09,007",
+      "entry_price_usd": "0.00026772",
+      "tokens_bought": "351993",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "94.24",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 07:53:50,926",
+          "type": "TESTING",
+          "detail": "2026-09-08 07:53:50,926 INFO Testing MOO 5m=+94.1%..."
+        },
+        {
+          "timestamp": "2026-09-08 07:55:08,402",
+          "type": "TESTING",
+          "detail": "2026-09-08 07:55:08,402 INFO Testing MOO 5m=+73.5%..."
+        },
+        {
+          "timestamp": "2026-09-08 07:56:25,133",
+          "type": "TESTING",
+          "detail": "2026-09-08 07:56:25,133 INFO Testing MOO 5m=+59.9%..."
+        },
+        {
+          "timestamp": "2026-09-08 07:58:55,082",
+          "type": "TESTING",
+          "detail": "2026-09-08 07:58:55,082 INFO Testing MOO 5m=+19.3%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:16:20,509",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:16:20,509 INFO Testing MOO 5m=+39.8%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:16:32,145",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+39.8% B/S=79/50"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:35,163",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+39.8% B/S=79/50"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:35,163",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 39.8\u219239.8\u219239.8"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:35,163",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: MOO 5m=+39.8% B/S=1.58"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:47,891",
+          "type": "PICK",
+          "detail": "PICK (cached): MOO 5m=+39.8% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:50,915",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+58.4% B/S=90/55"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:53,950",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+58.4% B/S=90/55"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:53,950",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 39.8\u219258.4\u219258.4"
+        },
+        {
+          "timestamp": "2026-09-08 08:16:53,950",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: MOO 5m=+58.4% B/S=1.58"
+        },
+        {
+          "timestamp": "2026-09-08 08:18:40,396",
+          "type": "PICK",
+          "detail": "PICK (cached): MOO 5m=+103.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-08 08:18:43,419",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+70.6% B/S=91/49"
+        },
+        {
+          "timestamp": "2026-09-08 08:18:46,524",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+103.0% B/S=104/55"
+        },
+        {
+          "timestamp": "2026-09-08 08:18:46,524",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 103.0\u219270.6\u2192103.0"
+        },
+        {
+          "timestamp": "2026-09-08 08:18:46,524",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: MOO 5m=+103.0% B/S=1.89"
+        },
+        {
+          "timestamp": "2026-09-08 08:18:57,207",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:18:57,207 INFO V3 BUY MOO with 0.038214 ETH ($94.24) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:19:33,460",
+      "exit_reason": "FAST_SL (-20.7%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "81.78",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 35,
+      "token": "MOO",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "0xD6177b59",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-08 08:22:23,479",
+      "entry_price_usd": "0.00016119",
+      "tokens_bought": "460431",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "74.22",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:20:47,610",
+          "type": "PICK",
+          "detail": "PICK (cached): MOO 5m=+32.5% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:50,631",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+32.5% B/S=97/47"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:53,648",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+32.5% B/S=97/47"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:53,648",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 32.5\u219232.5\u219232.5"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:53,648",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: MOO 5m=+32.5% B/S=2.06"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:06,614",
+          "type": "PICK",
+          "detail": "PICK (cached): MOO 5m=+32.5% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:09,633",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+32.5% B/S=97/47"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:12,652",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+32.5% B/S=97/47"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:12,653",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 32.5\u219232.5\u219232.5"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:12,653",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: MOO 5m=+32.5% B/S=2.06"
+        },
+        {
+          "timestamp": "2026-09-08 08:22:00,132",
+          "type": "PICK",
+          "detail": "PICK (cached): MOO 5m=+32.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-08 08:22:03,157",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+32.0% B/S=111/49"
+        },
+        {
+          "timestamp": "2026-09-08 08:22:06,176",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+32.0% B/S=111/49"
+        },
+        {
+          "timestamp": "2026-09-08 08:22:06,176",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 32.0\u219232.0\u219232.0"
+        },
+        {
+          "timestamp": "2026-09-08 08:22:06,176",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: MOO 5m=+32.0% B/S=2.27"
+        },
+        {
+          "timestamp": "2026-09-08 08:22:15,523",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:22:15,523 INFO V3 BUY MOO with 0.030095 ETH ($74.22) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:22:32,239",
+      "exit_reason": "HARD_TP (+52.2%)",
+      "exit_pnl_pct": "+52.2",
+      "exit_proceeds_usd": "81.36",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 36,
+      "token": "AGENTSORA",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "v4eth_100_1",
+      "entry_timestamp_utc": "2026-09-08 08:25:38,269",
+      "entry_price_usd": "0.00035453",
+      "tokens_bought": "208623",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "73.96",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273094 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:19:58,567",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+20.5% B/S=25/4"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:01,592",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+20.5% B/S=25/4"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:01,593",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 20.5\u219220.5\u219220.5"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:01,593",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: AGENTSORA 5m=+20.5% B/S=6.25"
+        },
+        {
+          "timestamp": "2026-09-08 08:20:39,322",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:20:39,322 INFO BUY AGENTSORA with 0.029243 ETH ($72.11)"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:26,473",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+22.9% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:21:29,491",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+12.7% B/S=22/5"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:32,512",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+12.7% B/S=22/5"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:37,584",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+22.9% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:21:40,604",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+12.7% B/S=22/5"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:43,628",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+12.7% B/S=22/5"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:48,692",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+22.9% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:21:51,724",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+12.7% B/S=22/5"
+        },
+        {
+          "timestamp": "2026-09-08 08:21:54,744",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+12.7% B/S=22/5"
+        },
+        {
+          "timestamp": "2026-09-08 08:24:37,058",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+22.4% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:24:49,566",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+24.2% B/S=30/9"
+        },
+        {
+          "timestamp": "2026-09-08 08:24:52,589",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+24.2% B/S=30/9"
+        },
+        {
+          "timestamp": "2026-09-08 08:24:52,589",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 22.4\u219224.2\u219224.2"
+        },
+        {
+          "timestamp": "2026-09-08 08:24:52,589",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: AGENTSORA 5m=+24.2% B/S=3.50"
+        },
+        {
+          "timestamp": "2026-09-08 08:25:30,716",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:25:30,716 INFO BUY AGENTSORA with 0.029993 ETH ($73.96)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:25:55,312",
+      "exit_reason": "HARD_SL (-7.0%)",
+      "exit_pnl_pct": "-7.0",
+      "exit_proceeds_usd": "71.13",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 37,
+      "token": "PTP",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 08:27:54,209",
+      "entry_price_usd": "0.00006914",
+      "tokens_bought": "536601",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "37.10",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273163 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:27:05,195",
+          "type": "PICK",
+          "detail": "PICK (WL): PTP 5m=+23.1% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:27:08,217",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+23.1% B/S=141/106"
+        },
+        {
+          "timestamp": "2026-09-08 08:27:11,243",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+23.1% B/S=141/106"
+        },
+        {
+          "timestamp": "2026-09-08 08:27:11,243",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 23.1\u219223.1\u219223.1"
+        },
+        {
+          "timestamp": "2026-09-08 08:27:11,243",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: PTP 5m=+23.1% B/S=1.33"
+        },
+        {
+          "timestamp": "2026-09-08 08:27:48,670",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:27:48,670 INFO BUY PTP with 0.015045 ETH ($37.10)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:28:08,229",
+      "exit_reason": "HARD_SL (-9.0%)",
+      "exit_pnl_pct": "-9.0",
+      "exit_proceeds_usd": "68.48",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 38,
+      "token": "FAT",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 08:42:39,965",
+      "entry_price_usd": "0.00008079",
+      "tokens_bought": "489210",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "39.52",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267789 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:40:56,824",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:40:56,824 INFO Testing FAT 5m=+37.9%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:40:58,106",
+          "type": "PICK",
+          "detail": "PICK (new/pons): FAT"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:01,137",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+37.9% B/S=524/397"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:04,163",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+37.9% B/S=524/397"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:04,163",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 37.9\u219237.9\u219237.9"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:04,163",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: FAT 5m=+37.9% B/S=1.32"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:41,696",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:41:41,696 INFO BUY FAT with 0.015493 ETH ($38.21)"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:49,977",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+32.3% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:41:53,002",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+34.1% B/S=411/364"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:56,021",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+34.1% B/S=411/364"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:56,021",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 32.3\u219234.1\u219234.1"
+        },
+        {
+          "timestamp": "2026-09-08 08:41:56,021",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: FAT 5m=+34.1% B/S=1.18"
+        },
+        {
+          "timestamp": "2026-09-08 08:42:33,345",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:42:33,345 INFO BUY FAT with 0.016028 ETH ($39.52)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:43:00,310",
+      "exit_reason": "MOMENTUM_DEAD (5m=+4.6%)",
+      "exit_pnl_pct": "-1.2",
+      "exit_proceeds_usd": "66.07",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 39,
+      "token": "FAT",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 08:44:49,608",
+      "entry_price_usd": "0.00008459",
+      "tokens_bought": "503507",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "42.59",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "267789 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:43:36,372",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+20.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:43:41,438",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+20.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:43:46,511",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+20.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:43:51,590",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+20.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:43:56,667",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+20.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:44:01,740",
+          "type": "PICK",
+          "detail": "PICK (WL): FAT 5m=+20.7% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:44:04,756",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+20.7% B/S=417/367"
+        },
+        {
+          "timestamp": "2026-09-08 08:44:07,776",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+20.7% B/S=417/367"
+        },
+        {
+          "timestamp": "2026-09-08 08:44:07,776",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 20.7\u219220.7\u219220.7"
+        },
+        {
+          "timestamp": "2026-09-08 08:44:07,776",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: FAT 5m=+20.7% B/S=1.14"
+        },
+        {
+          "timestamp": "2026-09-08 08:44:44,909",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:44:44,909 INFO BUY FAT with 0.017271 ETH ($42.59)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-08 08:45:20,110",
+          "rotation_slot": "R7",
+          "price_usd": "0.00008702",
+          "pnl_pct": "+2.9",
+          "momentum_5m_pct": "+25.0",
+          "buy_sell_ratio": "437/398",
+          "peak_drawdown_pct": "-7.9",
+          "trail_width_pct": "7",
+          "position_value_usd": "43.82",
+          "portfolio_total_usd": "67.14"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-08 08:45:26,404",
+      "exit_reason": "SLOWING (+25.0%\u2192-8.1%)",
+      "exit_pnl_pct": "-3.3",
+      "exit_proceeds_usd": "61.76",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-7.9%",
+      "notes": []
+    },
+    {
+      "trade_id": 40,
+      "token": "Anthropic",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "0x8240e945",
+        "fee": "100"
+      },
+      "route": "v3_100",
+      "entry_timestamp_utc": "2026-09-08 08:49:48,756",
+      "entry_price_usd": "0.00020253",
+      "tokens_bought": "266371",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "53.95",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:48:38,719",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:48:38,719 INFO Testing Anthropic 5m=+45.0%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:48:51,178",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+45.0% B/S=70/38"
+        },
+        {
+          "timestamp": "2026-09-08 08:48:54,204",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+45.0% B/S=70/38"
+        },
+        {
+          "timestamp": "2026-09-08 08:48:54,204",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 45.0\u219245.0\u219245.0"
+        },
+        {
+          "timestamp": "2026-09-08 08:48:54,204",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: Anthropic 5m=+45.0% B/S=1.84"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:04,180",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:49:04,180 INFO V3 BUY Anthropic with 0.021940 ETH ($54.10) fee=100"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:23,197",
+          "type": "PICK",
+          "detail": "PICK (cached): Anthropic 5m=+21.0% route=v3_100"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:26,223",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+21.0% B/S=56/31"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:29,245",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+21.0% B/S=56/31"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:29,246",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 21.0\u219221.0\u219221.0"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:29,246",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: Anthropic 5m=+21.0% B/S=1.81"
+        },
+        {
+          "timestamp": "2026-09-08 08:49:39,110",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:49:39,110 INFO V3 BUY Anthropic with 0.021877 ETH ($53.95) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:49:57,527",
+      "exit_reason": "HARD_TP (+58.6%)",
+      "exit_pnl_pct": "+58.6",
+      "exit_proceeds_usd": "61.07",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    },
+    {
+      "trade_id": 41,
+      "token": "ASSAY",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 08:53:58,272",
+      "entry_price_usd": "0.00006145",
+      "tokens_bought": "602839",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "37.04",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273065 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:53:04,668",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:53:04,668 INFO Testing ASSAY 5m=+82.2%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:53:06,099",
+          "type": "PICK",
+          "detail": "PICK (new/pons): ASSAY"
+        },
+        {
+          "timestamp": "2026-09-08 08:53:09,140",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+82.2% B/S=225/104"
+        },
+        {
+          "timestamp": "2026-09-08 08:53:12,159",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+82.2% B/S=225/104"
+        },
+        {
+          "timestamp": "2026-09-08 08:53:12,159",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 82.2\u219282.2\u219282.2"
+        },
+        {
+          "timestamp": "2026-09-08 08:53:12,159",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: ASSAY 5m=+82.2% B/S=2.16"
+        },
+        {
+          "timestamp": "2026-09-08 08:53:50,030",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:53:50,030 INFO BUY ASSAY with 0.015022 ETH ($37.04)"
+        }
+      ],
+      "tick_observations": [
+        {
+          "timestamp": "2026-09-08 08:54:29,102",
+          "rotation_slot": "R0",
+          "price_usd": "0.00006041",
+          "pnl_pct": "-1.7",
+          "momentum_5m_pct": "+65.3",
+          "buy_sell_ratio": "191/108",
+          "peak_drawdown_pct": "-15.8",
+          "trail_width_pct": "7",
+          "position_value_usd": "36.42",
+          "portfolio_total_usd": "60.26"
+        }
+      ],
+      "exit_timestamp_utc": "2026-09-08 08:55:07,607",
+      "exit_reason": "HARD_SL (-6.7%)",
+      "exit_pnl_pct": "-6.7",
+      "exit_proceeds_usd": "59.01",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "-15.8%",
+      "notes": []
+    },
+    {
+      "trade_id": 42,
+      "token": "AGENTSORA",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "NOT_RECORDED",
+        "fee": "NOT_RECORDED"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 08:58:44,787",
+      "entry_price_usd": "0.00052988",
+      "tokens_bought": "96775",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "51.28",
+      "buy_fee_tier": "NOT_RECORDED",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "273159 gas (estimate)",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 08:34:10,453",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+32.3% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:34:15,522",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+32.3% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:34:20,595",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+32.3% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:34:25,669",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+32.3% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:34:30,721",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+32.3% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:38:37,240",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:38:42,329",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:38:47,407",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:38:52,476",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:38:57,546",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:39:02,630",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:39:08,023",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:39:13,093",
+          "type": "PICK",
+          "detail": "PICK (WL): AGENTSORA 5m=+42.6% route="
+        },
+        {
+          "timestamp": "2026-09-08 08:57:53,727",
+          "type": "TESTING",
+          "detail": "2026-09-08 08:57:53,727 INFO Testing AGENTSORA 5m=+22.6%..."
+        },
+        {
+          "timestamp": "2026-09-08 08:57:55,124",
+          "type": "PICK",
+          "detail": "PICK (new/pons): AGENTSORA"
+        },
+        {
+          "timestamp": "2026-09-08 08:57:58,144",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+22.6% B/S=28/8"
+        },
+        {
+          "timestamp": "2026-09-08 08:58:01,175",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+22.6% B/S=28/8"
+        },
+        {
+          "timestamp": "2026-09-08 08:58:01,175",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 22.6\u219222.6\u219222.6"
+        },
+        {
+          "timestamp": "2026-09-08 08:58:01,175",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: AGENTSORA 5m=+22.6% B/S=3.50"
+        },
+        {
+          "timestamp": "2026-09-08 08:58:39,088",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 08:58:39,088 INFO BUY AGENTSORA with 0.020794 ETH ($51.28)"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 08:58:59,433",
+      "exit_reason": "HARD_SL (-7.4%)",
+      "exit_pnl_pct": "-7.4",
+      "exit_proceeds_usd": "41.91",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": []
+    },
+    {
+      "trade_id": 43,
+      "token": "Anthropic",
+      "token_address": "NOT_RECORDED",
+      "pool_info": {
+        "pool_address": "0x8240e945",
+        "fee": "100"
+      },
+      "route": "NOT_RECORDED",
+      "entry_timestamp_utc": "2026-09-08 09:12:40,967",
+      "entry_price_usd": "0.00013085",
+      "tokens_bought": "262474",
+      "quote_currency": "ETH",
+      "quote_spent_usd": "34.34",
+      "buy_fee_tier": "100",
+      "tx_hash_buy": "NOT_RECORDED",
+      "gas_cost_buy": "NOT_RECORDED",
+      "pre_entry_activity": [
+        {
+          "timestamp": "2026-09-08 09:12:07,373",
+          "type": "TESTING",
+          "detail": "2026-09-08 09:12:07,373 INFO Testing Anthropic 5m=+28.4%..."
+        },
+        {
+          "timestamp": "2026-09-08 09:12:20,172",
+          "type": "READING",
+          "detail": "Reading 2: 5m=+28.4% B/S=55/36"
+        },
+        {
+          "timestamp": "2026-09-08 09:12:23,194",
+          "type": "READING",
+          "detail": "Reading 3: 5m=+28.4% B/S=55/36"
+        },
+        {
+          "timestamp": "2026-09-08 09:12:23,194",
+          "type": "MOMENTUM_VERIFIED",
+          "detail": "Verified: 28.4\u219228.4\u219228.4"
+        },
+        {
+          "timestamp": "2026-09-08 09:12:23,194",
+          "type": "VERIFIED_ENTRY",
+          "detail": "VERIFIED ENTRY: Anthropic 5m=+28.4% B/S=1.53"
+        },
+        {
+          "timestamp": "2026-09-08 09:12:33,212",
+          "type": "BUY_ATTEMPT",
+          "detail": "2026-09-08 09:12:33,212 INFO V3 BUY Anthropic with 0.013927 ETH ($34.34) fee=100"
+        }
+      ],
+      "tick_observations": [],
+      "exit_timestamp_utc": "2026-09-08 09:13:14,173",
+      "exit_reason": "FAST_SL (-4.1%)",
+      "exit_pnl_pct": "NOT_RECORDED",
+      "exit_proceeds_usd": "42.63",
+      "tx_hash_sell": "NOT_RECORDED",
+      "gas_cost_sell": "NOT_RECORDED",
+      "peak_drawdown": "NOT_RECORDED",
+      "notes": [
+        "Sell fee tier: 100"
+      ]
+    }
+  ]
+}

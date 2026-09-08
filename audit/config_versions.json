@@ -1,0 +1,342 @@
+{
+  "extraction_timestamp": "2026-09-08T09:00:00Z",
+  "source_file": "/root/shaheer-project/crypto-alpha-engine/logs/engine.log",
+  "total_config_changes": 22,
+  "versions_seen": [
+    "v6.0",
+    "v6.1",
+    "v6.2"
+  ],
+  "configs": [
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 17:53:55,758",
+      "last_seen": "2026-09-07 17:53:55,758",
+      "active_until": "2026-09-07 18:17:56,395",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+80%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$232.72 ETH",
+        "balance_2": "~$216 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 18:17:56,395",
+      "last_seen": "2026-09-07 18:35:17,956",
+      "active_until": "2026-09-07 19:16:47,066",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+80%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$231.93 ETH",
+        "balance_2": "~$216 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 19:16:47,066",
+      "last_seen": "2026-09-07 19:16:47,066",
+      "active_until": "2026-09-07 20:36:31,117",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+80%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$230.83 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 20:36:31,117",
+      "last_seen": "2026-09-07 20:53:20,817",
+      "active_until": "2026-09-07 21:35:43,190",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+80%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$233.48 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 21:35:43,190",
+      "last_seen": "2026-09-07 21:35:43,190",
+      "active_until": "2026-09-07 21:49:29,660",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+80%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$271.08 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 21:49:29,660",
+      "last_seen": "2026-09-07 21:49:29,660",
+      "active_until": "2026-09-07 21:50:19,150",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+150%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$186.80 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 21:50:19,150",
+      "last_seen": "2026-09-07 21:50:19,150",
+      "active_until": "2026-09-07 22:06:37,577",
+      "settings": {
+        "entry_criteria": "5m +15%\u2013+300%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$186.80 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 22:06:37,577",
+      "last_seen": "2026-09-07 22:10:01,638",
+      "active_until": "2026-09-07 22:14:06,284",
+      "settings": {
+        "entry_criteria": "5m +20%\u2013+300%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$72.33 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 22:14:06,284",
+      "last_seen": "2026-09-07 22:14:06,284",
+      "active_until": "2026-09-07 22:17:44,755",
+      "settings": {
+        "entry_criteria": "5m +20%\u2013+300%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$50.75 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.0",
+      "description": "V4 INTEGRATION + MULTI-QUOTE + FIXED HONEYPOT (V4 Universal Router + Permit2 + QuoterV2 honeypot fix)",
+      "first_seen": "2026-09-07 22:17:44,755",
+      "last_seen": "2026-09-07 22:17:44,755",
+      "active_until": "2026-09-07 22:27:38,784",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+300%",
+        "exit_criteria": "momentum/sellers/trail(3-7%)/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$50.75 ETH",
+        "balance_2": "~$193 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 22:27:38,784",
+      "last_seen": "2026-09-07 22:27:38,784",
+      "active_until": "2026-09-07 22:41:59,540",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+300% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-5%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$47.85 ETH",
+        "balance_2": "~$192 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 22:41:59,540",
+      "last_seen": "2026-09-07 22:41:59,540",
+      "active_until": "2026-09-07 22:52:23,555",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+300% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$31.32 ETH",
+        "balance_2": "~$193 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 22:52:23,555",
+      "last_seen": "2026-09-07 22:52:23,555",
+      "active_until": "2026-09-07 22:52:31,128",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+300% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$27.41 ETH",
+        "balance_2": "~$193 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 22:52:31,128",
+      "last_seen": "2026-09-07 22:52:31,128",
+      "active_until": "2026-09-07 22:56:24,310",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+300% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$92.28 ETH",
+        "balance_2": "~$128 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 22:56:24,310",
+      "last_seen": "2026-09-07 22:56:24,310",
+      "active_until": "2026-09-07 23:01:48,736",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+5000% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$7.22 ETH",
+        "balance_2": "~$108 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 23:01:48,736",
+      "last_seen": "2026-09-07 23:01:48,736",
+      "active_until": "2026-09-07 23:04:08,047",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+5000% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$66.77 ETH",
+        "balance_2": "~$108 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 23:04:08,047",
+      "last_seen": "2026-09-07 23:04:33,317",
+      "active_until": "2026-09-07 23:07:28,663",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+5000% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$57.07 ETH",
+        "balance_2": "~$108 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-07 23:07:28,663",
+      "last_seen": "2026-09-07 23:07:28,663",
+      "active_until": "2026-09-08 07:34:07,088",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+5000% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$47.85 ETH",
+        "balance_2": "~$108 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-08 07:34:07,088",
+      "last_seen": "2026-09-08 08:00:28,679",
+      "active_until": "2026-09-08 08:02:11,083",
+      "settings": {
+        "entry_criteria": "5m +10%\u2013+5000% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$3.92 ETH",
+        "balance_2": "~$107 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.1",
+      "description": "HARD TP + WIN RATE TIGHTENING (5 filters + 25%% auto take-profit)",
+      "first_seen": "2026-09-08 08:02:11,083",
+      "last_seen": "2026-09-08 08:02:11,083",
+      "active_until": "2026-09-08 08:04:21,321",
+      "settings": {
+        "entry_criteria": "5m +19%\u2013+225% B/S>1.3",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$3.92 ETH",
+        "balance_2": "~$107 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.2",
+      "description": "CODEX ULTRA OPTIMIZED (verified entry + SL fix + single instance)",
+      "first_seen": "2026-09-08 08:04:21,321",
+      "last_seen": "2026-09-08 08:04:21,321",
+      "active_until": "2026-09-08 08:51:28,314",
+      "settings": {
+        "entry_criteria": "5m +19%\u2013+225% B/S>1.02",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$3.92 ETH",
+        "balance_2": "~$107 SPY",
+        "target": "$803"
+      }
+    },
+    {
+      "version": "v6.2",
+      "description": "CODEX ULTRA OPTIMIZED (verified entry + SL fix + single instance)",
+      "first_seen": "2026-09-08 08:51:28,314",
+      "last_seen": "2026-09-08 08:51:28,314",
+      "active_until": "END_OF_LOG",
+      "settings": {
+        "entry_criteria": "5m +19%\u2013+225% B/S>1.02",
+        "exit_criteria": "TP(+25%)/momentum/SL(-3%)",
+        "wallet": "0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2",
+        "balance_1": "$61.07 ETH",
+        "balance_2": "~$158 SPY",
+        "target": "$803"
+      }
+    }
+  ]
+}
