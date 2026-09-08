@@ -1,109 +1,111 @@
 ══════════════════════════════════════════════════════════════════════
-RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 4)
+RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 5)
 Status: STAGED repair configuration — production source untouched,
         service stopped and disabled, no live trading.
 Effective date: 2026-09-08
-Engine: repair/rh_rotation_engine.py (v6.2-repaired-v4 → v6.2-repaired-v5)
-Tests: 133 regression tests, ALL PASSING
+Engine: repair/rh_rotation_engine.py (v6.2-repaired-v5 → v6.2-repaired-v6)
+Tests: 160 regression tests, ALL PASSING (up from 133)
 ══════════════════════════════════════════════════════════════════════
 
-AMENDMENT 4 CHANGES (responding to docking station note-1788868454143):
+AMENDMENT 5 CHANGES (responding to docking station note-1788869819428):
 
-Section 1 — Transaction Coordinator & Position Lifecycle:
-  1. TxCoordinator class: thread-safe nonce ownership via acquire_nonce(),
-     durable operation IDs (TxOp), pending/confirmed/reverted/failed/replaced
-     states, receipt reconciliation via confirm_op()/fail_op().
-  2. TxOp class: lifecycle tracking with op_id, op_type, nonce, tx_hash,
-     receipt, token_addr, generation, timestamps.
-  3. Generation-based callback rejection: new_generation() increments on
-     new position; is_valid_generation() rejects old-generation callbacks.
-  4. State serialization: to_dict()/load_from_dict() for persistence
-     across restart.
-  5. PositionLedger class: full lifecycle tracking — managed_raw, sold_raw,
-     residual_raw, cost_basis_usd, proceeds_usd, gas_spent_usd, entry_price,
-     exec_peak_usd, exit_latch, buy/sell op IDs, tx hashes, receipts.
-  6. PositionLedger.record_sell(): models partial completion explicitly —
-     PARTIAL status when sold_raw < managed_raw.
-  7. PositionLedger.net_pnl_usd: proceeds - cost_basis - gas.
-  8. PositionLedger.is_fully_resolved(): True only when residual_raw == 0
-     AND proceeds attributed.
+Section 1 — TxCoordinator Wired Into All Broadcast Sites:
+  1. _tx_coord = TxCoordinator(w3, W, acct) instantiated at module level
+     after wallet initialization.
+  2. _acquire_nonce() helper: delegates to _tx_coord.acquire_nonce() for
+     all broadcast transactions. Returns just the nonce integer.
+  3. All 20 send_raw_transaction sites now use _acquire_nonce() instead of
+     inline w3.eth.get_transaction_count(W). Functions wired:
+     approve(), sell(), buy(), _unwrap_all_weth(), v3_buy() (3 sites),
+     v3_sell() (3 sites), v3_buy_spy() (2 sites), v3_sell_spy() (3 sites),
+     _ensure_permit2_approval() (2 sites), v4_buy() (2 sites), v4_sell().
+  4. 7 simulation-only sites (pons_ok, honeypot_check, get_rt_cost_model×4,
+     get_sell_quote) correctly retain w3.eth.get_transaction_count(W) —
+     they use eth_call/estimate_gas and don't consume nonces.
 
-Section 2 — Quote Freshness & Decision Fallback Removal:
-  9. QUOTE_MAX_AGE_S = 4.0 seconds freshness bound.
-  10. SL (EXIT 1), TP (EXIT 2), trailing stop (EXIT 3) all gated on
-      have_decision_pnl — only fires when executable quote is fresh
-      and within QUOTE_MAX_AGE_S.
-  11. exec_peak_usd only advances from fresh quotes (quote_fresh check).
-  12. Stale cached quotes may display but NOT certify net profit, advance
-      executable peak, authorize minOut, or clear exit latch.
-  13. Chart PnL labeled "display only — NOT for decisions".
-  14. Fresh SellQuote stored on position dict as _last_sell_quote for
-      seller integration.
-  15. Momentum exits (EXIT 4-6) remain market-signal based — they do not
-      depend on PnL and can fire regardless of quote freshness.
+Section 2 — PositionLedger Wired Into Actual Callers:
+  5. _pos_ledger module-level variable: set on successful buy in enter(),
+     cleared on full resolve.
+  6. enter() creates PositionLedger on acquisition: token_addr, symbol,
+     route, generation, managed_raw, cost_basis_usd, entry_price.
+  7. enter() calls _tx_coord.new_generation() on new position — enables
+     generation-based callback rejection for stale operations.
+  8. Main exit UNRESOLVED handler: calls _pos_ledger.mark_unresolved().
+  9. Main exit PARTIAL handler: calls _pos_ledger.record_sell() with
+     sold_raw, partial proceeds, tx_hash.
+  10. Main exit RESOLVED handler: calls _pos_ledger.record_sell() for
+      final attribution. Accumulates _partial_proceeds into total proceeds.
+  11. _save_state() persists both tx_coordinator and pos_ledger to state file.
+  12. _load_state() restores TxCoordinator (generation, nonce, ops) and
+      PositionLedger (via from_dict) on restart.
 
-Section 3 — RESOLVED Means Reconciled:
-  16. _do_sell now verifies residual balance AFTER positive proceeds:
-      checks both primary and V4 alias addresses.
-  17. Partial sell detection: positive proceeds + remaining tokens > 100
-      returns RESOLVED with error="partial: N tokens remaining".
-  18. TradeOutcome.is_partial property: True when resolved but error
-      contains "partial".
-  19. Zero inventory + unknown proceeds remains UNRESOLVED and blocks
-      new entries until reconciled.
+Section 3 — PARTIAL Status Fixed Through Every Caller:
+  13. TradeOutcome.PARTIAL = 'partial' as proper status constant.
+  14. is_partial checks self.status == self.PARTIAL (not error-string hack).
+  15. _do_sell returns TradeOutcome.PARTIAL with exact integer residual_raw
+      (removed >= 100 human-token threshold).
+  16. Main exit block: new elif outcome.is_partial handler between
+      is_unresolved and is_resolved. Records partial proceeds, updates
+      managed_raw to residual, keeps exit latch, resets sell_fail_count.
+      Does NOT release entry gate, increment rot, or mark _sold.
+  17. Fast exit caller: outcome.is_partial handler (already existed).
+  18. Latched exit caller: sr.is_partial handler (already existed).
+  19. Bad-fill sell-back: sell_result.is_partial returns position dict with
+      reduced managed_raw, exit latch, and _partial_proceeds. Does NOT
+      return None (which would release entry gate).
 
-Section 4 — Pons Route Rejection:
-  20. enter() explicitly rejects Pons route when get_rt_cost_model returns
-      not-ok. Reports "unsupported route — requires V3 or V4".
-  21. Existing Pons exposure retained with recovery path — only new entries
-      blocked, not existing positions.
-  22. get_sell_quote() for Pons returns ok=False — no chart fallback
-      re-enables the route.
+Section 4 — Mock Provider Harness & End-to-End Behavioral Tests:
+  20. MockWeb3Provider class: configurable RPC responses, call recording,
+      read-only mode enforcement. Supports dependency injection.
+  21. TestMockProviderHarness: 3 tests — records calls, blocks in readonly,
+      returns configurable nonce.
+  22. TestEndToEndBehavioral: 9 tests exercising real engine classes:
+      - TradeOutcome lifecycle: RESOLVED, PARTIAL, UNRESOLVED paths
+      - PositionLedger full lifecycle: create → partial sell → final sell →
+        fully resolved with net_pnl computation
+      - PositionLedger serialization roundtrip: to_dict → from_dict
+      - TxCoordinator nonce sequence: 5 monotonically increasing nonces
+      - TxCoordinator generation rejection: old gen rejected, new gen valid
+      - ReadOnlyProvider: blocks eth_sendRawTransaction, allows 8 read RPCs
+      - PositionLedger unresolved lifecycle: mark_unresolved → verify state
 
-Section 5 — Shadow Isolation:
-  23. ReadOnlyProvider class wraps Web3 provider at transport layer.
-      Explicit allowlist (_READ_ONLY_ALLOWED) of read/simulation RPCs.
-      All other methods raise PermissionError.
-  24. _DENIED_RPC_METHODS frozenset for declarative deny list.
-  25. Shadow mode with configurable duration (default 600s = 10min).
+TESTS ADDED (160 total, up from 133):
+  - TestTxCoordinator: +3 (coordinator instantiated, acquire_nonce helper,
+    all broadcast sites use coordinator)
+  - TestTxCoordinator: +1 (simulation sites preserved)
+  - TestPositionLedger: +4 (ledger wired into enter, exit handlers,
+    persisted in state, restored on load)
+  - TestPartialCompletionAllCallers: +6 (main exit, fast exit, latched exit,
+    bad-fill sellback, partial not counted as exit, proper status constant)
+  - TestMockProviderHarness: +3 (mock provider behavior)
+  - TestEndToEndBehavioral: +9 (real class instantiation and lifecycle tests)
+  Total new: 27 tests
 
-NEW CLASSES ADDED:
-  - TxCoordinator (nonce management, operation tracking, generation)
-  - TxOp (durable operation with lifecycle states)
-  - PositionLedger (full position lifecycle with partial completion)
-  - ReadOnlyProvider (transport-level RPC enforcement)
-
-TESTS ADDED (133 total, up from 104):
-  - TestTxCoordinator: class exists, nonce/generation/serialization
-  - TestPositionLedger: class, managed quantities, partial, net_pnl
-  - TestQuoteFreshness: QUOTE_MAX_AGE_S, SL/TP/trail require executable PnL,
-    exec_peak from fresh only, stale labeled
-  - TestResolvedMeansReconciled: residual verification, partial modeled
-  - TestReadOnlyProvider: class, blocks send, allows eth_call
-  - TestSellQuoteIntegration: required fields, main loop stores quote
-  - TestPonsRouteRejection: entry rejected, sell quote returns not-ok
-  - TestBehavioralAcceptance: chart+25% not booked, expired quotes blocked,
-    restart preserves state, partial not full close, shadow can't sign,
-    Pons can't authorize entry
-
-BEHAVIORAL ACCEPTANCE CHECKLIST:
+BEHAVIORAL ACCEPTANCE CHECKLIST (all from amendments 4+5):
   ✅ Chart +25% with flat executable not booked as +25% net profit
   ✅ Expired quotes cannot become live execution estimates
   ✅ Positive proceeds with residual don't close full position
   ✅ Restart preserves unresolved exit, basis, peak, daily pause
   ✅ Missing Pons quotes cannot authorize entry
   ✅ Shadow helpers cannot sign or transmit wallet-changing requests
+  ✅ All 20 broadcast nonce sites use TxCoordinator (no inline nonce)
+  ✅ 7 simulation sites correctly retain inline nonce (no coordinator)
+  ✅ PositionLedger created on buy, updated on sell, persisted on restart
+  ✅ PARTIAL does not release entry gate or count as complete exit
+  ✅ TxCoordinator issues monotonically increasing nonces
+  ✅ Generation-based callback rejection works across position transitions
 
-PROVIDER LIMITATIONS (honest assessment):
-  - Pons aggregator: eth_call returns empty bytes, no executable quotes.
-    New Pons entries BLOCKED. Existing Pons positions retain recovery path.
-  - Priority tx coordinator: Classes implemented with full lifecycle.
-    Wire-up to replace all 27 inline get_transaction_count calls requires
-    touching every buy/sell/approve function. Foundation is built; wiring
-    is staged for next activation step to minimize risk.
-  - Behavioral tests calling real implementation functions with injected
-    providers: Require mock Web3 provider harness. Current tests verify
-    structural properties. Live integration test planned for shadow run.
+AMENDMENT 4 ITEMS RETAINED (no regressions):
+  - TxCoordinator/TxOp/PositionLedger/ReadOnlyProvider classes
+  - QUOTE_MAX_AGE_S=4.0, have_decision_pnl gate on SL/TP/trail
+  - Pons entry rejection, shadow duration, RPC deny list
+  - All 133 prior tests still passing
+
+REMAINING FOR ACTIVATION:
+  - Shadow run: 10-minute shadow process with JSONL output (requires
+    production RPC access — not authorized in current stopped state)
+  - Resync nonce on coordinator init vs on-chain nonce 688
+  - Integration test with live RPC (read-only shadow queries)
 
 SAFETY: Production engine STOPPED, systemd DISABLED. All changes in
 repair/ copy only. No wallet operations, no signing, no broadcasting.
