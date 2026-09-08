@@ -1,26 +1,35 @@
 ==================================================
-RH ENGINE AMENDMENT 7 — COMPLETE
+ENGINE A PUMP ALERT — 2026-09-08 16:06 UTC
 ==================================================
 
-Date: 2026-09-08
-Tests: 205 pass (was 196)
-Shadow: 10-minute clean run, exit code 0
-Status: PRODUCTION STOPPED AND DISABLED
+Market: BTC 30d=+21.0%, 90d=+26.0% (BULL)
+Model: v7b (aecf27f3)
 
-ZIP: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/rh_engine_amendment7.zip
+6 ALERTS above threshold:
 
-KEY FIXES:
-  1. Generation guard in _sign_and_send — rejects stale-position txs (CRITICAL)
-  2. All 22 broadcast sites pass generation through full lifecycle
-  3. Fast exit + latched exit now update _pos_ledger (was missing)
-  4. Latched exit now counts losses in SESSION_LOSSES
-  5. _unwrap_all_weth scoped to max_amount on buy failures
-  6. ReadOnlyProvider inherits BaseProvider — shadow runs clean
-  7. Dust threshold relative to managed_raw (not hardcoded 100 tokens)
+  1. CATGPT — P(pump)=89.0%
+     Category: memecoin | FDV: $-1 | Price: $0.000215
+     CG: catgpt-2 | Decision ID: 220
 
-Full report in ZIP: AMENDMENT_7_REPORT.txt
+  2. SOLCAT — P(pump)=63.8%
+     Category: memecoin | FDV: $1,006,740 | Price: $0.001007
+     CG: solcat-3 | Decision ID: 221
 
-REMAINING BLOCKERS (pre-existing, from session brief):
-  1. Position discovery only checks Pons whitelist
-  2. Cost basis re-anchors to spot on adoption
-  3. No trailing-stop persistence
+  3. NASDUCK — P(pump)=60.1%
+     Category: memecoin | FDV: $3,482,913 | Price: $0.003634
+     CG: nasduck | Decision ID: 219
+
+  4. MARSCOIN — P(pump)=50.1%
+     Category: memecoin | FDV: $134,152,649 | Price: $0.134869
+     CG: marscoin-4 | Decision ID: 218
+
+  5. CASHCAT — P(pump)=47.1%
+     Category: memecoin | FDV: $186,715,837 | Price: $0.188914
+     CG: cash-cat | Decision ID: 217
+
+  6. DOT — P(pump)=24.0%
+     Category: defi | FDV: $2,038,766,800 | Price: $1.200000
+     CG: polkadot | Decision ID: 215
+
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
