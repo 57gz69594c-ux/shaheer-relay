@@ -1,35 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-08 16:06 UTC
+ENGINE A PUMP ALERT — 2026-09-08 20:06 UTC
 ==================================================
 
-Market: BTC 30d=+21.0%, 90d=+26.0% (BULL)
+Market: BTC 30d=+20.3%, 90d=+26.6% (BULL)
 Model: v7b (aecf27f3)
 
-6 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. CATGPT — P(pump)=89.0%
-     Category: memecoin | FDV: $-1 | Price: $0.000215
-     CG: catgpt-2 | Decision ID: 220
+  1. ANSEM — P(pump)=47.1%
+     Category: memecoin | FDV: $177,826,509 | Price: $0.178298
+     CG: the-black-bull | Decision ID: 227
 
-  2. SOLCAT — P(pump)=63.8%
-     Category: memecoin | FDV: $1,006,740 | Price: $0.001007
-     CG: solcat-3 | Decision ID: 221
+  2. AI — P(pump)=46.1%
+     Category: memecoin | FDV: $241,349,923 | Price: $0.243410
+     CG: artificial-inu-3 | Decision ID: 226
 
-  3. NASDUCK — P(pump)=60.1%
-     Category: memecoin | FDV: $3,482,913 | Price: $0.003634
-     CG: nasduck | Decision ID: 219
-
-  4. MARSCOIN — P(pump)=50.1%
-     Category: memecoin | FDV: $134,152,649 | Price: $0.134869
-     CG: marscoin-4 | Decision ID: 218
-
-  5. CASHCAT — P(pump)=47.1%
-     Category: memecoin | FDV: $186,715,837 | Price: $0.188914
-     CG: cash-cat | Decision ID: 217
-
-  6. DOT — P(pump)=24.0%
-     Category: defi | FDV: $2,038,766,800 | Price: $1.200000
-     CG: polkadot | Decision ID: 215
+  3. PUMP — P(pump)=38.8%
+     Category: memecoin | FDV: $3,661,295,117 | Price: $0.004386
+     CG: pump-fun | Decision ID: 224
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
