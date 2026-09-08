@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-08 06:06 UTC
+ENGINE A PUMP ALERT — 2026-09-08 08:05 UTC
 ==================================================
 
-Market: BTC 30d=+21.3%, 90d=+28.1% (BULL)
+Market: BTC 30d=+21.1%, 90d=+28.1% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. BONK — P(pump)=48.7%
-     Category: memecoin | FDV: $274,397,322 | Price: $0.000003
-     CG: bonk | Decision ID: 201
+  1. ZCAT — P(pump)=48.3%
+     Category: memecoin | FDV: $101,034,268 | Price: $0.104313
+     CG: anonymous-cat | Decision ID: 203
+
+  2. FORM — P(pump)=37.8%
+     Category: gaming | FDV: $209,084,231 | Price: $0.365211
+     CG: four | Decision ID: 204
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
