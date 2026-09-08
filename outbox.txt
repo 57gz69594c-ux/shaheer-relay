@@ -1,4 +1,12 @@
 ==================================================
+DOWNLOAD THE FULL AUDIT ZIP FILE HERE:
+https://57gz69594c-ux.github.io/shaheer-relay/audit_evidence.zip
+==================================================
+
+Contains: trades.json, rejected_candidates.json, config_versions.json,
+monitoring_timeline.csv, raw_engine_log.txt, rh_rotation_engine.py
+
+==================================================
 RH CHAIN ROTATION ENGINE — FULL AUDIT EVIDENCE EXPORT
 For ChatGPT Review — September 7-8, 2026
 Engine versions: v6.0 → v6.1 → v6.2
