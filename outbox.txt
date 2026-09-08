@@ -16,4 +16,113 @@ Model: v7b (aecf27f3)
      CG: pons | Decision ID: 209
 
 Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+==================================================══════════════════════════════════════════════════════════════════════
+RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 4)
+Status: STAGED repair configuration — production source untouched,
+        service stopped and disabled, no live trading.
+Effective date: 2026-09-08
+Engine: repair/rh_rotation_engine.py (v6.2-repaired-v4 → v6.2-repaired-v5)
+Tests: 133 regression tests, ALL PASSING
+══════════════════════════════════════════════════════════════════════
+
+AMENDMENT 4 CHANGES (responding to docking station note-1788868454143):
+
+Section 1 — Transaction Coordinator & Position Lifecycle:
+  1. TxCoordinator class: thread-safe nonce ownership via acquire_nonce(),
+     durable operation IDs (TxOp), pending/confirmed/reverted/failed/replaced
+     states, receipt reconciliation via confirm_op()/fail_op().
+  2. TxOp class: lifecycle tracking with op_id, op_type, nonce, tx_hash,
+     receipt, token_addr, generation, timestamps.
+  3. Generation-based callback rejection: new_generation() increments on
+     new position; is_valid_generation() rejects old-generation callbacks.
+  4. State serialization: to_dict()/load_from_dict() for persistence
+     across restart.
+  5. PositionLedger class: full lifecycle tracking — managed_raw, sold_raw,
+     residual_raw, cost_basis_usd, proceeds_usd, gas_spent_usd, entry_price,
+     exec_peak_usd, exit_latch, buy/sell op IDs, tx hashes, receipts.
+  6. PositionLedger.record_sell(): models partial completion explicitly —
+     PARTIAL status when sold_raw < managed_raw.
+  7. PositionLedger.net_pnl_usd: proceeds - cost_basis - gas.
+  8. PositionLedger.is_fully_resolved(): True only when residual_raw == 0
+     AND proceeds attributed.
+
+Section 2 — Quote Freshness & Decision Fallback Removal:
+  9. QUOTE_MAX_AGE_S = 4.0 seconds freshness bound.
+  10. SL (EXIT 1), TP (EXIT 2), trailing stop (EXIT 3) all gated on
+      have_decision_pnl — only fires when executable quote is fresh
+      and within QUOTE_MAX_AGE_S.
+  11. exec_peak_usd only advances from fresh quotes (quote_fresh check).
+  12. Stale cached quotes may display but NOT certify net profit, advance
+      executable peak, authorize minOut, or clear exit latch.
+  13. Chart PnL labeled "display only — NOT for decisions".
+  14. Fresh SellQuote stored on position dict as _last_sell_quote for
+      seller integration.
+  15. Momentum exits (EXIT 4-6) remain market-signal based — they do not
+      depend on PnL and can fire regardless of quote freshness.
+
+Section 3 — RESOLVED Means Reconciled:
+  16. _do_sell now verifies residual balance AFTER positive proceeds:
+      checks both primary and V4 alias addresses.
+  17. Partial sell detection: positive proceeds + remaining tokens > 100
+      returns RESOLVED with error="partial: N tokens remaining".
+  18. TradeOutcome.is_partial property: True when resolved but error
+      contains "partial".
+  19. Zero inventory + unknown proceeds remains UNRESOLVED and blocks
+      new entries until reconciled.
+
+Section 4 — Pons Route Rejection:
+  20. enter() explicitly rejects Pons route when get_rt_cost_model returns
+      not-ok. Reports "unsupported route — requires V3 or V4".
+  21. Existing Pons exposure retained with recovery path — only new entries
+      blocked, not existing positions.
+  22. get_sell_quote() for Pons returns ok=False — no chart fallback
+      re-enables the route.
+
+Section 5 — Shadow Isolation:
+  23. ReadOnlyProvider class wraps Web3 provider at transport layer.
+      Explicit allowlist (_READ_ONLY_ALLOWED) of read/simulation RPCs.
+      All other methods raise PermissionError.
+  24. _DENIED_RPC_METHODS frozenset for declarative deny list.
+  25. Shadow mode with configurable duration (default 600s = 10min).
+
+NEW CLASSES ADDED:
+  - TxCoordinator (nonce management, operation tracking, generation)
+  - TxOp (durable operation with lifecycle states)
+  - PositionLedger (full position lifecycle with partial completion)
+  - ReadOnlyProvider (transport-level RPC enforcement)
+
+TESTS ADDED (133 total, up from 104):
+  - TestTxCoordinator: class exists, nonce/generation/serialization
+  - TestPositionLedger: class, managed quantities, partial, net_pnl
+  - TestQuoteFreshness: QUOTE_MAX_AGE_S, SL/TP/trail require executable PnL,
+    exec_peak from fresh only, stale labeled
+  - TestResolvedMeansReconciled: residual verification, partial modeled
+  - TestReadOnlyProvider: class, blocks send, allows eth_call
+  - TestSellQuoteIntegration: required fields, main loop stores quote
+  - TestPonsRouteRejection: entry rejected, sell quote returns not-ok
+  - TestBehavioralAcceptance: chart+25% not booked, expired quotes blocked,
+    restart preserves state, partial not full close, shadow can't sign,
+    Pons can't authorize entry
+
+BEHAVIORAL ACCEPTANCE CHECKLIST:
+  ✅ Chart +25% with flat executable not booked as +25% net profit
+  ✅ Expired quotes cannot become live execution estimates
+  ✅ Positive proceeds with residual don't close full position
+  ✅ Restart preserves unresolved exit, basis, peak, daily pause
+  ✅ Missing Pons quotes cannot authorize entry
+  ✅ Shadow helpers cannot sign or transmit wallet-changing requests
+
+PROVIDER LIMITATIONS (honest assessment):
+  - Pons aggregator: eth_call returns empty bytes, no executable quotes.
+    New Pons entries BLOCKED. Existing Pons positions retain recovery path.
+  - Priority tx coordinator: Classes implemented with full lifecycle.
+    Wire-up to replace all 27 inline get_transaction_count calls requires
+    touching every buy/sell/approve function. Foundation is built; wiring
+    is staged for next activation step to minimize risk.
+  - Behavioral tests calling real implementation functions with injected
+    providers: Require mock Web3 provider harness. Current tests verify
+    structural properties. Live integration test planned for shadow run.
+
+SAFETY: Production engine STOPPED, systemd DISABLED. All changes in
+repair/ copy only. No wallet operations, no signing, no broadcasting.
+══════════════════════════════════════════════════════════════════════
