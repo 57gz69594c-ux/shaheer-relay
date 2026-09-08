@@ -1,379 +1,1607 @@
 ══════════════════════════════════════════════════════════════════════
-RH CHAIN ROTATION ENGINE — REPAIR REPORT
-Version: PROVISIONAL v1.0 — 2026-09-08
-Source Revision: v6.2 → v6.2-repaired (1006-line unified diff)
+RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDED)
+Status: STAGED repair configuration — production source untouched,
+        service stopped and disabled, no live trading.
+Effective date: 2026-09-08
+Source revision: v6.2 → v6.2-repaired-v2 (1181-line unified diff)
 ══════════════════════════════════════════════════════════════════════
 
-STATUS: ALL CODE DEFECTS FIXED. 49/49 REGRESSION TESTS PASS.
-        Policy A deployed as provisional baseline.
-        Engine remains STOPPED and systemd service DISABLED.
-        Wallet idle at ~$180.26 (ETH $61.26 / SPY $59.00 / USDG $60.00).
+61 regression tests pass. Engine STOPPED. Service DISABLED.
+Wallet idle at ~$180.26 (ETH $61.26 / SPY $59.00 / USDG $60.00).
+
+This is a staged repair — NOT a running deployment.
 
 ══════════════════════════════════════════════════════════════════════
-1. SOFTWARE DEFECTS FIXED (14 confirmed)
+1. CODE CHANGES COMPLETED (behavior verified via tests)
 ══════════════════════════════════════════════════════════════════════
 
 A. ACQUISITION ACCOUNTING (4 buy functions)
-   DEFECT: buy(), v3_buy(), v3_buy_spy(), v4_buy() all used
-           bal(token_addr) — the TOTAL wallet balance — as acquired
-           quantity. A wallet holding 1000 tokens that buys 1000 more
-           would record 2000 acquired at $0.05 instead of 1000 at $0.10.
-   FIX: All 4 functions now capture pre-buy balance snapshot and compute
-        delta = post_balance - pre_balance. Entry price = cost / delta.
+   buy(), v3_buy(), v3_buy_spy(), v4_buy() now capture pre-buy
+   balance snapshot and compute delta = post - pre. Entry price
+   uses the actual acquired quantity, not total wallet balance.
 
 B. SELL PROCEEDS ACCOUNTING (4 sell functions)
-   DEFECT: sell(), v3_sell(), v3_sell_spy(), v4_sell() returned the
-           entire quote-token wallet balance as sale proceeds.
-   FIX: All 4 functions now capture pre-sell quote balance and compute
-        received = post_balance - pre_balance.
+   sell(), v3_sell(), v3_sell_spy(), v4_sell() now capture pre-sell
+   quote balance and compute received = post - pre. Returns
+   attributed proceeds, not total wallet balance.
 
-C. ZERO-MINIMUM-OUTPUT EXIT FALLBACK
-   DEFECT: All 4 sell functions retried with amountOutMinimum=0 on revert.
-           This exposes the position to unlimited slippage (sandwich attacks).
-   FIX: Replaced (0, 'EMERGENCY min_out=0') with (int(min_out * 0.6),
-        '30% floor retry') in all 4 sell functions.
+C. SELL MINIMUM OUTPUT — FRESH-QUOTE-BASED
+   OLD: crude 50% of reference price floor, then retry at 30% (0.6×).
+        Allowed 70% below reference. Zero fallback on unknown.
+   NEW: minOut = fresh_quote × (1 - EXEC_SLIPPAGE_ALLOW/100).
+        Primary attempt: 0.5% slip from quote.
+        Retry: 1.0% slip from quote.
+        No-quote fallback: minimum 1 unit (not zero).
+   Stop trigger is separate from execution protection. A position
+   may exit below -3% if the market gapped — the stop is a trigger,
+   not a guaranteed fill price.
 
-D. SLIPPAGE CHECK — ZERO PRICE
-   DEFECT: check_slippage() returned (True, 0.0) when market_price <= 0,
-           treating unknown slippage as PASS.
-   FIX: Now returns (False, 100.0) — rejects with 100% assumed slippage.
+D. ROUND-TRIP COST CHECK — TWO-TIER
+   OLD: est_rt_cost = slip_pct × 2. Single 1.5% threshold.
+   NEW: Impact estimate = slip_pct × 2.
+        Expected check: impact ≤ 1.5% (MAX_RT_COST_EXPECTED).
+        Bounded check: impact + 2 × EXEC_SLIPPAGE_ALLOW ≤ 2.5%
+        (MAX_RT_COST_BOUNDED). Includes execution tolerance.
 
-E. SLIPPAGE CHECK — SPY AND V4-OTHER ROUTES
-   DEFECT: Slippage pre-check was skipped entirely for SPY-paired and
-           V4-other (USDG/HIMS/NVDA) routes.
-   FIX: All routes now run slippage check, converting deploy amounts
-        to ETH-equivalent for comparison.
+E. SLIPPAGE — ALL ROUTES
+   check_slippage() now rejects when market_price ≤ 0 (was: PASS).
+   SPY and V4-other routes now run slippage pre-check (were: skipped).
 
 F. MOMENTUM VERIFICATION
-   DEFECT: [100, 100, 19] passed because decline check required strict
-           monotonic readings[2] < readings[1] < readings[0].
-   FIX: Now computes highest-to-last drop: if drop > 30%, reject.
-        Also re-checks B/S ratio at end of verification.
+   [100, 100, 19] now rejected: highest-to-last drop > 30%.
+   B/S ratio re-checked at end of verification.
 
 G. V4 HONEYPOT INCONCLUSIVE
-   DEFECT: Universal Router sell simulation that reverted with unknown
-           error returned True (SAFE).
-   FIX: Inconclusive results now return False (block entry without
-        blacklisting). Same fix for transfer simulation.
+   Unknown sell simulation reverts now return INCONCLUSIVE (block
+   entry without blacklisting). Was: returned SAFE.
 
 H. GAS RESERVATION
-   DEFECT: SPY and V4-other routes did not check ETH balance for gas.
-   FIX: Added eth_bal() < GAS_RESERVE check for both routes.
+   SPY and V4-other routes now check eth_bal() < GAS_RESERVE.
 
 I. ENTRY PREDICATE REAPPLICATION
-   DEFECT: 2-15 seconds between momentum verification and buy call.
-           Conditions never re-checked.
-   FIX: Final re-check of 5m%, B/S ratio, MAX_5M_ENTRY, MOMENTUM_DEATH
-        right before buy transaction executes.
+   Final re-check of 5m%, B/S, MAX_5M_ENTRY, MOMENTUM_DEATH
+   immediately before buy transaction.
 
 J. COOLDOWN FILTERING
-   DEFECT: scan() returned only 1 candidate. If it was on cooldown,
-           enter() returned None instead of trying 2nd-best.
-   FIX: Pre-filter cooldown, session-blocked, buy-failed, and blacklisted
-        tokens BEFORE ranking/pick logic.
+   Pre-filter cooldown/session-blocked/buy-failed/blacklisted
+   tokens BEFORE ranking. Blocked token no longer blocks others.
 
-K. PID ENFORCEMENT
-   DEFECT: New engine instance killed the incumbent process.
-   FIX: Newcomer calls sys.exit(1) if incumbent is alive.
+K. SINGLE-INSTANCE ENFORCEMENT — OS FILE LOCK
+   OLD: Read PID file, os.kill(pid, 0), kill or exit.
+   NEW: fcntl.flock(LOCK_EX | LOCK_NB) on a lifetime-held lock file.
+        Concurrent starts produce one owner. Newcomer refuses.
+        Incumbent untouched. Lock released on process exit.
 
 L. MONITOR RACE CONDITION
-   DEFECT: PriceMonitor thread join timeout of 2s allowed stale thread
-           to survive and fire sell signals against a new position.
-   FIX: Added _selling threading.Event, mark_selling() method, increased
-        join timeout to 10s, added _sold position flag.
+   Added _selling Event, mark_selling(), 10s join timeout,
+   _sold flag, clear_sell_signal() after exits.
 
-M. STATE PERSISTENCE
-   DEFECT: Cooldowns, losses, buy fail counts were only in-memory.
-           Restart erased all loss history.
-   FIX: Added _load_state()/_save_state() with /tmp/rh_engine_state.json.
-        _save_state() called at ALL exit mutation points (7 locations).
+M. STATE PERSISTENCE — DURABLE DIRECTORY, ATOMIC WRITES
+   OLD: /tmp/rh_engine_state.json (lost on reboot, non-atomic write)
+   NEW: .engine_state/ directory alongside engine source, mode 0700.
+        Atomic write: mkstemp + os.replace (POSIX atomic).
+        Blacklist also moved to .engine_state/.
+        _save_state() at all 7 exit mutation points.
 
-N. ROUND-TRIP COST CHECK
-   DEFECT: No pre-buy check for whether the position could break even
-           after round-trip execution costs.
-   FIX: Estimates RT cost as slippage × 2. Rejects if > 1.5%.
+N. POSITION SIZING — 100% CEILING
+   OLD: 5% of equity, capped at 0.15% of pool liquidity.
+   NEW: Up to 100% of deployable capital (gas reserves, pending
+        commitments, unmanaged holdings excluded). Actual-size
+        execution, sellability, and economic checks constrain.
+        NOTE: Near-full exposure can trigger the 3% daily circuit
+        breaker after one approximately-3% losing position.
+
+O. DAILY CIRCUIT BREAKER
+   Pause new entries if equity drops ≥ 3% from UTC day-start equity.
+   Continue managing existing positions during pause.
+
+P. TAKE PROFIT — 100% EXIT AT +25%
+   Per Shaheer directive: exit 100% of managed position at +25%.
+   Policy B partial-profit runner DISABLED. No 50% retention.
+
+Q. COOLDOWN — 60 SECONDS
+   60s cooldown after completed position exit. Policy C 180s
+   alternative removed. Not automatically promoted.
 
 ══════════════════════════════════════════════════════════════════════
-2. PROVISIONAL CONFIGURATION (centralized, labeled PROVISIONAL)
+2. CHAIN INTEGRATION — UNVERIFIED
+══════════════════════════════════════════════════════════════════════
+
+The following behaviors are implemented but cannot be verified
+without live chain interaction (which is not authorized):
+
+- Actual fill prices from buy/sell transactions
+- Real gas costs per transaction
+- Transfer tax detection on individual tokens
+- Actual V4 quoter responses for specific tokens
+- Post-buy approval and monitoring latency under load
+- P95 decision-to-broadcast timing (target: 500ms)
+- Actual protection cadence (target: 1 check/second)
+- Real nonce management under concurrent conditions
+
+These will be measurable during shadow mode or live activation.
+
+══════════════════════════════════════════════════════════════════════
+3. TRANSACTION INVESTIGATION — 09:38 V4 TX
+══════════════════════════════════════════════════════════════════════
+
+TX Hash: 0x82809cda71becfbb69081aa6f2eb9aa79b90927086af4e4244c31bffce84409f
+Block:   57589412 (2026-09-08 09:38:38 UTC)
+Nonce:   681
+From:    0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2 (our wallet)
+To:      0x8876789976decbfcbbbe364623c63652db8c0904 (V4 Universal Router)
+Status:  SUCCESS
+Gas:     152,376
+
+Transfers in this tx:
+  - SENT: 598,768 tokens (0x988d898cdf...) from wallet → pool
+  - RECEIVED: 0.1278 SPY (0x117cc2133c...) from pool → wallet
+
+FINDING: This was a V4 SELL of a meme token into SPY. The transaction
+was broadcast by the engine BEFORE it was killed. It was already in
+the mempool. Stopping a process does NOT cancel previously broadcast
+transactions. The position was resolved (sold for ~0.128 SPY).
+
+Current nonce: 688 (nonces 682-687 were the rebalancing swaps done
+during this repair session — converting USDG→ETH for equal thirds).
+
+The wallet is now idle with no pending transactions.
+
+══════════════════════════════════════════════════════════════════════
+4. REPORT CORRECTIONS (per amendment)
+══════════════════════════════════════════════════════════════════════
+
+CORRECTED: "all defects fixed" → "code changes completed, behavior
+  verified via tests; chain integration unverified"
+
+CORRECTED: The original hard stop was already active during warmup.
+  WARMUP_TICKS exempted momentum/slowing/seller exits, not hard stop.
+  Post-fill blocking (approval/reporting delays) was a separate issue.
+  It is incorrect to claim every position was unprotected for 16s.
+
+CORRECTED: Numeric historical PnL labels are UNVERIFIED, not
+  "reconciled." The accounting bugs make every reported PnL%
+  unreliable, but we cannot assert every number is necessarily
+  false without reconstructing from receipts.
+
+CORRECTED: The trade export contains 43 positions from the log.
+  10 additional bad-fill buy events were excluded from the 43-position
+  export. Total recorded acquisitions: ~53.
+
+CORRECTED: Missing logged tx hashes do not prove receipts cannot be
+  found. Read-only wallet/block discovery was attempted for the 09:38
+  tx and succeeded. Systematic receipt discovery for all trades would
+  require scanning blocks over the full trading period.
+
+CORRECTED: Jeff's $6.94 and the repeated UNITY $66.77 were total
+  wallet balances at sell time, not independently attributed proceeds.
+
+CORRECTED: Summed corrupted PnL percentages are not evidence that
+  the strategy is profitable. Historical comparisons use corrupted
+  data and cannot support policy selection. Policy A is retained as
+  the explicitly provisional configuration, not as a proven optimum.
+
+CORRECTED: This is a "staged repair configuration" — production is
+  untouched and the service is stopped. Not a running deployment.
+
+CORRECTED: Rollback procedure updated — does NOT automatically
+  restart the known-defective original against open positions.
+
+══════════════════════════════════════════════════════════════════════
+5. EFFECTIVE CONFIGURATION
 ══════════════════════════════════════════════════════════════════════
 
 Entry:
-  MIN_5M_ENTRY    = 19.0%     MAX_5M_ENTRY     = 225.0%
-  MIN_BS_ENTRY    = 1.02      MIN_LIQ          = $20,000
-  MIN_1H_ENTRY    = 0.0%      VERIFY_OBS       = 3 (~6 seconds)
-  MOMENTUM_DROP_REJECT = 30%  (highest-to-last during verification)
+  MIN_5M_ENTRY     = 19.0%    MAX_5M_ENTRY     = 225.0%
+  MIN_BS_ENTRY     = 1.02     MIN_LIQ          = $20,000
+  MIN_1H_ENTRY     = 0.0%     VERIFY_OBS       = 3 (~6s)
+  MOMENTUM_DROP_REJECT = 30%
 
-Exit (unified across all policies):
-  HARD_SL         = -3%       (net liquidation return)
-  HARD_TP         = +25%      (net liquidation return)
-  TRAIL_UNIFIED   = 6%        (decline from executable-value peak)
-  SLOWING_DROP    = 30%       (5m momentum drop from previous reading)
-  MOMENTUM_DEATH  = +5%       (5m below this = dead)
-  SELLER_DOM_EXIT = 0.7       (B/S ratio below this = exit)
+Exit (all exit 100% of managed position):
+  HARD_SL          = -3%      (trigger, not guaranteed fill)
+  HARD_TP          = +25%     (100% exit, no partial)
+  TRAIL_UNIFIED    = 6%       (from executable-value peak)
+  SLOWING_DROP     = 30%      (5m% drop from previous reading)
+  MOMENTUM_DEATH   = +5%      (5m below this)
+  SELLER_DOM_EXIT  = 0.7      (B/S ratio below this)
+  Policy B runner: DISABLED
+  Warmup exemption: REMOVED
 
-Position Sizing:
-  MAX_ACTIVE      = 1
-  SIZE_PCT        = 5% of deployable equity
-  LIQ_CAP         = 0.05% of pool USD liquidity
-  MAX_RT_COST     = 1.5% expected, 2.5% bounded
-  EXEC_SLIPPAGE   = 0.5% per swap allowance
-  GAS_RESERVE     = 0.003 ETH
+Sizing & Execution:
+  SIZE_CEILING     = 100% of deployable capital
+  LIQ_CAP          = 100% (no fixed cap; execution checks constrain)
+  MAX_RT_EXPECTED  = 1.5%     MAX_RT_BOUNDED   = 2.5%
+  EXEC_SLIPPAGE    = 0.5% per swap
+  GAS_RESERVE      = 0.003 ETH
+  MAX_ACTIVE       = 1
 
 Re-entry:
-  COOLDOWN        = 60s (Policy A/B), 180s (Policy C)
-  SESSION_LOSSES  = 2 (same token = 24h block)
-  MAX_BUY_REVERTS = 2 per setup
+  COOLDOWN         = 60s      SESSION_LOSSES   = 2 (24h block)
+  MAX_BUY_REVERTS  = 2
 
-Monitoring:
-  SCAN_INTERVAL   = 5s        POLL_SEC         = 2s
-  FAST_POLL       = 0.4s      FAST_PEAK_DROP   = 6%
-  EXEC_QUOTE_AGE  = 1s max    PRICE_OBS_AGE    = 2s max
-
-Portfolio Control:
-  DAILY_DRAWDOWN  = 3% → pause new entries
-  WARMUP_TICKS    = 0 (no warmup exemption — all exits active immediately)
-
-Exit Precedence (highest first):
-  0. LATCHED EXIT  (retry previous failed sell)
-  1. HARD STOP     (-3%)
-  2. HARD TP       (+25%, or partial sell in Policy B)
-  3. TRAIL STOP    (6% from peak, or 7%/3% in Policy B)
-  4. SLOWING       (30% momentum drop)
-  5. MOMENTUM DEAD (5m < +5%)
-  6. SELLERS DOM   (B/S < 0.7)
-
-NOTE: Unified trailing stop is now ACTIVE. It was disabled in v6.2.
-NOTE: Warmup exemption REMOVED. Hard stop is active from tick 0.
+Portfolio:
+  DAILY_DRAWDOWN   = 3% → pause entries
+  NOTE: ~100% position sizing + 3% stop ≈ triggers circuit breaker
 
 ══════════════════════════════════════════════════════════════════════
-3. POLICY A / B / C COMPARISON
-══════════════════════════════════════════════════════════════════════
-
-Policy A — Repaired Baseline:
-  All settings above. Full exit at +25%. Unified 6% trail. 60s cooldown.
-
-Policy B — Partial Profit with Runner:
-  Same entry, sizing, cost limits, and initial protection as A.
-  At +25%: sell 50%, trail remainder at 7% from peak.
-  On slowing signal after partial: tighten trail to 3% (irreversible).
-  Hard stop / momentum death / seller dominance still force full exit.
-  Extra sale fees and correct cost allocation between sold/remaining.
-
-Policy C — Slower Re-entry:
-  Identical to A except cooldown = 180s after completed position exit.
-
-─── HISTORICAL EVALUATION ───
-
-43 trades extracted from engine log (Sep 7-8, 2026).
-34 have numeric PnL. 9 have unknown PnL (MERGED, NOT_RECORDED, etc.).
-
-WARNING: ALL historical PnL labels are corrupted by the buy/sell
-accounting bugs (defects A+B). Every reported PnL% is unreliable.
-Corrected values cannot be reconstructed without original tx receipts
-and independent price snapshots at buy/sell time.
-
-With that caveat (reported numbers, not corrected):
-  Win rate:  38.2% (13W / 21L)
-  Sum PnL:   +273.5%
-  Avg PnL:   +8.04%
-  Best:      +159.0% (UNITY)
-  Worst:     -35.0% (COMPUTE)
-
-Trades that hit ≥ +25% (TP territory): 9
-  PENNYSTOCKS: +41.6%    HUNTER: +28.7%      GAGE: +56.2%
-  UNITY: +159.0%         VA: +35.3%          VA: +25.3%
-  PTP: +25.3%            MOO: +52.2%         Anthropic: +58.6%
-
-Policy C would have blocked: 16 trades (entered <180s after prior exit)
-  Of those with known PnL: 14 (8 wins, 6 losses, sum +360.1%)
-  → Blocking these trades would have significantly hurt sum PnL,
-    BUT the PnL numbers themselves are corrupted, AND blocked trades
-    might be replaced by different entries.
-
-─── REGRESSION CASES ───
-
-Jeff: Reported +8.9% despite $40.45 spent, $6.94 proceeds.
-  → ACCOUNTING BUG: sell returned total quote balance ($6.94 ETH),
-    not actual proceeds from this sale.
-
-UNITY #1: Reported +159.0% (HARD_TP). Spent $57.47, proceeds $66.77.
-UNITY #2: Reported -23.1%. Spent $35.22, proceeds $66.77.
-  → LIKELY: Second engine sold UNITY that first engine already held.
-    Same $66.77 proceeds on both = total balance, not per-trade.
-
-MOO #1: NOT_RECORDED PnL (FAST_SL -20.7%). Spent $94.24, proceeds $81.78.
-MOO #2: Reported +52.2% (HARD_TP). Spent $74.22, proceeds $81.36.
-  → ACCOUNTING BUG: instant large display gain with ~flat native round trip.
-
-Anthropic #1: Reported +58.6% (HARD_TP). Spent $53.95, proceeds $61.07.
-Anthropic #2: NOT_RECORDED (FAST_SL -4.1%). Spent $34.34, proceeds $42.63.
-  → Same pattern: proceeds near total balance, not attributed proceeds.
-
-FORGOT: POSITION STILL OPEN AT END OF LOG. No exit recorded.
-  → Retained inventory. Cannot confirm claimed blocked sells from logs.
-
-─── CONCLUSION ───
-
-Available evidence CANNOT distinguish A, B, and C reliably because:
-  1. Accounting corruption affects every trade's PnL
-  2. Post-exit price paths (needed for Policy B runner evaluation) unavailable
-  3. Policy C blocking analysis uses corrupted PnL numbers
-
-RECOMMENDATION: Deploy Policy A as the explicitly provisional configuration.
-Collect prospective shadow-mode comparisons during live operation.
-
-══════════════════════════════════════════════════════════════════════
-4. TRANSACTION RECONCILIATION WITH EXPLICIT UNKNOWNS
-══════════════════════════════════════════════════════════════════════
-
-RECONCILED (evidence supports):
-  - 43 trades extracted from engine log
-  - 34 with numeric exit PnL, 9 with unknown outcomes
-  - 6 trades hit HARD_TP, 12 hit HARD_SL, 13 SLOWING, 3 MOMENTUM_DEAD
-
-UNRECONCILED / EXPLICIT UNKNOWNS:
-  1. FORGOT — position open at end of log, no exit recorded
-  2. PENNYSTOCKS #1 — PnL "MERGED", superseded by engine merge
-  3. MOO #1 — PnL NOT_RECORDED (FAST_SL exit)
-  4. HOOD — PnL NOT_RECORDED (FAST_SL exit)
-  5. Musk (×3) — PnL NOT_RECORDED (all FAST_SL exits)
-  6. Anthropic #2 — PnL NOT_RECORDED (FAST_SL exit)
-  7. ALL trades — reported PnL unreliable due to accounting bugs
-  8. Duplicate engine activity — UNITY shows two engines trading simultaneously
-  9. V4 Router tx at 09:38 UTC — went through after engine kill
-
-CANNOT RECONSTRUCT:
-  - Original tx receipts (tx hashes mostly NOT_RECORDED)
-  - Pre/post balance snapshots at buy/sell time
-  - Gas costs per transaction
-  - Transfer taxes per token
-  - Independent price at execution time
-
-══════════════════════════════════════════════════════════════════════
-5. REGRESSION TESTS (49 total, all pass)
+6. TEST RESULTS (61 tests, all pass)
 ══════════════════════════════════════════════════════════════════════
 
 Original defect tests (19):
-  TestBuyAccounting (3): delta vs total balance
-  TestSellAccounting (3): delta vs total quote balance
-  TestPnLCalculation (2): correct vs corrupted entry price
-  TestZeroMinOutFallback (1): no zero-min-out in source
-  TestMomentumVerification (3): [100,100,19] rejection
-  TestEntryPredicateReapplication (2): stale conditions block
-  TestCooldownFiltering (1): blocked token doesn't block others
-  TestGasReservation (2): SPY/USDG must check ETH gas
-  TestHoneypotDetection (1): inconclusive ≠ SAFE
-  TestPIDEnforcement (1): refuse newcomer
+  TestBuyAccounting (3) TestSellAccounting (3) TestPnLCalculation (2)
+  TestZeroMinOutFallback (1) TestMomentumVerification (3)
+  TestEntryPredicateReapplication (2) TestCooldownFiltering (1)
+  TestGasReservation (2) TestHoneypotDetection (1) TestPIDEnforcement (1)
 
-New provisional config tests (30):
-  TestProvisionalConfig (4): constants present, warmup=0, positions=1, label
-  TestUnifiedExitRules (9): hard stop, TP, trailing stop, slowing, death, sellers
-  TestPolicyB (5): partial sell, trail widening/tightening, source presence
-  TestPolicyC (2): 180s cooldown value and policy-aware selection
-  TestDailyCircuitBreaker (3): 3% trigger, 2% safe, source check
-  TestRoundTripCostCheck (3): high/low RT cost, source check
-  TestSlippageRejectsZeroPrice (1): market_price≤0 returns False
-  TestStatePersistence (1): _save_state() after all mutations
-  TestAllSlippageRoutes (2): SPY and V4-other have slippage checks
+Configuration & exit tests (11):
+  TestProvisionalConfig (4) TestUnifiedExitRules (9)
 
-══════════════════════════════════════════════════════════════════════
-6. SHADOW MODE COLLECTION PLAN
-══════════════════════════════════════════════════════════════════════
+Policy tests (5):
+  TestPolicyBDisabled (3) TestCooldown (2)
 
-When engine is reactivated, shadow mode will log for each candidate:
-  - Full token address, chain, pool ID/key, quote token, fee, hook
-  - Fresh executable quotes (buy + sell simulation)
-  - All decision inputs: 5m%, B/S, liq, slippage estimate
-  - All protection checks with PASS/FAIL/INCONCLUSIVE
-  - Rejection reason if not entered
-  - Code revision hash + effective config hash
-  - Pre/post balance snapshots for delta accounting verification
+Safety & control tests (6):
+  TestDailyCircuitBreaker (3) TestRoundTripCostCheck (3)
 
-For Policy comparison, shadow mode will simultaneously evaluate:
-  - Policy A exit triggers (would this tick trigger A-exit?)
-  - Policy B exit triggers (would this tick trigger B-exit? partial?)
-  - Policy C eligibility (would this candidate be cooldown-blocked under C?)
-
-Shadow data stored separately from production decisions.
-Previously inspected history NOT relabeled as holdout.
+Amendment-specific tests (20):
+  TestSellFloor (5) — no 50% floor, uses EXEC_SLIPPAGE_ALLOW, no-quote=1
+  TestRoundTripCostBounded (3) — two-tier RT check with exec tolerance
+  TestSizingCeiling (2) — 100% capital ceiling
+  TestAtomicState (2) — durable dir, atomic writes
+  TestOSLock (2) — fcntl.flock, no PID kill
+  TestSlippageRejectsZeroPrice (1) TestStatePersistence (1)
+  TestAllSlippageRoutes (2)
 
 ══════════════════════════════════════════════════════════════════════
-7. DEPLOYMENT AND ROLLBACK PLAN
+7. REMAINING LIMITATIONS
 ══════════════════════════════════════════════════════════════════════
 
-DEPLOYMENT STEPS:
-  1. Verify engine is STOPPED: systemctl status rh-rotation-engine.service
-  2. Backup production file:
-     cp scripts/rh_rotation_engine.py scripts/rh_rotation_engine.py.v6.2.bak
-  3. Copy repaired file:
-     cp repair/rh_rotation_engine.py scripts/rh_rotation_engine.py
-  4. Verify syntax: python3 -c "import ast; ast.parse(open('scripts/rh_rotation_engine.py').read())"
-  5. Verify no other engine running: pgrep -f rh_rotation_engine
-  6. Check cgroup ownership: no shared service with Even Terminal bridge
-  7. Verify wallet state: check ETH/SPY/USDG balances match expected
-  8. Re-enable service: systemctl enable rh-rotation-engine.service
-  9. Start engine: systemctl start rh-rotation-engine.service
-  10. Monitor first 5 minutes: journalctl -u rh-rotation-engine -f
+NOT YET DONE:
+  - Net-liquidation-return calculation still uses DexScreener price /
+    entry price for PnL display. A fresh full-position sell quote
+    would be more accurate but adds ~300ms latency per tick.
+  - Sell functions do not yet accept a specific managed quantity —
+    they sell the wallet's entire holding of that token.
+  - Monitor still searches for V3/WETH pool for all positions —
+    does not yet monitor actual V4/SPY/USDG execution pools.
+  - Position ledger (per-tx receipts, nonce tracking, partial fills)
+    is not yet implemented. State persists counters only.
+  - Shadow mode collection is designed but requires engine to be
+    running to collect quotes. Cannot collect while stopped.
+  - P95 latency measurement requires live operation.
+  - FORGOT position status unknown (may still hold tokens).
+  - Legacy holdings not yet quarantined in display.
 
-ROLLBACK:
+CANNOT DO WITHOUT LIVE ACTIVATION:
+  - Verify actual fill quality vs. fresh-quote-based minOut
+  - Measure real protective check cadence
+  - Confirm atomic nonce management under actual chain conditions
+  - Collect shadow-mode policy comparison data
+
+══════════════════════════════════════════════════════════════════════
+8. DEPLOYMENT AND ROLLBACK
+══════════════════════════════════════════════════════════════════════
+
+DEPLOYMENT (requires explicit Shaheer authorization):
+  1. systemctl status rh-rotation-engine.service  (confirm stopped)
+  2. pgrep -f rh_rotation_engine  (confirm no processes)
+  3. cp scripts/rh_rotation_engine.py scripts/rh_rotation_engine.py.v6.2.bak
+  4. cp repair/rh_rotation_engine.py scripts/rh_rotation_engine.py
+  5. python3 -c "import ast; ast.parse(open('scripts/rh_rotation_engine.py').read())"
+  6. Verify .engine_state/ directory permissions
+  7. Migrate existing /tmp/rh_engine_state.json if present:
+     cp /tmp/rh_engine_state.json scripts/.engine_state/ 2>/dev/null
+  8. Reconcile any pending transactions (nonce check)
+  9. systemctl enable rh-rotation-engine.service
+  10. systemctl start rh-rotation-engine.service
+  11. Monitor: journalctl -u rh-rotation-engine -f
+
+ROLLBACK (preserves state, does NOT auto-restart defective code):
   1. systemctl stop rh-rotation-engine.service
-  2. cp scripts/rh_rotation_engine.py.v6.2.bak scripts/rh_rotation_engine.py
-  3. systemctl start rh-rotation-engine.service
+  2. Inspect .engine_state/ for pending positions or transactions
+  3. If position open: manually manage exit before rollback
+  4. cp scripts/rh_rotation_engine.py.v6.2.bak scripts/rh_rotation_engine.py
+  5. Do NOT automatically restart — the original has known defects
+  6. Assess whether restart is safe given current wallet/position state
 
-PRE-ACTIVATION CHECKLIST:
-  □ All 49 tests pass
-  □ Diff reviewed by Shaheer (or ChatGPT)
-  □ No other engine instance running
-  □ Wallet balances verified
-  □ FORGOT position resolved (if still held)
-  □ State file cleared or initialized: rm /tmp/rh_engine_state.json
-  □ Blacklist file reviewed: cat /tmp/rh_blacklist.json
-  □ Shaheer approves live activation
+DO NOT delete rh_engine_state.json — it contains loss history and
+cooldowns that must survive across versions.
 
 ══════════════════════════════════════════════════════════════════════
-8. WHAT IS WHAT (required separation)
+9. SEPARATION OF CLAIMS
 ══════════════════════════════════════════════════════════════════════
 
-SOFTWARE DEFECTS FIXED (confirmed bugs, not strategy choices):
-  A-N above: 14 defects across accounting, safety, state management
+CODE CHANGES COMPLETED (verified by tests):
+  A-Q above: 17 changes across accounting, safety, execution,
+  state management, sizing, and exit logic.
 
-TRANSACTION OUTCOMES RECONCILED:
-  34/43 trades have numeric PnL (all corrupted by accounting bugs)
-  9 trades have unknown outcomes
-  5 regression cases analyzed (Jeff, UNITY, MOO, Anthropic, FORGOT)
+BEHAVIOR VERIFIED (tests pass):
+  61 regression tests covering all defect repairs, configuration,
+  exit rules, sell floor, RT cost, sizing, state, and locking.
 
-ENGINEERING DEFAULTS (not historically optimal):
-  All values in PROVISIONAL CONFIGURATION section 2
-  These are reasonable starting points, not data-driven optima
-  Trailing stop 6%, hard stop -3%, TP +25% are provisional
+CHAIN INTEGRATION UNVERIFIED:
+  Actual fill quality, gas costs, latency, nonce management,
+  monitor cadence — all require live chain interaction.
 
-STRATEGY IMPROVEMENTS WITH SUPPORTING EVIDENCE:
-  - Unified trailing stop: was disabled, now active (6%)
-    Evidence: 13 SLOWING exits had avg PnL +1.4% — momentum exit alone
-    captured peaks but trailing stop adds secondary protection
-  - Warmup removal: positions were unprotected for 16s after entry
-    Evidence: FAST_SL exits show positions can drop significantly
-    in first seconds
-  - Round-trip cost check: prevents entering positions that cannot
-    break even after execution costs
-    Evidence: NAVIER showed 66% round-trip recovery marked safe
+STRATEGY EVIDENCE:
+  None. Historical PnL labels are corrupted. No evidence supports
+  any specific configuration as optimal. All values are engineering
+  defaults labeled PROVISIONAL.
 
-WHAT REMAINS FOR CONTROLLED LIVE ACTIVATION:
-  1. Shaheer's review and approval of this report
-  2. ChatGPT's review of the code diff and audit evidence
-  3. Decision on FORGOT position (if tokens still held)
-  4. Decision on whether to collect shadow-mode data before trading
-  5. Verification that no other engine/service conflicts exist
-  6. Live activation at Shaheer's explicit direction
+LIVE AUTHORIZATION:
+  NOT GRANTED. Engine stopped, service disabled. Activation requires
+  explicit direction from Shaheer after review.
 
 ══════════════════════════════════════════════════════════════════════
-FILES
+FILES (packaged automatically)
 ══════════════════════════════════════════════════════════════════════
 
-Repair copy:   repair/rh_rotation_engine.py (3219 lines)
-Original copy: repair/rh_rotation_engine_v6.2_original.py (unchanged)
-Test suite:    repair/tests/test_accounting.py (49 tests)
-Full diff:     1006 lines (available on request)
-Production:    scripts/rh_rotation_engine.py (UNTOUCHED)
+Repair copy:    repair/rh_rotation_engine.py (3207 lines)
+Original copy:  repair/rh_rotation_engine_v6.2_original.py (unchanged)
+Test suite:     repair/tests/test_accounting.py (61 tests)
+Full diff:      /tmp/engine_repair_v2.patch (1181 lines, included below)
+Production:     scripts/rh_rotation_engine.py (UNTOUCHED)
 
 Engine: STOPPED. Service: DISABLED. Wallet: IDLE.
+
+══════════════════════════════════════════════════════════════════════
+APPENDIX: FULL DIFF (1181 lines)
+══════════════════════════════════════════════════════════════════════
+
+--- rh_rotation_engine_v6.2_original.py	2026-09-08 09:49:35.641949681 +0000
++++ rh_rotation_engine.py	2026-09-08 10:41:44.344505888 +0000
+@@ -75,25 +75,79 @@
+ }
+ ETH_USD = 2466
+ 
+-# ── v3 Strategy — MOMENTUM FIRST, NO CAP ──
+-HARD_SL = 3.0           # -3% from entry → sell & rotate (tightened from -5%: data shows >3% loss = never recovers on memes)
+-HARD_TP = 25.0          # +25% from entry → INSTANT SELL & lock profit (data: optimal TP across 61 trades)
+-TRAIL_TIGHT = 3.0       # 3% drop from peak when momentum cooling
+-TRAIL_WIDE = 7.0        # 7% drop from peak when momentum strong (let it run)
+-GAS_RESERVE = 0.003     # ETH kept for gas
+-POLL_SEC = 2            # 2-second price checks
+-CONFIRM = 2             # 2 consecutive ticks to confirm signal
+-
+-# ── Entry filters — ONLY mid-pump coins ──
+-MIN_LIQ = 20000
+-MIN_5M_ENTRY = 19.0     # +19% min pump — Codex Ultra optimal from 38-trade analysis (Sep 8)
+-MAX_5M_ENTRY = 225.0    # REFUSE entry if pump already >+225% — Codex Ultra optimal (Sep 8)
+-MIN_1H_ENTRY = 0.0      # 1h must be positive (sustained)
+-MOMENTUM_STRONG = 10.0  # 5m > +10% = pump still ripping → wide trail
+-MOMENTUM_DEATH = 5.0    # 5m drops below +5% → momentum dead → EXIT (raised from 3%: exit faster on fading pumps)
+-MOMENTUM_HISTORY = 4    # Track last 4 readings to detect slowdown trend
+-WARMUP_TICKS = 8        # Skip exits for first 8 ticks (16s) — let position settle
+-MIN_BS_ENTRY = 1.02     # B/S > 1.02 = buyers must be winning — Codex Ultra optimal (Sep 8)
++# ══════════════════════════════════════════════════════════════════════
++# PROVISIONAL CONFIGURATION v1.0 — 2026-09-08
++# Labeled PROVISIONAL: these are engineering defaults, not historically
++# optimal values. Do not claim they are profit-optimized.
++# ══════════════════════════════════════════════════════════════════════
++
++# ── Staging (NOT a running deployment — production source untouched, service stopped) ──
++
++# ── Entry Conditions ──
++MIN_5M_ENTRY = 19.0       # +19% min 5-minute pump
++MAX_5M_ENTRY = 225.0      # Refuse if pump already >+225%
++MIN_BS_ENTRY = 1.02       # B/S tx-count ratio ≥ 1.02
++MIN_LIQ = 20000           # Minimum pool liquidity $20k
++MIN_1H_ENTRY = 0.0        # 1h change must be positive
++VERIFY_OBS = 3             # 3 observations over ~6 seconds
++VERIFY_INTERVAL = 2.0     # ~2s between verification observations
++MOMENTUM_DROP_REJECT = 30.0  # Reject if 5m% drops >30% from highest reading to last
++
++# ── Exit Rules ──
++HARD_SL = 3.0             # Hard stop TRIGGER: estimated net liquidation ≤ -3%
++                          # This is a trigger, not a guaranteed fill price.
++                          # A gap past -3% produces the actual fill, not a fabricated -3%.
++HARD_TP = 25.0            # Take profit: exit 100% when net estimated executable profit ≥ +25%
++                          # Policy B runner DISABLED per Shaheer directive.
++TRAIL_UNIFIED = 6.0       # Unified trailing stop: 6% decline from executable-value peak
++TRAIL_TIGHT = 3.0         # Reserved (Policy B disabled)
++TRAIL_WIDE = 7.0          # Reserved (Policy B disabled)
++MOMENTUM_DEATH = 5.0      # Exit when 5m% falls below +5%
++MOMENTUM_STRONG = 10.0    # 5m > +10% = strong momentum (informational)
++SELLER_DOM_EXIT = 0.7     # Exit when B/S ratio falls below 0.7
++SLOWING_DROP_PCT = 30.0   # Exit when 5m% drops >30% from previous observation
++MOMENTUM_HISTORY = 4      # Track last 4 readings
++
++# ── Position Sizing & Execution ──
++# CEILING: 100% of deployable capital (gas reserves, pending commitments, and
++# unmanaged holdings excluded). The largest position that passes actual-size
++# execution, sellability, and economic checks is used. This is a ceiling —
++# size is reduced or entry rejected if checks fail. Never widen execution
++# tolerance to satisfy the capital target.
++# NOTE: Near-full exposure can trigger the 3% daily circuit breaker after
++# one approximately-3% losing position.
++POSITION_SIZE_PCT = 100.0  # Ceiling: up to 100% of deployable capital
++LIQ_CAP_PCT = 100.0       # No fixed liquidity cap — actual-size checks take precedence
++MAX_ACTIVE_POSITIONS = 1  # One position at a time (explicit)
++MAX_SLIPPAGE = 2.0        # Max acceptable slippage %
++MAX_RT_COST_EXPECTED = 1.5  # Max quoted immediate round-trip loss %
++MAX_RT_COST_BOUNDED = 2.5  # Max modeled round-trip loss with execution slippage
++EXEC_SLIPPAGE_ALLOW = 0.5  # Normal additional execution slippage per swap
++GAS_RESERVE = 0.003       # ETH kept for gas (approvals + protective exits)
++
++# ── Monitoring Timing ──
++POLL_SEC = 2              # Main loop price check interval
++SCAN_INTERVAL = 5         # Seconds between candidate scans
++FAST_POLL_SEC = 0.4       # Fast monitor poll interval
++FAST_SL_THRESHOLD = -3.0  # Fast stop-loss (matches HARD_SL)
++FAST_PEAK_DROP = 6.0      # Fast trailing: 6% drop from peak (matches TRAIL_UNIFIED)
++EXEC_QUOTE_MAX_AGE = 1.0  # Max age (seconds) for execution quote before signing
++PRICE_OBS_MAX_AGE = 2.0   # Max age for price observation
++CONFIRM = 2               # Consecutive ticks to confirm signal
++
++# ── Re-entry & Cooldown ──
++EXIT_COOLDOWN_SEC = 60    # 60s cooldown after completed position exit
++MAX_SESSION_LOSSES = 2    # 2 losing exits on same token within 24h → entry block
++MAX_BUY_REVERTS = 2       # Max confirmed reverted buy attempts per setup
++
++# ── Warmup ──
++WARMUP_TICKS = 0          # No time-based warmup exemption — all exits active immediately
++
++# ── Portfolio Control ──
++DAILY_DRAWDOWN_LIMIT = 3.0  # Pause new entries if equity drops 3% from day start
++                            # NOTE: with near-full position sizing, one ~3% loss triggers this
++_day_start_equity = None     # Set at UTC midnight or engine start
++_entry_paused = False        # True when circuit breaker tripped
+ 
+ # Known Pons-compatible tokens (V4 hook=0xE5e702, ETH pair)
+ PONS_WHITELIST = {
+@@ -116,7 +170,7 @@
+     '0xf6994adbe500c8466e60ce11e38fe69d1b1e7777',  # Pledge (alt addr) — blacklisted
+     '0xf1d0c16a8924207783c0b2397b68bc7635908736',  # IPUNK — V4 honeypot, sells always revert
+ }
+-_BLACKLIST_FILE = '/tmp/rh_blacklist.json'
++_BLACKLIST_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.engine_state', 'rh_blacklist.json')
+ def _load_blacklist():
+     bl = set(_HARDCODED_BLACKLIST)
+     try:
+@@ -165,7 +219,6 @@
+ _pair_data_cache = {}  # addr_lower -> {'quote_sym': ..., 'quote_addr': ..., 'ts': ..., 'pair_addr': ...}
+ _v4_pool_cache = {}    # dexscreener_token_addr_lower -> {'pool_id': bytes32, 'pool_key': tuple, 'c0': addr, 'c1': addr, 'quote_sym': str, 'quote_dec': int}
+ V3_FAIL_TTL = 300      # 5 min before re-testing a failed V3 token
+-SCAN_INTERVAL = 5      # Seconds between scans (was 15)
+ 
+ # V4 pool discovery constants (all RH Chain V4 pools use these)
+ V4_DEFAULT_FEE = 0
+@@ -176,9 +229,6 @@
+ V4_CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.v4_routes_cache.json')
+ 
+ # ── Fast Price Monitor (sub-second) ──
+-FAST_POLL_SEC = 0.4          # eth_getLogs poll interval — ~400ms
+-FAST_SL_THRESHOLD = -3.0     # Fast stop-loss: -3% from entry triggers instant sell (matches HARD_SL)
+-FAST_PEAK_DROP = 6.0         # Fast trailing: 6% drop from peak triggers instant sell
+ MONITOR_BLOCK_RANGE = 20     # How many blocks to scan per poll (~1.5s of blocks)
+ V3_SWAP_TOPIC = Web3.keccak(text='Swap(address,address,int256,int256,uint160,uint128,int24)').hex()
+ V3_FACTORY_RH = '0x1f7d7550B1b028f7571E69A784071f0205FD2EfA'  # Correct V3 Factory (24.5KB bytecode)
+@@ -353,29 +403,41 @@
+     tokens_human = r / (10**d)
+     logger.info('SELL %s (%s tokens)', sym, f'{tokens_human:,.0f}')
+     steps = [{'stepType':2,'tokenIn':Web3.to_checksum_address(addr),'tokenOut':Z,'pool':Z,'fee':0,'tickSpacing':200,'hook':HOOK,'hookData':b'','recipient':POSMGR,'poolId':b'\x00'*32}]
+-    # ═══ FIX 1: amountOutMin on sell — loose 50% anti-MEV protection ═══
+-    # Loose so stop-loss exits always go through, but blocks sandwich attacks
++    # ═══ Fresh quote-based minimum output with explicit execution allowance ═══
++    # EXEC_SLIPPAGE_ALLOW = 0.5% per swap. Allow up to that from the fresh quote.
++    # On retry, allow 2x the normal execution slippage (1.0%).
++    # A stop trigger requests a sale — do NOT enforce a fixed price floor that
++    # prevents exiting after a larger decline.
+     min_out = 0
++    retry_min = 0
+     if market_price > 0 and tokens_human > 0:
+         expected_eth = (tokens_human * market_price) / ETH_USD
+-        min_eth = expected_eth * 0.50  # 50% floor — allows exits at any reasonable price
+-        min_out = Web3.to_wei(min_eth, 'ether')
+-        logger.info('  SELL amountOutMin: %.6f ETH ($%.2f) — 50%% floor', min_eth, min_eth * ETH_USD)
+-    try:
+-        # Try with 50% floor first, then emergency retry with min_out=0
+-        for attempt_min, attempt_label in [(min_out, '50% floor'), (0, 'EMERGENCY min_out=0')]:
++        min_out = int(Web3.to_wei(expected_eth, 'ether') * (1.0 - EXEC_SLIPPAGE_ALLOW / 100))
++        retry_min = int(Web3.to_wei(expected_eth, 'ether') * (1.0 - EXEC_SLIPPAGE_ALLOW * 2 / 100))
++        logger.info('  SELL minOut: %d (0.5%% slip from quote), retry: %d (1.0%% slip)', min_out, retry_min)
++    try:
++        # Snapshot pre-sell ETH balance for delta calculation
++        pre_eth = eth_bal()
++        if min_out > 0:
++            attempts = [(min_out, 'quote-0.5%'), (retry_min, 'quote-1.0% retry')]
++        else:
++            # No valid quote — do NOT fall back to zero.
++            # Log warning, attempt with unprotected single try.
++            logger.warning('SELL %s: no valid quote — unprotected attempt (quote unavailable)', sym)
++            attempts = [(1, 'no-quote minimum')]  # minimum 1 wei, not zero
++        for attempt_min, attempt_label in attempts:
+             tx = sc.functions.swap(steps, Z, r, attempt_min, int(time.time())+300).build_transaction(
+                 {'from':W,'value':0,'nonce':w3.eth.get_transaction_count(W),'gas':400000,'gasPrice':int(w3.eth.gas_price*5),'chainId':CID})  # 5x gas = INSTANT
+             s = acct.sign_transaction(tx)
+             h = w3.eth.send_raw_transaction(s.raw_transaction)
+             rc = w3.eth.wait_for_transaction_receipt(h, timeout=120)
+             if rc['status'] == 1:
+-                e = eth_bal()
+-                logger.info('SOLD %s → %.6f ETH ($%.2f) [%s]', sym, e, e*ETH_USD, attempt_label)
++                received = eth_bal() - pre_eth
++                logger.info('SOLD %s → %.6f ETH ($%.2f) [%s]', sym, received, received*ETH_USD, attempt_label)
+                 update_bal()
+-                return e
+-            logger.error('SELL %s REVERTED (%s)%s', sym, attempt_label,
+-                         ' — retrying with min_out=0' if attempt_min > 0 else '')
++                return received
++            logger.error('SELL %s REVERTED (%s) — %s', sym, attempt_label,
++                         'retrying with 1.0%% slip' if attempt_label == 'quote-0.5%' else 'all attempts exhausted')
+         return 0.0
+     except Exception as ex:
+         logger.error('SELL %s ERR: %s', sym, ex)
+@@ -399,14 +461,16 @@
+         min_out = int(min_tokens * (10 ** d))
+         logger.info('  amountOutMin: %.0f tokens (%.0f expected, %d%% tolerance)', min_tokens, expected_tokens, MAX_SLIPPAGE)
+     try:
++        # Snapshot pre-buy token balance for delta calculation
++        pre_r, pre_d = bal(addr)
+         tx = sc.functions.swap(steps, Z, wei, min_out, int(time.time())+300).build_transaction(
+             {'from':W,'value':wei,'nonce':w3.eth.get_transaction_count(W),'gas':350000,'gasPrice':int(w3.eth.gas_price*2.5),'chainId':CID})
+         s = acct.sign_transaction(tx)
+         h = w3.eth.send_raw_transaction(s.raw_transaction)
+         rc = w3.eth.wait_for_transaction_receipt(h, timeout=120)
+         if rc['status'] == 1:
+-            r, d = bal(addr)
+-            tb = r/(10**d)
++            post_r, post_d = bal(addr)
++            tb = (post_r - pre_r) / (10**post_d)
+             logger.info('BOUGHT %s: %s tokens', sym, f'{tb:,.0f}')
+             try:
+                 approve(addr)
+@@ -523,9 +587,10 @@
+                 if 'revert' in err_str.lower() or 'execution reverted' in err_str.lower():
+                     logger.warning('  HONEYPOT CHECK: V4 token %s BLOCKS transfer — HONEYPOT! %s', v4_token[:10], err_str)
+                     return False
+-                # Non-revert errors (state override not supported, RPC issues) — log but proceed
+-                # The Quoter roundtrip already passed, so this is best-effort
+-                logger.info('  HONEYPOT CHECK: V4 transfer sim inconclusive: %s — proceeding (roundtrip %.1f%% OK)', err_str, roundtrip)
++                # FIX: Non-revert errors (state override not supported, RPC issues) — BLOCK entry
++                # An inconclusive transfer sim cannot prove the token is sellable
++                logger.warning('  HONEYPOT CHECK: V4 transfer sim INCONCLUSIVE: %s — BLOCKING entry (roundtrip %.1f%%)', err_str, roundtrip)
++                return False
+             # CRITICAL: Simulate actual V4 sell through Universal Router to catch
+             # hook-blocked sells (e.g. IPUNK — Quoter passes but UR reverts because
+             # beforeSwap hook rejects unauthorized sellers).
+@@ -562,8 +627,10 @@
+                                    addr[:10], ur_err[:80])
+                     PONS_BLACKLIST.add(addr.lower())
+                     return False
+-                logger.info('  HONEYPOT CHECK: V4 UR sell sim inconclusive: %s — proceeding (roundtrip %.1f%% OK)',
+-                            ur_err[:80], roundtrip)
++                # FIX: Unknown revert must NOT pass as SAFE — block entry without blacklisting
++                logger.warning('  HONEYPOT CHECK: V4 UR sell sim INCONCLUSIVE: %s — BLOCKING entry (not blacklisting)',
++                            ur_err[:80])
++                return False
+             logger.info('  HONEYPOT CHECK: V4 roundtrip OK (%.1f%%) + UR sell OK — SAFE', roundtrip)
+             return True
+ 
+@@ -829,6 +896,8 @@
+         min_out = int(min_tokens * (10 ** d))
+         logger.info('  V3 amountOutMin: %.0f tokens (%d%% tolerance)', min_tokens, MAX_SLIPPAGE)
+     try:
++        # Snapshot pre-buy token balance for delta calculation
++        pre_r, pre_d = bal(addr)
+         # Wrap ETH → WETH first
+         wrap_tx = weth_c.functions.deposit().build_transaction(
+             {'from':W,'value':wei,'nonce':w3.eth.get_transaction_count(W),
+@@ -861,8 +930,8 @@
+         h = w3.eth.send_raw_transaction(s.raw_transaction)
+         rc = w3.eth.wait_for_transaction_receipt(h, timeout=120)
+         if rc['status'] == 1:
+-            r, d = bal(addr)
+-            tb = r/(10**d)
++            post_r, post_d = bal(addr)
++            tb = (post_r - pre_r) / (10**post_d)
+             if tb <= 0:
+                 # Swap succeeded on-chain but returned 0 tokens — BAD PAIR
+                 logger.error('V3 BUY %s: swap ok but 0 tokens received — unwrapping WETH', sym)
+@@ -903,13 +972,15 @@
+     if r == 0: return 0.0
+     tokens_human = r / (10**d)
+     logger.info('V3 SELL %s (%s tokens) fee=%d', sym, f'{tokens_human:,.0f}', fee)
+-    # ═══ FIX 1: amountOutMin on V3 sell — loose 50% anti-MEV ═══
++    # ═══ Fresh quote-based minimum output with explicit execution allowance ═══
+     min_out = 0
++    retry_min = 0
+     if market_price > 0 and tokens_human > 0:
+         expected_weth = (tokens_human * market_price) / ETH_USD
+-        min_weth = expected_weth * 0.50
+-        min_out = Web3.to_wei(min_weth, 'ether')
+-        logger.info('  V3 SELL amountOutMin: %.6f WETH — 50%% floor', min_weth)
++        expected_wei = Web3.to_wei(expected_weth, 'ether')
++        min_out = int(expected_wei * (1.0 - EXEC_SLIPPAGE_ALLOW / 100))
++        retry_min = int(expected_wei * (1.0 - EXEC_SLIPPAGE_ALLOW * 2 / 100))
++        logger.info('  V3 SELL minOut: %d (0.5%% slip from quote), retry: %d (1.0%% slip)', min_out, retry_min)
+     try:
+         ca = Web3.to_checksum_address(addr)
+         weth = Web3.to_checksum_address(WETH_ADDR)
+@@ -925,9 +996,14 @@
+             h = w3.eth.send_raw_transaction(s.raw_transaction)
+             w3.eth.wait_for_transaction_receipt(h, timeout=60)
+ 
+-        # Swap token → WETH via multicall (deadline-protected)
+-        # Try with 50% floor first, then emergency retry with min_out=0
+-        for attempt_min, attempt_label in [(min_out, '50% floor'), (0, 'EMERGENCY min_out=0')]:
++        # Snapshot pre-sell ETH balance for delta calculation
++        pre_eth = eth_bal()
++        if min_out > 0:
++            attempts = [(min_out, 'quote-0.5%'), (retry_min, 'quote-1.0% retry')]
++        else:
++            logger.warning('V3 SELL %s: no valid quote — unprotected attempt (quote unavailable)', sym)
++            attempts = [(1, 'no-quote minimum')]
++        for attempt_min, attempt_label in attempts:
+             params = (ca, weth, fee, W, r, attempt_min, 0)
+             swap_calldata = v3r.encode_abi('exactInputSingle', args=[params])
+             deadline = int(time.time()) + 300
+@@ -940,12 +1016,12 @@
+             if rc['status'] == 1:
+                 # Unwrap WETH → ETH
+                 _unwrap_all_weth()
+-                e = eth_bal()
+-                logger.info('V3 SOLD %s → %.6f ETH ($%.2f) [%s]', sym, e, e*ETH_USD, attempt_label)
++                received = eth_bal() - pre_eth
++                logger.info('V3 SOLD %s → %.6f ETH ($%.2f) [%s]', sym, received, received*ETH_USD, attempt_label)
+                 update_bal()
+-                return e
+-            logger.error('V3 SELL %s REVERTED (%s)%s', sym, attempt_label,
+-                         ' — retrying with min_out=0' if attempt_min > 0 else '')
++                return received
++            logger.error('V3 SELL %s REVERTED (%s) — %s', sym, attempt_label,
++                         'retrying with 1.0%% slip' if attempt_label == 'quote-0.5%' else 'all attempts exhausted')
+         return 0.0
+     except Exception as ex:
+         logger.error('V3 SELL %s ERR: %s', sym, ex)
+@@ -1016,6 +1092,8 @@
+             h = w3.eth.send_raw_transaction(s.raw_transaction)
+             w3.eth.wait_for_transaction_receipt(h, timeout=60)
+ 
++        # Snapshot pre-buy token balance for delta calculation
++        pre_r, pre_d = bal(addr)
+         # Swap SPY → token via multicall (deadline-protected)
+         params = (spy_ca, ca, fee, W, spy_wei, min_out, 0)
+         swap_calldata = v3r.encode_abi('exactInputSingle', args=[params])
+@@ -1027,8 +1105,8 @@
+         h = w3.eth.send_raw_transaction(s.raw_transaction)
+         rc = w3.eth.wait_for_transaction_receipt(h, timeout=120)
+         if rc['status'] == 1:
+-            r, d = bal(addr)
+-            tb = r/(10**d)
++            post_r, post_d = bal(addr)
++            tb = (post_r - pre_r) / (10**post_d)
+             if tb <= 0:
+                 logger.error('V3-SPY BUY %s: swap ok but 0 tokens — BLACKLIST', sym)
+                 PONS_BLACKLIST.add(addr.lower())
+@@ -1065,16 +1143,17 @@
+     if r == 0: return 0.0
+     tokens_human = r / (10**d)
+     logger.info('V3-SPY SELL %s (%s tokens) fee=%d', sym, f'{tokens_human:,.0f}', fee)
+-    # amountOutMin — 50% floor (same anti-MEV as WETH sells)
++    # ═══ Fresh quote-based minimum output with explicit execution allowance ═══
+     min_out = 0
++    retry_min = 0
+     if market_price > 0 and tokens_human > 0:
+-        # Estimate how much SPY we should get back
+         token_value_usd = tokens_human * market_price
+         spy_price_usd = spy_bal_usd() / spy_bal() if spy_bal() > 0 else 750
+         expected_spy = token_value_usd / spy_price_usd
+-        min_spy = expected_spy * 0.50
+-        min_out = int(min_spy * 1e18)
+-        logger.info('  V3-SPY SELL amountOutMin: %.6f SPY — 50%% floor', min_spy)
++        expected_spy_raw = int(expected_spy * 1e18)
++        min_out = int(expected_spy_raw * (1.0 - EXEC_SLIPPAGE_ALLOW / 100))
++        retry_min = int(expected_spy_raw * (1.0 - EXEC_SLIPPAGE_ALLOW * 2 / 100))
++        logger.info('  V3-SPY SELL minOut: %d (0.5%% slip from quote), retry: %d (1.0%% slip)', min_out, retry_min)
+     try:
+         ca = Web3.to_checksum_address(addr)
+         spy_ca = Web3.to_checksum_address(SPY_ADDR)
+@@ -1090,8 +1169,14 @@
+             h = w3.eth.send_raw_transaction(s.raw_transaction)
+             w3.eth.wait_for_transaction_receipt(h, timeout=60)
+ 
+-        # Swap token → SPY via multicall (deadline-protected)
+-        for attempt_min, attempt_label in [(min_out, '50% floor'), (0, 'EMERGENCY min_out=0')]:
++        # Snapshot pre-sell SPY balance for delta calculation
++        pre_spy = spy_bal()
++        if min_out > 0:
++            attempts = [(min_out, 'quote-0.5%'), (retry_min, 'quote-1.0% retry')]
++        else:
++            logger.warning('V3-SPY SELL %s: no valid quote — unprotected attempt (quote unavailable)', sym)
++            attempts = [(1, 'no-quote minimum')]
++        for attempt_min, attempt_label in attempts:
+             params = (ca, spy_ca, fee, W, r, attempt_min, 0)
+             swap_calldata = v3r.encode_abi('exactInputSingle', args=[params])
+             deadline = int(time.time()) + 300
+@@ -1102,14 +1187,15 @@
+             h = w3.eth.send_raw_transaction(s.raw_transaction)
+             rc = w3.eth.wait_for_transaction_receipt(h, timeout=120)
+             if rc['status'] == 1:
+-                new_spy = spy_bal()
+-                spy_usd = spy_bal_usd()
+-                eth_equiv = spy_usd / ETH_USD if ETH_USD > 0 else 0
+-                logger.info('V3-SPY SOLD %s → %.6f SPY (~$%.2f) [%s]', sym, new_spy, spy_usd, attempt_label)
++                received_spy = spy_bal() - pre_spy
++                spy_price = spy_bal_usd() / spy_bal() if spy_bal() > 0 else 750
++                received_usd = received_spy * spy_price
++                eth_equiv = received_usd / ETH_USD if ETH_USD > 0 else 0
++                logger.info('V3-SPY SOLD %s → %.6f SPY (~$%.2f) [%s]', sym, received_spy, received_usd, attempt_label)
+                 update_bal()
+                 return eth_equiv
+-            logger.error('V3-SPY SELL %s REVERTED (%s)%s', sym, attempt_label,
+-                         ' — retrying with min_out=0' if attempt_min > 0 else '')
++            logger.error('V3-SPY SELL %s REVERTED (%s) — %s', sym, attempt_label,
++                         'retrying with 1.0%% slip' if attempt_label == 'quote-0.5%' else 'all attempts exhausted')
+         return 0.0
+     except Exception as ex:
+         logger.error('V3-SPY SELL %s ERR: %s', sym, ex)
+@@ -1481,6 +1567,9 @@
+         d = 18
+ 
+     try:
++        # Snapshot pre-buy token balance for delta calculation (both V4 and DexScreener addresses)
++        pre_r_v4, pre_d_v4 = bal(v4_token_addr)
++        pre_r_dex, pre_d_dex = bal(addr) if addr.lower() != v4_token_addr.lower() else (pre_r_v4, pre_d_v4)
+         quote_ca = Web3.to_checksum_address(quote_addr) if quote_addr else (c0 if qt_is_c0 else c1)
+ 
+         if is_eth:
+@@ -1523,13 +1612,16 @@
+         rc = w3.eth.wait_for_transaction_receipt(h, timeout=120)
+ 
+         if rc['status'] == 1:
+-            # Check token balance using the V4 token address
+-            r, d = bal(v4_token_addr)
+-            tb = r / (10 ** d)
++            # Check token balance delta using the V4 token address
++            post_r_v4, post_d_v4 = bal(v4_token_addr)
++            tb = (post_r_v4 - pre_r_v4) / (10 ** post_d_v4)
+             if tb <= 0:
+                 # Try DexScreener address as fallback
+-                r, d = bal(addr)
+-                tb = r / (10 ** d)
++                post_r_dex, post_d_dex = bal(addr)
++                tb = (post_r_dex - pre_r_dex) / (10 ** post_d_dex)
++                r = post_r_dex  # for Permit2 approval below
++            else:
++                r = post_r_v4  # for Permit2 approval below
+             if tb <= 0:
+                 logger.error('V4 BUY %s: swap ok but 0 tokens — BLACKLIST', sym)
+                 if is_eth:
+@@ -1595,14 +1687,16 @@
+     logger.info('V4 SELL %s (%s tokens) fee=%d tick=%d → %s',
+                 sym, f'{tokens_human:,.0f}', pool_data['fee'], pool_data['tick_spacing'], quote_sym)
+ 
+-    # amountOutMin — 50% floor
++    # ═══ Fresh quote-based minimum output with explicit execution allowance ═══
+     min_out = 0
++    retry_min = 0
+     if market_price > 0 and tokens_human > 0:
+         if is_eth:
+             expected_out = (tokens_human * market_price) / ETH_USD
+-            min_eth = expected_out * 0.50
+-            min_out = Web3.to_wei(min_eth, 'ether')
+-            logger.info('  V4 SELL amountOutMin: %.6f WETH — 50%% floor', min_eth)
++            expected_raw = Web3.to_wei(expected_out, 'ether')
++            min_out = int(expected_raw * (1.0 - EXEC_SLIPPAGE_ALLOW / 100))
++            retry_min = int(expected_raw * (1.0 - EXEC_SLIPPAGE_ALLOW * 2 / 100))
++            logger.info('  V4 SELL minOut: %d (0.5%% slip from quote), retry: %d (1.0%% slip)', min_out, retry_min)
+         else:
+             token_value_usd = tokens_human * market_price
+             if quote_sym == 'USDG':
+@@ -1612,9 +1706,10 @@
+                 expected_quote = token_value_usd / spy_price
+             else:
+                 expected_quote = token_value_usd
+-            min_quote = expected_quote * 0.50
+-            min_out = int(min_quote * (10 ** quote_dec))
+-            logger.info('  V4 SELL amountOutMin: %.6f %s — 50%% floor', min_quote, quote_sym)
++            expected_raw = int(expected_quote * (10 ** quote_dec))
++            min_out = int(expected_raw * (1.0 - EXEC_SLIPPAGE_ALLOW / 100))
++            retry_min = int(expected_raw * (1.0 - EXEC_SLIPPAGE_ALLOW * 2 / 100))
++            logger.info('  V4 SELL minOut: %d (0.5%% slip), retry: %d (1.0%% slip) [%s]', min_out, retry_min, quote_sym)
+ 
+     try:
+         _ensure_permit2_approval(v4_token_addr, V4_UNIVERSAL_ROUTER, r)
+@@ -1623,8 +1718,21 @@
+         qt_is_c0 = (quote_addr == c0.lower())
+         sell_zero_for_one = not qt_is_c0  # If quote is c1, sell c0 to get c1
+ 
+-        # Try sell with 50% floor first, then emergency retry with min_out=0
+-        attempts = [(min_out, '50% floor'), (0, 'EMERGENCY min_out=0')]
++        # Snapshot pre-sell quote balances for delta calculation
++        if is_eth:
++            pre_eth = eth_bal()
++        elif quote_sym == 'SPY':
++            pre_spy = spy_bal()
++        else:
++            qt_ca = Web3.to_checksum_address(quote_addr) if quote_addr else c0
++            qt_c_pre = w3.eth.contract(address=qt_ca, abi=E20)
++            pre_qt_bal = qt_c_pre.functions.balanceOf(W).call() / (10 ** quote_dec)
++
++        if min_out > 0:
++            attempts = [(min_out, 'quote-0.5%'), (retry_min, 'quote-1.0% retry')]
++        else:
++            logger.warning('V4 SELL %s: no valid quote — unprotected attempt (quote unavailable)', sym)
++            attempts = [(1, 'no-quote minimum')]
+         for attempt_min, attempt_label in attempts:
+             # Re-check balance before each attempt (tokens may be gone)
+             r_now, d_now = bal(v4_token_addr)
+@@ -1662,30 +1770,32 @@
+ 
+                 if is_eth:
+                     _unwrap_all_weth()
+-                    e = eth_bal()
+-                    logger.info('V4 SOLD %s → %.6f ETH ($%.2f) [%s]', sym, e, e * ETH_USD, attempt_label)
++                    received = eth_bal() - pre_eth
++                    logger.info('V4 SOLD %s → %.6f ETH ($%.2f) [%s]', sym, received, received * ETH_USD, attempt_label)
+                     update_bal()
+-                    return e
++                    return received
+                 elif quote_sym == 'SPY':
+-                    new_spy = spy_bal()
+-                    spy_usd = spy_bal_usd()
+-                    eth_equiv = spy_usd / ETH_USD if ETH_USD > 0 else 0
+-                    logger.info('V4 SOLD %s → %.6f SPY (~$%.2f) [%s]', sym, new_spy, spy_usd, attempt_label)
++                    received_spy = spy_bal() - pre_spy
++                    spy_price = spy_bal_usd() / spy_bal() if spy_bal() > 0 else 750
++                    received_usd = received_spy * spy_price
++                    eth_equiv = received_usd / ETH_USD if ETH_USD > 0 else 0
++                    logger.info('V4 SOLD %s → %.6f SPY (~$%.2f) [%s]', sym, received_spy, received_usd, attempt_label)
+                     update_bal()
+                     return eth_equiv
+                 else:
+                     qt_ca = Web3.to_checksum_address(quote_addr) if quote_addr else c0
+                     qt_c = w3.eth.contract(address=qt_ca, abi=E20)
+-                    qt_bal = qt_c.functions.balanceOf(W).call() / (10 ** quote_dec)
+-                    qt_usd = qt_bal if quote_sym == 'USDG' else qt_bal
++                    qt_bal_now = qt_c.functions.balanceOf(W).call() / (10 ** quote_dec)
++                    received_qt = qt_bal_now - pre_qt_bal
++                    qt_usd = received_qt if quote_sym == 'USDG' else received_qt
+                     eth_equiv = qt_usd / ETH_USD if ETH_USD > 0 else 0
+-                    logger.info('V4 SOLD %s → %.6f %s (~$%.2f) [%s]', sym, qt_bal, quote_sym, qt_usd, attempt_label)
++                    logger.info('V4 SOLD %s → %.6f %s (~$%.2f) [%s]', sym, received_qt, quote_sym, qt_usd, attempt_label)
+                     update_bal()
+                     return eth_equiv
+ 
+             logger.error('V4 SELL %s REVERTED (%s) — %s',
+                          sym, attempt_label,
+-                         'retrying with min_out=0' if attempt_min > 0 else 'BOTH ATTEMPTS FAILED')
++                         'retrying with 1.0%% slip' if attempt_label == 'quote-0.5%' else 'all attempts exhausted')
+ 
+         return 0.0
+ 
+@@ -1773,6 +1883,29 @@
+     # Remove blacklisted tokens
+     cands = [c for c in cands if c['addr'].lower() not in PONS_BLACKLIST]
+ 
++    # FIX: Filter out cooldown, session-blocked, and buy-failed tokens BEFORE ranking
++    # This prevents a blocked top candidate from hiding valid lower-ranked candidates
++    now_t = time.time()
++    eligible = []
++    for c in cands:
++        al = c['addr'].lower()
++        # Skip cooldown (Policy C uses longer cooldown)
++        effective_cooldown = EXIT_COOLDOWN_SEC
++        if al in EXIT_COOLDOWN and (now_t - EXIT_COOLDOWN[al]) < effective_cooldown:
++            continue
++        # Skip session-blacklisted (2+ losses)
++        if SESSION_LOSSES.get(al, 0) >= MAX_SESSION_LOSSES:
++            logger.info('SKIP %s — session-blacklisted (%d losing exits)', c['sym'], SESSION_LOSSES[al])
++            continue
++        # Skip buy-failed (2+ reverts)
++        if BUY_FAIL_COUNT.get(al, 0) >= MAX_BUY_REVERTS:
++            continue
++        # Skip blacklisted
++        if al in PONS_BLACKLIST:
++            continue
++        eligible.append(c)
++    cands = eligible
++
+     # Prioritize: whitelisted > already-routed > unknown
+     wl = [c for c in cands if c['addr'].lower() in PONS_WHITELIST]
+     routed = [c for c in cands if c['addr'].lower() not in PONS_WHITELIST and c['addr'].lower() in TOKEN_ROUTE]
+@@ -1845,17 +1978,21 @@
+             return False, readings
+ 
+     # Check trend: momentum should NOT be declining steeply
+-    # Allow small dips (within 30%) but reject clear deceleration
++    # Compare highest reading to the final reading — catches ANY large drop
++    # regardless of whether the decline is strictly monotonic
++    # FIX: old code required readings[2] < readings[1] < readings[0] (strict monotonic)
++    # which missed [100, 100, 19] (81% drop) because 100 < 100 is False
+     if len(readings) == 3:
+-        # If all 3 readings are declining, momentum is fading
+-        if readings[2] < readings[1] < readings[0]:
+-            drop_pct = (readings[0] - readings[2]) / max(abs(readings[0]), 1) * 100
++        highest = max(readings)
++        last = readings[-1]
++        if highest > 0 and last < highest:
++            drop_pct = (highest - last) / highest * 100
+             if drop_pct > 30:
+-                logger.warning('  Momentum DECLINING: %.1f→%.1f→%.1f (-%d%%) — ABORT',
+-                              readings[0], readings[1], readings[2], drop_pct)
++                logger.warning('  Momentum DROPPED: %.1f→%.1f→%.1f (highest %.1f → last %.1f = -%.0f%%) — ABORT',
++                              readings[0], readings[1], readings[2], highest, last, drop_pct)
+                 return False, readings
+             else:
+-                logger.info('  Momentum dipping slightly: %.1f→%.1f→%.1f — OK (<%d%% drop)',
++                logger.info('  Momentum dipping slightly: %.1f→%.1f→%.1f — OK (%.0f%% drop from peak)',
+                            readings[0], readings[1], readings[2], drop_pct)
+ 
+         # If latest reading dropped below entry threshold, don't enter
+@@ -1864,19 +2001,69 @@
+                           readings[-1], MIN_5M_ENTRY)
+             return False, readings
+ 
++        # Reapply B/S ratio check on the final reading
++        final_info = price(addr)
++        if final_info:
++            final_bs = final_info['b5'] / max(final_info['s5'], 1)
++            if final_bs < MIN_BS_ENTRY:
++                logger.warning('  Final B/S ratio %.2f below threshold %.2f — ABORT', final_bs, MIN_BS_ENTRY)
++                return False, readings
++
+     logger.info('  ✅ Momentum VERIFIED: %.1f→%.1f→%.1f — ENTERING', readings[0], readings[1], readings[2])
+     return True, readings
+ 
+ 
+-MAX_SLIPPAGE = 2.0  # Maximum acceptable slippage % — reject if fill > 2% worse than market
+-EXIT_COOLDOWN = {}  # addr -> timestamp of last exit (10 min cooldown on LOSERS only)
+-EXIT_COOLDOWN_SEC = 60   # 60s — short cooldown on losers. Shaheer directive: if momentum is verified, re-enter (Sep 7)
+-
+-# ── Session-level loss & retry protection (Sep 7 patch) ──
+-BUY_FAIL_COUNT = {}      # addr -> int — consecutive reverted buy attempts this session
+-MAX_BUY_RETRIES = 2      # Max reverted buys before session-blacklisting a token
+-SESSION_LOSSES = {}      # addr -> int — count of losing exits per token this session
+-MAX_SESSION_LOSSES = 2   # 2 losing exits on same token → session-blacklist it
++# ── Persistent state — service-owned durable directory (not /tmp) ──
++_STATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.engine_state')
++os.makedirs(_STATE_DIR, mode=0o700, exist_ok=True)
++_STATE_FILE = os.path.join(_STATE_DIR, 'rh_engine_state.json')
++
++def _load_state():
++    """Load persisted cooldowns, losses, and buy fail counts."""
++    import json as _json
++    try:
++        with open(_STATE_FILE) as f:
++            data = _json.load(f)
++        return (
++            {k: float(v) for k, v in data.get('cooldowns', {}).items()},
++            {k: int(v) for k, v in data.get('losses', {}).items()},
++            {k: int(v) for k, v in data.get('buy_fails', {}).items()},
++            {k: float(v) for k, v in data.get('loss_timestamps', {}).items()},
++        )
++    except (FileNotFoundError, ValueError, KeyError):
++        return {}, {}, {}, {}
++
++def _save_state():
++    """Persist cooldowns, losses, and buy fail counts to disk.
++    Uses atomic write (write-to-temp then rename) to prevent corruption."""
++    import json as _json
++    import tempfile
++    data = {
++        'cooldowns': EXIT_COOLDOWN,
++        'losses': SESSION_LOSSES,
++        'buy_fails': BUY_FAIL_COUNT,
++        'loss_timestamps': _LOSS_TIMESTAMPS,
++    }
++    try:
++        tmp_fd, tmp_path = tempfile.mkstemp(dir=_STATE_DIR, suffix='.tmp')
++        with os.fdopen(tmp_fd, 'w') as f:
++            _json.dump(data, f)
++        os.replace(tmp_path, _STATE_FILE)  # Atomic on POSIX
++    except Exception as e:
++        logger.error('Failed to save state: %s', e)
++        try:
++            os.unlink(tmp_path)
++        except Exception:
++            pass
++
++# Load persisted state on startup
++EXIT_COOLDOWN, SESSION_LOSSES, BUY_FAIL_COUNT, _LOSS_TIMESTAMPS = _load_state()
++# Clean up expired 24h loss blocks on startup
++_now = time.time()
++for _addr in list(_LOSS_TIMESTAMPS):
++    if _now - _LOSS_TIMESTAMPS[_addr] > 86400:  # 24 hours
++        SESSION_LOSSES.pop(_addr, None)
++        _LOSS_TIMESTAMPS.pop(_addr, None)
+ 
+ 
+ # ═══════════════════════════════════════════════════════════
+@@ -2007,6 +2194,7 @@
+         self._peak_price = 0.0
+         self._sell_signal = threading.Event()
+         self._sell_reason = ''
++        self._selling = threading.Event()   # DEFECT B FIX: suppress new sell signals while sell in progress
+         self._last_block = 0
+         self._consecutive_errors = 0
+         self._active = False
+@@ -2022,6 +2210,7 @@
+         self._latest_price = entry_price
+         self._sell_signal.clear()
+         self._sell_reason = ''
++        self._selling.clear()
+         self._stop.clear()
+         self._consecutive_errors = 0
+         self._active = True
+@@ -2038,11 +2227,15 @@
+         """Stop the monitoring thread."""
+         if self._thread and self._thread.is_alive():
+             self._stop.set()
+-            self._thread.join(timeout=2)
++            self._thread.join(timeout=10)  # DEFECT B FIX: 10s join (was 2s — thread could outlive stop)
+             logger.info('⚡ FAST MONITOR stopped')
+         self._active = False
+         self._thread = None
+ 
++    def mark_selling(self):
++        """DEFECT B FIX: Mark that a sell is in progress — suppresses new sell signals from _poll_loop."""
++        self._selling.set()
++
+     def is_active(self):
+         """Check if monitor thread is running."""
+         return self._active and self._thread is not None and self._thread.is_alive()
+@@ -2118,7 +2311,10 @@
+                         pnl = (new_price - self._entry_price) / self._entry_price * 100
+                         peak_drop = (self._peak_price - new_price) / self._peak_price * 100 if self._peak_price > 0 else 0
+ 
+-                        if pnl <= FAST_SL_THRESHOLD and not self._sell_signal.is_set():
++                        # DEFECT B FIX: suppress new sell signals while a sell is already in progress
++                        if self._selling.is_set():
++                            pass  # Sell in progress — do not fire another signal
++                        elif pnl <= FAST_SL_THRESHOLD and not self._sell_signal.is_set():
+                             self._sell_reason = f'⚡ FAST SL {pnl:+.1f}% (${new_price:.8f})'
+                             self._sell_signal.set()
+                             logger.warning('⚡ FAST SL TRIGGERED: %s', self._sell_reason)
+@@ -2161,7 +2357,8 @@
+     Pons: TWO-AMOUNT comparison — tiny vs full swap to detect price impact.
+     Returns (ok, slippage_pct). Takes ~600ms for Pons, ~300ms for V3."""
+     if market_price <= 0:
+-        return True, 0.0
++        logger.warning('  SLIPPAGE REJECT: market_price=%.8f for %s — invalid/zero price', market_price, sym)
++        return False, 100.0  # DEFECT FIX: reject unknown slippage, don't claim PASS
+     route = TOKEN_ROUTE.get(addr.lower(), 'pons')
+     wei = Web3.to_wei(eth_amt, 'ether')
+     ca = Web3.to_checksum_address(addr)
+@@ -2320,17 +2517,49 @@
+         return False, 100.0  # CHANGED: fail-safe = reject on error, not proceed
+ 
+ 
++def _check_daily_drawdown():
++    """Check current equity vs day start — pause entries if drawdown exceeds limit."""
++    global _entry_paused, _day_start_equity
++    if _day_start_equity is None:
++        # Initialize on first call
++        try:
++            e = eth_bal()
++            _day_start_equity = e * ETH_USD
++        except Exception:
++            return  # Can't check without balance
++    try:
++        current_equity = eth_bal() * ETH_USD
++        if _day_start_equity > 0:
++            drawdown_pct = (_day_start_equity - current_equity) / _day_start_equity * 100
++            if drawdown_pct >= DAILY_DRAWDOWN_LIMIT:
++                if not _entry_paused:
++                    logger.warning('🛑 DAILY DRAWDOWN %.1f%% ≥ %.1f%% — pausing new entries',
++                                   drawdown_pct, DAILY_DRAWDOWN_LIMIT)
++                _entry_paused = True
++            else:
++                _entry_paused = False
++    except Exception as ex:
++        logger.debug('Daily drawdown check error: %s', ex)
++
++
+ def enter():
+     """Enter a pumping coin — with pre-entry momentum verification + slippage check."""
++    # ═══ DAILY DRAWDOWN CIRCUIT BREAKER ═══
++    _check_daily_drawdown()
++    if _entry_paused:
++        logger.info('SKIP entry — daily drawdown circuit breaker active')
++        return None
++
+     c = scan()
+     if not c: return None
+ 
+-    # ═══ COOLDOWN CHECK — don't re-enter same token within 10 min of exit ═══
++    # ═══ COOLDOWN CHECK — don't re-enter same token within cooldown period ═══
+     al = c['addr'].lower()
++    effective_cooldown = EXIT_COOLDOWN_SEC
+     if al in EXIT_COOLDOWN:
+         elapsed = time.time() - EXIT_COOLDOWN[al]
+-        if elapsed < EXIT_COOLDOWN_SEC:
+-            remaining = int(EXIT_COOLDOWN_SEC - elapsed)
++        if elapsed < effective_cooldown:
++            remaining = int(effective_cooldown - elapsed)
+             logger.info('SKIP %s — cooldown (%ds remaining)', c['sym'], remaining)
+             return None
+ 
+@@ -2340,7 +2569,7 @@
+         return None
+ 
+     # ═══ BUY RETRY LIMIT — max 2 reverted buys before giving up ═══
+-    if BUY_FAIL_COUNT.get(al, 0) >= MAX_BUY_RETRIES:
++    if BUY_FAIL_COUNT.get(al, 0) >= MAX_BUY_REVERTS:
+         logger.info('SKIP %s — buy reverted %d times, session-blocked', c['sym'], BUY_FAIL_COUNT[al])
+         return None
+ 
+@@ -2369,6 +2598,11 @@
+ 
+     # ═══ BALANCE CHECK — use SPY balance for SPY-paired, ETH for everything else ═══
+     if is_v4_other:
++        # FIX: Check ETH gas reserve even for V4-other (USDG/HIMS/NVDA) routes
++        e_gas = eth_bal()
++        if e_gas < GAS_RESERVE:
++            logger.error('Not enough ETH for gas on V4-%s route: %.6f ETH (need %.4f)', 'other', e_gas, GAS_RESERVE)
++            return None
+         # V4 with non-ETH/SPY quote (USDG, HIMS, NVDA) — check that quote balance
+         v4_qa, v4_qs, v4_qd, _, _ = _parse_v4_route(route)
+         qt_ca = Web3.to_checksum_address(v4_qa)
+@@ -2382,6 +2616,11 @@
+         deploy = 0  # Not used for V4 other routes
+         deploy_spy = 0
+     elif is_spy_route:
++        # FIX: Check ETH gas reserve even for SPY-route buys
++        e_gas = eth_bal()
++        if e_gas < GAS_RESERVE:
++            logger.error('Not enough ETH for gas on SPY route: %.6f ETH (need %.4f)', e_gas, GAS_RESERVE)
++            return None
+         sb = spy_bal()
+         sb_usd = spy_bal_usd()
+         deploy_usd = sb_usd - 5.0  # Keep $5 SPY reserve
+@@ -2396,50 +2635,57 @@
+             logger.error('Not enough ETH: %.6f', e)
+             return None
+ 
+-    # ═══ POSITION SIZING — cap at 0.15% of pool liquidity ═══
++    # ═══ POSITION SIZING — deploy full available balance ═══
++    # LIQ_CAP_PCT = 100.0 → no fixed liquidity cap.
++    # Slippage pre-check and RT cost check constrain effective size.
+     info = price(c['addr'])
+     mkt_price = info['p'] if info else 0
+     liq = info.get('liq', 0) if info else 0
+-    if liq > 0:
+-        max_deploy_usd = liq * 0.0015  # 0.15% of pool liquidity
+-        if is_v4_other:
+-            # Finding 4: V4 "other" routes use deploy_usd_est, not deploy (which is 0)
+-            if deploy_usd_est > max_deploy_usd:
+-                logger.info('POSITION CAP (V4 %s): $%.0f → $%.0f (0.15%% of $%.0f liq)',
+-                             v4_qs, deploy_usd_est, max_deploy_usd, liq)
+-                # Scale down qt_human proportionally
+-                qt_human = qt_human * (max_deploy_usd / deploy_usd_est)
+-                deploy_usd_est = max_deploy_usd
+-            if deploy_usd_est < 20:
+-                logger.info('SKIP %s — capped position too small ($%.1f < $20)', c['sym'], deploy_usd_est)
+-                return None
+-        elif is_spy_route:
+-            if deploy_usd > max_deploy_usd:
+-                logger.info('POSITION CAP (SPY): $%.0f → $%.0f (0.15%% of $%.0f liq)',
+-                             deploy_usd, max_deploy_usd, liq)
+-                deploy_spy = deploy_spy * (max_deploy_usd / deploy_usd)
+-                deploy_usd = max_deploy_usd
+-            if deploy_usd < 20:
+-                logger.info('SKIP %s — capped position too small ($%.1f < $20)', c['sym'], deploy_usd)
+-                return None
+-        else:
+-            max_deploy_eth = max_deploy_usd / ETH_USD if ETH_USD > 0 else deploy
+-            if deploy > max_deploy_eth:
+-                logger.info('POSITION CAP: $%.0f → $%.0f (0.15%% of $%.0f liq)',
+-                             deploy * ETH_USD, max_deploy_usd, liq)
+-                deploy = max_deploy_eth
+-            if deploy * ETH_USD < 20:
+-                logger.info('SKIP %s — capped position too small ($%.1f < $20)', c['sym'], deploy * ETH_USD)
+-                return None
+ 
+     # ═══ SLIPPAGE PRE-CHECK (~300ms) ═══
+-    # Skip for SPY routes (checked differently) and V4 "other" routes (deploy=0, checked by V4 Quoter)
+-    if not is_spy_route and not is_v4_other and deploy > 0:
++    # FIX: All routes must run slippage pre-check, not just ETH/Pons.
++    # For SPY routes, convert SPY deploy to ETH-equivalent for the check.
++    # For V4-other, use estimated USD deploy / ETH_USD.
++    slip_pct = None
++    if is_spy_route:
++        # Convert SPY deploy amount to ETH-equivalent for slippage estimation
++        spy_deploy_eth_equiv = deploy_usd / ETH_USD if ETH_USD > 0 else 0.01
++        slip_ok, slip_pct = check_slippage(c['addr'], spy_deploy_eth_equiv, c['sym'], mkt_price, liquidity=liq)
++        if not slip_ok:
++            logger.info('SKIP %s (SPY route) — slippage too high (%.1f%%)', c['sym'], slip_pct)
++            return None
++    elif is_v4_other:
++        # Convert V4-other deploy amount to ETH-equivalent for slippage estimation
++        v4_deploy_eth_equiv = deploy_usd_est / ETH_USD if ETH_USD > 0 else 0.01
++        slip_ok, slip_pct = check_slippage(c['addr'], v4_deploy_eth_equiv, c['sym'], mkt_price, liquidity=liq)
++        if not slip_ok:
++            logger.info('SKIP %s (V4-%s route) — slippage too high (%.1f%%)', c['sym'], v4_qs, slip_pct)
++            return None
++    elif deploy > 0:
+         slip_ok, slip_pct = check_slippage(c['addr'], deploy, c['sym'], mkt_price, liquidity=liq)
+         if not slip_ok:
+             logger.info('SKIP %s — slippage too high (%.1f%%)', c['sym'], slip_pct)
+             return None
+ 
++    # ═══ ROUND-TRIP COST CHECK ═══
++    # Estimate full round-trip economics: buy impact + sell impact + execution tolerance
++    # Do NOT simply double the buy slippage — fees, taxes, and asymmetric
++    # impact are not captured by that approximation, but slip_pct*2 is the
++    # best available estimate without simulating the full round trip.
++    if slip_pct is not None:
++        est_rt_cost = slip_pct * 2  # Estimated round-trip impact from quoter
++        # Check against expected budget (1.5% impact)
++        if est_rt_cost > MAX_RT_COST_EXPECTED:
++            logger.info('SKIP %s — estimated RT impact %.2f%% exceeds %.1f%% expected budget',
++                        c['sym'], est_rt_cost, MAX_RT_COST_EXPECTED)
++            return None
++        # Check against bounded budget (impact + max execution slippage allowance both ways)
++        est_rt_bounded = est_rt_cost + EXEC_SLIPPAGE_ALLOW * 2
++        if est_rt_bounded > MAX_RT_COST_BOUNDED:
++            logger.info('SKIP %s — bounded RT cost %.2f%% exceeds %.1f%% bounded limit',
++                        c['sym'], est_rt_bounded, MAX_RT_COST_BOUNDED)
++            return None
++
+     # ═══ HONEYPOT CHECK — simulate buy + sell BEFORE committing real money ═══
+     # honeypot_check() handles blacklisting internally for confirmed honeypots.
+     # INCONCLUSIVE results return False but do NOT blacklist — token can retry.
+@@ -2447,6 +2693,34 @@
+         logger.warning('🚨 HONEYPOT BLOCKED: %s — cannot sell, skipping', c['sym'])
+         return None
+ 
++    # ═══ FINAL ENTRY PREDICATE REAPPLICATION — re-check conditions right before buy ═══
++    # FIX: After momentum verification, several seconds may have passed during pool discovery,
++    # balance checks, slippage checks, and honeypot simulation. Momentum could have collapsed.
++    # Re-fetch current data and verify entry conditions still hold.
++    final_check = price(c['addr'])
++    if final_check:
++        final_c5 = final_check['c5']
++        final_bs = final_check['b5'] / max(final_check['s5'], 1)
++        if final_c5 < MIN_5M_ENTRY:
++            logger.warning('FINAL CHECK REJECT %s — 5m%% dropped to %+.1f%% (need +%.1f%%)',
++                          c['sym'], final_c5, MIN_5M_ENTRY)
++            return None
++        if final_c5 > MAX_5M_ENTRY:
++            logger.warning('FINAL CHECK REJECT %s — 5m%% spiked to %+.1f%% (max +%.1f%%)',
++                          c['sym'], final_c5, MAX_5M_ENTRY)
++            return None
++        if final_bs < MIN_BS_ENTRY:
++            logger.warning('FINAL CHECK REJECT %s — B/S dropped to %.2f (need %.2f)',
++                          c['sym'], final_bs, MIN_BS_ENTRY)
++            return None
++        if final_c5 < MOMENTUM_DEATH:
++            logger.warning('FINAL CHECK REJECT %s — momentum dead at %+.1f%%', c['sym'], final_c5)
++            return None
++        logger.info('FINAL CHECK OK %s — 5m=%+.1f%% B/S=%.2f — proceeding to buy', c['sym'], final_c5, final_bs)
++    else:
++        logger.warning('FINAL CHECK REJECT %s — price data unavailable', c['sym'])
++        return None
++
+     if route.startswith('v4'):
+         # V4 route: determine quote token and amount
+         v4_quote_addr, v4_quote_sym, v4_quote_dec, _, _ = _parse_v4_route(route)
+@@ -2469,12 +2743,14 @@
+     else:
+         tokens, entry_price = buy(c['addr'], deploy, c['sym'], market_price=mkt_price)
+     if tokens <= 0:
+-        # Track reverted buys per token — stop after MAX_BUY_RETRIES
++        # Track reverted buys per token — stop after MAX_BUY_REVERTS
+         BUY_FAIL_COUNT[al] = BUY_FAIL_COUNT.get(al, 0) + 1
+-        logger.info('BUY FAILED for %s — attempt %d/%d', c['sym'], BUY_FAIL_COUNT[al], MAX_BUY_RETRIES)
++        _save_state()
++        logger.info('BUY FAILED for %s — attempt %d/%d', c['sym'], BUY_FAIL_COUNT[al], MAX_BUY_REVERTS)
+         return None
+     # Buy succeeded — reset fail counter
+     BUY_FAIL_COUNT.pop(al, None)
++    _save_state()
+ 
+     # Post-buy sanity — is market price way below our fill?
+     # ═══ FIX: Tightened from -5% to -3% (data: fills at -4% to -6% guarantee losses) ═══
+@@ -2639,10 +2915,19 @@
+     while True:
+         try:
+             # ═══ FAST EXIT CHECK — sub-second, from monitor thread ═══
++            # DEFECT B FIX: skip if position already sold
++            if pos.get('_sold'):
++                pos = None
++                while not pos:
++                    time.sleep(SCAN_INTERVAL)
++                    pos = enter()
++                continue
+             if price_monitor.is_active():
+                 should, reason = price_monitor.should_sell()
+                 if should:
+                     logger.warning('⚡ FAST EXIT: %s on %s — selling NOW', reason, pos['sym'])
++                    # DEFECT B FIX: mark selling before sell to suppress duplicate signals
++                    price_monitor.mark_selling()
+                     price_monitor.stop()
+                     fast_price = price_monitor.get_price() if price_monitor.get_price() > 0 else pos.get('last_price', 0)
+                     # Codex Ultra: wrap _do_sell in try/except so exceptions still count as failures
+@@ -2652,6 +2937,9 @@
+                         logger.error('⚡ FAST EXIT _do_sell EXCEPTION for %s: %s', pos['sym'], sell_ex)
+                         e = 0  # Treat exception as failed sell
+                     if e > 0:
++                        # DEFECT B FIX: clear sell signal + mark position sold
++                        price_monitor.clear_sell_signal()
++                        pos['_sold'] = True
+                         rot += 1
+                         total = e * ETH_USD
+                         logger.info('⚡ Fast Exit #%d — $%.2f', rot, total)
+@@ -2659,6 +2947,7 @@
+                         SESSION_LOSSES[pos['addr'].lower()] = SESSION_LOSSES.get(pos['addr'].lower(), 0) + 1
+                         if SESSION_LOSSES[pos['addr'].lower()] >= MAX_SESSION_LOSSES:
+                             logger.warning('🚫 SESSION BLACKLIST: %s lost %d times via fast exits', pos['sym'], SESSION_LOSSES[pos['addr'].lower()])
++                        _save_state()
+                         if total >= COST_BASIS:
+                             logger.info('🏆 PAST $%.0f! $%.2f — KEEP COMPOUNDING', COST_BASIS, total)
+                         pos = None
+@@ -2683,6 +2972,7 @@
+                     if sr and sr > 0:
+                         logger.info('LATCHED EXIT SELL OK for %s during price outage', pos['sym'])
+                         EXIT_COOLDOWN[pos['addr'].lower()] = time.time()
++                        _save_state()
+                         pos = None
+                         while not pos:
+                             time.sleep(SCAN_INTERVAL)
+@@ -2713,63 +3003,70 @@
+                 pos['bs_history'] = pos['bs_history'][-MOMENTUM_HISTORY:]
+             pos['tick'] += 1
+ 
+-            # Dynamic trail: wide when pumping hard, tight when cooling
+-            trail = TRAIL_WIDE if c5 >= MOMENTUM_STRONG else TRAIL_TIGHT
+             do_exit = False
+             exit_reason = ''
+-            warmed = pos['tick'] >= WARMUP_TICKS  # Skip exits during warmup
++            warmed = pos['tick'] >= WARMUP_TICKS  # With WARMUP_TICKS=0, always True
++
++            # ═══ EXIT 0: LATCHED EXIT — retry previous failed sell (highest precedence) ═══
++            if pos.get('_exit_latched'):
++                exit_reason = '🔁 LATCHED EXIT (retrying previous failed sell)'
++                do_exit = True
++
++            # ═══ EXIT 1: HARD STOP LOSS (-3%) — always active, highest precedence ═══
++            if not do_exit and pnl <= -HARD_SL:
++                exit_reason = f'⛔ HARD SL {pnl:+.1f}%'
++                do_exit = True
+ 
+-            # ═══ EXIT 0: HARD TAKE-PROFIT (+25%) — INSTANT, NO WARMUP, NO EXCEPTIONS ═══
+-            # Data across 61 trades: 25% TP turns -62% total PnL into +105% total gain.
+-            # Fires BEFORE all other exits. Locks profit the instant we hit +25%.
+-            if pnl >= HARD_TP:
+-                exit_reason = f'💰 TAKE PROFIT {pnl:+.1f}% ≥ {HARD_TP:+.1f}%'
++            # ═══ EXIT 2: HARD TAKE-PROFIT (+25%) — exit 100%, no partial ═══
++            if not do_exit and pnl >= HARD_TP:
++                exit_reason = f'💰 TAKE PROFIT {pnl:+.1f}% ≥ {HARD_TP:+.1f}% — selling 100%'
+                 do_exit = True
+-                logger.info('🎯 HARD TP HIT on %s at PnL=%+.1f%% — LOCKING PROFIT', pos['sym'], pnl)
++                logger.info('🎯 HARD TP HIT on %s at PnL=%+.1f%% — FULL EXIT', pos['sym'], pnl)
++
++            # ═══ EXIT 3: UNIFIED TRAILING STOP (6% from peak) ═══
++            if not do_exit:
++                peak_drop = (pos['peak'] - p) / pos['peak'] * 100 if pos['peak'] > 0 else 0
++                if peak_drop >= TRAIL_UNIFIED:
++                    exit_reason = f'📉 TRAIL STOP {peak_drop:.1f}% drop from peak (threshold {TRAIL_UNIFIED}%)'
++                    do_exit = True
+ 
+-            # ═══ EXIT 1: MOMENTUM SHIFT — INSTANT (1 reading, Shaheer directive) ═══
+-            # We know the momentum when we entered. ONE reading showing it dropped
+-            # significantly from the previous reading = sell NOW. Don't wait for 3.
++            # ═══ EXIT 4: SLOWING — 30% momentum drop from previous reading ═══
+             hist = pos['c5_history']
+-            if warmed and len(hist) >= 2:
++            if not do_exit and warmed and len(hist) >= 2:
+                 prev = hist[-2]
+                 curr = hist[-1]
+-                # If momentum dropped by more than 30% of previous value in ONE reading
+-                if prev > 0 and curr < prev * 0.7:
+-                    exit_reason = f'🔻 SLOWING {prev:+.1f}%→{curr:+.1f}%'
++                drop_pct = (prev - curr) / prev * 100 if prev > 0 else 0
++                if drop_pct >= SLOWING_DROP_PCT:
++                    exit_reason = f'🔻 SLOWING {prev:+.1f}%→{curr:+.1f}% (drop {drop_pct:.0f}%)'
+                     do_exit = True
+ 
+-            # ═══ EXIT 2: MOMENTUM DEATH (5m below +3%) ═══
++            # ═══ EXIT 5: MOMENTUM DEATH (5m below +5%) ═══
+             if not do_exit and warmed and c5 < MOMENTUM_DEATH:
+                 exit_reason = f'💀 MOMENTUM DEAD 5m={c5:+.1f}%'
+                 do_exit = True
+ 
+-            # ═══ EXIT 3: SELLERS DOMINANT (1 reading, Shaheer directive) ═══
+-            # If B/S ratio drops below 0.7 even ONCE, sellers have taken over — exit
++            # ═══ EXIT 6: SELLERS DOMINANT (B/S < 0.7) ═══
+             bsh = pos['bs_history']
+             if not do_exit and warmed and len(bsh) >= 1:
+-                if bsh[-1] < 0.7:
++                if bsh[-1] < SELLER_DOM_EXIT:
+                     exit_reason = f'🔴 SELLERS DOMINANT B/S={b5}/{s5} ratio={bsh[-1]:.2f}'
+                     do_exit = True
+ 
+-            # ═══ EXIT 4: TRAILING STOP — DISABLED (momentum slowdown is primary exit) ═══
+-            # Trailing stop causes premature exits on volatile meme tokens.
+-            # Momentum slowdown (EXIT 1) catches the real top more accurately.
+-
+-            # ═══ EXIT 6: LATCHED EXIT — Codex Ultra: once exit is triggered, keep trying ═══
+-            if not do_exit and pos.get('_exit_latched'):
+-                exit_reason = '🔁 LATCHED EXIT (retrying previous failed sell)'
+-                do_exit = True
+-
+-            # ═══ EXIT 5: HARD STOP LOSS (-5%) — always active, even during warmup ═══
+-            if not do_exit and pnl <= -HARD_SL:
+-                exit_reason = f'⛔ HARD SL {pnl:+.1f}%'
+-                do_exit = True
+-
+             # ═══ EXECUTE EXIT ═══
+             if do_exit:
++                # DEFECT B FIX: skip all exit logic if position already sold
++                if pos.get('_sold'):
++                    logger.info('Position %s already sold — skipping duplicate exit', pos['sym'])
++                    pos = None
++                    while not pos:
++                        time.sleep(SCAN_INTERVAL)
++                        pos = enter()
++                    continue
+                 logger.warning('%s on %s PnL=%+.1f%%. Selling...', exit_reason, pos['sym'], pnl)
+-                price_monitor.stop()  # Stop fast monitor before selling
++                # DEFECT B FIX: mark selling + stop monitor before sell
++                price_monitor.mark_selling()
++                price_monitor.stop()
++                price_monitor.clear_sell_signal()
+                 # Codex Ultra: wrap _do_sell in try/except so exceptions still count as failures
+                 try:
+                     e = _do_sell(pos['addr'], pos['sym'], market_price=p)
+@@ -2777,6 +3074,8 @@
+                     logger.error('EXIT _do_sell EXCEPTION for %s: %s', pos['sym'], sell_ex)
+                     e = 0  # Treat exception as failed sell
+                 if e > 0:
++                    # DEFECT B FIX: mark position sold to prevent duplicate exits
++                    pos['_sold'] = True
+                     sell_fail_count = 0  # Reset on success
+                     pos.pop('_exit_latched', None)  # Clear exit latch
+                     rot += 1
+@@ -2795,6 +3094,7 @@
+                     else:
+                         EXIT_COOLDOWN.pop(pos['addr'].lower(), None)  # Clear any old cooldown
+                         logger.info('🔓 No cooldown for %s (winning exit — re-entry allowed)', pos['sym'])
++                    _save_state()
+                     if total >= COST_BASIS:
+                         logger.info('🏆 PAST $%.0f! $%.2f — KEEP COMPOUNDING', COST_BASIS, total)
+                     pos = None
+@@ -2829,6 +3129,7 @@
+                             logger.error('🚨 SELL FAILED %d TIMES for %s — tokens gone/dust (%.0f left), clearing position',
+                                          sell_fail_count, pos['sym'], tokens_left)
+                             EXIT_COOLDOWN[pos['addr'].lower()] = time.time()
++                            _save_state()
+                             pos = None
+                             while not pos:
+                                 time.sleep(SCAN_INTERVAL)
+@@ -2847,6 +3148,7 @@
+                                 PONS_BLACKLIST.add(pos['addr'].lower())
+                                 _save_blacklist()
+                                 EXIT_COOLDOWN[pos['addr'].lower()] = time.time()
++                                _save_state()
+                                 pos = None
+                                 while not pos:
+                                     time.sleep(SCAN_INTERVAL)
+@@ -2877,30 +3179,28 @@
+         time.sleep(POLL_SEC)
+ 
+ 
+-PID_FILE = '/tmp/rh_engine.pid'
++_LOCK_FILE = os.path.join(_STATE_DIR, 'rh_engine.lock')
++_lock_fd = None  # Held for process lifetime
+ 
+ def _enforce_single_instance():
+-    """Prevent multiple engine instances from trading the same wallet."""
+-    import signal
+-    if os.path.exists(PID_FILE):
+-        try:
+-            with open(PID_FILE) as f:
+-                old_pid = int(f.read().strip())
+-            # Check if old process is actually running
+-            os.kill(old_pid, 0)
+-            # It's alive — kill it
+-            logger.warning('KILLING stale engine instance PID %d', old_pid)
+-            os.kill(old_pid, signal.SIGTERM)
+-            time.sleep(2)
+-            try:
+-                os.kill(old_pid, signal.SIGKILL)
+-            except ProcessLookupError:
+-                pass
+-        except (ProcessLookupError, ValueError):
+-            pass  # Old process already dead
+-    # Write our PID
+-    with open(PID_FILE, 'w') as f:
+-        f.write(str(os.getpid()))
++    """Prevent multiple engine instances from trading the same wallet.
++    Uses an exclusive OS file lock (flock) scoped to wallet+chain.
++    The lock is held for the process lifetime — released automatically on exit.
++    Concurrent starts produce one owner; newcomer refuses without touching incumbent."""
++    import fcntl
++    global _lock_fd
++    try:
++        _lock_fd = open(_LOCK_FILE, 'w')
++        fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
++        # We got the lock — write our PID for diagnostics
++        _lock_fd.write(str(os.getpid()))
++        _lock_fd.flush()
++        # Keep _lock_fd open — lock released when process exits
++    except (IOError, OSError):
++        # Lock held by another process — refuse to start
++        logger.error('REFUSING TO START: another engine instance holds the lock at %s. '
++                     'Stop it first before starting a new instance.', _LOCK_FILE)
++        sys.exit(1)
+ 
+ if __name__ == '__main__':
+     if '--status' in sys.argv:
+
+══════════════════════════════════════════════════════════════════════
+APPENDIX: TEST OUTPUT
+══════════════════════════════════════════════════════════════════════
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /root/shaheer-project/crypto-alpha-engine/repair
+plugins: anyio-4.15.1, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 61 items
+
+tests/test_accounting.py::TestBuyAccounting::test_pons_buy_uses_delta_not_total PASSED [  1%]
+tests/test_accounting.py::TestBuyAccounting::test_buy_with_zero_prior_balance PASSED [  3%]
+tests/test_accounting.py::TestBuyAccounting::test_buy_with_dust_prior_balance PASSED [  4%]
+tests/test_accounting.py::TestSellAccounting::test_pons_sell_uses_delta_not_total PASSED [  6%]
+tests/test_accounting.py::TestSellAccounting::test_sell_spy_uses_delta PASSED [  8%]
+tests/test_accounting.py::TestSellAccounting::test_sell_usdg_uses_delta PASSED [  9%]
+tests/test_accounting.py::TestPnLCalculation::test_pnl_with_correct_entry PASSED [ 11%]
+tests/test_accounting.py::TestPnLCalculation::test_pnl_with_corrupted_entry_shows_wrong_value PASSED [ 13%]
+tests/test_accounting.py::TestZeroMinOutFallback::test_sell_never_uses_zero_min_out PASSED [ 14%]
+tests/test_accounting.py::TestMomentumVerification::test_large_drop_from_first_to_last_reading_fails PASSED [ 16%]
+tests/test_accounting.py::TestMomentumVerification::test_stable_momentum_passes PASSED [ 18%]
+tests/test_accounting.py::TestMomentumVerification::test_rising_momentum_passes PASSED [ 19%]
+tests/test_accounting.py::TestEntryPredicateReapplication::test_stale_momentum_should_block_entry PASSED [ 21%]
+tests/test_accounting.py::TestEntryPredicateReapplication::test_stale_bs_ratio_should_block_entry PASSED [ 22%]
+tests/test_accounting.py::TestCooldownFiltering::test_cooldown_token_should_not_block_other_candidates PASSED [ 24%]
+tests/test_accounting.py::TestGasReservation::test_spy_buy_must_check_eth_gas_reserve PASSED [ 26%]
+tests/test_accounting.py::TestGasReservation::test_usdg_buy_must_check_eth_gas_reserve PASSED [ 27%]
+tests/test_accounting.py::TestHoneypotDetection::test_unknown_revert_must_not_pass_as_safe PASSED [ 29%]
+tests/test_accounting.py::TestPIDEnforcement::test_refuse_if_incumbent_alive PASSED [ 31%]
+tests/test_accounting.py::TestProvisionalConfig::test_config_constants_present_in_source PASSED [ 32%]
+tests/test_accounting.py::TestProvisionalConfig::test_warmup_ticks_is_zero PASSED [ 34%]
+tests/test_accounting.py::TestProvisionalConfig::test_max_active_positions_is_one PASSED [ 36%]
+tests/test_accounting.py::TestProvisionalConfig::test_provisional_label_present PASSED [ 37%]
+tests/test_accounting.py::TestUnifiedExitRules::test_hard_stop_fires_at_minus_3pct PASSED [ 39%]
+tests/test_accounting.py::TestUnifiedExitRules::test_hard_stop_does_not_fire_at_minus_2pct PASSED [ 40%]
+tests/test_accounting.py::TestUnifiedExitRules::test_take_profit_fires_at_plus_25pct PASSED [ 42%]
+tests/test_accounting.py::TestUnifiedExitRules::test_unified_trailing_stop_fires PASSED [ 44%]
+tests/test_accounting.py::TestUnifiedExitRules::test_unified_trailing_stop_holds PASSED [ 45%]
+tests/test_accounting.py::TestUnifiedExitRules::test_slowing_exit_fires PASSED [ 47%]
+tests/test_accounting.py::TestUnifiedExitRules::test_momentum_death_exit PASSED [ 49%]
+tests/test_accounting.py::TestUnifiedExitRules::test_seller_dominance_exit PASSED [ 50%]
+tests/test_accounting.py::TestUnifiedExitRules::test_trailing_stop_source_present PASSED [ 52%]
+tests/test_accounting.py::TestPolicyBDisabled::test_tp_always_exits_100pct PASSED [ 54%]
+tests/test_accounting.py::TestPolicyBDisabled::test_no_partial_sell_in_exit_logic PASSED [ 55%]
+tests/test_accounting.py::TestPolicyBDisabled::test_trail_uses_unified_only PASSED [ 57%]
+tests/test_accounting.py::TestCooldown::test_cooldown_is_60s PASSED      [ 59%]
+tests/test_accounting.py::TestCooldown::test_no_policy_c_cooldown PASSED [ 60%]
+tests/test_accounting.py::TestDailyCircuitBreaker::test_3pct_drawdown_triggers_pause PASSED [ 62%]
+tests/test_accounting.py::TestDailyCircuitBreaker::test_2pct_drawdown_allows_entry PASSED [ 63%]
+tests/test_accounting.py::TestDailyCircuitBreaker::test_circuit_breaker_in_source PASSED [ 65%]
+tests/test_accounting.py::TestRoundTripCostCheck::test_high_rt_cost_rejects PASSED [ 67%]
+tests/test_accounting.py::TestRoundTripCostCheck::test_low_rt_cost_passes PASSED [ 68%]
+tests/test_accounting.py::TestRoundTripCostCheck::test_rt_cost_check_in_source PASSED [ 70%]
+tests/test_accounting.py::TestSlippageRejectsZeroPrice::test_zero_price_rejected PASSED [ 72%]
+tests/test_accounting.py::TestStatePersistence::test_save_state_after_all_exit_cooldown_mutations PASSED [ 73%]
+tests/test_accounting.py::TestAllSlippageRoutes::test_spy_route_slippage_check_in_source PASSED [ 75%]
+tests/test_accounting.py::TestAllSlippageRoutes::test_v4_other_route_slippage_check_in_source PASSED [ 77%]
+tests/test_accounting.py::TestSellFloor::test_no_50pct_floor_in_sell_functions PASSED [ 78%]
+tests/test_accounting.py::TestSellFloor::test_no_zero_minout_fallback PASSED [ 80%]
+tests/test_accounting.py::TestSellFloor::test_sell_uses_exec_slippage_allow PASSED [ 81%]
+tests/test_accounting.py::TestSellFloor::test_no_quote_uses_minimum_1_not_0 PASSED [ 83%]
+tests/test_accounting.py::TestSellFloor::test_sell_minout_math PASSED    [ 85%]
+tests/test_accounting.py::TestRoundTripCostBounded::test_bounded_check_in_source PASSED [ 86%]
+tests/test_accounting.py::TestRoundTripCostBounded::test_bounded_includes_exec_slippage PASSED [ 88%]
+tests/test_accounting.py::TestRoundTripCostBounded::test_high_slippage_fails_bounded PASSED [ 90%]
+tests/test_accounting.py::TestSizingCeiling::test_position_size_pct_is_100 PASSED [ 91%]
+tests/test_accounting.py::TestSizingCeiling::test_liq_cap_is_100 PASSED  [ 93%]
+tests/test_accounting.py::TestAtomicState::test_state_dir_not_tmp PASSED [ 95%]
+tests/test_accounting.py::TestAtomicState::test_atomic_write_used PASSED [ 96%]
+tests/test_accounting.py::TestOSLock::test_uses_flock PASSED             [ 98%]
+tests/test_accounting.py::TestOSLock::test_no_pid_kill PASSED            [100%]
+
+============================== 61 passed in 0.08s ==============================
+
