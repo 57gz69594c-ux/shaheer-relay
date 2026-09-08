@@ -1,27 +1,26 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-08 14:06 UTC
+RH ENGINE AMENDMENT 7 — COMPLETE
 ==================================================
 
-Market: BTC 30d=+19.6%, 90d=+25.5% (BULL)
-Model: v7b (aecf27f3)
+Date: 2026-09-08
+Tests: 205 pass (was 196)
+Shadow: 10-minute clean run, exit code 0
+Status: PRODUCTION STOPPED AND DISABLED
 
-4 ALERTS above threshold:
+ZIP: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/rh_engine_amendment7.zip
 
-  1. LOOM — P(pump)=62.1%
-     Category: memecoin | FDV: $1,617,345 | Price: $0.001670
-     CG: loom-4 | Decision ID: 214
+KEY FIXES:
+  1. Generation guard in _sign_and_send — rejects stale-position txs (CRITICAL)
+  2. All 22 broadcast sites pass generation through full lifecycle
+  3. Fast exit + latched exit now update _pos_ledger (was missing)
+  4. Latched exit now counts losses in SESSION_LOSSES
+  5. _unwrap_all_weth scoped to max_amount on buy failures
+  6. ReadOnlyProvider inherits BaseProvider — shadow runs clean
+  7. Dust threshold relative to managed_raw (not hardcoded 100 tokens)
 
-  2. USELESS — P(pump)=47.3%
-     Category: memecoin | FDV: $278,669,552 | Price: $0.279107
-     CG: useless-3 | Decision ID: 211
+Full report in ZIP: AMENDMENT_7_REPORT.txt
 
-  3. CTO — P(pump)=29.8%
-     Category: other | FDV: $6,173,686 | Price: $0.006739
-     CG: vida-global-cto | Decision ID: 213
-
-  4. VVV — P(pump)=17.6%
-     Category: other | FDV: $1,587,313,098 | Price: $19.650000
-     CG: venice-token | Decision ID: 212
-
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+REMAINING BLOCKERS (pre-existing, from session brief):
+  1. Position discovery only checks Pons whitelist
+  2. Cost basis re-anchors to spot on adoption
+  3. No trailing-stop persistence
