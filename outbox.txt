@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-08 20:06 UTC
+ENGINE A PUMP ALERT — 2026-09-08 22:04 UTC
 ==================================================
 
-Market: BTC 30d=+20.3%, 90d=+26.6% (BULL)
+Market: BTC 30d=+20.4%, 90d=+28.1% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. ANSEM — P(pump)=47.1%
-     Category: memecoin | FDV: $177,826,509 | Price: $0.178298
-     CG: the-black-bull | Decision ID: 227
-
-  2. AI — P(pump)=46.1%
-     Category: memecoin | FDV: $241,349,923 | Price: $0.243410
-     CG: artificial-inu-3 | Decision ID: 226
-
-  3. PUMP — P(pump)=38.8%
-     Category: memecoin | FDV: $3,661,295,117 | Price: $0.004386
-     CG: pump-fun | Decision ID: 224
+  1. AGI — P(pump)=31.5%
+     Category: other | FDV: $3,694,620 | Price: $0.003738
+     CG: artificial-gooner-intelligence | Decision ID: 230
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
