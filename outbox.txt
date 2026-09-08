@@ -1,150 +1,27 @@
-DOWNLOAD ZIP (Amendment 6):
-https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/rh_engine_v6_source.zip
+==================================================
+ENGINE A PUMP ALERT — 2026-09-08 14:06 UTC
+==================================================
 
-══════════════════════════════════════════════════════════════════════
-RH CHAIN ROTATION ENGINE — REPAIR REPORT (AMENDMENT 6)
-Status: STAGED repair configuration — production source untouched,
-        service stopped and disabled, no live trading.
-Effective date: 2026-09-08
-Engine: repair/rh_rotation_engine.py (v6.2-repaired-v6 → v6.2-repaired-v7)
-Tests: 184 regression tests, ALL PASSING (up from 169)
-Shadow: 107 JSONL entries, 10 min, 3 tokens, 2 routes, 0 errors
-══════════════════════════════════════════════════════════════════════
+Market: BTC 30d=+19.6%, 90d=+25.5% (BULL)
+Model: v7b (aecf27f3)
 
-AMENDMENT 6 CHANGES (responding to docking station note-1788874993552):
+4 ALERTS above threshold:
 
-Section 1 — Concrete Bug Fixes (from ChatGPT review):
-  1. SellQuote gas_estimate: removed from base dict, each constructor
-     provides it explicitly. No duplicate keyword argument.
-  2. _acquire_nonce now registers durable TxOp BEFORE returning nonce.
-     Returns (nonce, op) tuple. _nonce_only wraps for backward compat.
-  3. resync_nonce: takes max(chain_nonce, max_pending_nonce + 1) —
-     never reissues a nonce with pending operations.
-  4. Reverted receipts: already handled correctly (status != 1 check).
-  5. _do_sell fail-closed: when bal() throws after positive proceeds,
-     returns UNRESOLVED, not RESOLVED. Cannot certify sale without
-     balance verification.
-  6. Duplicate receipts: PositionLedger.record_sell is idempotent on
-     tx_hash — same hash cannot credit proceeds twice.
-  7. AttributeDict serialization: TxOp.to_dict and PositionLedger.to_dict
-     normalize Web3 AttributeDict → plain dict.
+  1. LOOM — P(pump)=62.1%
+     Category: memecoin | FDV: $1,617,345 | Price: $0.001670
+     CG: loom-4 | Decision ID: 214
 
-Section 2 — Transaction Coordination (broadcast + timeout):
-  8. TxOp: added TIMEOUT status, broadcast_attempted_at, signed_hash.
-     Distinguishes "tx may still confirm" from "no tx hash obtained".
-  9. TxCoordinator: added mark_broadcast(), mark_timeout(),
-     reconcile_op(), has_unreconciled(), timeout_ops().
-  10. _broadcast() helper: records transport attempt durably BEFORE
-      calling send_raw_transaction. Persists state for crash safety.
-      Records tx_hash in op after successful send.
-  11. _wait_receipt() helper: on timeout marks op as TIMEOUT (not
-      FAILED). Returns None on timeout so caller can retry/reconcile.
-      On success calls confirm_op with receipt.
+  2. USELESS — P(pump)=47.3%
+     Category: memecoin | FDV: $278,669,552 | Price: $0.279107
+     CG: useless-3 | Decision ID: 211
 
-Section 3 — Zero-Reset Approvals:
-  12. approve(): if allowance is nonzero but < 10^30, calls approve(0)
-      before approve(MAX). Required by USDT-like tokens.
-  13. _ensure_permit2_approval(): if ERC20→Permit2 allowance is nonzero
-      but insufficient, calls approve(permit2, 0) first.
+  3. CTO — P(pump)=29.8%
+     Category: other | FDV: $6,173,686 | Price: $0.006739
+     CG: vida-global-cto | Decision ID: 213
 
-Section 4 — Portfolio Equity Without Double-Counting:
-  14. _portfolio_equity(): includes native ETH + WETH + SPY + USDG +
-      managed position value. Subtracts proceeds already in ETH to
-      prevent double-counting partial proceeds.
-  15. _check_daily_drawdown(): now uses _portfolio_equity() instead of
-      eth_bal() * ETH_USD + spy_bal_usd() + usdg_bal().
+  4. VVV — P(pump)=17.6%
+     Category: other | FDV: $1,587,313,098 | Price: $19.650000
+     CG: venice-token | Decision ID: 212
 
-TESTS ADDED (184 total, up from 169):
-  TestAmendment6Integration: 15 new tests
-  - test_approve_zero_reset_on_nonzero_insufficient
-  - test_permit2_zero_reset_on_nonzero_insufficient
-  - test_txop_has_broadcast_attempted_at
-  - test_broadcast_helper_records_before_send
-  - test_broadcast_helper_records_tx_hash
-  - test_txop_has_timeout_status
-  - test_wait_receipt_handles_timeout
-  - test_coordinator_has_unreconciled_check
-  - test_coordinator_reconcile_op
-  - test_portfolio_equity_includes_weth
-  - test_portfolio_equity_no_double_counting
-  - test_daily_drawdown_uses_portfolio_equity
-  - test_txop_timeout_lifecycle (end-to-end with real class)
-  - test_coordinator_timeout_and_reconcile (end-to-end with mock w3)
-  - test_coordinator_mark_broadcast_before_send (end-to-end)
-
-SHADOW PROCESS RESULTS (10-minute run):
-  Duration: 13:50:06 → 13:59:32 UTC (9m 26s)
-  Entries: 107 JSONL
-  Tokens observed: liquititty, DARK, CUTCHAIN
-  Routes exercised: pons, v3_100
-  Entry passes: 9/107 (all correctly rejected on round-trip cost)
-  Rejections: rt_cost (91), slippage (3), 5m momentum (4), other (9)
-  Scan ms: min=61.8 median=87.0 max=11193.6
-  Decision ms: min=263.9 median=272.5 max=6119.6
-  Errors: 0
-  Broadcasts: 0 (read-only mode enforced)
-
-CODE HASHES (SHA-256):
-  rh_rotation_engine.py: c19ec8cc06369af0308e6ebc584326cd1df40271
-  test_accounting.py:    cd521ef4b78ba0b204d3fa06b3a36c492066592752e9
-
-BEHAVIORAL ACCEPTANCE CHECKLIST (amendments 4-6):
-  ✅ Chart +25% with flat executable not booked as +25% net profit
-  ✅ Expired quotes cannot become live execution estimates
-  ✅ Positive proceeds with residual don't close full position
-  ✅ Restart preserves unresolved exit, basis, peak, daily pause
-  ✅ Missing Pons quotes cannot authorize entry
-  ✅ Shadow helpers cannot sign or transmit wallet-changing requests
-  ✅ All 20 broadcast nonce sites use TxCoordinator
-  ✅ 7 simulation sites correctly retain inline nonce
-  ✅ PositionLedger created on buy, updated on sell, persisted on restart
-  ✅ PARTIAL does not release entry gate or count as complete exit
-  ✅ TxCoordinator issues monotonically increasing nonces
-  ✅ Generation-based callback rejection works across positions
-  ✅ Zero-reset approvals for nonzero insufficient allowances
-  ✅ Transport attempt recorded before broadcast (crash-safe)
-  ✅ Broadcast timeout → TIMEOUT status (not FAILED), reconcilable
-  ✅ Portfolio equity includes WETH, no double-counting partials
-  ✅ Duplicate receipt rejected (idempotent on tx_hash)
-  ✅ Failed residual check → UNRESOLVED (fail closed)
-
-UNFINISHED SOFTWARE INTEGRATION:
-  • _broadcast()/_wait_receipt() helpers exist but are not yet wired
-    into all 20 broadcast call sites. The existing sites still use
-    direct w3.eth.send_raw_transaction(). Wiring requires touching
-    each function (sell, v3_sell, v3_sell_spy, v4_sell, buy, v3_buy,
-    v4_buy, approve, _ensure_permit2_approval, _unwrap_all_weth) —
-    deferred to avoid high-risk refactor in this session.
-  • USD attribution rate refresh after approval delay: identified but
-    not implemented. Requires passing fresh ETH_USD at signing time.
-  • Broadcast-time quote freshness re-check: sell functions refuse to
-    sign without quote (min_out=0), but no re-check between sign and
-    send for quotes that were fresh at decision time.
-  • has_unreconciled() gate on new buy/sell: coordinator method exists
-    but is not yet called from enter() or exit paths.
-
-EXTERNAL LIMITATIONS:
-  • Shadow observed 3 tokens across pons and v3_100 routes. No v3spy
-    or v4 tokens were active during the 10-minute window. Route
-    coverage is limited to what the market presented.
-  • Scan latency p95 ~6s (DexScreener API). Decision latency p95
-    ~400ms (acceptable). First scan ~11s (cold start).
-  • No live RPC inclusion latency measured (read-only mode).
-
-PRODUCTION STATUS (verified on this server):
-  • systemctl is-enabled rh-engine: not-found (disabled)
-  • systemctl is-active rh-engine: inactive
-  • Production source: untouched
-  • No wallet operations, signing, or broadcasting performed
-
-STRATEGY SETTINGS PRESERVED:
-  • TP: +25% net executable return
-  • SL: immediate −3% stop
-  • Trail: 6% from executable peak
-  • Cooldown: 60s after completed exit
-  • Gas reserve: 0.003 ETH
-  • RT budgets: 1.5% expected, 2.5% bounded
-  • Exec allowance: 0.5% per attempt
-  • Daily pause: 3% drawdown, existing positions still managed
-  • Position size: up to 100% deployable capital
-══════════════════════════════════════════════════════════════════════
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
