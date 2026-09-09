@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-09 14:04 UTC
+ENGINE A PUMP ALERT — 2026-09-09 16:06 UTC
 ==================================================
 
-Market: BTC 30d=+22.8%, 90d=+25.8% (BULL)
+Market: BTC 30d=+22.4%, 90d=+25.4% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. LAPTOP — P(pump)=40.0%
-     Category: memecoin | FDV: $1,372,663,961 | Price: $3.570000
-     CG: hunter-biden-s-laptop-3 | Decision ID: 254
+  1. FONE — P(pump)=59.0%
+     Category: memecoin | FDV: $5,555,557 | Price: $0.005619
+     CG: apeonfone | Decision ID: 256
+
+  2. VVV — P(pump)=17.5%
+     Category: other | FDV: $2,002,976,208 | Price: $24.660000
+     CG: venice-token | Decision ID: 255
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
