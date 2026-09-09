@@ -1,19 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-09 18:05 UTC
+ENGINE A PUMP ALERT — 2026-09-09 20:04 UTC
 ==================================================
 
-Market: BTC 30d=+23.3%, 90d=+24.1% (BULL)
+Market: BTC 30d=+22.3%, 90d=+23.0% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. USELESS — P(pump)=48.4%
-     Category: memecoin | FDV: $262,809,906 | Price: $0.263689
-     CG: useless-3 | Decision ID: 259
-
-  2. DOT — P(pump)=24.6%
-     Category: defi | FDV: $1,922,892,393 | Price: $1.130000
-     CG: polkadot | Decision ID: 258
+  1. LOOM — P(pump)=60.9%
+     Category: memecoin | FDV: $2,993,723 | Price: $0.003087
+     CG: loom-4 | Decision ID: 260
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
