@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-09 16:06 UTC
+ENGINE A PUMP ALERT — 2026-09-09 18:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.4%, 90d=+25.4% (BULL)
+Market: BTC 30d=+23.3%, 90d=+24.1% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. FONE — P(pump)=59.0%
-     Category: memecoin | FDV: $5,555,557 | Price: $0.005619
-     CG: apeonfone | Decision ID: 256
+  1. USELESS — P(pump)=48.4%
+     Category: memecoin | FDV: $262,809,906 | Price: $0.263689
+     CG: useless-3 | Decision ID: 259
 
-  2. VVV — P(pump)=17.5%
-     Category: other | FDV: $2,002,976,208 | Price: $24.660000
-     CG: venice-token | Decision ID: 255
+  2. DOT — P(pump)=24.6%
+     Category: defi | FDV: $1,922,892,393 | Price: $1.130000
+     CG: polkadot | Decision ID: 258
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
