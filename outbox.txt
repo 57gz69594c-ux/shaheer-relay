@@ -1,7 +1,7 @@
 RH ROTATION ENGINE — REPAIR COPY (v6.2-repaired)
 
 The full engine Python file is in this repo:
-https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/main/rh_rotation_engine.py
+https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/rh_rotation_engine.py
 
 5,558 lines / 278KB — download or copy from the link above and submit to ChatGPT.
 
