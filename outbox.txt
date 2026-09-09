@@ -1,23 +1,8 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-09 00:05 UTC
-==================================================
+RH ROTATION ENGINE — REPAIR COPY (v6.2-repaired)
 
-Market: BTC 30d=+21.0%, 90d=+27.6% (BULL)
-Model: v7b (aecf27f3)
+The full engine Python file is in this repo:
+https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/main/rh_rotation_engine.py
 
-3 ALERTS above threshold:
+5,558 lines / 278KB — download or copy from the link above and submit to ChatGPT.
 
-  1. TRUMP — P(pump)=40.6%
-     Category: memecoin | FDV: $2,234,274,184 | Price: $2.230000
-     CG: official-trump | Decision ID: 232
-
-  2. OTC — P(pump)=27.4%
-     Category: other | FDV: $16,552,895 | Price: $0.023299
-     CG: otc | Decision ID: 233
-
-  3. UNI — P(pump)=21.4%
-     Category: defi | FDV: $6,014,028,772 | Price: $6.750000
-     CG: uniswap | Decision ID: 231
-
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+Status: 348 tests passing, Sol Ultra R11 review in progress. All amendments 1-7 applied.
