@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-09 06:05 UTC
+ENGINE A PUMP ALERT — 2026-09-09 08:04 UTC
 ==================================================
 
-Market: BTC 30d=+21.2%, 90d=+26.1% (BULL)
+Market: BTC 30d=+21.6%, 90d=+26.5% (BULL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. STONK — P(pump)=21.5%
-     Category: other | FDV: $174,658,119 | Price: $0.202381
-     CG: stonk-3 | Decision ID: 237
+  1. PENDLE — P(pump)=27.4%
+     Category: defi | FDV: $596,152,397 | Price: $2.120000
+     CG: pendle | Decision ID: 239
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
