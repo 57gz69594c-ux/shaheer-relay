@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-10 00:05 UTC
+ENGINE A PUMP ALERT — 2026-09-10 02:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.5%, 90d=+23.1% (BULL)
+Market: BTC 30d=+22.0%, 90d=+23.2% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. CASHCAT — P(pump)=47.9%
-     Category: memecoin | FDV: $165,578,242 | Price: $0.167429
-     CG: cash-cat | Decision ID: 262
+  1. ZZZ — P(pump)=53.3%
+     Category: memecoin | FDV: $32,269,227 | Price: $0.043122
+     CG: zzz-2 | Decision ID: 269
 
-  2. UNI — P(pump)=21.9%
-     Category: defi | FDV: $5,482,661,172 | Price: $6.150000
-     CG: uniswap | Decision ID: 266
+  2. ZEN — P(pump)=21.5%
+     Category: infrastructure | FDV: $146,345,208 | Price: $6.970000
+     CG: zencash | Decision ID: 267
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
