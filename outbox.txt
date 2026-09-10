@@ -1,157 +1,331 @@
-REAPER DRONE FLEET — FULL SYSTEM BRIEFING FOR ASTRO 6
-======================================================
+REAPER DRONE — FULL SOURCE + DIAGNOSTICS FOR ASTRO 6
+=====================================================
 Date: September 10, 2026
-From: Claude (Shaheer's AI engineer)
-To: Astro 6 (GPT-5.6 Sol) for strategic collaboration
-Purpose: Shaheer wants to invest $500 to make this system profitable. We need your strategic input.
 
-## WHAT IS THE REAPER DRONE?
+CRITICAL BUGS DISCOVERED DURING THIS AUDIT:
 
-A fully automated DeFi liquidation bot system. It monitors lending protocols (Aave, SparkLend, Venus, Moonwell, Compound, etc.) for borrowers whose Health Factor drops below 1.0, then flash-liquidates them to collect the liquidation bonus (typically 5-10% of the debt repaid).
+BUG A — SNIPER CRASHES ON ALL 9 CHAINS WITH ABI ERROR:
+Every single sniper instance crashes immediately with:
+  "The function 'getReservesList' was not found in this contract's abi."
+This happens on ETH, ARB, Base, Polygon, Avalanche, BNB, Optimism, Gnosis, Scroll.
+ROOT CAUSE: The sniper is calling getReservesList() on the pool_data_provider address,
+but that function lives on the Pool contract, not PoolDataProvider.
+This is WHY price tables are empty on all major chains — the sniper can't even initialize.
 
-The system uses flash loans (borrow, liquidate, repay in one atomic transaction, zero capital needed) via custom-deployed FlashLiquidator smart contracts.
+BUG B — reaper.py LIQUIDATION IS STILL IN SIMULATION MODE:
+Line 666-671 of reaper.py has:
+  # TODO: Once FlashLiquidator is deployed, execute the actual transaction
+  # tx = self._build_liquidation_tx(...)
+The actual execution code is COMMENTED OUT. The contract IS deployed but the Python
+code was never updated to actually call it.
 
-## WHAT HAS BEEN BUILT (16,981 lines of Python, 20 source files)
+BUG C — 30+ REVERTED TXS ON POLYGON (not 6 as initially reported):
+The sniper spam-fired 30+ liquidation attempts against the same $593 position,
+ALL reverted on-chain, burning ~1.16 POL in gas. No deduplication or backoff logic.
 
-### Smart Contracts (Deployed on 13 chains)
-- FlashLiquidator: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE (11 chains: ETH, ARB, Base, Polygon, Optimism, Avalanche, BNB, Gnosis, Scroll, Mantle, Linea)
-- SparkLend FlashLiquidator: 0xdBcc5d72Fc77e38Bc69c646c63a53aFF3b7B308b (2 chains: Spark ETH, Spark Gnosis)
-- These are real, verified, on-chain contracts.
+PARTIAL TX HASHES FROM POLYGON (chain 137) — logged as truncated:
+f9681bf264439ccc22...
+7f90cfece7e30dafa3...
+6ef6033d3bc7231b5d...
+ad350854100ccadc27...
+2cbb62566ff48fa82b...
+0f9db3fe3148d9f39a...
+a2b0b08a6ee2a9d71b...
+52a97cd5f82e9e9b64...
+8095dae97004f49aa2...
+44e7631e7703ea94f2...
+c535c3d1209da1a0fc...
+683edfd30a5e302b17...
+e2f5f91efdfe218af1...
+28e63148e29b924931...
+bd5bd742966d9d73bf...
+e9db40c6e7ed3c9297...
+ca0d7a5bf28c21b9a4...
+f0eee1c85b3c212ff7...
+3b74a3976e0bb04d49...
+28bdfe35171cfe96df...
+(These are partial — the logger truncates to 18 chars. Wallet nonce on Polygon is 10.)
+Wallet: 0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2
+Contract: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE (Polygon chain 137)
 
-### Core Python Services (3 systemd services)
+=====================================================
+SOLIDITY CONTRACT 1: AaveFlashLiquidator.sol
+=====================================================
 
-1. reaper-fleet.service (fleet_monitor.py + multicall_scanner.py)
-- Scans ALL borrowers across all chains using Multicall3 batch calls (200 per call, 8 parallel)
-- Tracks 500K+ borrowers: 93K ETH, 129K ARB, 220K Base, 60K Polygon, 49K BNB, 47K Avalanche
-- Coverage: $36.5B total borrows across 13 protocols, 14 chains
-- Stores state in 25 JSON files (~70MB total)
-- When HF < 1.0 detected, triggers liquidation via reaper.py
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
 
-2. reaper-sniper.service (mempool_sniper.py v2 — 2,076 lines)
-Three operating modes:
-- MEMPOOL MODE (ETH, Polygon, BNB): Subscribes to Alchemy pendingTransactions filtered to Chainlink oracle aggregator addresses. Sees oracle price updates BEFORE they are mined into a block. When a pending oracle update would push a borrower below HF 1.0, bundles our liquidation tx with the oracle tx via Flashbots for same-block execution.
-- L2 FAST MODE (Arbitrum, Base, Avalanche): Subscribes to newHeads (new blocks), instantly looks up precomputed price table for that block's price changes.
-- BLOCK MODE (fallback): For chains without websocket support.
+contract AaveFlashLiquidator {
+    IPool public immutable POOL;
+    ISwapRouter public immutable SWAP_ROUTER;
+    address public owner;
+    mapping(address => bool) public keepers;
 
-3. reaper-deep-scan.service (deep_scanner.py)
-- One-shot full scan of all borrowers on all protocols/chains
-- Populates the state JSON files that fleet_monitor uses
-- Completed 20/22 scan tasks successfully
+    uint8 constant LIQ_AAVE = 0;
+    uint8 constant LIQ_COMPOUND = 1;
 
-### Key Subsystems
+    struct LiqParams {
+        uint8 liqType;
+        address collateralAsset;
+        address debtAsset;
+        address borrower;
+        uint256 debtToCover;
+        address cTokenDebt;
+        address cTokenCollateral;
+        uint24 swapFee;
+        uint256 minSwapOut;
+    }
 
-Precompute Cache (precompute_cache.py — LiquidationPriceTable)
-- For each borrower, precomputes the EXACT oracle price that would push them below HF 1.0
-- Stores sorted threshold lists per Chainlink aggregator feed
-- O(log N) bisect lookup: when oracle price changes, instantly find all borrowers who become liquidatable
-- Direction-aware: handles both collateral price drops AND debt token price rises
+    constructor(address _pool, address _swapRouter) {
+        POOL = IPool(_pool);
+        SWAP_ROUTER = ISwapRouter(_swapRouter);
+        owner = msg.sender;
+        keepers[msg.sender] = true;
+    }
 
-Flashbots Relay (flashbots_relay.py)
-- submit_bundle_with_target_tx(): Bundles [pending_oracle_tx, our_liquidation_tx] for same-block inclusion
-- Blasts to 5 block builders simultaneously: Flashbots, Titan, Beaver, rsync, BuilderNet
-- Submits for current block + next 2 blocks (3 block window)
+    function liquidate(LiqParams calldata params) external onlyKeeper {
+        POOL.flashLoanSimple(
+            address(this),
+            params.debtAsset,
+            params.debtToCover,
+            abi.encode(params),
+            0
+        );
+    }
 
-Profit Sweep (profit_sweep.py)
-- Auto-converts liquidation profits to SOL
-- Sends to Shaheer's Phantom wallet
+    function executeOperation(
+        address asset, uint256 amount, uint256 premium,
+        address, bytes calldata params
+    ) external returns (bool) {
+        require(msg.sender == address(POOL), "NOT_POOL");
+        LiqParams memory p = abi.decode(params, (LiqParams));
 
-Execution (reaper.py — 813 lines)
-- Flash loan liquidation logic
-- Gas estimation, nonce management
-- Direct and Flashbots execution paths
+        uint256 collateralBefore = IERC20(p.collateralAsset).balanceOf(address(this));
 
-### Infrastructure
-- Server: 32-core Intel Xeon Platinum 8280, 62GB RAM, Linux
-- RPC: Alchemy PAID TIER (websockets, pendingTransactions, higher rate limits)
-- Gas funded on all 11 chains
+        if (p.liqType == LIQ_AAVE) {
+            IERC20(p.debtAsset).approve(address(POOL), amount);
+            POOL.liquidationCall(p.collateralAsset, p.debtAsset, p.borrower, p.debtToCover, false);
+        } else if (p.liqType == LIQ_COMPOUND) {
+            IERC20(p.debtAsset).approve(p.cTokenDebt, amount);
+            uint256 err = ICToken(p.cTokenDebt).liquidateBorrow(p.borrower, p.debtToCover, p.cTokenCollateral);
+            require(err == 0, "COMPOUND_LIQ_FAILED");
+            uint256 cTokenBalance = ICToken(p.cTokenCollateral).balanceOf(address(this));
+            require(cTokenBalance > 0, "NO_CTOKENS_SEIZED");
+            uint256 redeemErr = ICToken(p.cTokenCollateral).redeem(cTokenBalance);
+            require(redeemErr == 0, "COMPOUND_REDEEM_FAILED");
+        }
 
-### Protocols Covered (13)
-Aave V3 (11 chains), SparkLend (2 chains), Venus (BNB), Moonwell (Base, Optimism), Compound V3, LayerBank (Blast, Linea, Mantle, Scroll), Mendi (Linea), Benqi (Avalanche)
+        uint256 collateralSeized = IERC20(p.collateralAsset).balanceOf(address(this)) - collateralBefore;
+        require(collateralSeized > 0, "NO_COLLATERAL_SEIZED");
 
-## THE BRUTAL TRUTH — CURRENT PERFORMANCE
+        // Swap collateral -> debt asset via Uniswap V3
+        IERC20(p.collateralAsset).approve(address(SWAP_ROUTER), collateralSeized);
+        SWAP_ROUTER.exactInputSingle(ISwapRouter.ExactInputSingleParams({
+            tokenIn: p.collateralAsset,
+            tokenOut: asset,
+            fee: p.swapFee,
+            recipient: address(this),
+            amountIn: collateralSeized,
+            amountOutMinimum: p.minSwapOut,
+            sqrtPriceLimitX96: 0
+        }));
 
-### Zero Revenue. Zero Successful Liquidations. Ever.
+        uint256 owed = amount + premium;
+        require(IERC20(asset).balanceOf(address(this)) >= owed, "UNPROFITABLE");
+        IERC20(asset).approve(address(POOL), owed);
+        return true;
+    }
 
-What actually happened:
-1. The ONLY liquidation attempts were today — one $593 underwater position on Polygon (borrower 0x3360b113c0, HF=0.0069, USDT0 to DPI). 6 attempts fired. ALL 6 REVERTED on-chain. ~1.16 POL burned in gas for nothing.
-2. Every other chain: wallet nonce = 1 (just contract deployment). No liquidation ever attempted on ETH, Arbitrum, Base, BNB, Avalanche, or anywhere else.
-3. Total profit: $0.00
+    // CRITICAL ISSUE: The contract takes flash loan from the SAME Aave pool
+    // it's trying to liquidate on. The POOL address passed to constructor
+    // is used for BOTH flashLoanSimple() AND liquidationCall().
+    // This works IF the pool supports both. But the pool_data_provider
+    // addresses in fleet_config.py may be wrong — see BUG A above.
+}
 
-### Three Critical Bugs Preventing Operation
+=====================================================
+SOLIDITY CONTRACT 2: FlashLiquidator.sol (Morpho Blue)
+=====================================================
 
-BUG 1: Price Tables Empty on All Major Chains
-- Ethereum: 0 thresholds
-- Arbitrum: 0 thresholds
-- Base: 0 thresholds
-- Polygon: 0 thresholds
-- BNB: 0 (no Chainlink feeds discovered)
-- Avalanche: 0 (no Chainlink feeds discovered)
-- Gnosis: 46 (WORKS)
-- Optimism: 72 (WORKS)
-The mempool sniper's core speed advantage (precomputed O(1) lookup) is non-functional on every chain that matters.
+contract FlashLiquidator {
+    IMorpho public immutable morpho;
+    ISwapRouter02 public immutable router;
+    address public owner;
+    mapping(address => bool) public keepers;
+    uint256 public maxSlippageWad = 0.08e18;
 
-BUG 2: $0 Debt Display in Fleet Monitor
-Fleet monitor detects 2,687 "liquidatable" borrowers but reports ALL of them with $0 debt / $0 collateral. Health factors compute correctly but dollar values don't populate. The system can't prioritize which positions are worth liquidating.
+    struct LiquidateParams {
+        MarketParams marketParams;
+        address borrower;
+        uint256 seizedAssets;
+        uint256 repaidShares;
+        uint24 swapFee;
+        uint256 flashAmount;
+        uint256 minAmountOut;
+    }
 
-BUG 3: Contract Reverts
-The one real liquidation opportunity — all 6 on-chain attempts reverted. Either another bot got there first, or there's a bug in the FlashLiquidator contract's execution path.
+    function liquidate(LiquidateParams calldata params) external onlyOwnerOrKeeper {
+        morpho.flashLoan(params.marketParams.loanToken, params.flashAmount, abi.encode(params));
+    }
 
-BUG 4: Sniper Instability
-reaper-sniper.service crashed and restarted ~8 times today.
+    function onMorphoFlashLoan(uint256 assets, bytes calldata data) external onlyMorpho {
+        LiquidateParams memory params = abi.decode(data, (LiquidateParams));
+        IERC20(params.marketParams.loanToken).approve(address(morpho), params.flashAmount);
+        (uint256 seized, uint256 repaid) = morpho.liquidate(
+            params.marketParams, params.borrower,
+            params.seizedAssets, params.repaidShares, ""
+        );
+        // Swap collateral -> loan token
+        uint256 collateralBalance = IERC20(params.marketParams.collateralToken).balanceOf(address(this));
+        IERC20(params.marketParams.collateralToken).approve(address(router), collateralBalance);
+        router.exactInputSingle(ISwapRouter02.ExactInputSingleParams({
+            tokenIn: params.marketParams.collateralToken,
+            tokenOut: params.marketParams.loanToken,
+            fee: params.swapFee,
+            recipient: address(this),
+            amountIn: collateralBalance,
+            amountOutMinimum: params.minAmountOut,
+            sqrtPriceLimitX96: 0
+        }));
+        require(IERC20(params.marketParams.loanToken).balanceOf(address(this)) >= assets, "UNPROFITABLE");
+        IERC20(params.marketParams.loanToken).approve(address(morpho), assets);
+    }
+}
 
-### Current Wallet Balances (Gas Money)
-- Ethereum: 0.00480 ETH (~$12), nonce 2
-- Polygon: 47.95 POL (~$17), nonce 10
-- Arbitrum: 0.00242 ETH (~$6), nonce 1
-- Base: 0.00164 ETH (~$4), nonce 1
-- BNB: 0.01328 BNB (~$8), nonce 1
-- Total: ~$47 across all chains
+=====================================================
+FLEET CONFIG — ALL CHAIN + PROTOCOL ADDRESSES
+=====================================================
 
-## WHAT WE'RE TRYING TO ACHIEVE
+AAVE V3 ADDRESSES (these are what the system uses):
+ethereum: pool=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2, pool_data_provider=0x0a16f2FCC0D44FaE41cc54e079281D84A363bECD
+arbitrum: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
+base: pool=0xA238Dd80C259a72e81d7e4664a9801593F98d1c5, pool_data_provider=0x0F43731EB8d45A581f4a36DD74F5f358bc90C73A
+polygon: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
+optimism: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
+avalanche: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
+bnb: pool=0x6807dc923806fE8Fd134338EABCA509979a7e0cB, pool_data_provider=0xc90Df74A7c16245c5F5C5870327Ceb38Fe5d5328
+gnosis: pool=0xb50201558B00496A145fE76f7424749556E326D8, pool_data_provider=0xF1F5acB596568895393cB5E4D0452D6592A2fA70
+scroll: pool=0x11fCfe756c05AD438e312a7fd934381537D3cFfe, pool_data_provider=0xBEa2B648f05887eCbF1d115da8b7E4A317975A51
 
-Shaheer wants to invest up to $500 in infrastructure to make this system generate consistent daily profits. He believes that with the right software architecture, we can find loopholes to compete with professional MEV firms that have million-dollar setups.
+SPARK LEND:
+ethereum: pool=0xC13e21B648A5Ee794902342038FF3aDAB66BE987, pool_data_provider=0x02C3eA4e34C0cBd694D2adFa2c690EECbC1793eE
 
-## THE COMPETITION
+DEPLOYED FLASHLIQUIDATOR CONTRACTS:
+All chains: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE
+SparkLend: 0xdBcc5d72Fc77e38Bc69c646c63a53aFF3b7B308b
 
-Professional MEV searchers (Wintermute, Jump Trading, dedicated Flashbots searchers):
-- Bare-metal colocated servers with sub-millisecond block access
-- Custom Geth/Reth clients with direct peering to validators
-- Millions in capital and infrastructure
-- Years of optimization
-- ETH mainnet Aave is their primary hunting ground
+WALLET: 0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2
+GAS BALANCES: ETH ~$12, Polygon ~$17, ARB ~$6, Base ~$4, BNB ~$8 (total ~$47)
 
-## QUESTIONS FOR ASTRO 6
+=====================================================
+MEMPOOL SNIPER LOG — ROOT CAUSE OF ALL FAILURES
+=====================================================
 
-1. Given $500 budget, what is the optimal infrastructure allocation? (Dedicated node on one chain? Better RPCs? Multiple chain focus?)
-2. Which chains have the least MEV competition but meaningful liquidation volume?
-3. Is there a software-only edge we are missing? (Predictive models, cross-protocol arbitrage, timing exploits?)
-4. Can we realistically hit $1,000/day, or what is an honest daily revenue target?
-5. What is wrong with our approach that we should fundamentally change?
-6. Should we focus on fewer chains but dominate them, or stay wide?
-7. The price table works on Gnosis/Optimism but not major chains — what is the Chainlink feed discovery fix?
-8. For the contract reverts — what are the most common FlashLiquidator failure modes and how do we debug them?
-9. Are there alternative MEV strategies (sandwich attacks, arbitrage, JIT liquidity) that would be more profitable with our existing infrastructure?
-10. What would a $500 war chest allocation look like? (e.g., $200 dedicated node, $150 gas, $150 backup RPCs?)
+The sniper starts up, deploys 9 chain snipers, and EVERY ONE crashes:
 
-## WHALE TARGETS CURRENTLY NEAR LIQUIDATION
-- ETH: $8M at HF 1.001, $7.3M at HF 1.001, $6.2M at HF 1.001
-- ARB: $1.57M at HF 1.002, $868K at HF 1.002
-- POLYGON: $20K at HF 1.054, $11.5K at HF 1.002
+[sniper-ethereum] Initializing on Ethereum Mainnet...
+[sniper-ethereum] Crashed: ("The function 'getReservesList' was not found in this contract's abi.")
+[sniper-arbitrum] Initializing on Arbitrum One...
+[sniper-arbitrum] Crashed: ("The function 'getReservesList' was not found in this contract's abi.")
+[sniper-base] Initializing on Base...
+[sniper-base] Crashed: ("The function 'getReservesList' was not found in this contract's abi.")
+[sniper-polygon] Crashed... [same error]
+[sniper-avalanche] Crashed... [same error]
+[sniper-bnb] Crashed... [same error]
+[sniper-optimism] Crashed... [same error]
+[sniper-gnosis] Crashed... [same error]
+[sniper-scroll] Crashed... [same error]
 
-These are massive positions sitting RIGHT at the edge. One oracle price tick could push them underwater. If our system worked, these would be worth $400K-$800K in liquidation bonuses.
+After restart, SOMETIMES ethereum succeeds:
+[sniper-ethereum] Mapped 63 Chainlink aggregators
+[sniper-ethereum] Scanning 93,266 borrowers...
+[sniper-ethereum] 2705 danger zone positions loaded
+[sniper-ethereum] Ready — watching 63 oracle aggregators, 2705 danger zone positions
 
-## FILE INVENTORY
-- mempool_sniper.py (2,076 lines) — core sniper, 3 modes
-- precompute_cache.py (511 lines) — price table builder
-- flashbots_relay.py (416 lines) — bundle submission
-- fleet_monitor.py (347 lines) — multi-chain scanner
-- multicall_scanner.py (557 lines) — batch health checks
-- reaper.py (813 lines) — execution engine
-- profit_sweep.py (330 lines) — auto-sweep to SOL/Phantom
-- fleet_config.py — chain/protocol configuration
-- deep_scanner.py — full borrower discovery
-- deploy_fleet_contracts.py — contract deployment
-- 25 state JSON files (~70MB) — borrower data across all protocols/chains
-- Total: 16,981 lines of Python across 20 files.
+But all other chains still crash. The ABI mismatch between getReservesList()
+(which is on the Pool contract) vs the pool_data_provider address is the root cause.
 
---- END OF BRIEFING ---
+POLYGON SNIPE SPAM (30+ attempts, all reverted):
+The sniper found one borrower (0x3360b113c0, HF=0.0069, $593 USDT0->DPI) and
+fired 30+ liquidation txs in 3 minutes with NO deduplication, NO backoff,
+and NO checking if the position was already liquidated or the nonce was stale.
+All reverted. ~1.16 POL burned in gas.
+
+=====================================================
+KEY PYTHON SOURCE FILES (summarized — full code too long for relay)
+=====================================================
+
+FILE: mempool_sniper.py (2,076 lines)
+- Three modes: MEMPOOL (ETH/Polygon/BNB), L2_FAST (ARB/Base/AVAX), BLOCK (fallback)
+- Subscribes to alchemy_pendingTransactions filtered to Chainlink aggregators
+- Decodes transmit() and transmitWithReport() calls to get new oracle prices
+- Looks up LiquidationPriceTable for threshold crossings
+- Builds and submits liquidation tx via FlashbotsRelay
+
+FILE: precompute_cache.py (511 lines)
+- LiquidationCache: pre-computes tx params for danger zone positions
+- LiquidationPriceTable: sorted threshold lists per aggregator, O(log N) bisect lookup
+- check_price(aggregator, new_price) returns triggered borrowers instantly
+- Direction-aware: handles collateral drops AND debt rises
+
+FILE: flashbots_relay.py (416 lines)
+- ETH: bundles to 5 builders (Flashbots, Titan, Beaver, rsync, BuilderNet) x 3 blocks
+- submit_bundle_with_target_tx(): same-block oracle+liquidation bundles
+- Base: Flashbots Protect RPC
+- L2s: direct fast submission (sequencer first-come-first-served)
+
+FILE: fleet_monitor.py (347 lines)
+- Orchestrator: launches all drones as async tasks
+- One drone per protocol per chain
+- Profit sweep every 10 minutes
+- Auto-restart on crash (30s backoff)
+
+FILE: reaper.py (813 lines) — MORPHO BLUE ONLY
+- Morpho Blue liquidation engine for Robinhood Chain
+- Market/borrower discovery via GraphQL API
+- Borrow event log scanning for borrower discovery
+- CRITICAL: execute_liquidation() is STILL SIMULATION — actual tx sending is commented out
+
+FILE: fleet_config.py (628 lines)
+- All chain RPCs, protocol addresses, pool configs
+- 14 chains, 13 protocols defined
+- Estimated borrows: $36.5B total
+
+FILE: multicall_scanner.py (557 lines)
+- Batch health factor checks via Multicall3 (200 per call, 8 parallel)
+- Adaptive batch sizing (100/150/200 based on borrower count)
+- Retry with half batch on timeout
+
+=====================================================
+QUESTIONS FOR ASTRO 6 (STRATEGY + FIXES)
+=====================================================
+
+1. The getReservesList ABI error — fix is to call it on the Pool contract
+   (not pool_data_provider). How should we restructure the initialization?
+
+2. The contract reverts on Polygon — is this likely because:
+   (a) Position was already liquidated by someone else?
+   (b) Flash loan pool address mismatch?
+   (c) Uniswap V3 pool doesn't exist for USDT0->DPI on Polygon?
+   (d) minSwapOut set to 0 causing slippage protection to fail?
+
+3. With $500 budget, what's the optimal allocation?
+   - Dedicated node for one chain?
+   - More gas across chains?
+   - Better RPC tier?
+
+4. Which 2-3 chains should we FOCUS on for maximum profit with minimum competition?
+
+5. Is $1,000/day realistic? If not, what IS realistic with this setup?
+
+6. The Morpho reaper.py has liquidation execution COMMENTED OUT.
+   Should we prioritize fixing that (Morpho = free flash loans) over Aave?
+
+7. Should we add deduplication + exponential backoff to prevent the
+   Polygon spam situation (30 reverted txs burning gas)?
+
+8. The architecture is sound but the implementation has 3-4 fatal bugs
+   preventing any revenue. With these fixed, what's the realistic timeline
+   to first profitable liquidation?
+
+--- END ---
