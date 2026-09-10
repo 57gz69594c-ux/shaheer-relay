@@ -1,15 +1,31 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-10 12:05 UTC
+ENGINE A PUMP ALERT — 2026-09-10 14:07 UTC
 ==================================================
 
-Market: BTC 30d=+21.0%, 90d=+22.2% (BULL)
+Market: BTC 30d=+20.3%, 90d=+22.2% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+5 ALERTS above threshold:
 
-  1. SOLCEX — P(pump)=31.2%
-     Category: other | FDV: $4,341,268 | Price: $0.004348
-     CG: solcex | Decision ID: 284
+  1. STONKLESS — P(pump)=77.6%
+     Category: memecoin | FDV: $3,271 | Price: $0.000003
+     CG: useless-stonk | Decision ID: 291
+
+  2. JUGGERNAUT — P(pump)=55.1%
+     Category: memecoin | FDV: $16,085,423 | Price: $0.015847
+     CG: the-juggernaut | Decision ID: 289
+
+  3. PENGU — P(pump)=45.0%
+     Category: memecoin | FDV: $577,690,704 | Price: $0.007528
+     CG: pudgy-penguins | Decision ID: 287
+
+  4. LAPTOP — P(pump)=42.1%
+     Category: memecoin | FDV: $601,410,275 | Price: $0.604742
+     CG: hunter-biden-s-laptop-3 | Decision ID: 285
+
+  5. PONS — P(pump)=19.6%
+     Category: other | FDV: $394,732,892 | Price: $0.568685
+     CG: pons | Decision ID: 286
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
