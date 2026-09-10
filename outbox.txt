@@ -1,331 +1,47 @@
-REAPER DRONE — FULL SOURCE + DIAGNOSTICS FOR ASTRO 6
-=====================================================
-Date: September 10, 2026
+REAPER DRONE — FULL SOURCE ZIP FOR ASTRO 6
+============================================
 
-CRITICAL BUGS DISCOVERED DURING THIS AUDIT:
+DOWNLOAD THE ZIP:
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-drone-source.zip
 
-BUG A — SNIPER CRASHES ON ALL 9 CHAINS WITH ABI ERROR:
-Every single sniper instance crashes immediately with:
-  "The function 'getReservesList' was not found in this contract's abi."
-This happens on ETH, ARB, Base, Polygon, Avalanche, BNB, Optimism, Gnosis, Scroll.
-ROOT CAUSE: The sniper is calling getReservesList() on the pool_data_provider address,
-but that function lives on the Pool contract, not PoolDataProvider.
-This is WHY price tables are empty on all major chains — the sniper can't even initialize.
+164KB — contains ALL 24 files:
 
-BUG B — reaper.py LIQUIDATION IS STILL IN SIMULATION MODE:
-Line 666-671 of reaper.py has:
-  # TODO: Once FlashLiquidator is deployed, execute the actual transaction
-  # tx = self._build_liquidation_tx(...)
-The actual execution code is COMMENTED OUT. The contract IS deployed but the Python
-code was never updated to actually call it.
+PYTHON (20 files, 16,981 lines total):
+  mempool_sniper.py (2,076 lines) — core sniper, 3 modes
+  precompute_cache.py (511 lines) — price table builder
+  flashbots_relay.py (416 lines) — bundle submission
+  fleet_monitor.py (347 lines) — multi-chain orchestrator
+  fleet_config.py (628 lines) — all chain/protocol addresses
+  multicall_scanner.py (557 lines) — batch health checks
+  reaper.py (813 lines) — Morpho Blue engine (EXECUTION COMMENTED OUT)
+  aave_drone.py — Aave V3 drone per chain
+  compound_v2_drone.py — Venus/Benqi/Moonwell/Mendi
+  compound_v3_drone.py — Compound V3 Comet
+  morpho_drone.py — Morpho Blue multi-chain
+  deep_scanner.py — full borrower discovery
+  deploy_fleet_contracts.py — contract deployer
+  profit_sweep.py (330 lines) — auto-sweep to SOL
+  oracle_watcher.py — Chainlink feed monitor
+  fleet.py — fleet launcher
+  config.py — RH Chain config
+  math_utils.py — health factor math
+  test_dry_run.py — test harness
+  CODEX_ULTRA_CODE_DUMP.py — Codex Ultra fixes
 
-BUG C — 30+ REVERTED TXS ON POLYGON (not 6 as initially reported):
-The sniper spam-fired 30+ liquidation attempts against the same $593 position,
-ALL reverted on-chain, burning ~1.16 POL in gas. No deduplication or backoff logic.
+SOLIDITY (2 contracts):
+  contracts/AaveFlashLiquidator.sol — Aave V3 + Compound V2 flash liquidator
+  contracts/FlashLiquidator.sol — Morpho Blue flash liquidator
+  contracts/AaveFlashLiquidator.json — compiled ABI
 
-PARTIAL TX HASHES FROM POLYGON (chain 137) — logged as truncated:
-f9681bf264439ccc22...
-7f90cfece7e30dafa3...
-6ef6033d3bc7231b5d...
-ad350854100ccadc27...
-2cbb62566ff48fa82b...
-0f9db3fe3148d9f39a...
-a2b0b08a6ee2a9d71b...
-52a97cd5f82e9e9b64...
-8095dae97004f49aa2...
-44e7631e7703ea94f2...
-c535c3d1209da1a0fc...
-683edfd30a5e302b17...
-e2f5f91efdfe218af1...
-28e63148e29b924931...
-bd5bd742966d9d73bf...
-e9db40c6e7ed3c9297...
-ca0d7a5bf28c21b9a4...
-f0eee1c85b3c212ff7...
-3b74a3976e0bb04d49...
-28bdfe35171cfe96df...
-(These are partial — the logger truncates to 18 chars. Wallet nonce on Polygon is 10.)
-Wallet: 0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2
-Contract: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE (Polygon chain 137)
+DATA:
+  deployed_contracts.json — all contract addresses per chain
 
-=====================================================
-SOLIDITY CONTRACT 1: AaveFlashLiquidator.sol
-=====================================================
-
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
-
-contract AaveFlashLiquidator {
-    IPool public immutable POOL;
-    ISwapRouter public immutable SWAP_ROUTER;
-    address public owner;
-    mapping(address => bool) public keepers;
-
-    uint8 constant LIQ_AAVE = 0;
-    uint8 constant LIQ_COMPOUND = 1;
-
-    struct LiqParams {
-        uint8 liqType;
-        address collateralAsset;
-        address debtAsset;
-        address borrower;
-        uint256 debtToCover;
-        address cTokenDebt;
-        address cTokenCollateral;
-        uint24 swapFee;
-        uint256 minSwapOut;
-    }
-
-    constructor(address _pool, address _swapRouter) {
-        POOL = IPool(_pool);
-        SWAP_ROUTER = ISwapRouter(_swapRouter);
-        owner = msg.sender;
-        keepers[msg.sender] = true;
-    }
-
-    function liquidate(LiqParams calldata params) external onlyKeeper {
-        POOL.flashLoanSimple(
-            address(this),
-            params.debtAsset,
-            params.debtToCover,
-            abi.encode(params),
-            0
-        );
-    }
-
-    function executeOperation(
-        address asset, uint256 amount, uint256 premium,
-        address, bytes calldata params
-    ) external returns (bool) {
-        require(msg.sender == address(POOL), "NOT_POOL");
-        LiqParams memory p = abi.decode(params, (LiqParams));
-
-        uint256 collateralBefore = IERC20(p.collateralAsset).balanceOf(address(this));
-
-        if (p.liqType == LIQ_AAVE) {
-            IERC20(p.debtAsset).approve(address(POOL), amount);
-            POOL.liquidationCall(p.collateralAsset, p.debtAsset, p.borrower, p.debtToCover, false);
-        } else if (p.liqType == LIQ_COMPOUND) {
-            IERC20(p.debtAsset).approve(p.cTokenDebt, amount);
-            uint256 err = ICToken(p.cTokenDebt).liquidateBorrow(p.borrower, p.debtToCover, p.cTokenCollateral);
-            require(err == 0, "COMPOUND_LIQ_FAILED");
-            uint256 cTokenBalance = ICToken(p.cTokenCollateral).balanceOf(address(this));
-            require(cTokenBalance > 0, "NO_CTOKENS_SEIZED");
-            uint256 redeemErr = ICToken(p.cTokenCollateral).redeem(cTokenBalance);
-            require(redeemErr == 0, "COMPOUND_REDEEM_FAILED");
-        }
-
-        uint256 collateralSeized = IERC20(p.collateralAsset).balanceOf(address(this)) - collateralBefore;
-        require(collateralSeized > 0, "NO_COLLATERAL_SEIZED");
-
-        // Swap collateral -> debt asset via Uniswap V3
-        IERC20(p.collateralAsset).approve(address(SWAP_ROUTER), collateralSeized);
-        SWAP_ROUTER.exactInputSingle(ISwapRouter.ExactInputSingleParams({
-            tokenIn: p.collateralAsset,
-            tokenOut: asset,
-            fee: p.swapFee,
-            recipient: address(this),
-            amountIn: collateralSeized,
-            amountOutMinimum: p.minSwapOut,
-            sqrtPriceLimitX96: 0
-        }));
-
-        uint256 owed = amount + premium;
-        require(IERC20(asset).balanceOf(address(this)) >= owed, "UNPROFITABLE");
-        IERC20(asset).approve(address(POOL), owed);
-        return true;
-    }
-
-    // CRITICAL ISSUE: The contract takes flash loan from the SAME Aave pool
-    // it's trying to liquidate on. The POOL address passed to constructor
-    // is used for BOTH flashLoanSimple() AND liquidationCall().
-    // This works IF the pool supports both. But the pool_data_provider
-    // addresses in fleet_config.py may be wrong — see BUG A above.
-}
-
-=====================================================
-SOLIDITY CONTRACT 2: FlashLiquidator.sol (Morpho Blue)
-=====================================================
-
-contract FlashLiquidator {
-    IMorpho public immutable morpho;
-    ISwapRouter02 public immutable router;
-    address public owner;
-    mapping(address => bool) public keepers;
-    uint256 public maxSlippageWad = 0.08e18;
-
-    struct LiquidateParams {
-        MarketParams marketParams;
-        address borrower;
-        uint256 seizedAssets;
-        uint256 repaidShares;
-        uint24 swapFee;
-        uint256 flashAmount;
-        uint256 minAmountOut;
-    }
-
-    function liquidate(LiquidateParams calldata params) external onlyOwnerOrKeeper {
-        morpho.flashLoan(params.marketParams.loanToken, params.flashAmount, abi.encode(params));
-    }
-
-    function onMorphoFlashLoan(uint256 assets, bytes calldata data) external onlyMorpho {
-        LiquidateParams memory params = abi.decode(data, (LiquidateParams));
-        IERC20(params.marketParams.loanToken).approve(address(morpho), params.flashAmount);
-        (uint256 seized, uint256 repaid) = morpho.liquidate(
-            params.marketParams, params.borrower,
-            params.seizedAssets, params.repaidShares, ""
-        );
-        // Swap collateral -> loan token
-        uint256 collateralBalance = IERC20(params.marketParams.collateralToken).balanceOf(address(this));
-        IERC20(params.marketParams.collateralToken).approve(address(router), collateralBalance);
-        router.exactInputSingle(ISwapRouter02.ExactInputSingleParams({
-            tokenIn: params.marketParams.collateralToken,
-            tokenOut: params.marketParams.loanToken,
-            fee: params.swapFee,
-            recipient: address(this),
-            amountIn: collateralBalance,
-            amountOutMinimum: params.minAmountOut,
-            sqrtPriceLimitX96: 0
-        }));
-        require(IERC20(params.marketParams.loanToken).balanceOf(address(this)) >= assets, "UNPROFITABLE");
-        IERC20(params.marketParams.loanToken).approve(address(morpho), assets);
-    }
-}
-
-=====================================================
-FLEET CONFIG — ALL CHAIN + PROTOCOL ADDRESSES
-=====================================================
-
-AAVE V3 ADDRESSES (these are what the system uses):
-ethereum: pool=0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2, pool_data_provider=0x0a16f2FCC0D44FaE41cc54e079281D84A363bECD
-arbitrum: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
-base: pool=0xA238Dd80C259a72e81d7e4664a9801593F98d1c5, pool_data_provider=0x0F43731EB8d45A581f4a36DD74F5f358bc90C73A
-polygon: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
-optimism: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
-avalanche: pool=0x794a61358D6845594F94dc1DB02A252b5b4814aD, pool_data_provider=0x243Aa95cAC2a25651eda86e80bEe66114413c43b
-bnb: pool=0x6807dc923806fE8Fd134338EABCA509979a7e0cB, pool_data_provider=0xc90Df74A7c16245c5F5C5870327Ceb38Fe5d5328
-gnosis: pool=0xb50201558B00496A145fE76f7424749556E326D8, pool_data_provider=0xF1F5acB596568895393cB5E4D0452D6592A2fA70
-scroll: pool=0x11fCfe756c05AD438e312a7fd934381537D3cFfe, pool_data_provider=0xBEa2B648f05887eCbF1d115da8b7E4A317975A51
-
-SPARK LEND:
-ethereum: pool=0xC13e21B648A5Ee794902342038FF3aDAB66BE987, pool_data_provider=0x02C3eA4e34C0cBd694D2adFa2c690EECbC1793eE
-
-DEPLOYED FLASHLIQUIDATOR CONTRACTS:
-All chains: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE
-SparkLend: 0xdBcc5d72Fc77e38Bc69c646c63a53aFF3b7B308b
+3 CRITICAL BUGS TO FIX:
+1. Sniper crashes on ALL chains: "getReservesList not found in abi" — calling wrong contract
+2. reaper.py line 666: actual liquidation tx is COMMENTED OUT (still simulation mode)
+3. No deduplication: 30+ reverted txs against same $593 position, burning gas
 
 WALLET: 0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2
-GAS BALANCES: ETH ~$12, Polygon ~$17, ARB ~$6, Base ~$4, BNB ~$8 (total ~$47)
-
-=====================================================
-MEMPOOL SNIPER LOG — ROOT CAUSE OF ALL FAILURES
-=====================================================
-
-The sniper starts up, deploys 9 chain snipers, and EVERY ONE crashes:
-
-[sniper-ethereum] Initializing on Ethereum Mainnet...
-[sniper-ethereum] Crashed: ("The function 'getReservesList' was not found in this contract's abi.")
-[sniper-arbitrum] Initializing on Arbitrum One...
-[sniper-arbitrum] Crashed: ("The function 'getReservesList' was not found in this contract's abi.")
-[sniper-base] Initializing on Base...
-[sniper-base] Crashed: ("The function 'getReservesList' was not found in this contract's abi.")
-[sniper-polygon] Crashed... [same error]
-[sniper-avalanche] Crashed... [same error]
-[sniper-bnb] Crashed... [same error]
-[sniper-optimism] Crashed... [same error]
-[sniper-gnosis] Crashed... [same error]
-[sniper-scroll] Crashed... [same error]
-
-After restart, SOMETIMES ethereum succeeds:
-[sniper-ethereum] Mapped 63 Chainlink aggregators
-[sniper-ethereum] Scanning 93,266 borrowers...
-[sniper-ethereum] 2705 danger zone positions loaded
-[sniper-ethereum] Ready — watching 63 oracle aggregators, 2705 danger zone positions
-
-But all other chains still crash. The ABI mismatch between getReservesList()
-(which is on the Pool contract) vs the pool_data_provider address is the root cause.
-
-POLYGON SNIPE SPAM (30+ attempts, all reverted):
-The sniper found one borrower (0x3360b113c0, HF=0.0069, $593 USDT0->DPI) and
-fired 30+ liquidation txs in 3 minutes with NO deduplication, NO backoff,
-and NO checking if the position was already liquidated or the nonce was stale.
-All reverted. ~1.16 POL burned in gas.
-
-=====================================================
-KEY PYTHON SOURCE FILES (summarized — full code too long for relay)
-=====================================================
-
-FILE: mempool_sniper.py (2,076 lines)
-- Three modes: MEMPOOL (ETH/Polygon/BNB), L2_FAST (ARB/Base/AVAX), BLOCK (fallback)
-- Subscribes to alchemy_pendingTransactions filtered to Chainlink aggregators
-- Decodes transmit() and transmitWithReport() calls to get new oracle prices
-- Looks up LiquidationPriceTable for threshold crossings
-- Builds and submits liquidation tx via FlashbotsRelay
-
-FILE: precompute_cache.py (511 lines)
-- LiquidationCache: pre-computes tx params for danger zone positions
-- LiquidationPriceTable: sorted threshold lists per aggregator, O(log N) bisect lookup
-- check_price(aggregator, new_price) returns triggered borrowers instantly
-- Direction-aware: handles collateral drops AND debt rises
-
-FILE: flashbots_relay.py (416 lines)
-- ETH: bundles to 5 builders (Flashbots, Titan, Beaver, rsync, BuilderNet) x 3 blocks
-- submit_bundle_with_target_tx(): same-block oracle+liquidation bundles
-- Base: Flashbots Protect RPC
-- L2s: direct fast submission (sequencer first-come-first-served)
-
-FILE: fleet_monitor.py (347 lines)
-- Orchestrator: launches all drones as async tasks
-- One drone per protocol per chain
-- Profit sweep every 10 minutes
-- Auto-restart on crash (30s backoff)
-
-FILE: reaper.py (813 lines) — MORPHO BLUE ONLY
-- Morpho Blue liquidation engine for Robinhood Chain
-- Market/borrower discovery via GraphQL API
-- Borrow event log scanning for borrower discovery
-- CRITICAL: execute_liquidation() is STILL SIMULATION — actual tx sending is commented out
-
-FILE: fleet_config.py (628 lines)
-- All chain RPCs, protocol addresses, pool configs
-- 14 chains, 13 protocols defined
-- Estimated borrows: $36.5B total
-
-FILE: multicall_scanner.py (557 lines)
-- Batch health factor checks via Multicall3 (200 per call, 8 parallel)
-- Adaptive batch sizing (100/150/200 based on borrower count)
-- Retry with half batch on timeout
-
-=====================================================
-QUESTIONS FOR ASTRO 6 (STRATEGY + FIXES)
-=====================================================
-
-1. The getReservesList ABI error — fix is to call it on the Pool contract
-   (not pool_data_provider). How should we restructure the initialization?
-
-2. The contract reverts on Polygon — is this likely because:
-   (a) Position was already liquidated by someone else?
-   (b) Flash loan pool address mismatch?
-   (c) Uniswap V3 pool doesn't exist for USDT0->DPI on Polygon?
-   (d) minSwapOut set to 0 causing slippage protection to fail?
-
-3. With $500 budget, what's the optimal allocation?
-   - Dedicated node for one chain?
-   - More gas across chains?
-   - Better RPC tier?
-
-4. Which 2-3 chains should we FOCUS on for maximum profit with minimum competition?
-
-5. Is $1,000/day realistic? If not, what IS realistic with this setup?
-
-6. The Morpho reaper.py has liquidation execution COMMENTED OUT.
-   Should we prioritize fixing that (Morpho = free flash loans) over Aave?
-
-7. Should we add deduplication + exponential backoff to prevent the
-   Polygon spam situation (30 reverted txs burning gas)?
-
-8. The architecture is sound but the implementation has 3-4 fatal bugs
-   preventing any revenue. With these fixed, what's the realistic timeline
-   to first profitable liquidation?
-
---- END ---
+CONTRACT: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE (all 11 chains)
+BUDGET: $500 for infrastructure improvements
+GOAL: Make this system profitable
