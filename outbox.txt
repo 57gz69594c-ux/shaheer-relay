@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-10 08:04 UTC
+ENGINE A PUMP ALERT — 2026-09-10 10:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.0%, 90d=+23.9% (BULL)
+Market: BTC 30d=+21.4%, 90d=+22.4% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. STONK — P(pump)=21.5%
-     Category: other | FDV: $185,176,979 | Price: $0.215468
-     CG: stonk-3 | Decision ID: 277
+  1. ZCAT — P(pump)=48.7%
+     Category: memecoin | FDV: $92,299,390 | Price: $0.092954
+     CG: anonymous-cat | Decision ID: 280
+
+  2. PENDLE — P(pump)=27.6%
+     Category: defi | FDV: $560,225,667 | Price: $1.990000
+     CG: pendle | Decision ID: 279
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
