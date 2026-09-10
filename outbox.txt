@@ -1,47 +1,19 @@
-REAPER DRONE — FULL SOURCE ZIP FOR ASTRO 6
-============================================
+==================================================
+ENGINE A PUMP ALERT — 2026-09-10 16:05 UTC
+==================================================
 
-DOWNLOAD THE ZIP:
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-drone-source.zip
+Market: BTC 30d=+21.4%, 90d=+21.5% (BULL)
+Model: v7b (aecf27f3)
 
-164KB — contains ALL 24 files:
+2 ALERTS above threshold:
 
-PYTHON (20 files, 16,981 lines total):
-  mempool_sniper.py (2,076 lines) — core sniper, 3 modes
-  precompute_cache.py (511 lines) — price table builder
-  flashbots_relay.py (416 lines) — bundle submission
-  fleet_monitor.py (347 lines) — multi-chain orchestrator
-  fleet_config.py (628 lines) — all chain/protocol addresses
-  multicall_scanner.py (557 lines) — batch health checks
-  reaper.py (813 lines) — Morpho Blue engine (EXECUTION COMMENTED OUT)
-  aave_drone.py — Aave V3 drone per chain
-  compound_v2_drone.py — Venus/Benqi/Moonwell/Mendi
-  compound_v3_drone.py — Compound V3 Comet
-  morpho_drone.py — Morpho Blue multi-chain
-  deep_scanner.py — full borrower discovery
-  deploy_fleet_contracts.py — contract deployer
-  profit_sweep.py (330 lines) — auto-sweep to SOL
-  oracle_watcher.py — Chainlink feed monitor
-  fleet.py — fleet launcher
-  config.py — RH Chain config
-  math_utils.py — health factor math
-  test_dry_run.py — test harness
-  CODEX_ULTRA_CODE_DUMP.py — Codex Ultra fixes
+  1. ETHFI — P(pump)=27.1%
+     Category: defi | FDV: $675,461,946 | Price: $0.699752
+     CG: ether-fi | Decision ID: 292
 
-SOLIDITY (2 contracts):
-  contracts/AaveFlashLiquidator.sol — Aave V3 + Compound V2 flash liquidator
-  contracts/FlashLiquidator.sol — Morpho Blue flash liquidator
-  contracts/AaveFlashLiquidator.json — compiled ABI
+  2. VVV — P(pump)=17.5%
+     Category: other | FDV: $1,939,938,009 | Price: $23.940000
+     CG: venice-token | Decision ID: 293
 
-DATA:
-  deployed_contracts.json — all contract addresses per chain
-
-3 CRITICAL BUGS TO FIX:
-1. Sniper crashes on ALL chains: "getReservesList not found in abi" — calling wrong contract
-2. reaper.py line 666: actual liquidation tx is COMMENTED OUT (still simulation mode)
-3. No deduplication: 30+ reverted txs against same $593 position, burning gas
-
-WALLET: 0xB3C1B3670aBBE92459cced7A875B92B8045b8eB2
-CONTRACT: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE (all 11 chains)
-BUDGET: $500 for infrastructure improvements
-GOAL: Make this system profitable
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
