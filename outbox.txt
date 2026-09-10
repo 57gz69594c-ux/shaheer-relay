@@ -1,23 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-10 04:06 UTC
+ENGINE A PUMP ALERT — 2026-09-10 06:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.1%, 90d=+23.4% (BULL)
+Market: BTC 30d=+22.8%, 90d=+24.0% (BULL)
 Model: v7b (aecf27f3)
 
 3 ALERTS above threshold:
 
-  1. TROLL — P(pump)=51.9%
-     Category: memecoin | FDV: $49,710,754 | Price: $0.049774
-     CG: troll-2 | Decision ID: 272
+  1. CRACKTOP — P(pump)=76.5%
+     Category: other | FDV: $-1 | Price: $0.000118
+     CG: cracktop | Decision ID: 276
 
-  2. OTC — P(pump)=29.5%
-     Category: other | FDV: $8,556,777 | Price: $0.012085
-     CG: otc | Decision ID: 271
+  2. TRUMP — P(pump)=41.5%
+     Category: memecoin | FDV: $2,006,732,065 | Price: $2.010000
+     CG: official-trump | Decision ID: 275
 
-  3. DEBIT — P(pump)=29.3%
-     Category: defi | FDV: $187,901,460 | Price: $1.880000
-     CG: teller | Decision ID: 270
+  3. REZ — P(pump)=36.4%
+     Category: defi | FDV: $34,369,789 | Price: $0.003480
+     CG: renzo | Decision ID: 274
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
