@@ -1,19 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-10 16:05 UTC
+ENGINE A PUMP ALERT — 2026-09-10 18:05 UTC
 ==================================================
 
-Market: BTC 30d=+21.4%, 90d=+21.5% (BULL)
+Market: BTC 30d=+21.7%, 90d=+21.1% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. ETHFI — P(pump)=27.1%
-     Category: defi | FDV: $675,461,946 | Price: $0.699752
-     CG: ether-fi | Decision ID: 292
-
-  2. VVV — P(pump)=17.5%
-     Category: other | FDV: $1,939,938,009 | Price: $23.940000
-     CG: venice-token | Decision ID: 293
+  1. CRIMECAT — P(pump)=68.1%
+     Category: memecoin | FDV: $226,224 | Price: $0.000233
+     CG: crime-cat | Decision ID: 297
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
