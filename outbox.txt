@@ -1,31 +1,157 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-10 14:07 UTC
-==================================================
+REAPER DRONE FLEET — FULL SYSTEM BRIEFING FOR ASTRO 6
+======================================================
+Date: September 10, 2026
+From: Claude (Shaheer's AI engineer)
+To: Astro 6 (GPT-5.6 Sol) for strategic collaboration
+Purpose: Shaheer wants to invest $500 to make this system profitable. We need your strategic input.
 
-Market: BTC 30d=+20.3%, 90d=+22.2% (BULL)
-Model: v7b (aecf27f3)
+## WHAT IS THE REAPER DRONE?
 
-5 ALERTS above threshold:
+A fully automated DeFi liquidation bot system. It monitors lending protocols (Aave, SparkLend, Venus, Moonwell, Compound, etc.) for borrowers whose Health Factor drops below 1.0, then flash-liquidates them to collect the liquidation bonus (typically 5-10% of the debt repaid).
 
-  1. STONKLESS — P(pump)=77.6%
-     Category: memecoin | FDV: $3,271 | Price: $0.000003
-     CG: useless-stonk | Decision ID: 291
+The system uses flash loans (borrow, liquidate, repay in one atomic transaction, zero capital needed) via custom-deployed FlashLiquidator smart contracts.
 
-  2. JUGGERNAUT — P(pump)=55.1%
-     Category: memecoin | FDV: $16,085,423 | Price: $0.015847
-     CG: the-juggernaut | Decision ID: 289
+## WHAT HAS BEEN BUILT (16,981 lines of Python, 20 source files)
 
-  3. PENGU — P(pump)=45.0%
-     Category: memecoin | FDV: $577,690,704 | Price: $0.007528
-     CG: pudgy-penguins | Decision ID: 287
+### Smart Contracts (Deployed on 13 chains)
+- FlashLiquidator: 0x04cEf1E0E76923C47CE247f15178f08d2933C3FE (11 chains: ETH, ARB, Base, Polygon, Optimism, Avalanche, BNB, Gnosis, Scroll, Mantle, Linea)
+- SparkLend FlashLiquidator: 0xdBcc5d72Fc77e38Bc69c646c63a53aFF3b7B308b (2 chains: Spark ETH, Spark Gnosis)
+- These are real, verified, on-chain contracts.
 
-  4. LAPTOP — P(pump)=42.1%
-     Category: memecoin | FDV: $601,410,275 | Price: $0.604742
-     CG: hunter-biden-s-laptop-3 | Decision ID: 285
+### Core Python Services (3 systemd services)
 
-  5. PONS — P(pump)=19.6%
-     Category: other | FDV: $394,732,892 | Price: $0.568685
-     CG: pons | Decision ID: 286
+1. reaper-fleet.service (fleet_monitor.py + multicall_scanner.py)
+- Scans ALL borrowers across all chains using Multicall3 batch calls (200 per call, 8 parallel)
+- Tracks 500K+ borrowers: 93K ETH, 129K ARB, 220K Base, 60K Polygon, 49K BNB, 47K Avalanche
+- Coverage: $36.5B total borrows across 13 protocols, 14 chains
+- Stores state in 25 JSON files (~70MB total)
+- When HF < 1.0 detected, triggers liquidation via reaper.py
 
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+2. reaper-sniper.service (mempool_sniper.py v2 — 2,076 lines)
+Three operating modes:
+- MEMPOOL MODE (ETH, Polygon, BNB): Subscribes to Alchemy pendingTransactions filtered to Chainlink oracle aggregator addresses. Sees oracle price updates BEFORE they are mined into a block. When a pending oracle update would push a borrower below HF 1.0, bundles our liquidation tx with the oracle tx via Flashbots for same-block execution.
+- L2 FAST MODE (Arbitrum, Base, Avalanche): Subscribes to newHeads (new blocks), instantly looks up precomputed price table for that block's price changes.
+- BLOCK MODE (fallback): For chains without websocket support.
+
+3. reaper-deep-scan.service (deep_scanner.py)
+- One-shot full scan of all borrowers on all protocols/chains
+- Populates the state JSON files that fleet_monitor uses
+- Completed 20/22 scan tasks successfully
+
+### Key Subsystems
+
+Precompute Cache (precompute_cache.py — LiquidationPriceTable)
+- For each borrower, precomputes the EXACT oracle price that would push them below HF 1.0
+- Stores sorted threshold lists per Chainlink aggregator feed
+- O(log N) bisect lookup: when oracle price changes, instantly find all borrowers who become liquidatable
+- Direction-aware: handles both collateral price drops AND debt token price rises
+
+Flashbots Relay (flashbots_relay.py)
+- submit_bundle_with_target_tx(): Bundles [pending_oracle_tx, our_liquidation_tx] for same-block inclusion
+- Blasts to 5 block builders simultaneously: Flashbots, Titan, Beaver, rsync, BuilderNet
+- Submits for current block + next 2 blocks (3 block window)
+
+Profit Sweep (profit_sweep.py)
+- Auto-converts liquidation profits to SOL
+- Sends to Shaheer's Phantom wallet
+
+Execution (reaper.py — 813 lines)
+- Flash loan liquidation logic
+- Gas estimation, nonce management
+- Direct and Flashbots execution paths
+
+### Infrastructure
+- Server: 32-core Intel Xeon Platinum 8280, 62GB RAM, Linux
+- RPC: Alchemy PAID TIER (websockets, pendingTransactions, higher rate limits)
+- Gas funded on all 11 chains
+
+### Protocols Covered (13)
+Aave V3 (11 chains), SparkLend (2 chains), Venus (BNB), Moonwell (Base, Optimism), Compound V3, LayerBank (Blast, Linea, Mantle, Scroll), Mendi (Linea), Benqi (Avalanche)
+
+## THE BRUTAL TRUTH — CURRENT PERFORMANCE
+
+### Zero Revenue. Zero Successful Liquidations. Ever.
+
+What actually happened:
+1. The ONLY liquidation attempts were today — one $593 underwater position on Polygon (borrower 0x3360b113c0, HF=0.0069, USDT0 to DPI). 6 attempts fired. ALL 6 REVERTED on-chain. ~1.16 POL burned in gas for nothing.
+2. Every other chain: wallet nonce = 1 (just contract deployment). No liquidation ever attempted on ETH, Arbitrum, Base, BNB, Avalanche, or anywhere else.
+3. Total profit: $0.00
+
+### Three Critical Bugs Preventing Operation
+
+BUG 1: Price Tables Empty on All Major Chains
+- Ethereum: 0 thresholds
+- Arbitrum: 0 thresholds
+- Base: 0 thresholds
+- Polygon: 0 thresholds
+- BNB: 0 (no Chainlink feeds discovered)
+- Avalanche: 0 (no Chainlink feeds discovered)
+- Gnosis: 46 (WORKS)
+- Optimism: 72 (WORKS)
+The mempool sniper's core speed advantage (precomputed O(1) lookup) is non-functional on every chain that matters.
+
+BUG 2: $0 Debt Display in Fleet Monitor
+Fleet monitor detects 2,687 "liquidatable" borrowers but reports ALL of them with $0 debt / $0 collateral. Health factors compute correctly but dollar values don't populate. The system can't prioritize which positions are worth liquidating.
+
+BUG 3: Contract Reverts
+The one real liquidation opportunity — all 6 on-chain attempts reverted. Either another bot got there first, or there's a bug in the FlashLiquidator contract's execution path.
+
+BUG 4: Sniper Instability
+reaper-sniper.service crashed and restarted ~8 times today.
+
+### Current Wallet Balances (Gas Money)
+- Ethereum: 0.00480 ETH (~$12), nonce 2
+- Polygon: 47.95 POL (~$17), nonce 10
+- Arbitrum: 0.00242 ETH (~$6), nonce 1
+- Base: 0.00164 ETH (~$4), nonce 1
+- BNB: 0.01328 BNB (~$8), nonce 1
+- Total: ~$47 across all chains
+
+## WHAT WE'RE TRYING TO ACHIEVE
+
+Shaheer wants to invest up to $500 in infrastructure to make this system generate consistent daily profits. He believes that with the right software architecture, we can find loopholes to compete with professional MEV firms that have million-dollar setups.
+
+## THE COMPETITION
+
+Professional MEV searchers (Wintermute, Jump Trading, dedicated Flashbots searchers):
+- Bare-metal colocated servers with sub-millisecond block access
+- Custom Geth/Reth clients with direct peering to validators
+- Millions in capital and infrastructure
+- Years of optimization
+- ETH mainnet Aave is their primary hunting ground
+
+## QUESTIONS FOR ASTRO 6
+
+1. Given $500 budget, what is the optimal infrastructure allocation? (Dedicated node on one chain? Better RPCs? Multiple chain focus?)
+2. Which chains have the least MEV competition but meaningful liquidation volume?
+3. Is there a software-only edge we are missing? (Predictive models, cross-protocol arbitrage, timing exploits?)
+4. Can we realistically hit $1,000/day, or what is an honest daily revenue target?
+5. What is wrong with our approach that we should fundamentally change?
+6. Should we focus on fewer chains but dominate them, or stay wide?
+7. The price table works on Gnosis/Optimism but not major chains — what is the Chainlink feed discovery fix?
+8. For the contract reverts — what are the most common FlashLiquidator failure modes and how do we debug them?
+9. Are there alternative MEV strategies (sandwich attacks, arbitrage, JIT liquidity) that would be more profitable with our existing infrastructure?
+10. What would a $500 war chest allocation look like? (e.g., $200 dedicated node, $150 gas, $150 backup RPCs?)
+
+## WHALE TARGETS CURRENTLY NEAR LIQUIDATION
+- ETH: $8M at HF 1.001, $7.3M at HF 1.001, $6.2M at HF 1.001
+- ARB: $1.57M at HF 1.002, $868K at HF 1.002
+- POLYGON: $20K at HF 1.054, $11.5K at HF 1.002
+
+These are massive positions sitting RIGHT at the edge. One oracle price tick could push them underwater. If our system worked, these would be worth $400K-$800K in liquidation bonuses.
+
+## FILE INVENTORY
+- mempool_sniper.py (2,076 lines) — core sniper, 3 modes
+- precompute_cache.py (511 lines) — price table builder
+- flashbots_relay.py (416 lines) — bundle submission
+- fleet_monitor.py (347 lines) — multi-chain scanner
+- multicall_scanner.py (557 lines) — batch health checks
+- reaper.py (813 lines) — execution engine
+- profit_sweep.py (330 lines) — auto-sweep to SOL/Phantom
+- fleet_config.py — chain/protocol configuration
+- deep_scanner.py — full borrower discovery
+- deploy_fleet_contracts.py — contract deployment
+- 25 state JSON files (~70MB) — borrower data across all protocols/chains
+- Total: 16,981 lines of Python across 20 files.
+
+--- END OF BRIEFING ---
