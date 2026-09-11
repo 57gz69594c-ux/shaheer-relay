@@ -1,15 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-11 02:06 UTC
+ENGINE A PUMP ALERT — 2026-09-11 04:04 UTC
 ==================================================
 
-Market: BTC 30d=+20.7%, 90d=+20.7% (BULL)
+Market: BTC 30d=+20.5%, 90d=+21.0% (BULL)
 Model: v7b (aecf27f3)
 
 1 ALERT above threshold:
 
-  1. LOOM — P(pump)=59.8%
-     Category: memecoin | FDV: $3,773,204 | Price: $0.003892
-     CG: loom-4 | Decision ID: 307
+  1. UNI — P(pump)=21.6%
+     Category: defi | FDV: $5,351,919,745 | Price: $6.010000
+     CG: uniswap | Decision ID: 308
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
