@@ -1,19 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-11 00:04 UTC
+ENGINE A PUMP ALERT — 2026-09-11 02:06 UTC
 ==================================================
 
-Market: BTC 30d=+20.5%, 90d=+20.5% (BULL)
+Market: BTC 30d=+20.7%, 90d=+20.7% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. NASDUCK — P(pump)=62.4%
-     Category: memecoin | FDV: $1,609,472 | Price: $0.001676
-     CG: nasduck | Decision ID: 305
-
-  2. INDEX — P(pump)=25.6%
-     Category: other | FDV: $30,740,088 | Price: $0.031356
-     CG: the-index | Decision ID: 304
+  1. LOOM — P(pump)=59.8%
+     Category: memecoin | FDV: $3,773,204 | Price: $0.003892
+     CG: loom-4 | Decision ID: 307
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
