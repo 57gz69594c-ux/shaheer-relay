@@ -1,15 +1,27 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-11 08:05 UTC
+ENGINE A PUMP ALERT — 2026-09-11 10:04 UTC
 ==================================================
 
-Market: BTC 30d=+21.1%, 90d=+21.0% (BULL)
+Market: BTC 30d=+20.3%, 90d=+20.9% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+4 ALERTS above threshold:
 
-  1. MET — P(pump)=29.9%
-     Category: defi | FDV: $241,395,077 | Price: $0.242089
-     CG: meteora | Decision ID: 312
+  1. KNOTS — P(pump)=51.8%
+     Category: memecoin | FDV: $44,048,204 | Price: $0.044068
+     CG: knots | Decision ID: 317
+
+  2. CASHCAT — P(pump)=47.4%
+     Category: memecoin | FDV: $163,104,504 | Price: $0.164626
+     CG: cash-cat | Decision ID: 316
+
+  3. AI — P(pump)=45.9%
+     Category: memecoin | FDV: $252,508,571 | Price: $0.254651
+     CG: artificial-inu-3 | Decision ID: 315
+
+  4. STONK — P(pump)=20.5%
+     Category: other | FDV: $252,940,485 | Price: $0.296931
+     CG: stonk-3 | Decision ID: 314
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
