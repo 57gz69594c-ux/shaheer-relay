@@ -1,15 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-11 18:05 UTC
+ENGINE A PUMP ALERT — 2026-09-11 20:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.3%, 90d=+21.3% (BULL)
+Market: BTC 30d=+22.0%, 90d=+20.3% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+3 ALERTS above threshold:
 
-  1. LEVERCAT — P(pump)=59.4%
-     Category: memecoin | FDV: $4,918,189 | Price: $0.004939
-     CG: leveraged-cat | Decision ID: 332
+  1. FONE — P(pump)=58.6%
+     Category: memecoin | FDV: $6,186,149 | Price: $0.006248
+     CG: apeonfone | Decision ID: 336
+
+  2. ORE — P(pump)=33.7%
+     Category: defi | FDV: $43,719,113 | Price: $89.150000
+     CG: ore | Decision ID: 334
+
+  3. LAB — P(pump)=32.3%
+     Category: defi | FDV: $68,722,905 | Price: $0.068758
+     CG: lab | Decision ID: 335
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
