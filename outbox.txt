@@ -1,27 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-10 22:06 UTC
+ENGINE A PUMP ALERT — 2026-09-11 00:04 UTC
 ==================================================
 
-Market: BTC 30d=+21.2%, 90d=+21.5% (BULL)
+Market: BTC 30d=+20.5%, 90d=+20.5% (BULL)
 Model: v7b (aecf27f3)
 
-4 ALERTS above threshold:
+2 ALERTS above threshold:
 
-  1. MARSCOIN — P(pump)=50.4%
-     Category: memecoin | FDV: $124,350,039 | Price: $0.124510
-     CG: marscoin-4 | Decision ID: 301
+  1. NASDUCK — P(pump)=62.4%
+     Category: memecoin | FDV: $1,609,472 | Price: $0.001676
+     CG: nasduck | Decision ID: 305
 
-  2. USELESS — P(pump)=48.1%
-     Category: memecoin | FDV: $244,023,135 | Price: $0.244039
-     CG: useless-3 | Decision ID: 299
-
-  3. PUMP — P(pump)=39.6%
-     Category: memecoin | FDV: $3,171,456,081 | Price: $0.003799
-     CG: pump-fun | Decision ID: 302
-
-  4. ETH — P(pump)=21.2%
-     Category: other | FDV: $200,228,326 | Price: $2458.350000
-     CG: ethereum-wormhole | Decision ID: 303
+  2. INDEX — P(pump)=25.6%
+     Category: other | FDV: $30,740,088 | Price: $0.031356
+     CG: the-index | Decision ID: 304
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
