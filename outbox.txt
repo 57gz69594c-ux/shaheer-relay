@@ -1,19 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-12 04:05 UTC
+ENGINE A PUMP ALERT — 2026-09-12 08:04 UTC
 ==================================================
 
-Market: BTC 30d=+21.5%, 90d=+19.7% (BULL)
+Market: BTC 30d=+21.1%, 90d=+20.0% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. NASDUCK — P(pump)=63.7%
-     Category: memecoin | FDV: $1,117,161 | Price: $0.001174
-     CG: nasduck | Decision ID: 349
+  1. SPX — P(pump)=46.0%
+     Category: memecoin | FDV: $460,195,757 | Price: $0.494215
+     CG: spx6900 | Decision ID: 353
 
-  2. UNI — P(pump)=21.7%
-     Category: defi | FDV: $5,474,539,631 | Price: $6.150000
-     CG: uniswap | Decision ID: 346
+  2. ETHFI — P(pump)=26.8%
+     Category: defi | FDV: $708,636,489 | Price: $0.734635
+     CG: ether-fi | Decision ID: 351
+
+  3. INDEX — P(pump)=26.0%
+     Category: other | FDV: $28,325,375 | Price: $0.028888
+     CG: the-index | Decision ID: 352
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
