@@ -1,77 +1,15 @@
-=== REAPER DRONE — SUBMIT TO GPT ASTRA 6 ===
+==================================================
+ENGINE A PUMP ALERT — 2026-09-12 16:04 UTC
+==================================================
 
-STEP 1: Download the zip file from this link:
-https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/reaper-astra-full-package.zip
-(It contains the 3 Python files to attach to Astra)
+Market: BTC 30d=+22.1%, 90d=+20.9% (BULL)
+Model: v7b (aecf27f3)
 
-STEP 2: Copy everything below the line and paste into ChatGPT Astra 6:
+1 ALERT above threshold:
 
-========================================================
+  1. MM — P(pump)=64.2%
+     Category: memecoin | FDV: $974,519 | Price: $0.000975
+     CG: meme-man-2 | Decision ID: 363
 
-I am attaching 3 Python source files from a DeFi flash loan liquidation engine. These files are:
-
-1. morpho_integration.py (1,269 lines) — The execution layer
-2. risk.py (2,340 lines) — The GasGuard safety system  
-3. concurrency.py (298 lines) — Nonce and deduplication manager
-
-The current production safety score is 6/10. Below are the 10 remaining findings from the latest review. Your job is NOT to review these files again. Your job is to REWRITE all 3 files and PRODUCE the complete corrected production-ready Python code that fixes EVERY finding listed below.
-
-CRITICAL RULES:
-- Output the FULL corrected Python code for EACH of the 3 files
-- Do NOT output diffs, patches, or summaries — output the COMPLETE files
-- Preserve all existing functionality while fixing the safety issues
-- Every import, every class, every function must be present in your output
-- Label each file clearly so I know which is which
-
-=== FINDINGS TO FIX ===
-
-1. R01 — HIGH — Corrected configuration skips previously mislabeled ownership.
-   Lines: morpho_integration.py:527-531, 568-585
-   Problem: Persisted signed Base transaction at nonce 7 under previously accepted "ethereum/8453" identity. Restart correctly as "base/8453". Reconstruction skips old reservation by label and signs different transaction at nonce 7, despite durable ownership.
-   Fix needed: Validate or migrate persisted identities by numeric chain ID before filtering by label. Use one canonical identity for budgets, claims, token policy and nonce history.
-
-2. R02 — HIGH — Incorrect effective prices still become terminal accounting.
-   Lines: morpho_integration.py:796-816, 1161-1171
-   Problem: Signed fee cap 420,000,000, priority cap 90,000,000, block base fee 110,000,000. Receipt reporting price 110,000,000 passes although required price is 200,000,000. Permanently books $0.011 instead of $0.02. Omitting block base fee also permits terminal $0 accounting.
-   Fix needed: Persist transaction type and full signed fee fields. Verify exact effective price per EIP-1559: min(maxFeePerGas, baseFeePerGas + maxPriorityFeePerGas). Retain incomplete accounting on contradictions.
-
-3. R03 — HIGH — OP stress budgets do not cap actual spending.
-   Lines: morpho_integration.py:1131-1147, risk.py:35-39
-   Problem: Admit $0.06302; model inclusion with Jovian operator scalar 1,000,000,000. Revert costs $10.02001, exceeding $0.50 setting.
-   Fix needed: Bound funded-sender exposure and replenishment independently of estimates. If hard actual-spend cap required, keep OP mechanism disabled.
-
-4. R04 — MEDIUM — Unresolved nonce retention lacks recovery.
-   Lines: concurrency.py:169-219, morpho_integration.py:893-932
-   Problem: Relay rejects nonce 7; RPC pending remains 7. Further borrowers receive 8 and 9. Expiry leaves three unresolved reservations. Journal cannot reconstruct signed envelopes.
-   Fix needed: Persist signed envelopes, implement accounted recovery/replacement, stop additional admission behind expired unresolved predecessor.
-
-5. R05 — MEDIUM — Duplicate reservation IDs still fail across rollover.
-   Lines: morpho_integration.py:240-246, 422-457, risk.py:2010-2032
-   Problem: Finalize two reservations associated with one transaction, reprocess noncanonical ID across rollover. Pruning removes both. Fallback searches outcome["associated_ids"] which settlement never persists. KeyError latches _persistence_failed and blocks another chain.
-   Fix needed: Atomically persist every associated ID, retaining mapping through pruning and reload.
-
-6. R06 — MEDIUM — Provisional net remains numeric; completeness never clears.
-   Lines: morpho_integration.py:843-863, 1229-1232
-   Problem: $3 gross profit with missing fees reports +$3. Completing fee evidence revises to -$7.02, but has_incomplete_accounting remains True despite all outcomes complete.
-   Fix needed: Return unknown net as None, separate provisional components from complete totals, track incomplete transaction identities per stats sink.
-
-7. R07 — MEDIUM — External calls block kill-switch persistence.
-   Lines: morpho_integration.py:1149-1185, risk.py:2062-2087
-   Problem: Block relay after receiving signed bytes. Concurrent activate_kill_switch() cannot complete until relay returns. Persisted switch remains false.
-   Fix needed: Require bounded transport deadlines and independently latch stop intent. Separate response waiting from atomic dispatch authorization.
-
-8. R08 — FIXED. No action needed.
-
-9. R09 — MEDIUM — Dispatch ordering hides consecutive on-chain failures.
-   Lines: morpho_integration.py:302-309, 405-420
-   Problem: Delay nonce-7 builder; dispatch [8,9,10,7]. Finalize in nonce order as [success, revert, revert, revert]. Recorded failure streak remains 0.
-   Fix needed: Persist and order outcomes by canonical block number and transaction index, not dispatch sequence.
-
-10. R10 — HIGH — Partial outcomes are double-booked under journal corruption.
-    Lines: morpho_integration.py:138-163, 363-397
-    Problem: Partially settle, close, delete outcome entry from journal. Keep reservation. Reload succeeds. Reconciliation doubles booked gas $0.02 to $0.04 or profit $10 to $20.
-    Fix needed: Cross-check finalized reservations, journal identities, known components and posting-month totals before admission. Reject missing partial outcomes rather than recreating them.
-
-=== END OF FINDINGS ===
-
-Now produce the COMPLETE corrected version of all 3 files. Output them one by one, clearly labeled, with every line of code included.
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
