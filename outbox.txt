@@ -1,23 +1,27 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-12 08:04 UTC
+ENGINE A PUMP ALERT — 2026-09-12 10:06 UTC
 ==================================================
 
-Market: BTC 30d=+21.1%, 90d=+20.0% (BULL)
+Market: BTC 30d=+21.3%, 90d=+19.7% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+4 ALERTS above threshold:
 
-  1. SPX — P(pump)=46.0%
-     Category: memecoin | FDV: $460,195,757 | Price: $0.494215
-     CG: spx6900 | Decision ID: 353
+  1. IMAGINE — P(pump)=58.7%
+     Category: gaming | FDV: $260,330 | Price: $0.000275
+     CG: imagine-game-studio | Decision ID: 357
 
-  2. ETHFI — P(pump)=26.8%
-     Category: defi | FDV: $708,636,489 | Price: $0.734635
-     CG: ether-fi | Decision ID: 351
+  2. USELESS — P(pump)=48.3%
+     Category: memecoin | FDV: $232,111,190 | Price: $0.232125
+     CG: useless-3 | Decision ID: 356
 
-  3. INDEX — P(pump)=26.0%
-     Category: other | FDV: $28,325,375 | Price: $0.028888
-     CG: the-index | Decision ID: 352
+  3. AI — P(pump)=45.1%
+     Category: memecoin | FDV: $349,608,309 | Price: $0.352663
+     CG: artificial-inu-3 | Decision ID: 355
+
+  4. MET — P(pump)=30.0%
+     Category: defi | FDV: $240,521,562 | Price: $0.241068
+     CG: meteora | Decision ID: 354
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
