@@ -1,23 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-11 20:05 UTC
+ENGINE A PUMP ALERT — 2026-09-12 00:06 UTC
 ==================================================
 
-Market: BTC 30d=+22.0%, 90d=+20.3% (BULL)
+Market: BTC 30d=+21.7%, 90d=+19.5% (BULL)
 Model: v7b (aecf27f3)
 
 3 ALERTS above threshold:
 
-  1. FONE — P(pump)=58.6%
-     Category: memecoin | FDV: $6,186,149 | Price: $0.006248
-     CG: apeonfone | Decision ID: 336
+  1. PUMP — P(pump)=39.9%
+     Category: memecoin | FDV: $2,991,377,088 | Price: $0.003588
+     CG: pump-fun | Decision ID: 343
 
-  2. ORE — P(pump)=33.7%
-     Category: defi | FDV: $43,719,113 | Price: $89.150000
-     CG: ore | Decision ID: 334
+  2. STUNK — P(pump)=33.6%
+     Category: other | FDV: $2,067,657 | Price: $0.002044
+     CG: stunk | Decision ID: 342
 
-  3. LAB — P(pump)=32.3%
-     Category: defi | FDV: $68,722,905 | Price: $0.068758
-     CG: lab | Decision ID: 335
+  3. ORCA — P(pump)=32.4%
+     Category: defi | FDV: $109,953,656 | Price: $1.470000
+     CG: orca | Decision ID: 339
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
