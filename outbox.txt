@@ -1,15 +1,43 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-12 16:04 UTC
+ENGINE A PUMP ALERT — 2026-09-12 18:07 UTC
 ==================================================
 
-Market: BTC 30d=+22.1%, 90d=+20.9% (BULL)
+Market: BTC 30d=+22.4%, 90d=+21.2% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+8 ALERTS above threshold:
 
-  1. MM — P(pump)=64.2%
-     Category: memecoin | FDV: $974,519 | Price: $0.000975
-     CG: meme-man-2 | Decision ID: 363
+  1. BONK — P(pump)=49.3%
+     Category: memecoin | FDV: $247,118,677 | Price: $0.000003
+     CG: bonk | Decision ID: 372
+
+  2. ZCAT — P(pump)=48.6%
+     Category: memecoin | FDV: $103,058,726 | Price: $0.107055
+     CG: anonymous-cat | Decision ID: 368
+
+  3. PENGU — P(pump)=45.7%
+     Category: memecoin | FDV: $559,683,469 | Price: $0.007295
+     CG: pudgy-penguins | Decision ID: 366
+
+  4. LAPTOP — P(pump)=44.4%
+     Category: memecoin | FDV: $352,514,448 | Price: $0.352805
+     CG: hunter-biden-s-laptop-3 | Decision ID: 367
+
+  5. SOLCEX — P(pump)=31.5%
+     Category: other | FDV: $4,363,094 | Price: $0.004370
+     CG: solcex | Decision ID: 371
+
+  6. EMBER — P(pump)=26.9%
+     Category: other | FDV: $22,075,929 | Price: $0.022160
+     CG: embercurve | Decision ID: 365
+
+  7. PONS — P(pump)=19.8%
+     Category: other | FDV: $414,539,436 | Price: $0.598207
+     CG: pons | Decision ID: 364
+
+  8. VVV — P(pump)=17.6%
+     Category: other | FDV: $1,903,242,128 | Price: $23.510000
+     CG: venice-token | Decision ID: 370
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
