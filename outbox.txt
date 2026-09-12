@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-12 00:06 UTC
+ENGINE A PUMP ALERT — 2026-09-12 02:04 UTC
 ==================================================
 
-Market: BTC 30d=+21.7%, 90d=+19.5% (BULL)
+Market: BTC 30d=+21.9%, 90d=+19.7% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. PUMP — P(pump)=39.9%
-     Category: memecoin | FDV: $2,991,377,088 | Price: $0.003588
-     CG: pump-fun | Decision ID: 343
-
-  2. STUNK — P(pump)=33.6%
-     Category: other | FDV: $2,067,657 | Price: $0.002044
-     CG: stunk | Decision ID: 342
-
-  3. ORCA — P(pump)=32.4%
-     Category: defi | FDV: $109,953,656 | Price: $1.470000
-     CG: orca | Decision ID: 339
+  1. DOT — P(pump)=24.5%
+     Category: defi | FDV: $1,794,738,950 | Price: $1.054000
+     CG: polkadot | Decision ID: 344
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
