@@ -1,15 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-12 20:04 UTC
+ENGINE A PUMP ALERT — 2026-09-12 22:04 UTC
 ==================================================
 
-Market: BTC 30d=+21.8%, 90d=+21.0% (BULL)
+Market: BTC 30d=+21.8%, 90d=+18.3% (BULL)
 Model: v7b (aecf27f3)
 
-1 ALERT above threshold:
+2 ALERTS above threshold:
 
-  1. REZ — P(pump)=35.7%
-     Category: defi | FDV: $38,695,268 | Price: $0.003947
-     CG: renzo | Decision ID: 373
+  1. ILV — P(pump)=43.7%
+     Category: gaming | FDV: $36,020,850 | Price: $3.760000
+     CG: illuvium | Decision ID: 374
+
+  2. NOCK — P(pump)=22.4%
+     Category: infrastructure | FDV: $206,558,909 | Price: $0.047775
+     CG: nockchain | Decision ID: 375
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
