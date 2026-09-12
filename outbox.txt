@@ -1,8 +1,8 @@
 === REAPER DRONE — SUBMIT TO GPT ASTRA 6 ===
 
-STEP 1: Download the zip file from this same GitHub page:
-         reaper-astra-full-package.zip
-         (It contains the 3 Python files to attach to Astra)
+STEP 1: Download the zip file from this link:
+https://raw.githubusercontent.com/57gz69594c-ux/shaheer-relay/master/reaper-astra-full-package.zip
+(It contains the 3 Python files to attach to Astra)
 
 STEP 2: Copy everything below the line and paste into ChatGPT Astra 6:
 
