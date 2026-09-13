@@ -1,23 +1,118 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-13 22:05 UTC
-==================================================
+=====================================================================
+REAPER v5.4.2 POST-DEPLOYMENT REPORT — 2026-09-13 23:10 UTC
+FROM: Claude (VPS) → TO: GPT Astra 6 (via Shaheer)
+=====================================================================
 
-Market: BTC 30d=+22.9%, 90d=+16.5% (BULL)
-Model: v7b (aecf27f3)
+## v5.4.2 DEPLOYMENT: SUCCESS ✓
 
-3 ALERTS above threshold:
+Engine v5.4.2 deployed successfully at 23:00 UTC.
+- 1,663 tests passed
+- Fleet setup completed across all 11 chains (~2 hours of on-chain txs)
+- Readiness check PASSED
+- Engine running: PID 2542530, 649MB RAM
+- Release: /opt/reaper/releases/20260913T204947Z-j6sVol6S
+- Manifest: f6e31e377e0330b8ebb3f743845f3a80b7f1377909850174be5d31a504d91aa0
 
-  1. ZZZ — P(pump)=54.4%
-     Category: memecoin | FDV: $25,137,407 | Price: $0.033582
-     CG: zzz-2 | Decision ID: 411
+## ISSUE #1 (CandidateScheduler) — FIXED ✓
 
-  2. PENGU — P(pump)=45.9%
-     Category: memecoin | FDV: $551,506,426 | Price: $0.007188
-     CG: pudgy-penguins | Decision ID: 410
+The #1 blocker is resolved. The pipeline IS processing candidates:
+- Candidates detected → queued → prepared → evaluated on ALL live chains
+- This was completely dead in v5.3.0, now working in v5.4.2
 
-  3. NOCK — P(pump)=22.4%
-     Category: infrastructure | FDV: $224,332,008 | Price: $0.052232
-     CG: nockchain | Decision ID: 412
+## 9 LIVE CHAINS ✓
 
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+ETH(1), OP(10), BNB(56), Gnosis(100), Polygon(137), Base(8453),
+Arbitrum(42161), Avalanche(43114), Linea(59144)
+
+Active scanning stats:
+- Ethereum: 1,958 accounts scanned, 75 near liquidation
+- Base: 1,258 accounts scanned, 48 qualify (HF < 1.15)
+- Arbitrum: 14 accounts, 13 qualify
+- BNB/Venus: 55 markets discovered, 8 positions near liquidation
+- Polygon: 14 accounts, 13 qualify
+- Morpho Drone Ethereum: 10,256 borrowers via websocket
+- Morpho Optimism: Repeatedly detecting liquidatable (HF 0.997)
+- Avalanche/Benqi: 2 near liquidation
+- Linea/Mendi: 1 near liquidation (remaining liquidity $8.79)
+
+## 2 DEFERRED CHAINS
+
+- Scroll (534352): executor_and_treasury gates failed (×3)
+- Mantle (5000): funding_refill_fee, keeper_funding, treasury, route_and_prices
+
+## CRITICAL REMAINING PROBLEM: ZERO LIQUIDATIONS
+
+Despite the pipeline fix, warm plans = 0, liquidations = 0/0, profit = $0.00.
+
+Every candidate preparation ends in PREPARATION_UNAVAILABLE because
+ALL route providers are failing:
+
+### Route Provider Failures (Issue #7 — NOT fully resolved):
+
+1. **1inch: API_KEY_MISSING**
+   Log: `aggregator provider=1inch chain=10 reason=API_KEY_MISSING count=5`
+   There is NO 1inch API key in /etc/reaper/reaper.env.
+   Grep for "1inch|ONEINCH|one_inch" in reaper.env returns zero matches.
+
+2. **Odos: HTTP 530 (Server Error)**
+   Log: `HTTP Request: POST https://api.odos.xyz/sor/quote/v2 "HTTP/1.1 530 <none>"`
+   Log: `aggregator provider=odos chain=10 reason=SERVICE_UNAVAILABLE count=2`
+   This is their server-side issue but we have no fallback.
+
+3. **Velora: HTTP 429 (Rate Limited)**
+   Log: `HTTP Request: GET https://api.velora.xyz/prices... "HTTP/1.1 429 Too Many Requests"`
+   Log: `aggregator provider=velora chain=10 reason=RATE_LIMIT count=2`
+
+4. **Uniswap V3 Direct: Position too small**
+   Log: `PLAN stage=route_declined reason=OUTPUT_BELOW_REPAYMENT_AND_PROFIT`
+   Borrower: 0xB157EE8325aE8e0f5A5907e71C0871fDA62748D8
+   Market: 0xba3c3f6e38c5767a2c288fe5d8bb2bd493a8de3b573e7f0d3c17eddd6b6ac861
+   Provider: uniswap_v3 — swap output doesn't cover repayment + minimum profit
+
+### Net result on Morpho Optimism (most active):
+- 1inch → API_KEY_MISSING (skipped)
+- Odos → 530 SERVICE_UNAVAILABLE (skipped)
+- Velora → 429 RATE_LIMIT (skipped)
+- Uniswap V3 → OUTPUT_BELOW_REPAYMENT_AND_PROFIT (declined)
+- Final: AGGREGATORS_NO_QUOTE → route_declined → PREPARATION_UNAVAILABLE
+
+### Partial success on other chains:
+- BNB sniper: Price table built with 5 thresholds across 3 aggregators
+- Polygon sniper: Price table built with 9 thresholds across 2 aggregators
+- Optimism sniper: 8 thresholds across 3 aggregators
+- But Aave direct route evaluations still fail: "No feasible profitable direct route"
+
+## WHAT NEEDS TO BE FIXED IN THE NEXT VERSION (v5.4.3):
+
+1. **1inch API key configuration** — Either:
+   a. Add REAPER_1INCH_API_KEY env var support and document it, OR
+   b. Register for a 1inch API key and include setup instructions
+
+2. **Aggregator fallback robustness** — When Odos returns 530 and Velora
+   returns 429, the engine should:
+   a. Retry with exponential backoff
+   b. Fall back to Uniswap V3/V2 direct routes more aggressively
+   c. Consider Paraswap as additional aggregator
+
+3. **Profit threshold tuning** — OUTPUT_BELOW_REPAYMENT_AND_PROFIT is
+   declining positions that ARE liquidatable. The minimum profit threshold
+   may be too high for current market conditions. Consider:
+   a. A configurable minimum profit (e.g. $0.50 instead of whatever current default)
+   b. Break-even mode option for market-making / relationship building
+
+4. **Scroll executor deployment** — executor_and_treasury gate failing 3x
+5. **Mantle full provisioning** — 4 gates still blocked
+
+## MONITOR-ONLY PROTOCOLS (4):
+- layerbank:scroll (deferred chain)
+- moonwell:optimism (explicit monitoring only)
+- morpho:ethereum (protocol readiness pending)
+- morpho:optimism (explicit monitoring only)
+
+## SECURITY REMINDER:
+Never output private keys, seed phrases, API credentials, or RPC URLs
+with API keys. They're already on the server at /etc/reaper/.
+
+=====================================================================
+END OF POST-DEPLOYMENT REPORT
+=====================================================================
