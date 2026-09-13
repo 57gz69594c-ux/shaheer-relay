@@ -1,19 +1,23 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-12 22:04 UTC
+ENGINE A PUMP ALERT — 2026-09-13 02:05 UTC
 ==================================================
 
-Market: BTC 30d=+21.8%, 90d=+18.3% (BULL)
+Market: BTC 30d=+21.7%, 90d=+18.1% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+3 ALERTS above threshold:
 
-  1. ILV — P(pump)=43.7%
-     Category: gaming | FDV: $36,020,850 | Price: $3.760000
-     CG: illuvium | Decision ID: 374
+  1. PEPE — P(pump)=42.3%
+     Category: memecoin | FDV: $1,448,829,461 | Price: $0.000003
+     CG: pepe | Decision ID: 378
 
-  2. NOCK — P(pump)=22.4%
-     Category: infrastructure | FDV: $206,558,909 | Price: $0.047775
-     CG: nockchain | Decision ID: 375
+  2. PUMP — P(pump)=39.6%
+     Category: memecoin | FDV: $3,211,799,232 | Price: $0.003850
+     CG: pump-fun | Decision ID: 381
+
+  3. VIRTUAL — P(pump)=20.4%
+     Category: other | FDV: $618,586,797 | Price: $0.618427
+     CG: virtual-protocol | Decision ID: 380
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
