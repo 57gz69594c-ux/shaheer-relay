@@ -1,20 +1,19 @@
-REAPER V5 — FINAL COMPLETE FIX PACKAGE
-========================================
+==================================================
+ENGINE A PUMP ALERT — 2026-09-13 12:05 UTC
+==================================================
 
-Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v5-final-fix.zip
+Market: BTC 30d=+22.2%, 90d=+15.9% (BULL)
+Model: v7b (aecf27f3)
 
-This package has EVERYTHING:
-- Full engine source (129 Python files)
-- All config files
-- Complete SQLite journal dumps
-- Live on-chain balances
-- Readiness logs, crash logs, prior diagnosis
-- Comprehensive PROMPT.md covering ALL 11 chains
+2 ALERTS above threshold:
 
-INSTRUCTIONS:
-1. Download the zip
-2. Open ChatGPT Pro (Astra 6)
-3. Upload the zip
-4. Paste this:
+  1. AI — P(pump)=46.5%
+     Category: memecoin | FDV: $245,115,497 | Price: $0.247258
+     CG: artificial-inu-3 | Decision ID: 393
 
-Read PROMPT.md first. It describes every issue on every chain. Then read ALL files in config/, engine/, journal/, and evidence/. Fix EVERYTHING. Return complete fixed files — configs, patched source, a journal fix script, and deployment scripts. Goal: all 11 chains live. Start with PROMPT.md.
+  2. OTC — P(pump)=30.5%
+     Category: other | FDV: $5,978,788 | Price: $0.008493
+     CG: otc | Decision ID: 394
+
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
