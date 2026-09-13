@@ -1,19 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-13 12:05 UTC
+ENGINE A PUMP ALERT — 2026-09-13 14:04 UTC
 ==================================================
 
-Market: BTC 30d=+22.2%, 90d=+15.9% (BULL)
+Market: BTC 30d=+22.8%, 90d=+15.7% (BULL)
 Model: v7b (aecf27f3)
 
-2 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. AI — P(pump)=46.5%
-     Category: memecoin | FDV: $245,115,497 | Price: $0.247258
-     CG: artificial-inu-3 | Decision ID: 393
-
-  2. OTC — P(pump)=30.5%
-     Category: other | FDV: $5,978,788 | Price: $0.008493
-     CG: otc | Decision ID: 394
+  1. STONK — P(pump)=21.3%
+     Category: other | FDV: $219,077,696 | Price: $0.257905
+     CG: stonk-3 | Decision ID: 395
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
