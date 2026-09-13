@@ -1,23 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-13 02:05 UTC
+ENGINE A PUMP ALERT — 2026-09-13 04:06 UTC
 ==================================================
 
-Market: BTC 30d=+21.7%, 90d=+18.1% (BULL)
+Market: BTC 30d=+22.0%, 90d=+17.2% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+2 ALERTS above threshold:
 
-  1. PEPE — P(pump)=42.3%
-     Category: memecoin | FDV: $1,448,829,461 | Price: $0.000003
-     CG: pepe | Decision ID: 378
+  1. REVOLVE — P(pump)=76.4%
+     Category: other | FDV: $-1 | Price: $0.000209
+     CG: revolve | Decision ID: 384
 
-  2. PUMP — P(pump)=39.6%
-     Category: memecoin | FDV: $3,211,799,232 | Price: $0.003850
-     CG: pump-fun | Decision ID: 381
-
-  3. VIRTUAL — P(pump)=20.4%
-     Category: other | FDV: $618,586,797 | Price: $0.618427
-     CG: virtual-protocol | Decision ID: 380
+  2. UNI — P(pump)=21.7%
+     Category: defi | FDV: $5,661,682,370 | Price: $6.360000
+     CG: uniswap | Decision ID: 383
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
