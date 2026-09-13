@@ -1,1 +1,19 @@
-http://104.248.159.95.nip.io/reaper-v4-upgrade.zip
+==================================================
+ENGINE A PUMP ALERT — 2026-09-13 16:06 UTC
+==================================================
+
+Market: BTC 30d=+22.5%, 90d=+14.7% (BEAR/NEUTRAL)
+Model: v7b (aecf27f3)
+
+2 ALERTS above threshold:
+
+  1. FONE — P(pump)=58.7%
+     Category: memecoin | FDV: $6,242,526 | Price: $0.006268
+     CG: apeonfone | Decision ID: 399
+
+  2. FLAME — P(pump)=32.9%
+     Category: other | FDV: $2,748,318 | Price: $0.002748
+     CG: flame-5 | Decision ID: 400
+
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
