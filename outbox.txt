@@ -1,19 +1,20 @@
-REAPER V5 — FULL FIX PACKAGE FOR ASTRA 6
-==========================================
+REAPER V5 — FINAL COMPLETE FIX PACKAGE
+========================================
 
-Download the zip file:
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v5-fix-package.zip
+Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v5-final-fix.zip
+
+This package has EVERYTHING:
+- Full engine source (129 Python files)
+- All config files
+- Complete SQLite journal dumps
+- Live on-chain balances
+- Readiness logs, crash logs, prior diagnosis
+- Comprehensive PROMPT.md covering ALL 11 chains
 
 INSTRUCTIONS:
-1. Download the zip on your iPhone
+1. Download the zip
 2. Open ChatGPT Pro (Astra 6)
-3. Upload the zip file
-4. Paste this prompt:
+3. Upload the zip
+4. Paste this:
 
----
-
-Read PROMPT.md first — it describes everything. Then read ALL files in config/, source/, and evidence/. Fix every issue described in PROMPT.md. Return COMPLETE fixed files (not diffs). The goal: get the REAPER V5 liquidation engine running on the maximum number of chains. Start with PROMPT.md.
-
----
-
-Astra 6 will return fixed config files and patched source code. Then we plug them back in.
+Read PROMPT.md first. It describes every issue on every chain. Then read ALL files in config/, engine/, journal/, and evidence/. Fix EVERYTHING. Return complete fixed files — configs, patched source, a journal fix script, and deployment scripts. Goal: all 11 chains live. Start with PROMPT.md.
