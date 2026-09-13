@@ -1,15 +1,64 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-13 18:05 UTC
-==================================================
+REAPER v5.4.0 DIAGNOSTIC RECOVERY PACKAGE — FOR GPT ASTRA 6
+=============================================================
+Date: 2026-09-13 19:39 UTC
+Package: reaper-v540-diagnostic-full-package.zip (2.5 MB, 330 files)
+SHA256: 20026e2af2631a7b28fa0010901324ce916592c72529d03d9105e9bad8aec616
 
-Market: BTC 30d=+22.8%, 90d=+15.7% (BULL)
-Model: v7b (aecf27f3)
+DOWNLOAD LINK:
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v540-diagnostic-full-package.zip
 
-1 ALERT above threshold:
+=====================================================================
+PROMPT FOR GPT ASTRA 6 — COPY EVERYTHING BELOW THIS LINE
+=====================================================================
 
-  1. ALON — P(pump)=31.4%
-     Category: other | FDV: $4,648,318 | Price: $0.004699
-     CG: alon | Decision ID: 404
+You are deploying REAPER v5.4.0, a flash loan liquidation engine, onto a production VPS server. The engine is currently running v5.3.0 and scanning hundreds of liquidatable DeFi positions across 11 EVM chains but executing ZERO liquidations. A v5.4.0 diagnostic recovery package was built to fix 8 critical issues, but the previous deployment attempt FAILED catastrophically. Your job is to deploy it correctly this time.
 
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+Download and extract the diagnostic package from: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v540-diagnostic-full-package.zip
+
+Read the full PROMPT.md inside the zip first. It contains:
+- Detailed description of all 8 critical issues preventing liquidation execution
+- Complete failure analysis of the previous v5.4.0 deployment attempt
+- Current server state (7/11 chains live, 4 deferred, 0 liquidations)
+- Full server layout and configuration
+- Step-by-step instructions for what you need to do
+- All evidence: crash logs, deployment reports, config files, DB state, engine source code
+
+THE 8 CRITICAL ISSUES:
+1. CandidateScheduler pipeline broken — candidates detected but never become warm plans (THE #1 BLOCKER)
+2. Morpho Flash Liquidator not deployed — all 10 Morpho instances stuck in MONITOR MODE
+3. Gas journal not reconciled — 4 chains (Base, Optimism, Scroll, Mantle) completely blocked
+4. Executor V3-to-V4 migration incomplete — Morpho needs v4 executors
+5. Treasury token coverage gaps — cannot process profit payouts for some debt assets
+6. Monitor-only jobs permanently pinned — 5 jobs scan but do not execute
+7. Route provider rate limiting — Velora 429, Odos 530, no fallback to Uniswap direct
+8. Morpho market discovery incomplete — missing markets/borrowers
+
+WHY THE PREVIOUS DEPLOYMENT FAILED:
+- Tests passed (1550/1550), fleet setup partially completed
+- THEN: readiness check failed with "RELEASE VERIFICATION BLOCKED: Release file failed verification: requirements-tested.lock"
+- Root cause: test_fix_journal.py was edited to fix a test failure (it loaded production env), which broke the manifest SHA256 chain
+- The deployer had ALREADY stopped the engine and switched the symlink, causing a crash loop
+- Had to manually roll back to v5.3.0
+
+WHAT YOU NEED TO DO:
+1. Fix the deployment so manifest verification does not fail — do NOT edit source files after manifest creation. If test_fix_journal.py fails because it loads production /etc/reaper/reaper.env, fix it by setting env vars BEFORE test execution (the install.sh already strips REAPER_* vars — verify deploy.sh does too)
+2. Deploy v5.4.0 using: sudo bash INSTALL.sh --apply
+3. Ensure the setup signer (owner: 0x0be30e1d830f066e709b38a92c5755a6eadfa741) is available for executor deployments — check for /etc/reaper/setup.env or use --setup-env-file / --setup-key-file flags
+4. Verify all 11 chains go LIVE, warm plans > 0, liquidations start executing
+
+The complete v5.4.0 engine source (238 files) is in v540-complete-engine/ inside the zip. All config, logs, state, deployment evidence, and current v5.3.0 source are also included.
+
+SECURITY: Never output private keys, seed phrases, API credentials, or RPC URLs with API keys. They are already on the server.
+
+Server paths:
+- Engine: /opt/reaper/current -> /opt/reaper/releases/20260913T163631Z-2xf9HKit (v5.3.0)
+- Config: /etc/reaper/ (reaper.env, live-chains.env, execution.json, deployments.json, treasury.json, gas-funding-policy.json)
+- State: /var/lib/reaper/state/ (execution.sqlite3, settlement.sqlite3, metrics.sqlite3)
+- Service: reaper-engine.service with drop-in at /etc/systemd/system/reaper-engine.service.d/90-reaper-release.conf
+- Python: 3.12 required
+
+Current engine status: READY on v5.3.0, 7/11 chains LIVE, 4 DEFERRED, 5 monitor-only jobs, ZERO liquidations, ZERO profit. Hundreds of opportunities being missed every minute.
+
+=====================================================================
+END OF PROMPT
+=====================================================================
