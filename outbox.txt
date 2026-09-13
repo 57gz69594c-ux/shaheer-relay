@@ -1,74 +1,23 @@
-REPACKAGE REQUEST — REAPER v5.4.1 has ONE test failure blocking deployment
-=============================================================================
+==================================================
+ENGINE A PUMP ALERT — 2026-09-13 22:05 UTC
+==================================================
 
-The v5.4.1 engine you shipped fails to deploy because of exactly ONE test that fails during the full suite run. 1659 pass, 1 fails. The installer refuses to continue when any test fails.
+Market: BTC 30d=+22.9%, 90d=+16.5% (BULL)
+Model: v7b (aecf27f3)
 
-FAILING TEST:
-  tests/test_v4_pipeline_audit.py::test_slow_preparation_reaches_real_v4_liquidation_and_profit_delivery
+3 ALERTS above threshold:
 
-ERROR OUTPUT:
-  WARNING  reaper.scheduler:candidate_scheduler.py:414 [ethereum] preparation_candidate failed (MorphoPlanUnavailable)
+  1. ZZZ — P(pump)=54.4%
+     Category: memecoin | FDV: $25,137,407 | Price: $0.033582
+     CG: zzz-2 | Decision ID: 411
 
-  > assert receipts, dict(scheduler.stats)
-  E AssertionError: {'queued': 1, 'started': 1, 'declined': 1, 'preparation_queued': 1, ...}
-  E assert []
+  2. PENGU — P(pump)=45.9%
+     Category: memecoin | FDV: $551,506,426 | Price: $0.007188
+     CG: pudgy-penguins | Decision ID: 410
 
-  The scheduler's prepare callback calls prepare_morpho_sync(), which raises
-  MorphoPlanUnavailable. The candidate_scheduler catches that at line 410-414
-  and logs "preparation_candidate failed (MorphoPlanUnavailable)". The test
-  then asserts receipts is non-empty, but it's [] because preparation failed.
+  3. NOCK — P(pump)=22.4%
+     Category: infrastructure | FDV: $224,332,008 | Price: $0.052232
+     CG: nockchain | Decision ID: 412
 
-KEY DETAIL — THIS IS A TEST-ORDERING BUG:
-  - When running the FULL suite (1660 tests): THIS TEST FAILS
-  - When running THIS TEST ALONE: IT PASSES
-
-  Command that passes:
-    .venv/bin/python -m pytest tests/test_v4_pipeline_audit.py -v --tb=long -s
-    Result: 1 passed in 3.50s
-
-  Command that fails (what the installer runs):
-    .venv/bin/python -m pytest -q tests test_dry_run.py
-    Result: 1 failed, 1659 passed in 474s
-
-  This means an earlier test in the suite is contaminating global state that
-  causes prepare_morpho_sync to raise MorphoPlanUnavailable when this test
-  runs later. The test monkeypatches md.execution_config, md.fresh_usd_price,
-  md.read_accrued_market, and aq.get_aggregator_quotes_sync — but some OTHER
-  global state from a prior test (likely in morpho_drone module-level caches
-  or threading locks) is leaking through.
-
-  Possible contamination sources:
-  - _MORPHO_SIZE_LOCK (threading.Lock at morpho_drone.py line 718)
-  - Module-level plan caches (_morpho_cache)
-  - Thread-local or module-level state from earlier morpho tests
-  - The _morpho_identity() or _morpho_head() calls hitting stale state
-
-WHAT YOU NEED TO FIX:
-  Either:
-  (a) Fix the test to properly reset/isolate all module-level state it depends
-      on (clear caches, reset locks, etc.) so it passes regardless of test order
-  OR:
-  (b) Fix the underlying morpho_drone functions so they don't retain state
-      across calls when monkeypatched config changes
-
-  The test itself at tests/test_v4_pipeline_audit.py lines 22-130 is correct
-  in isolation. The issue is cross-test contamination in the full suite.
-
-DEPLOYMENT ATTEMPTS:
-  Attempt 1: 1 failed, 1659 passed in 471s — same test, same error
-  Attempt 2: 1 failed, 1659 passed in 474s — same test, same error
-  Both times: "DEPLOYMENT BLOCKED: Installation or local tests failed"
-
-EVERYTHING ELSE IS FINE:
-  - All 1659 other tests pass
-  - The engine code itself works
-  - The installer, manifest, requirements-tested.lock — all verified
-  - Setup credentials are discoverable at /etc/reaper/setup.env
-  - Engine is currently STOPPED waiting for this deployment
-
-Please repackage the complete engine as v5.4.2 with this fix and upload
-the zip to: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/
-
-Server: Python 3.12, Ubuntu, /opt/reaper/current
-Deploy command: sudo bash INSTALL.sh --apply
-=============================================================================
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
