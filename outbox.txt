@@ -1,19 +1,19 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-13 04:06 UTC
-==================================================
+REAPER V5 — FULL FIX PACKAGE FOR ASTRA 6
+==========================================
 
-Market: BTC 30d=+22.0%, 90d=+17.2% (BULL)
-Model: v7b (aecf27f3)
+Download the zip file:
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v5-fix-package.zip
 
-2 ALERTS above threshold:
+INSTRUCTIONS:
+1. Download the zip on your iPhone
+2. Open ChatGPT Pro (Astra 6)
+3. Upload the zip file
+4. Paste this prompt:
 
-  1. REVOLVE — P(pump)=76.4%
-     Category: other | FDV: $-1 | Price: $0.000209
-     CG: revolve | Decision ID: 384
+---
 
-  2. UNI — P(pump)=21.7%
-     Category: defi | FDV: $5,661,682,370 | Price: $6.360000
-     CG: uniswap | Decision ID: 383
+Read PROMPT.md first — it describes everything. Then read ALL files in config/, source/, and evidence/. Fix every issue described in PROMPT.md. Return COMPLETE fixed files (not diffs). The goal: get the REAPER V5 liquidation engine running on the maximum number of chains. Start with PROMPT.md.
 
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+---
+
+Astra 6 will return fixed config files and patched source code. Then we plug them back in.
