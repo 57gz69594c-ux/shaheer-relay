@@ -1,14 +1,18 @@
-REAPER ENGINE CRITICAL ISSUES — For GPT-Astra 6:
+SKELETOR ENGINE CRITICAL ISSUES — For GPT-Astra 6:
 
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-issues-only-20260914.zip
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-issues-only-20260914.zip
 
-191KB ZIP — Reaper ONLY. 9 files:
-- GPT_ASTRA_6_REAPER_PROMPT.md (feed this first)
-- REAPER_ISSUES_REPORT.md (full 6-issue breakdown)
-- decline-reasons-filtered.txt (every declined position + liquidatable found)
-- reaper-journal-current-session.txt (full engine journal)
-- infrastructure-service-journal.txt (restart loop evidence)
-- reaper-service-status.txt / reaper-unit-file.txt
-- infrastructure-timer-unit.txt / infrastructure-service-unit.txt
+21KB ZIP — Skeletor ONLY. 10 files:
+- GPT_ASTRA_6_SKELETOR_PROMPT.md (feed this first)
+- SKELETOR_ISSUES_REPORT.md (full 8-issue breakdown + 12 profit recommendations)
+- skeletor-status.json (full engine status JSON)
+- skeletor-chain-summary.txt (per-chain breakdown)
+- skeletor-engine-log-tail.txt (last 400 lines engine log)
+- skeletor-env-sanitized.txt (config — keys & RPCs redacted)
+- scan-results-filtered.txt (scan timeouts + candidate decisions)
+- skeletor-service-status.txt / skeletor-unit-file.txt
+- last-upgrade-result.json (v1.1.0 upgrade result)
 
-#1 BLOCKER: PREPARATION_UNAVAILABLE — 848+ liquidatable candidates declined. Positions with HF as low as 0.008 sitting there. Zero executions.
+8 ISSUES: Scan timeouts on all chains, 30-63% RPC error rates, candidates not profitable after gas, Linea missing contract, aggressive rescan hammering RPCs, V3 lender pool errors, MAX_CYCLES limiting depth, Mantle no RPC.
+
+12 RECOMMENDATIONS: Config quick-wins + code/infra changes needed for profitability.
