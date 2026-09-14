@@ -1,15 +1,43 @@
-==================================================
-ENGINE A PUMP ALERT — 2026-09-14 16:05 UTC
-==================================================
+===========================================================================
+REAPER MISSED OPPORTUNITIES REPORT — 2026-09-14 16:25 UTC
+===========================================================================
 
-Market: BTC 30d=+24.6%, 90d=+19.3% (BULL)
-Model: v7b (aecf27f3)
+BOTTOM LINE: REAPER identified $24.3 MILLION in liquidation profit
+in 2.5 hours and earned $0. ZERO liquidations executed.
 
-1 ALERT above threshold:
+BIGGEST MISSES:
+  #1  $46,565  Ethereum Morpho — BLOCKED (executor migration needed)
+  #2  $42,756  Ethereum Morpho — BLOCKED
+  #3  $37,699  Ethereum Morpho — BLOCKED
+  #4  $17,511  Ethereum Morpho — BLOCKED
+  #5  $16,611  Ethereum Morpho — BLOCKED
+  #6  $12,816  Ethereum Morpho — BLOCKED
+  #7  $12,780  Ethereum Morpho — BLOCKED
+  ...6,273 total profitable candidates identified
 
-  1. MIZO — P(pump)=76.9%
-     Category: other | FDV: $-1 | Price: $0.000161
-     CG: mizo | Decision ID: 443
+WHY THEY WERE ALL MISSED:
+  1. EXECUTOR_MIGRATION_REQUIRED (4,607x) — Ethereum Morpho V4 executor
+     not deployed. Blocks $24.2M (99.7% of all missed profit)
+  2. NO_PROFITABLE_ROUTE (4,157x) — DEX swap route not good enough
+  3. EXECUTOR_MISSING (2,143x) — No executor on Scroll
+  4. DEBT_USD_FEED_MISSING (934x) — Missing price feeds
+  5. PREPARATION_DEADLINE_EXPIRED (421x) — Too slow, someone else got it
+  6. Morpho on Base+OP in MONITOR_ONLY — seeing but not acting
 
-Action: Monitor these tokens. Forward validation in 30 days.
-==================================================
+PREPARATION SPEED PROBLEM:
+  Median: 186ms | P90: 15.6 seconds | 18% take >10 seconds
+  Professional bots do this in <100ms
+
+DOWNLOAD FULL PACKAGE:
+  https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper_missed_opportunities.zip
+
+  Contains:
+  - Full analysis report (reaper_missed_opportunities_report.md)
+  - Raw event data (6,273 economics evaluations)
+  - Top missed opportunities ranked by profit
+  - Engine configuration
+  - GPT Astra 6 prompt (ready to paste) asking for speed/execution fixes
+
+SKELETOR UPDATE: 0 trades, 0 profit. 9 chains scanning 2,186 pools.
+  Market too tight — no exploitable DEX spreads. Waiting for volatility.
+===========================================================================
