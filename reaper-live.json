@@ -1,0 +1,99 @@
+{
+  "updated": "2026-09-14T09:51:48Z",
+  "epoch": 1789379508,
+  "engine": "Reaper v5.4.3-velora-paid-auth",
+  "uptime_hours": 34.1,
+  "chains": {
+    "ethereum": {"markets":0,"borrowers":0,"danger":0,"block":0},
+    "arbitrum": {"markets":0,"borrowers":0,"danger":0,"block":0},
+    "base": {"markets":0,"borrowers":0,"danger":0,"block":0},
+    "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
+    "optimism": {"markets":0,"borrowers":0,"danger":0,"block":0},
+    "bnb": {"markets":23,"borrowers":9,"danger":0,"block":121816749},
+    "scroll": {"markets":8,"borrowers":9,"danger":1,"block":35025011}
+  },
+  "liquidatable_markets": [
+    {"chain":"arbitrum","market":"thBILL/USDC","detections":235},
+{"chain":"arbitrum","market":"K/USDC","detections":94},
+{"chain":"ethereum","market":"sNUSD/USDC","detections":50},
+{"chain":"base","market":"PT-USR-25SEP2025/USDC","detections":19},
+{"chain":"base","market":"wbCOIN/USDC","detections":18},
+{"chain":"ethereum","market":"deUSD/USDC","detections":15},
+{"chain":"base","market":"stEUR/jEUR","detections":12},
+{"chain":"arbitrum","market":"RLP/USDC","detections":8},
+{"chain":"ethereum","market":"PT-eUSDE-29MAY2025/DAI","detections":7},
+{"chain":"ethereum","market":"IMF/USDS","detections":5},
+{"chain":"polygon","market":"WETH/WPOL","detections":4},
+{"chain":"polygon","market":"WETH/USDC","detections":4},
+{"chain":"arbitrum","market":"xUSD/USDC","detections":4},
+{"chain":"arbitrum","market":"wstUSR/USDC","detections":4},
+{"chain":"arbitrum","market":"PT-USDai-20NOV2025/USDC","detections":4}
+  ],
+  "top_targets": [
+    {
+      "chain": "base",
+      "market": "wstETH/WETH",
+      "borrower": "0xc8df8271...",
+      "borrow_usd": 788252,
+      "health_factor": 1.0135,
+      "drop_needed": "1.35%",
+      "potential_profit": 12436,
+      "status": "WATCHING"
+    },
+    {
+      "chain": "base",
+      "market": "wstETH/WETH",
+      "borrower": "0x5f569180...",
+      "borrow_usd": 529439,
+      "health_factor": 1.0353,
+      "drop_needed": "3.53%",
+      "potential_profit": 8400,
+      "status": "WATCHING"
+    },
+    {
+      "chain": "base",
+      "market": "wstETH/WETH",
+      "borrower": "0x37b6be55...",
+      "borrow_usd": 16281,
+      "health_factor": 1.0169,
+      "drop_needed": "1.69%",
+      "potential_profit": 257,
+      "status": "WATCHING"
+    },
+    {
+      "chain": "base",
+      "market": "wstETH/WETH",
+      "borrower": "0x69f55a95...",
+      "borrow_usd": 17518,
+      "health_factor": 1.0331,
+      "drop_needed": "3.31%",
+      "potential_profit": 277,
+      "status": "WATCHING"
+    },
+    {
+      "chain": "arbitrum",
+      "market": "thBILL/USDC",
+      "borrower": "235 positions",
+      "borrow_usd": 15446,
+      "health_factor": 0.97,
+      "drop_needed": "0% (NOW)",
+      "potential_profit": 260,
+      "status": "BLOCKED — no route"
+    },
+    {
+      "chain": "base",
+      "market": "wstETH/WETH",
+      "borrower": "0x9736b13d...",
+      "borrow_usd": 139,
+      "health_factor": 1.0081,
+      "drop_needed": "0.81%",
+      "potential_profit": 2,
+      "status": "KNIFE EDGE"
+    }
+  ],
+  "total_liquidations": 0,
+  "total_profit_usd": 0,
+  "recent_events": [
+    "2026-09-14 09:51:03,280 [reaper.engine] INFO [optimism] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=1 submitting=0 queued_submit=0 | outcomes={\\\\"preparation_active_duplicate\\\\":10095,\\\\"preparation_coalesced\\\\":4788,\\\\"preparation_declined\\\\":270,\\\\"preparation_queued\\\\":273,\\\\"preparation_started\\\\":272} | reasons={\\\\"PREPARATION_UNAVAILABLE\\\\":270}","2026-09-14 09:51:03,280 [reaper.engine] INFO [bnb] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\\\\"preparation_active_duplicate\\\\":3077,\\\\"preparation_coalesced\\\\":7,\\\\"preparation_declined\\\\":530,\\\\"preparation_queued\\\\":530,\\\\"preparation_started\\\\":530} | reasons={\\\\"PREPARATION_UNAVAILABLE\\\\":530}","2026-09-14 09:51:03,280 [reaper.engine] INFO [avalanche] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\\\\"preparation_active_duplicate\\\\":10568,\\\\"preparation_coalesced\\\\":16,\\\\"preparation_declined\\\\":1089,\\\\"preparation_queued\\\\":1091,\\\\"preparation_started\\\\":1091} | reasons={\\\\"PREPARATION_UNAVAILABLE\\\\":1089}","2026-09-14 09:51:03,280 [reaper.engine] INFO [gnosis] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={} | reasons={}","2026-09-14 09:51:03,280 [reaper.engine] INFO [mantle] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\\\\"preparation_active_duplicate\\\\":5376,\\\\"preparation_coalesced\\\\":138,\\\\"preparation_declined\\\\":7318,\\\\"preparation_queued\\\\":7318,\\\\"preparation_started\\\\":7318} | reasons={\\\\"PREPARATION_UNAVAILABLE\\\\":7318}","2026-09-14 09:51:03,280 [reaper.engine] INFO [scroll] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\\\\"preparation_declined\\\\":556,\\\\"preparation_queued\\\\":556,\\\\"preparation_retry_pending\\\\":256,\\\\"preparation_started\\\\":556} | reasons={\\\\"PREPARATION_UNAVAILABLE\\\\":556}","2026-09-14 09:51:03,281 [reaper.engine] INFO [linea] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={} | reasons={}","2026-09-14 09:51:07,428 [reaper.morpho] WARNING [ethereum] WS-SCAN LIQUIDATABLE: mMEV/USDC | Borrower: 0x00000F9110... | HF: 0.9999","2026-09-14 09:51:13,688 [reaper.morpho] INFO [base] PLAN stage=route_declined reason=NET_PROFIT_BELOW_COSTS count=54 borrower=0x84a1b650B52407a5baCc2f83d32d64a89531c51d market=0x78d11c03944e0dc298398f0545dc8195ad201a18b0388cb8058b1bcb89440971 debt_token=0x4200000000000000000000000000000000000006 provider=uniswap_v3 causes=","2026-09-14 09:51:15,708 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: WETH/USDC | Borrower: 0x60bfaF9E28... | HF: 0.0000","2026-09-14 09:51:15,712 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: WETH/USDC | Borrower: 0x624614DE50... | HF: 0.0000","2026-09-14 09:51:18,250 [reaper.morpho] INFO [optimism] PLAN stage=route_declined reason=OUTPUT_BELOW_REPAYMENT_AND_PROFIT count=159 borrower=0x90598105dF535B19420BD0D89AfF73Ecd6966312 market=0x80aa1cba2c5907533b5f4e454786c9628ffe8e4ed1a9edcf139325c0fcf09d01 debt_token=0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85 provider=velora causes=","2026-09-14 09:51:19,364 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=422 borrower= market= debt_token= provider= causes=","2026-09-14 09:51:22,416 [reaper.morpho] WARNING [ethereum] WS-SCAN LIQUIDATABLE: USR/USD0 | Borrower: 0x06590Fef20... | HF: 0.5050","2026-09-14 09:51:23,501 [reaper.morpho] INFO [ethereum] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=1090 borrower= market= debt_token= provider= causes=","2026-09-14 09:51:26,791 [reaper.morpho] WARNING [ethereum] WS-SCAN LIQUIDATABLE: PT-cUSD-29JAN2026/AUSD | Borrower: 0xfeed46c11F... | HF: 0.0018","2026-09-14 09:51:27,234 [reaper.morpho] WARNING [optimism] WS-SCAN LIQUIDATABLE: sUSDC/USDC | Borrower: 0xBA705cF0De... | HF: 0.9970","2026-09-14 09:51:30,179 [reaper.morpho] WARNING [ethereum] WS-SCAN LIQUIDATABLE: hemiBTC/VUSD | Borrower: 0x7b6027ba86... | HF: 0.0022","2026-09-14 09:51:32,333 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=425 borrower= market= debt_token= provider= causes=","2026-09-14 09:51:42,414 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=427 borrower= market= debt_token= provider= causes="
+  ]
+}
