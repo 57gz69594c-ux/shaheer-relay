@@ -430,89 +430,14 @@
   </a>
 
   <div class="tabs">
-    <div class="tab active" id="tab-clips">Clips</div>
-    <div class="tab" id="tab-send">Send</div>
-    <div class="tab" id="tab-recv">Claude</div>
+    <div class="tab active" id="tab-send">Send</div>
+    <div class="tab" id="tab-recv">From Claude</div>
     <div class="tab" id="tab-reaper" style="color:#ff6b6b;">Reaper</div>
   </div>
 
-  <!-- CLIPS REVIEW TAB -->
-  <div class="panel active" id="panel-clips">
-    <div style="width:100%;max-width:480px;text-align:center;font-size:0.7rem;color:#FF8647;font-weight:700;letter-spacing:3px;margin-bottom:14px;">CODEWORD: PHOENIX</div>
+  <!-- SEND TAB (default active) -->
 
-    <div class="section-label tarot">TAROT CLIPS — New Episode</div>
-
-    <!-- TAROT c1 — 10 AM -->
-    <div class="clip-card">
-      <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_c1_preview.mp4?v=83" type="video/mp4">
-      </video>
-      <div class="clip-info">
-        <div class="clip-title">Is He the One? Love Reading Reveal <span class="time-badge tarot">10 AM</span></div>
-        <div class="clip-meta">Tarot #1 · 29s · Slot 1</div>
-      </div>
-    </div>
-
-    <!-- TAROT c2 — 4 PM -->
-    <div class="clip-card">
-      <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_c2_preview.mp4?v=83" type="video/mp4">
-      </video>
-      <div class="clip-info">
-        <div class="clip-title">Will His Behavior Change? Relationship Reading <span class="time-badge tarot">4 PM</span></div>
-        <div class="clip-meta">Tarot #2 · 24s · Slot 3</div>
-      </div>
-    </div>
-
-    <!-- TAROT c3 — 9 PM -->
-    <div class="clip-card">
-      <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_c3_preview.mp4?v=83" type="video/mp4">
-      </video>
-      <div class="clip-info">
-        <div class="clip-title">Will Debt Be Cleared? Financial Reading <span class="time-badge tarot">9 PM</span></div>
-        <div class="clip-meta">Tarot #3 · 29s · Slot 5</div>
-      </div>
-    </div>
-
-    <div class="section-label podcast">PODCAST CLIPS — Mega UFO &amp; Aliens Episode</div>
-
-    <!-- PODCAST p1 — 1 PM -->
-    <div class="clip-card">
-      <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_p1_preview.mp4?v=83" type="video/mp4">
-      </video>
-      <div class="clip-info">
-        <div class="clip-title">Mega UFO Episode Begins! <span class="time-badge podcast">1 PM</span></div>
-        <div class="clip-meta">Podcast #1 · 26s · Slot 2</div>
-      </div>
-    </div>
-
-    <!-- PODCAST p2 — 7 PM -->
-    <div class="clip-card">
-      <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_p2_preview.mp4?v=83" type="video/mp4">
-      </video>
-      <div class="clip-info">
-        <div class="clip-title">Nordic Aliens: Human Lookalikes? <span class="time-badge podcast">7 PM</span></div>
-        <div class="clip-meta">Podcast #2 · 26s · Slot 4</div>
-      </div>
-    </div>
-
-    <!-- PODCAST p3 — 11 PM -->
-    <div class="clip-card">
-      <video class="clip-video" controls playsinline preload="metadata">
-        <source src="https://104.248.159.95.nip.io/clips/clip_p3_preview.mp4?v=83" type="video/mp4">
-      </video>
-      <div class="clip-info">
-        <div class="clip-title">Strange Encounter on Orcas Island <span class="time-badge podcast">11 PM</span></div>
-        <div class="clip-meta">Podcast #3 · 27s · Slot 6</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SEND TAB -->
-  <div class="panel" id="panel-send">
+  <div class="panel active" id="panel-send">
     <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
     <button id="send">Send</button>
     <div id="status"></div>
@@ -610,19 +535,25 @@
   <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v87 — REAPER LIVE DASHBOARD — Sep 14 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v87')) {
-  sessionStorage.setItem('relay_cache_bust_v87', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v90')) {
+  sessionStorage.setItem('relay_cache_bust_v90', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 
-const tabs = ['clips','send','recv','reaper'];
-tabs.forEach(t => {
-  document.getElementById('tab-'+t).addEventListener('click', () => {
-    tabs.forEach(x => {
-      document.getElementById('tab-'+x).classList.toggle('active', x===t);
-      document.getElementById('panel-'+x).classList.toggle('active', x===t);
+// --- Tab switching ---
+var tabNames = ['send','recv','reaper'];
+tabNames.forEach(function(t) {
+  var tabEl = document.getElementById('tab-' + t);
+  var panelEl = document.getElementById('panel-' + t);
+  if (!tabEl || !panelEl) return;
+  tabEl.addEventListener('click', function() {
+    tabNames.forEach(function(x) {
+      var xTab = document.getElementById('tab-' + x);
+      var xPanel = document.getElementById('panel-' + x);
+      if (xTab) xTab.classList.toggle('active', x === t);
+      if (xPanel) xPanel.classList.toggle('active', x === t);
     });
     if (t === 'recv') loadLatest();
     if (t === 'reaper') loadReaperData();
