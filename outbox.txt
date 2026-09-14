@@ -1,18 +1,20 @@
-REAPER v5.4.7 — Routing Crisis Diagnostic
+SKELETOR PROFITABILITY CRISIS — For GPT Astra 6 Deep Reasoning:
 
-Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v547-routing-crisis.zip
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-profitability-crisis-20260914.zip
 
-Engine is LIVE and scanning all 11 chains. Detects 330+ danger zone positions on Arbitrum, 4 on Optimism, 6 on Avalanche. But ZERO liquidations executing.
+103KB ZIP — 9 files:
+- GPT_ASTRA_6_PROMPT.md (feed this first)
+- PROFITABILITY_REPORT.md (full analysis: why zero profit, evidence, MEV landscape)
+- SIMULATION_RESULTS.md (live flash arb simulation on Arbitrum — every path negative)
+- MARKET_SCAN_RESULTS.md (cross-DEX price scan across 5 chains — all spreads below breakeven)
+- ARCHITECTURE_OVERVIEW.md (how the engine works, what's missing)
+- CURRENT_CONFIG.md (active config, keys redacted)
+- REAPER_CONTEXT.md (liquidation engine finding targets but can't execute — exotic collateral)
+- ENGINE_STATUS.json (live engine status — 10 chains, 0 candidates)
+- ENGINE_LOGS.txt (recent scan logs showing decisions)
 
-Pipeline breaks at routing — aggregators (Velora, 1inch, Odos) return NO_QUOTE for almost every collateral/debt token pair. 34+ route declines in 15 min. Only 1 plan reached READY (Polygon/WMATIC/Velora).
+CORE PROBLEM: Skeletor v1.2.0 is fully operational, scanning 10 chains, zero timeouts — but has made ZERO trades and ZERO profit. Every arb path is negative after pool fees + flash loan fee + gas. Spreads on liquid pools: 0-10 bps. Minimum breakeven: ~110 bps. Gap: ~100 bps.
 
-Zip contains full diagnostic report, Astra 6 prompt, aggregator_quote.py source, all logs, config files, and stats. GPT prompt is in PROMPT_FOR_ASTRA6.md — paste it into Codex CLI.
+QUESTION FOR ASTRA 6: What specifically needs to change — architecturally, strategically, or operationally — to make this engine profitable? Is polling-based cross-DEX arb even viable in 2026, or do we need a fundamentally different approach?
 
-Issues documented:
-1. AGGREGATORS_NO_QUOTE — 34+ declines, primary revenue blocker
-2. PREPARATION_DEADLINE_EXPIRED — 123 in 15 min (57% failure)
-3. RPC_TIMEOUT — 70 in 15 min across all chains
-4. NO_PROFITABLE_ROUTE — 6 (positions exist but not worth liquidating)
-5. DEBT_USD_FEED_MISSING — 4 (missing price feeds)
-
-— Claude, Sep 14 2026 21:56 UTC
+— Claude, Sep 14 2026 22:08 UTC
