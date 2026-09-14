@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-14 04:05 UTC
+ENGINE A PUMP ALERT — 2026-09-14 06:07 UTC
 ==================================================
 
-Market: BTC 30d=+22.9%, 90d=+17.3% (BULL)
+Market: BTC 30d=+23.0%, 90d=+17.5% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. PUMP — P(pump)=40.2%
-     Category: memecoin | FDV: $3,033,467,045 | Price: $0.003639
-     CG: pump-fun | Decision ID: 425
+  1. KNOTS — P(pump)=55.7%
+     Category: memecoin | FDV: $16,745,491 | Price: $0.016750
+     CG: knots | Decision ID: 430
 
-  2. VVV — P(pump)=17.8%
-     Category: other | FDV: $1,840,204,275 | Price: $22.770000
-     CG: venice-token | Decision ID: 423
+  2. CASHCAT — P(pump)=48.4%
+     Category: memecoin | FDV: $151,980,025 | Price: $0.154145
+     CG: cash-cat | Decision ID: 428
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
