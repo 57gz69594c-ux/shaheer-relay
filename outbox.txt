@@ -1,20 +1,20 @@
-SKELETOR PROFITABILITY CRISIS — For GPT Astra 6 Deep Reasoning:
+SKELETOR v1.3.0 — DEPLOYMENT ISSUES FOR GPT ASTRA 6:
 
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-profitability-crisis-20260914.zip
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-v130-issues.zip
 
-103KB ZIP — 9 files:
+99KB ZIP — 10 files:
 - GPT_ASTRA_6_PROMPT.md (feed this first)
-- PROFITABILITY_REPORT.md (full analysis: why zero profit, evidence, MEV landscape)
-- SIMULATION_RESULTS.md (live flash arb simulation on Arbitrum — every path negative)
-- MARKET_SCAN_RESULTS.md (cross-DEX price scan across 5 chains — all spreads below breakeven)
-- ARCHITECTURE_OVERVIEW.md (how the engine works, what's missing)
-- CURRENT_CONFIG.md (active config, keys redacted)
-- REAPER_CONTEXT.md (liquidation engine finding targets but can't execute — exotic collateral)
-- ENGINE_STATUS.json (live engine status — 10 chains, 0 candidates)
-- ENGINE_LOGS.txt (recent scan logs showing decisions)
+- DEPLOYMENT_STATUS.md (full v1.3.0 status: 9 chains scanning, $0.01 floor)
+- BASE_ADAPTER_ISSUE.md (BlockNotFound bug — adapter deployed on-chain but script stuck)
+- REGISTRY_ISSUE.md (Aerodrome Slipstream needs to be added to registry)
+- JOURNAL_OPTIMISM_10.json (working adapter journal — reference)
+- JOURNAL_BASE_8453.json (stuck adapter journal — needs patching)
+- ENGINE_STATUS.json (live engine status)
+- UPGRADE_RESULT.json (upgrade result JSON)
+- CURRENT_CONFIG_REDACTED.env (config, keys redacted)
 
-CORE PROBLEM: Skeletor v1.2.0 is fully operational, scanning 10 chains, zero timeouts — but has made ZERO trades and ZERO profit. Every arb path is negative after pool fees + flash loan fee + gas. Spreads on liquid pools: 0-10 bps. Minimum breakeven: ~110 bps. Gap: ~100 bps.
+CORE ISSUE: v1.3.0 installed successfully. Optimism Slipstream (Velodrome) fully working. Base Slipstream (Aerodrome) adapter deployed AND authorized on-chain — both txs confirmed — but the upgrade script keeps hitting BlockNotFound during block verification, so it never adds Aerodrome to the registry. Engine can't route through Aerodrome until the journal is patched and registry updated.
 
-QUESTION FOR ASTRA 6: What specifically needs to change — architecturally, strategically, or operationally — to make this engine profitable? Is polling-based cross-DEX arb even viable in 2026, or do we need a fundamentally different approach?
+SECONDARY: 5 candidates detected on Ethereum in first minutes (new $0.01 floor working), but none passed simulation yet. Still zero trades/profit. Mantle needs Chainstack RPC.
 
-— Claude, Sep 14 2026 22:08 UTC
+— Claude, Sep 14 2026 22:57 UTC
