@@ -145,6 +145,269 @@
     padding: 40px 20px;
     color: #9a9aa5;
   }
+
+  /* ── REAPER LIVE TAB ── */
+  .reaper-header {
+    width: 100%; max-width: 480px;
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .reaper-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #ff4444, #ff8844, #ffaa00, #44ff44, #4488ff);
+    animation: reaper-glow 3s linear infinite;
+  }
+  @keyframes reaper-glow {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+  .reaper-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #ff6b6b;
+    text-shadow: 0 0 12px rgba(255,107,107,0.4);
+  }
+  .reaper-sub {
+    font-size: 0.7rem;
+    color: #8b949e;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+  .reaper-pulse {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: #3fb950;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse-dot 2s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(63,185,80,0.6); }
+    50% { box-shadow: 0 0 0 6px rgba(63,185,80,0); }
+  }
+  .reaper-stats-row {
+    display: flex;
+    gap: 8px;
+    width: 100%; max-width: 480px;
+    margin-bottom: 10px;
+  }
+  .reaper-stat {
+    flex: 1;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .reaper-stat-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #e6edf3;
+    font-family: ui-monospace, monospace;
+  }
+  .reaper-stat-value.profit { color: #3fb950; }
+  .reaper-stat-value.danger { color: #ff6b6b; }
+  .reaper-stat-value.watching { color: #ffaa00; }
+  .reaper-stat-label {
+    font-size: 0.6rem;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+
+  .reaper-section {
+    width: 100%; max-width: 480px;
+    margin-bottom: 12px;
+  }
+  .reaper-section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #8b949e;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .target-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .target-card.hot {
+    border-color: #ff6b6b;
+  }
+  .target-card.hot::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: #ff6b6b;
+  }
+  .target-card.warm {
+    border-color: #ffaa00;
+  }
+  .target-card.warm::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: #ffaa00;
+  }
+  .target-card.blocked {
+    border-color: #f85149;
+    opacity: 0.7;
+  }
+  .target-card.blocked::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: #f85149;
+  }
+  .target-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .target-market {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e6edf3;
+  }
+  .target-chain {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 6px;
+  }
+  .chain-base { background: #1a3a5c; color: #58a6ff; }
+  .chain-arbitrum { background: #28394b; color: #79c0ff; }
+  .chain-ethereum { background: #2a2444; color: #a78bfa; }
+  .chain-polygon { background: #2a1f3d; color: #b07bfa; }
+  .chain-optimism { background: #3d1f1f; color: #fa7b7b; }
+  .chain-scroll { background: #1f2d1f; color: #7bfa7b; }
+
+  .target-profit {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #3fb950;
+    font-family: ui-monospace, monospace;
+  }
+  .target-detail {
+    font-size: 0.72rem;
+    color: #8b949e;
+    margin-top: 4px;
+  }
+  .target-detail span { color: #c9d1d9; font-weight: 600; }
+  .target-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+  .status-watching { background: rgba(255,170,0,0.15); color: #ffaa00; }
+  .status-knife { background: rgba(255,107,107,0.15); color: #ff6b6b; animation: pulse-text 2s ease-in-out infinite; }
+  .status-blocked { background: rgba(248,81,73,0.15); color: #f85149; }
+  @keyframes pulse-text {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .chain-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 0.78rem;
+  }
+  .chain-name {
+    width: 80px;
+    font-weight: 700;
+    color: #e6edf3;
+    text-transform: capitalize;
+  }
+  .chain-stats {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    color: #8b949e;
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+  }
+  .chain-stats .val { color: #c9d1d9; font-weight: 600; }
+  .chain-stats .danger-val { color: #ff6b6b; font-weight: 700; }
+
+  .event-feed {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: ui-monospace, monospace;
+    font-size: 0.62rem;
+    line-height: 1.6;
+    color: #8b949e;
+    width: 100%; max-width: 480px;
+  }
+  .event-feed .ev-liq { color: #ff6b6b; }
+  .event-feed .ev-route { color: #ffaa00; }
+  .event-feed .ev-pipe { color: #58a6ff; }
+  .event-feed .ev-time { color: #484f58; }
+
+  .reaper-refresh-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; max-width: 480px;
+    margin-bottom: 12px;
+    font-size: 0.7rem;
+    color: #484f58;
+  }
+  .reaper-refresh-bar .countdown { font-family: ui-monospace, monospace; color: #8b949e; }
+
+  .liq-market-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+  }
+  .liq-market-name { color: #e6edf3; font-weight: 600; }
+  .liq-market-chain { color: #8b949e; font-size: 0.65rem; text-transform: capitalize; }
+  .liq-market-count { color: #ff6b6b; font-weight: 700; font-family: ui-monospace, monospace; }
 </style>
 </head>
 <body>
@@ -167,9 +430,10 @@
   </a>
 
   <div class="tabs">
-    <div class="tab active" id="tab-clips">Review Clips</div>
+    <div class="tab active" id="tab-clips">Clips</div>
     <div class="tab" id="tab-send">Send</div>
-    <div class="tab" id="tab-recv">From Claude</div>
+    <div class="tab" id="tab-recv">Claude</div>
+    <div class="tab" id="tab-reaper" style="color:#ff6b6b;">Reaper</div>
   </div>
 
   <!-- CLIPS REVIEW TAB -->
@@ -274,7 +538,76 @@
     <div class="recv-meta" id="recv-meta"></div>
   </div>
 
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v85 — MT5 STATUS REPORT (PHOENIX) — Aug 27 2026</p>
+  <!-- REAPER LIVE TAB -->
+  <div class="panel" id="panel-reaper">
+
+    <div class="reaper-header">
+      <div class="reaper-title"><span class="reaper-pulse"></span> REAPER ENGINE LIVE</div>
+      <div class="reaper-sub" id="reaper-update-time">Loading...</div>
+    </div>
+
+    <div class="reaper-refresh-bar">
+      <span>Auto-refresh: <span class="countdown" id="reaper-countdown">30s</span></span>
+      <button id="reaper-refresh-btn" style="margin:0;width:auto;padding:6px 14px;font-size:0.75rem;border-radius:6px;">Refresh Now</button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="reaper-stats-row">
+      <div class="reaper-stat">
+        <div class="reaper-stat-value profit" id="rs-profit">$0</div>
+        <div class="reaper-stat-label">Total Profit</div>
+      </div>
+      <div class="reaper-stat">
+        <div class="reaper-stat-value danger" id="rs-danger">0</div>
+        <div class="reaper-stat-label">Danger Zone</div>
+      </div>
+      <div class="reaper-stat">
+        <div class="reaper-stat-value watching" id="rs-potential">$0</div>
+        <div class="reaper-stat-label">Potential</div>
+      </div>
+    </div>
+    <div class="reaper-stats-row">
+      <div class="reaper-stat">
+        <div class="reaper-stat-value" id="rs-markets">0</div>
+        <div class="reaper-stat-label">Markets</div>
+      </div>
+      <div class="reaper-stat">
+        <div class="reaper-stat-value" id="rs-borrowers">0</div>
+        <div class="reaper-stat-label">Borrowers</div>
+      </div>
+      <div class="reaper-stat">
+        <div class="reaper-stat-value" id="rs-uptime">0h</div>
+        <div class="reaper-stat-label">Uptime</div>
+      </div>
+    </div>
+
+    <!-- Top Targets -->
+    <div class="reaper-section">
+      <div class="reaper-section-title">🎯 Top Targets — Potential Profit</div>
+      <div id="reaper-targets"></div>
+    </div>
+
+    <!-- Chain Status -->
+    <div class="reaper-section">
+      <div class="reaper-section-title">⛓ Chain Status</div>
+      <div id="reaper-chains"></div>
+    </div>
+
+    <!-- Active Liquidatable Markets -->
+    <div class="reaper-section">
+      <div class="reaper-section-title">🔴 Liquidatable Now (last 5 min)</div>
+      <div id="reaper-liquidatable"></div>
+    </div>
+
+    <!-- Event Feed -->
+    <div class="reaper-section">
+      <div class="reaper-section-title">📡 Live Event Feed</div>
+      <div class="event-feed" id="reaper-events">Loading events...</div>
+    </div>
+
+  </div>
+
+  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v87 — REAPER LIVE DASHBOARD — Sep 14 2026</p>
 
 <script>
 if (!sessionStorage.getItem('relay_cache_bust_v85')) {
@@ -284,7 +617,7 @@ if (!sessionStorage.getItem('relay_cache_bust_v85')) {
 
 const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
 
-const tabs = ['clips','send','recv'];
+const tabs = ['clips','send','recv','reaper'];
 tabs.forEach(t => {
   document.getElementById('tab-'+t).addEventListener('click', () => {
     tabs.forEach(x => {
@@ -292,6 +625,7 @@ tabs.forEach(t => {
       document.getElementById('panel-'+x).classList.toggle('active', x===t);
     });
     if (t === 'recv') loadLatest();
+    if (t === 'reaper') loadReaperData();
   });
 });
 
@@ -403,6 +737,173 @@ copyBtn.addEventListener('click', async () => {
   if (!recvText.value) return;
   try { await navigator.clipboard.writeText(recvText.value); } catch(e) { recvText.select(); document.execCommand('copy'); }
   recvStatus.textContent = 'Copied.'; recvStatus.className = 'ok';
+});
+
+// ── REAPER LIVE DASHBOARD ──
+let reaperTimer = null;
+let reaperCountdown = 30;
+let reaperInterval = null;
+
+function chainBadge(chain) {
+  const cls = 'target-chain chain-' + chain.toLowerCase();
+  return '<span class="' + cls + '">' + chain + '</span>';
+}
+
+function formatUSD(n) {
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return '$' + (n / 1000).toFixed(1) + 'K';
+  return '$' + n.toLocaleString();
+}
+
+function statusBadge(status) {
+  let cls = 'status-watching';
+  if (status.includes('KNIFE')) cls = 'status-knife';
+  else if (status.includes('BLOCK')) cls = 'status-blocked';
+  return '<span class="target-status ' + cls + '">' + status + '</span>';
+}
+
+function renderTargets(targets) {
+  const el = document.getElementById('reaper-targets');
+  if (!targets || !targets.length) { el.innerHTML = '<div style="color:#484f58;text-align:center;padding:20px;">No targets</div>'; return; }
+  el.innerHTML = targets.map(t => {
+    let cardClass = 'target-card';
+    if (t.status.includes('KNIFE')) cardClass += ' hot';
+    else if (t.status.includes('BLOCK')) cardClass += ' blocked';
+    else if (t.potential_profit >= 1000) cardClass += ' warm';
+    return '<div class="' + cardClass + '">' +
+      '<div class="target-row">' +
+        '<div><span class="target-market">' + t.market + '</span>' + chainBadge(t.chain) + '</div>' +
+        '<div class="target-profit">+' + formatUSD(t.potential_profit) + '</div>' +
+      '</div>' +
+      '<div class="target-detail">' +
+        'Borrower: <span>' + t.borrower + '</span> · ' +
+        'Borrow: <span>' + formatUSD(t.borrow_usd) + '</span> · ' +
+        'HF: <span>' + t.health_factor.toFixed(4) + '</span> · ' +
+        'Drop: <span>' + t.drop_needed + '</span>' +
+      '</div>' +
+      statusBadge(t.status) +
+    '</div>';
+  }).join('');
+}
+
+function renderChains(chains) {
+  const el = document.getElementById('reaper-chains');
+  if (!chains) { el.innerHTML = ''; return; }
+  const order = ['ethereum','arbitrum','base','polygon','optimism','bnb','scroll'];
+  el.innerHTML = order.map(name => {
+    const c = chains[name] || {markets:0,borrowers:0,danger:0,block:0};
+    const active = (c.markets > 0 || c.block > 0);
+    return '<div class="chain-row" style="opacity:' + (active ? '1' : '0.4') + '">' +
+      '<div class="chain-name">' +
+        '<span style="color:' + (active ? '#3fb950' : '#484f58') + ';margin-right:4px;">●</span>' +
+        name +
+      '</div>' +
+      '<div class="chain-stats">' +
+        '<span><span class="val">' + c.markets + '</span> mkt</span>' +
+        '<span><span class="val">' + c.borrowers.toLocaleString() + '</span> bor</span>' +
+        '<span><span class="' + (c.danger > 0 ? 'danger-val' : 'val') + '">' + c.danger + '</span> dgr</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderLiquidatable(markets) {
+  const el = document.getElementById('reaper-liquidatable');
+  if (!markets || !markets.length) { el.innerHTML = '<div style="color:#484f58;text-align:center;padding:14px;font-size:0.75rem;">None detected in last 5 min</div>'; return; }
+  el.innerHTML = markets.map(m => {
+    return '<div class="liq-market-row">' +
+      '<div><span class="liq-market-name">' + m.market + '</span> <span class="liq-market-chain">' + m.chain + '</span></div>' +
+      '<div class="liq-market-count">' + m.detections + 'x</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderEvents(events) {
+  const el = document.getElementById('reaper-events');
+  if (!events || !events.length) { el.innerHTML = '<span style="color:#484f58;">No events yet</span>'; return; }
+  el.innerHTML = events.slice().reverse().map(e => {
+    // Clean up escaped quotes
+    let text = e.replace(/\\\\/g, '').replace(/\\"/g, '"');
+    // Colorize
+    let cls = 'ev-pipe';
+    if (text.includes('LIQUIDATABLE')) cls = 'ev-liq';
+    else if (text.includes('route_declined') || text.includes('NO_QUOTE') || text.includes('PROFIT_BELOW')) cls = 'ev-route';
+    // Extract time
+    const timeMatch = text.match(/(\d{2}:\d{2}:\d{2})/);
+    const time = timeMatch ? timeMatch[1] : '';
+    // Shorten the line
+    let short = text.replace(/^.*\[reaper\.\w+\]\s*(INFO|WARNING)\s*/, '');
+    if (short.length > 120) short = short.substring(0, 117) + '...';
+    return '<div><span class="ev-time">' + time + '</span> <span class="' + cls + '">' + short + '</span></div>';
+  }).join('');
+}
+
+async function loadReaperData() {
+  try {
+    const resp = await fetch('./reaper-live.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+
+    // Update time
+    const updatedDate = new Date(data.updated);
+    const ago = Math.floor((Date.now() - updatedDate.getTime()) / 1000);
+    document.getElementById('reaper-update-time').innerHTML =
+      data.engine + ' · <span style="color:#3fb950;">Uptime ' + data.uptime_hours + 'h</span> · Updated ' + (ago < 60 ? ago + 's ago' : Math.floor(ago/60) + 'm ago');
+
+    // Stats
+    let totalMarkets = 0, totalBorrowers = 0, totalDanger = 0;
+    if (data.chains) {
+      Object.values(data.chains).forEach(c => {
+        totalMarkets += c.markets || 0;
+        totalBorrowers += c.borrowers || 0;
+        totalDanger += c.danger || 0;
+      });
+    }
+    let totalPotential = 0;
+    if (data.top_targets) data.top_targets.forEach(t => totalPotential += t.potential_profit || 0);
+
+    document.getElementById('rs-profit').textContent = '$' + (data.total_profit_usd || 0).toLocaleString();
+    document.getElementById('rs-danger').textContent = totalDanger.toLocaleString();
+    document.getElementById('rs-potential').textContent = formatUSD(totalPotential);
+    document.getElementById('rs-markets').textContent = totalMarkets.toLocaleString();
+    document.getElementById('rs-borrowers').textContent = totalBorrowers.toLocaleString();
+    document.getElementById('rs-uptime').textContent = data.uptime_hours + 'h';
+
+    // Render sections
+    renderTargets(data.top_targets);
+    renderChains(data.chains);
+    renderLiquidatable(data.liquidatable_markets);
+    renderEvents(data.recent_events);
+
+  } catch (e) {
+    document.getElementById('reaper-update-time').textContent = 'Error: ' + e.message;
+  }
+}
+
+// Auto-refresh countdown
+function startReaperRefresh() {
+  if (reaperInterval) clearInterval(reaperInterval);
+  reaperCountdown = 30;
+  reaperInterval = setInterval(() => {
+    reaperCountdown--;
+    const cdEl = document.getElementById('reaper-countdown');
+    if (cdEl) cdEl.textContent = reaperCountdown + 's';
+    if (reaperCountdown <= 0) {
+      reaperCountdown = 30;
+      // Only auto-refresh if the reaper tab is active
+      if (document.getElementById('panel-reaper').classList.contains('active')) {
+        loadReaperData();
+      }
+    }
+  }, 1000);
+}
+
+document.getElementById('reaper-refresh-btn').addEventListener('click', () => {
+  loadReaperData();
+  reaperCountdown = 30;
+});
+
+startReaperRefresh();
 });
 </script>
 </body>
