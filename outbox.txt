@@ -1,19 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-14 10:05 UTC
+ENGINE A PUMP ALERT — 2026-09-14 12:06 UTC
 ==================================================
 
-Market: BTC 30d=+24.1%, 90d=+17.6% (BULL)
+Market: BTC 30d=+23.4%, 90d=+17.0% (BULL)
 Model: v7b (aecf27f3)
 
 2 ALERTS above threshold:
 
-  1. CPOOL — P(pump)=37.0%
-     Category: defi | FDV: $31,778,012 | Price: $0.032410
-     CG: clearpool | Decision ID: 433
+  1. SPX — P(pump)=46.6%
+     Category: memecoin | FDV: $465,843,331 | Price: $0.500488
+     CG: spx6900 | Decision ID: 436
 
-  2. CAKE — P(pump)=26.8%
-     Category: defi | FDV: $918,476,022 | Price: $2.350000
-     CG: pancakeswap-token | Decision ID: 434
+  2. TWINE — P(pump)=39.9%
+     Category: other | FDV: $321,253 | Price: $0.000321
+     CG: twine | Decision ID: 437
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
