@@ -1,23 +1,15 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-14 14:05 UTC
+ENGINE A PUMP ALERT — 2026-09-14 16:05 UTC
 ==================================================
 
-Market: BTC 30d=+24.0%, 90d=+18.3% (BULL)
+Market: BTC 30d=+24.6%, 90d=+19.3% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+1 ALERT above threshold:
 
-  1. DOT — P(pump)=25.1%
-     Category: defi | FDV: $1,724,913,654 | Price: $1.014000
-     CG: polkadot | Decision ID: 440
-
-  2. UNI — P(pump)=22.1%
-     Category: defi | FDV: $5,679,523,985 | Price: $6.380000
-     CG: uniswap | Decision ID: 438
-
-  3. STONK — P(pump)=22.0%
-     Category: other | FDV: $178,395,622 | Price: $0.210519
-     CG: stonk-3 | Decision ID: 439
+  1. MIZO — P(pump)=76.9%
+     Category: other | FDV: $-1 | Price: $0.000161
+     CG: mizo | Decision ID: 443
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
