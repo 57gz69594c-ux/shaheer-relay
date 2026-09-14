@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-14T10:32:01Z",
-  "epoch": 1789381921,
+  "updated": "2026-09-14T10:34:01Z",
+  "epoch": 1789382041,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 34.7,
   "chains": {
@@ -13,21 +13,21 @@
     "scroll": {"markets":8,"borrowers":9,"danger":1,"block":35025393}
   },
   "liquidatable_markets": [
-    {"chain":"arbitrum","market":"thBILL/USDC","detections":141},
-{"chain":"arbitrum","market":"K/USDC","detections":94},
-{"chain":"arbitrum","market":"RLP/USDC","detections":8},
-{"chain":"ethereum","market":"PT-RLP-9APR2026/USDC","detections":7},
+    {"chain":"arbitrum","market":"K/USDC","detections":94},
 {"chain":"polygon","market":"WETH/WPOL","detections":4},
 {"chain":"ethereum","market":"PT-sUSDE-27MAR2025/USDC","detections":4},
-{"chain":"arbitrum","market":"xUSD/USDC","detections":4},
 {"chain":"arbitrum","market":"PT-USDai-20NOV2025/USDC","detections":4},
 {"chain":"polygon","market":"/USDC","detections":3},
-{"chain":"ethereum","market":"yUSD-old/USDC","detections":3},
-{"chain":"arbitrum","market":"PT-sUSDai-19FEB2026/USDC","detections":3},
 {"chain":"polygon","market":"WPOL/USDC","detections":2},
 {"chain":"polygon","market":"WETH/USDC","detections":2},
-{"chain":"ethereum","market":"yETH/WETH","detections":2},
-{"chain":"ethereum","market":"PT-srUSDe-2APR2026/USDC","detections":2}
+{"chain":"ethereum","market":"PT-LBTC-26JUN2025/LBTC","detections":2},
+{"chain":"ethereum","market":"Mog/USDS","detections":2},
+{"chain":"polygon","market":"vQATCHNO/USDC","detections":1},
+{"chain":"polygon","market":"vBELEGYYES/USDC","detections":1},
+{"chain":"polygon","market":"test-collateral-usdc/test-loan-semi","detections":1},
+{"chain":"polygon","market":"WPOL/USDT0","detections":1},
+{"chain":"ethereum","market":"ynETHx/wstETH","detections":1},
+{"chain":"ethereum","market":"stakedao-av/frxUSD/frxUSD","detections":1}
   ],
   "top_targets": [
     {
