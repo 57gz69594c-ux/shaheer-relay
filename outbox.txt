@@ -1,43 +1,23 @@
-===========================================================================
-REAPER MISSED OPPORTUNITIES REPORT — 2026-09-14 16:25 UTC
-===========================================================================
+SKELETOR ENGINE DIAGNOSTICS — DOWNLOAD NOW
+============================================
 
-BOTTOM LINE: REAPER identified $24.3 MILLION in liquidation profit
-in 2.5 hours and earned $0. ZERO liquidations executed.
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-diagnostics.zip
 
-BIGGEST MISSES:
-  #1  $46,565  Ethereum Morpho — BLOCKED (executor migration needed)
-  #2  $42,756  Ethereum Morpho — BLOCKED
-  #3  $37,699  Ethereum Morpho — BLOCKED
-  #4  $17,511  Ethereum Morpho — BLOCKED
-  #5  $16,611  Ethereum Morpho — BLOCKED
-  #6  $12,816  Ethereum Morpho — BLOCKED
-  #7  $12,780  Ethereum Morpho — BLOCKED
-  ...6,273 total profitable candidates identified
+72 KB zip file containing:
+- DIAGNOSTICS_REPORT.md (full breakdown of all issues)
+- engine.log (complete Skeletor log)
+- full-journal.txt (systemd journal)
+- All engine Python source files (main.py, config.py, dex.py, detector.py, executor.py, flash.py, rpc.py, gas.py, models.py, pricing.py, state.py)
+- Service unit file + status
+- skeletor.env config
+- registry-enhanced.json (38 extra borrow tokens)
+- Package manifest + version
+- File permissions + process info + memory stats
 
-WHY THEY WERE ALL MISSED:
-  1. EXECUTOR_MIGRATION_REQUIRED (4,607x) — Ethereum Morpho V4 executor
-     not deployed. Blocks $24.2M (99.7% of all missed profit)
-  2. NO_PROFITABLE_ROUTE (4,157x) — DEX swap route not good enough
-  3. EXECUTOR_MISSING (2,143x) — No executor on Scroll
-  4. DEBT_USD_FEED_MISSING (934x) — Missing price feeds
-  5. PREPARATION_DEADLINE_EXPIRED (421x) — Too slow, someone else got it
-  6. Morpho on Base+OP in MONITOR_ONLY — seeing but not acting
+CRITICAL ISSUES:
+1. ALL 9 chain workers crash every ~60 min with RuntimeError (no traceback logged)
+2. Zero trades executed, zero profit
+3. Engine only shows pool discovery + crash recovery — never reaches scanning
+4. aiohttp sessions leaking (unclosed client session error)
 
-PREPARATION SPEED PROBLEM:
-  Median: 186ms | P90: 15.6 seconds | 18% take >10 seconds
-  Professional bots do this in <100ms
-
-DOWNLOAD FULL PACKAGE:
-  https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper_missed_opportunities.zip
-
-  Contains:
-  - Full analysis report (reaper_missed_opportunities_report.md)
-  - Raw event data (6,273 economics evaluations)
-  - Top missed opportunities ranked by profit
-  - Engine configuration
-  - GPT Astra 6 prompt (ready to paste) asking for speed/execution fixes
-
-SKELETOR UPDATE: 0 trades, 0 profit. 9 chains scanning 2,186 pools.
-  Market too tight — no exploitable DEX spreads. Waiting for volatility.
-===========================================================================
+Give this to GPT-Astra 6 deep reasoning for full fix.
