@@ -1,14 +1,14 @@
-REAPER + SKELETOR CRITICAL ISSUES — Download for GPT-Astra 6:
+REAPER ENGINE CRITICAL ISSUES — For GPT-Astra 6:
 
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-skeletor-issues-20260914.zip
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-issues-only-20260914.zip
 
-198KB ZIP — Contains:
-- ISSUES_REPORT.md (full analysis of all 6 issues)
-- GPT_ASTRA_6_PROMPT.md (direct prompt to diagnose & fix)
-- Reaper journal, service configs, decline reason logs
-- Skeletor status JSON + engine log
-- Infrastructure timer/service configs
+191KB ZIP — Reaper ONLY. 9 files:
+- GPT_ASTRA_6_REAPER_PROMPT.md (feed this first)
+- REAPER_ISSUES_REPORT.md (full 6-issue breakdown)
+- decline-reasons-filtered.txt (every declined position + liquidatable found)
+- reaper-journal-current-session.txt (full engine journal)
+- infrastructure-service-journal.txt (restart loop evidence)
+- reaper-service-status.txt / reaper-unit-file.txt
+- infrastructure-timer-unit.txt / infrastructure-service-unit.txt
 
-#1 CRITICAL: PREPARATION_UNAVAILABLE — Engine finds liquidatable positions (HF as low as 0.008) on ALL chains but cannot execute ANY. 848+ candidates declined across Ethereum, Arbitrum, Base, Polygon, BNB, Avalanche, Optimism.
-
-Feed the ZIP directly to GPT-Astra 6 Deep Reasoning.
+#1 BLOCKER: PREPARATION_UNAVAILABLE — 848+ liquidatable candidates declined. Positions with HF as low as 0.008 sitting there. Zero executions.
