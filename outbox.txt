@@ -1,28 +1,25 @@
-URGENT: REAPER & SKELETOR SYSTEM ISSUES — Sep 14, 2026
-========================================================
+SKELETOR v1.0.0 — Full Issues Report (Clean) — Sep 14, 2026
+=============================================================
 
-Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper_system_issues_20260914.zip
+Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor_issues_20260914.zip
 
-10 KB zip containing:
-- reaper_system_report.md (FULL analysis)
-- gpt_astra_system_issues.md (ready-to-paste prompt for GPT Astra 6)
-- restart_log.txt (engine restart timestamps — restarting every 2-3 min!)
-- on_chain_liquidations.txt (actual blockchain liquidation events, verified)
-- engine_economics.txt (engine's prewarmed economics — NOT real profits)
-- infrastructure_status.json (stuck Scroll executor state)
-- skeletor_log.txt (scan timeouts, degraded state)
+27 KB zip containing 7 files:
+- skeletor_issues_report.md — Complete analysis of all 6 issues
+- skeletor_gpt_prompt.md — Ready-to-paste prompt for GPT Astra 6
+- skeletor_chain_analysis.txt — Per-chain breakdown (all 11 chains)
+- skeletor_status.json — Full engine status (raw JSON)
+- skeletor_engine_full.log — Complete engine log
+- skeletor_env_sanitized.txt — Config file (private keys removed)
+- skeletor_service.txt — Systemd service config and status
 
-CRITICAL ISSUES FOUND:
-1. REAPER was in a RESTART LOOP for 2+ hours (infrastructure worker killing it every 2-3 min)
-2. Engine could NOT have caught any opportunity during that time — it never fully initialized
-3. Previous $15K profit estimate was WRONG — based on prewarmed plans, not real opportunities
-4. On-chain data shows only $67K total liquidation bonuses on Ethereum AAVE in 7 days
-5. 99% of DeFi liquidation money ($23M/day) is on Hyperliquid Perps — NOT lending protocols
-6. Skeletor config keeps reverting (timeout went from 90s back to 300s)
+6 ISSUES FOUND:
+1. Scan timeouts — every chain except Scroll times out (90s not enough for 2048 cycles)
+2. RPC error rates 22-59% across all Chainstack endpoints
+3. Flash loan lender errors — "No lendable token balance" on 6 chains
+4. Ethereum finds arb candidates but gas > profit (spreads too thin)
+5. Linea blocked despite having RPC configured
+6. Config file reverts on engine restart
 
-EMERGENCY FIX APPLIED:
-- Stopped reaper-engine-infrastructure.timer to break restart loop
-- Reaper now running stable
-- Skeletor timeout fixed back to 90s
+REAPER STATUS: Running stable (restart loop was fixed this session)
 
-GIVE THIS ZIP TO GPT ASTRA 6 FOR DEEP ANALYSIS.
+Give the zip to GPT Astra 6 for code-level fixes.
