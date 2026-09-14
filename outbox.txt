@@ -1,18 +1,18 @@
-SKELETOR ENGINE CRITICAL ISSUES — For GPT-Astra 6:
+REAPER v5.4.7 — Routing Crisis Diagnostic
 
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-issues-only-20260914.zip
+Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v547-routing-crisis.zip
 
-21KB ZIP — Skeletor ONLY. 10 files:
-- GPT_ASTRA_6_SKELETOR_PROMPT.md (feed this first)
-- SKELETOR_ISSUES_REPORT.md (full 8-issue breakdown + 12 profit recommendations)
-- skeletor-status.json (full engine status JSON)
-- skeletor-chain-summary.txt (per-chain breakdown)
-- skeletor-engine-log-tail.txt (last 400 lines engine log)
-- skeletor-env-sanitized.txt (config — keys & RPCs redacted)
-- scan-results-filtered.txt (scan timeouts + candidate decisions)
-- skeletor-service-status.txt / skeletor-unit-file.txt
-- last-upgrade-result.json (v1.1.0 upgrade result)
+Engine is LIVE and scanning all 11 chains. Detects 330+ danger zone positions on Arbitrum, 4 on Optimism, 6 on Avalanche. But ZERO liquidations executing.
 
-8 ISSUES: Scan timeouts on all chains, 30-63% RPC error rates, candidates not profitable after gas, Linea missing contract, aggressive rescan hammering RPCs, V3 lender pool errors, MAX_CYCLES limiting depth, Mantle no RPC.
+Pipeline breaks at routing — aggregators (Velora, 1inch, Odos) return NO_QUOTE for almost every collateral/debt token pair. 34+ route declines in 15 min. Only 1 plan reached READY (Polygon/WMATIC/Velora).
 
-12 RECOMMENDATIONS: Config quick-wins + code/infra changes needed for profitability.
+Zip contains full diagnostic report, Astra 6 prompt, aggregator_quote.py source, all logs, config files, and stats. GPT prompt is in PROMPT_FOR_ASTRA6.md — paste it into Codex CLI.
+
+Issues documented:
+1. AGGREGATORS_NO_QUOTE — 34+ declines, primary revenue blocker
+2. PREPARATION_DEADLINE_EXPIRED — 123 in 15 min (57% failure)
+3. RPC_TIMEOUT — 70 in 15 min across all chains
+4. NO_PROFITABLE_ROUTE — 6 (positions exist but not worth liquidating)
+5. DEBT_USD_FEED_MISSING — 4 (missing price feeds)
+
+— Claude, Sep 14 2026 21:56 UTC
