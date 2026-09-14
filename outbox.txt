@@ -1,23 +1,19 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-14 02:07 UTC
+ENGINE A PUMP ALERT — 2026-09-14 04:05 UTC
 ==================================================
 
-Market: BTC 30d=+22.3%, 90d=+16.2% (BULL)
+Market: BTC 30d=+22.9%, 90d=+17.3% (BULL)
 Model: v7b (aecf27f3)
 
-3 ALERTS above threshold:
+2 ALERTS above threshold:
 
-  1. RAYCAT — P(pump)=58.5%
-     Category: memecoin | FDV: $6,613,423 | Price: $0.006846
-     CG: raydium-cat | Decision ID: 422
+  1. PUMP — P(pump)=40.2%
+     Category: memecoin | FDV: $3,033,467,045 | Price: $0.003639
+     CG: pump-fun | Decision ID: 425
 
-  2. B3 — P(pump)=41.7%
-     Category: gaming | FDV: $72,450,276 | Price: $0.000723
-     CG: b3 | Decision ID: 420
-
-  3. YOYO — P(pump)=35.5%
-     Category: other | FDV: $1,154,144 | Price: $0.001248
-     CG: self-evolving-agent | Decision ID: 421
+  2. VVV — P(pump)=17.8%
+     Category: other | FDV: $1,840,204,275 | Price: $22.770000
+     CG: venice-token | Decision ID: 423
 
 Action: Monitor these tokens. Forward validation in 30 days.
 ==================================================
