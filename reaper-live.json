@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-14T14:12:01Z",
-  "epoch": 1789395121,
+  "updated": "2026-09-14T14:14:01Z",
+  "epoch": 1789395241,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 26.9,
   "chains": {
@@ -9,25 +9,25 @@
     "base": {"markets":340,"borrowers":24772,"danger":16,"block":51269605},
     "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
     "optimism": {"markets":9,"borrowers":85,"danger":0,"block":156897722},
-    "bnb": {"markets":23,"borrowers":9,"danger":0,"block":121851440},
+    "bnb": {"markets":25,"borrowers":9,"danger":0,"block":121851744},
     "scroll": {"markets":13,"borrowers":11,"danger":1,"block":35027493}
   },
   "liquidatable_markets": [
     {"chain":"arbitrum","market":"thBILL/USDC","detections":235},
-{"chain":"arbitrum","market":"K/USDC","detections":188},
+{"chain":"arbitrum","market":"K/USDC","detections":94},
+{"chain":"polygon","market":"WETH/WPOL","detections":8},
 {"chain":"arbitrum","market":"RLP/USDC","detections":8},
-{"chain":"polygon","market":"WETH/WPOL","detections":4},
-{"chain":"optimism","market":"sUSDC/USDC","detections":4},
+{"chain":"polygon","market":"/USDC","detections":6},
+{"chain":"polygon","market":"WPOL/USDC","detections":4},
+{"chain":"polygon","market":"WETH/USDC","detections":4},
 {"chain":"arbitrum","market":"xUSD/USDC","detections":4},
 {"chain":"arbitrum","market":"wstUSR/USDC","detections":4},
 {"chain":"arbitrum","market":"PT-USDai-20NOV2025/USDC","detections":4},
-{"chain":"polygon","market":"/USDC","detections":3},
 {"chain":"arbitrum","market":"PT-sUSDai-19FEB2026/USDC","detections":3},
-{"chain":"polygon","market":"WPOL/USDC","detections":2},
-{"chain":"polygon","market":"WETH/USDC","detections":2},
-{"chain":"arbitrum","market":"PT-syrupUSDC-29JAN2026/USDT0","detections":2},
-{"chain":"arbitrum","market":"PT-USDai-19FEB2026/USDT0","detections":2},
-{"chain":"polygon","market":"vQATCHNO/USDC","detections":1}
+{"chain":"polygon","market":"vQATCHNO/USDC","detections":2},
+{"chain":"polygon","market":"vBELEGYYES/USDC","detections":2},
+{"chain":"polygon","market":"test-collateral-usdc/test-loan-semi","detections":2},
+{"chain":"polygon","market":"WPOL/USDT0","detections":2}
   ],
   "top_targets": [
     {
@@ -94,6 +94,6 @@
   "total_liquidations": 0,
   "total_profit_usd": 0,
   "recent_events": [
-    "2026-09-14 14:11:31,954 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x945Abdd96b... | HF: 0.0001", "2026-09-14 14:11:31,954 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xc6E52B461b... | HF: 0.0000", "2026-09-14 14:11:31,954 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x5E8cC1D37f... | HF: 0.0000", "2026-09-14 14:11:31,954 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xdcE927E004... | HF: 0.0000", "2026-09-14 14:11:31,954 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x493c92Bd01... | HF: 0.0006", "2026-09-14 14:11:31,956 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x983502F334... | HF: 0.0000", "2026-09-14 14:11:31,980 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x88be9663CE... | HF: 0.0002", "2026-09-14 14:11:32,031 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x2bB4CB6e01... | HF: 0.0000", "2026-09-14 14:11:32,053 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xC5CE5088aE... | HF: 0.0042", "2026-09-14 14:11:32,068 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xFa96F35EDf... | HF: 0.0000", "2026-09-14 14:11:32,094 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x24fF9469E3... | HF: 0.0000", "2026-09-14 14:11:32,095 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x7ae3f2600F... | HF: 0.0001", "2026-09-14 14:11:32,095 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xac617C1623... | HF: 0.0002", "2026-09-14 14:11:32,095 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xd0AEFF31E9... | HF: 0.0000", "2026-09-14 14:11:32,095 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xFAeeb2f7B0... | HF: 0.0008", "2026-09-14 14:11:32,095 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x8F0Ccc4064... | HF: 0.0000", "2026-09-14 14:11:33,417 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: PT-syrupUSDC-29JAN2026/USDT0 | Borrower: 0xfeed46c11F... | HF: 0.0983", "2026-09-14 14:11:41,319 [reaper.morpho] INFO [arbitrum] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=138 borrower= market= debt_token= provider= causes=", "2026-09-14 14:11:47,644 [reaper.morpho] INFO [optimism] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=1 borrower= market= debt_token= provider= causes=", "2026-09-14 14:11:51,860 [reaper.morpho] INFO [arbitrum] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=144 borrower= market= debt_token= provider= causes="
+    "2026-09-14 14:13:21,760 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: /USDC | Borrower: 0x188cDbF9BC... | HF: 0.0000", "2026-09-14 14:13:21,773 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: /USDC | Borrower: 0x66B7B126e4... | HF: 0.0000", "2026-09-14 14:13:26,834 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: WPOL/USDC | Borrower: 0x3e3FCF5797... | HF: 0.0000", "2026-09-14 14:13:26,834 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: WPOL/USDC | Borrower: 0x10B9175Ad4... | HF: 0.0000", "2026-09-14 14:13:29,395 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: vBELEGYYES/USDC | Borrower: 0xfBdb3a79Fb... | HF: 0.0008", "2026-09-14 14:13:31,151 [reaper.engine] INFO [ethereum] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=14 submitting=0 queued_submit=0 | outcomes={\"declined\":3,\"expired\":92,\"preparation_active_duplicate\":1474,\"preparation_coalesced\":11835,\"preparation_completed\":2,\"preparation_declined\":218,\"preparation_expired\":371,\"preparation_queued\":607,\"preparation_started\":222,\"prepared_economics\":2,\"queued\":95,\"started\":3} | reasons={\"PREPARATION_REQUIRED\":3,\"PREPARATION_UNAVAILABLE\":218}", "2026-09-14 14:13:31,151 [reaper.engine] INFO [polygon] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=12 submitting=0 queued_submit=0 | outcomes={\"declined\":11,\"expired\":79,\"preparation_active_duplicate\":1665,\"preparation_coalesced\":5978,\"preparation_completed\":10,\"preparation_declined\":170,\"preparation_expired\":128,\"preparation_queued\":322,\"preparation_started\":182,\"prepared_economics\":10,\"queued\":90,\"started\":11} | reasons={\"PREPARATION_REQUIRED\":11,\"PREPARATION_UNAVAILABLE\":170}", "2026-09-14 14:13:31,153 [reaper.engine] INFO [bnb] Candidate pipeline | workers=3/3 preparing=1 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\"preparation_active_duplicate\":1034,\"preparation_coalesced\":2,\"preparation_declined\":205,\"preparation_queued\":206,\"preparation_started\":206} | reasons={\"PREPARATION_UNAVAILABLE\":205}", "2026-09-14 14:13:31,153 [reaper.engine] INFO [avalanche] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=1 submitting=0 queued_submit=0 | outcomes={\"preparation_active_duplicate\":1680,\"preparation_coalesced\":154,\"preparation_declined\":192,\"preparation_queued\":195,\"preparation_started\":194} | reasons={\"PREPARATION_UNAVAILABLE\":192}", "2026-09-14 14:13:31,153 [reaper.engine] INFO [gnosis] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={} | reasons={}", "2026-09-14 14:13:31,153 [reaper.engine] INFO [linea] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={} | reasons={}", "2026-09-14 14:13:31,153 [reaper.engine] INFO [arbitrum] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=2 submitting=0 queued_submit=0 | outcomes={\"declined\":19,\"expired\":757,\"preparation_active_duplicate\":1646,\"preparation_coalesced\":2870,\"preparation_completed\":6,\"preparation_declined\":231,\"preparation_evicted\":286,\"preparation_expired\":872,\"preparation_queued\":1399,\"preparation_saturated\":969,\"preparation_started\":239,\"prepared_economics\":6,\"queued\":776,\"saturated\":1049,\"started\":19} | reasons={\"PREPARATION_REQUIRED\":19,\"PREPARATION_UNAVAILABLE\":231}", "2026-09-14 14:13:31,153 [reaper.engine] INFO [mantle] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\"preparation_active_duplicate\":67,\"preparation_coalesced\":2,\"preparation_declined\":583,\"preparation_queued\":583,\"preparation_started\":583} | reasons={\"PREPARATION_UNAVAILABLE\":583}", "2026-09-14 14:13:31,167 [reaper.engine] INFO [base] Candidate pipeline | workers=3/3 preparing=2 queued_prepare=14 submitting=0 queued_submit=0 | outcomes={\"preparation_active_duplicate\":16,\"preparation_coalesced\":112,\"preparation_queued\":16,\"preparation_started\":2} | reasons={}", "2026-09-14 14:13:31,168 [reaper.engine] INFO [scroll] Candidate pipeline | workers=3/3 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={\"preparation_declined\":1,\"preparation_queued\":1,\"preparation_started\":1} | reasons={\"PREPARATION_UNAVAILABLE\":1}", "2026-09-14 14:13:33,853 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=54 borrower= market= debt_token= provider= causes=", "2026-09-14 14:13:36,821 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: WETH/USDC | Borrower: 0x60bfaF9E28... | HF: 0.0000", "2026-09-14 14:13:36,826 [reaper.morpho] WARNING [polygon] WS-SCAN LIQUIDATABLE: WETH/USDC | Borrower: 0x624614DE50... | HF: 0.0000", "2026-09-14 14:13:45,131 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=55 borrower= market= debt_token= provider= causes=", "2026-09-14 14:13:56,408 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=59 borrower= market= debt_token= provider= causes="
   ]
 }
