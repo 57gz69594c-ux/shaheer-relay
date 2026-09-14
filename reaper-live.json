@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-14T17:28:01Z",
-  "epoch": 1789406881,
+  "updated": "2026-09-14T17:30:01Z",
+  "epoch": 1789407001,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 41.6,
   "chains": {
@@ -14,20 +14,13 @@
   },
   "liquidatable_markets": [
     {"chain":"ethereum","market":"USR/USDC","detections":300},
-{"chain":"arbitrum","market":"thBILL/USDC","detections":235},
 {"chain":"arbitrum","market":"RLP/USDC","detections":8},
-{"chain":"ethereum","market":"USD0USD0++/USDC","detections":7},
-{"chain":"ethereum","market":"PT-USD0++-27MAR2025/USDC","detections":4},
-{"chain":"arbitrum","market":"xUSD/USDC","detections":4},
 {"chain":"ethereum","market":"USDe/DAI","detections":3},
-{"chain":"ethereum","market":"PT-USDe-25SEP2025/USDC","detections":3},
-{"chain":"arbitrum","market":"PT-sUSDai-19FEB2026/USDC","detections":3},
-{"chain":"optimism","market":"sUSDC/USDC","detections":1},
-{"chain":"ethereum","market":"wbrUSDC/USDC","detections":1},
 {"chain":"ethereum","market":"slvlUSD/USDC","detections":1},
 {"chain":"ethereum","market":"apxETH/WETH","detections":1},
-{"chain":"ethereum","market":"PT-sUSDE-31JUL2025/USDT","detections":1},
-{"chain":"ethereum","market":"PT-mMEV-31JUL2025/USDC","detections":1}
+{"chain":"arbitrum","market":"wstETH/USDT0","detections":1},
+{"chain":"arbitrum","market":"vyUSD/USDC","detections":1},
+{"chain":"arbitrum","market":"stUSD/USDC","detections":1}
   ],
   "top_targets": [
     {
