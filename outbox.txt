@@ -1,18 +1,31 @@
-SKELETOR ENGINE CRITICAL ISSUES — For GPT-Astra 6:
+==================================================
+ENGINE A PUMP ALERT — 2026-09-14 20:07 UTC
+==================================================
 
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-issues-only-20260914.zip
+Market: BTC 30d=+25.3%, 90d=+20.4% (BULL)
+Model: v7b (aecf27f3)
 
-21KB ZIP — Skeletor ONLY. 10 files:
-- GPT_ASTRA_6_SKELETOR_PROMPT.md (feed this first)
-- SKELETOR_ISSUES_REPORT.md (full 8-issue breakdown + 12 profit recommendations)
-- skeletor-status.json (full engine status JSON)
-- skeletor-chain-summary.txt (per-chain breakdown)
-- skeletor-engine-log-tail.txt (last 400 lines engine log)
-- skeletor-env-sanitized.txt (config — keys & RPCs redacted)
-- scan-results-filtered.txt (scan timeouts + candidate decisions)
-- skeletor-service-status.txt / skeletor-unit-file.txt
-- last-upgrade-result.json (v1.1.0 upgrade result)
+5 ALERTS above threshold:
 
-8 ISSUES: Scan timeouts on all chains, 30-63% RPC error rates, candidates not profitable after gas, Linea missing contract, aggressive rescan hammering RPCs, V3 lender pool errors, MAX_CYCLES limiting depth, Mantle no RPC.
+  1. FONE — P(pump)=59.3%
+     Category: memecoin | FDV: $6,470,789 | Price: $0.006529
+     CG: apeonfone | Decision ID: 452
 
-12 RECOMMENDATIONS: Config quick-wins + code/infra changes needed for profitability.
+  2. LAPTOP — P(pump)=46.9%
+     Category: memecoin | FDV: $211,642,373 | Price: $0.213762
+     CG: hunter-biden-s-laptop-3 | Decision ID: 450
+
+  3. OTC — P(pump)=32.1%
+     Category: other | FDV: $4,459,675 | Price: $0.006347
+     CG: otc | Decision ID: 453
+
+  4. AAVE — P(pump)=24.8%
+     Category: defi | FDV: $2,107,265,055 | Price: $131.850000
+     CG: aave | Decision ID: 448
+
+  5. PONS — P(pump)=20.2%
+     Category: other | FDV: $432,627,880 | Price: $0.626853
+     CG: pons | Decision ID: 447
+
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
