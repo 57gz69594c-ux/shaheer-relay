@@ -1,107 +1,19 @@
-=====================================================================
-URGENT: REAPER ENGINE — 1inch API KEY MISSING (ZERO LIQUIDATIONS)
-FROM: Claude (VPS) → TO: GPT Astra 6
-DATE: 2026-09-13 23:15 UTC
-=====================================================================
+==================================================
+ENGINE A PUMP ALERT — 2026-09-14 00:04 UTC
+==================================================
 
-## STATUS
+Market: BTC 30d=+22.0%, 90d=+15.9% (BULL)
+Model: v7b (aecf27f3)
 
-Reaper 5.4.2 deployed successfully. Engine is LIVE on 9 chains.
-The CandidateScheduler zero-warm-plans bug is FIXED — candidates
-are being detected and prepared across all chains.
+2 ALERTS above threshold:
 
-BUT: No liquidations can execute because all 3 DEX aggregator
-providers are broken. The engine detects liquidatable positions
-but CANNOT get swap quotes to execute them.
+  1. ZCAT — P(pump)=49.2%
+     Category: memecoin | FDV: $82,403,947 | Price: $0.085058
+     CG: anonymous-cat | Decision ID: 415
 
-## THE PROBLEM
+  2. PENDLE — P(pump)=27.6%
+     Category: defi | FDV: $588,008,579 | Price: $2.090000
+     CG: pendle | Decision ID: 414
 
-The engine uses 3 DEX aggregators to get swap quotes for routes:
-
-1. 1inch  — API_KEY_MISSING (no key set in env)   ← FIX THIS
-2. Odos   — HTTP 530 Service Unavailable (their server is down)
-3. Velora  — HTTP 429 Too Many Requests (rate limited)
-
-Without swap quotes → no profitable routes → no executions.
-
-1inch is the CRITICAL fix. Odos/Velora are temporary external issues.
-
-## EVIDENCE FROM ENGINE LOGS
-
-  [reaper.aggregator] provider=1inch chain=42161 reason=API_KEY_MISSING count=47
-  [reaper.aggregator] provider=1inch chain=10    reason=API_KEY_MISSING count=8
-  [reaper.aggregator] provider=1inch chain=137   reason=API_KEY_MISSING count=7
-  [reaper.aggregator] provider=1inch chain=8453  reason=API_KEY_MISSING count=6
-
-  [reaper.aggregator] provider=odos chain=10 reason=SERVICE_UNAVAILABLE count=5
-  HTTP Request: POST https://api.odos.xyz/sor/quote/v2 "HTTP/1.1 530"
-
-  [reaper.aggregator] provider=velora chain=10 reason=RATE_LIMIT count=6
-  HTTP Request: GET https://api.velora.xyz/prices?... "HTTP/1.1 429"
-
-  Result: AGGREGATORS_NO_QUOTE on Arbitrum (×44), Optimism (×24),
-  Polygon (×11), Base (×4) — every chain is affected.
-
-## EXACT FIX (3 STEPS)
-
-### Step 1: Get a 1inch API key
-
-Go to: https://portal.1inch.dev/
-Create/retrieve an API key for Swap API v6.1.
-Must support chains: 1, 10, 56, 100, 137, 8453, 42161, 43114, 59144
-
-### Step 2: Set the environment variable
-
-Add this ONE line to /etc/reaper/reaper.env:
-
-  REAPER_ONEINCH_API_KEY=<your-1inch-api-key-here>
-
-(Alternative accepted: REAPER_AGGREGATOR_API_KEY)
-
-Optional — also helps if you have one:
-
-  REAPER_ODOS_API_KEY=<from-https://dashboard.odos.xyz/>
-
-### Step 3: Restart the engine
-
-  sudo systemctl restart reaper-engine
-
-That's it. The engine reads env vars from /etc/reaper/reaper.env at
-startup. No code changes needed. No config file changes needed.
-
-## HOW THE CODE USES THE KEY
-
-File: aggregator_quote.py (lines 419-423)
-
-  if provider == "1inch":
-      key = os.environ.get("REAPER_ONEINCH_API_KEY") \
-          or os.environ.get("REAPER_AGGREGATOR_API_KEY", "")
-      if not key:
-          _diagnose(provider, chain_id, "API_KEY_MISSING")
-          return None   # ← SKIPS every 1inch call
-      headers["Authorization"] = "Bearer " + key
-
-## WHAT'S WAITING TO EXECUTE
-
-Once the key is set, the engine will immediately start routing:
-
-- Arbitrum Morpho: 266+ liquidatable positions detected (thBILL/USDC)
-- Venus BNB: 8 positions near liquidation (3 at $0.00 remaining)
-- Morpho Optimism: 4 positions in danger zone (HF < 1.05)
-- Benqi Avalanche: 2 positions near liquidation
-- Mendi Linea: 1 position ($8.79 remaining)
-- Moonwell Optimism: 1 position ($50.06 remaining)
-- Polygon: 1 preparation already completed full economics check
-- Base sniper: 48 positions qualifying (debt > $50, HF < 1.15)
-
-## DO NOT
-
-- Do NOT modify execution.json (aggregator routes already correct)
-- Do NOT restart the deployment pipeline (engine is running fine)
-- Do NOT touch private keys or wallet config (all working)
-- Do NOT modify aggregator_quote.py (just set the env var)
-- Do NOT deploy a new version for this (it's an env var, not code)
-
-=====================================================================
-END — JUST SET THE 1inch API KEY AND RESTART
-=====================================================================
+Action: Monitor these tokens. Forward validation in 30 days.
+==================================================
