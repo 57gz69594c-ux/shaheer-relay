@@ -1,8 +1,8 @@
 {
-  "updated": "2026-09-14T12:32:01Z",
+  "updated": "2026-09-14T12:36:01Z",
   "version": "5.4.5-scroll-pendle",
   "release": "/opt/reaper/releases/20260914T111734Z-tDjgcOSv",
-  "pid": 2530707,
+  "pid": 2544584,
   "active": true,
   "tx_events": 0,
   "liquidatable_total": 0,
@@ -19,7 +19,7 @@
     "pendle_not_matured": 0,
     "debt_feed_missing": 0,
     "no_collateral": 0,
-    "aave_no_route": 0
+    "aave_no_route": 1
   },
   "hot_markets": [],
   "pipelines": {},
