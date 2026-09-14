@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-14T21:44:01Z",
-  "epoch": 1789422241,
+  "updated": "2026-09-14T21:46:02Z",
+  "epoch": 1789422362,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 45.9,
   "chains": {
@@ -16,7 +16,6 @@
     {"chain":"arbitrum","market":"thBILL/USDC","detections":235},
 {"chain":"arbitrum","market":"K/USDC","detections":94},
 {"chain":"arbitrum","market":"RLP/USDC","detections":8},
-{"chain":"optimism","market":"sUSDC/USDC","detections":6},
 {"chain":"polygon","market":"WETH/WPOL","detections":4},
 {"chain":"arbitrum","market":"xUSD/USDC","detections":4},
 {"chain":"arbitrum","market":"wstUSR/USDC","detections":4},
@@ -27,7 +26,8 @@
 {"chain":"polygon","market":"WETH/USDC","detections":2},
 {"chain":"arbitrum","market":"PT-USDai-19FEB2026/USDT0","detections":2},
 {"chain":"polygon","market":"vQATCHNO/USDC","detections":1},
-{"chain":"polygon","market":"vBELEGYYES/USDC","detections":1}
+{"chain":"polygon","market":"vBELEGYYES/USDC","detections":1},
+{"chain":"polygon","market":"test-collateral-usdc/test-loan-semi","detections":1}
   ],
   "top_targets": [
     {
