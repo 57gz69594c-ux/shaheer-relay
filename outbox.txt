@@ -1,19 +1,43 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-14 12:06 UTC
+SKELETOR ARB ENGINE — REQUIREMENTS PACKAGE READY
 ==================================================
+Date: 2026-09-14 12:50 UTC
 
-Market: BTC 30d=+23.4%, 90d=+17.0% (BULL)
-Model: v7b (aecf27f3)
+The complete Skeletor cross-DEX flash loan arbitrage
+engine requirements are packaged and ready for
+GPT Astra 6 deep reasoning.
 
-2 ALERTS above threshold:
+DOWNLOAD ZIP (18 KB):
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-arb-engine-requirements.zip
 
-  1. SPX — P(pump)=46.6%
-     Category: memecoin | FDV: $465,843,331 | Price: $0.500488
-     CG: spx6900 | Decision ID: 436
+ZIP CONTENTS:
+  1. SKELETOR_ARB_ENGINE_REQUIREMENTS.md
+     - Full architecture & component design
+     - DEX targets on all 11 chains with router addresses
+     - Token pairs to monitor (4 tiers)
+     - Flash loan strategy (Morpho 0%, Balancer 0%, AAVE 0.05%)
+     - Smart contract spec (SkeletorArbitrageur.sol)
+     - Execution flow & risk management
+     - Phased plan: $50/day → $150 → $300 → $500/day
+     - Performance & testing requirements
+     - Deployment checklist
 
-  2. TWINE — P(pump)=39.9%
-     Category: other | FDV: $321,253 | Price: $0.000321
-     CG: twine | Decision ID: 437
+  2. EXISTING_INFRASTRUCTURE.md
+     - Server specs (32-core Xeon, 62GB RAM, Ubuntu 24.04)
+     - Chainstack paid RPC endpoints (HTTP + WSS) all 11 chains
+     - All keeper wallet addresses (11 chains)
+     - All funding wallet addresses (11 chains)
+     - Flash loan providers (Morpho, AAVE, Balancer)
+     - Velora paid swap routing API
+     - REAPER v5.4.5 coexistence rules
+     - Gas funding config per chain
+     - Security constraints
+     - Quick-start build instructions
 
-Action: Monitor these tokens. Forward validation in 30 days.
+TARGET: $500/day net profit from cross-DEX arbitrage
+STRATEGY: Flash loan → buy cheap DEX → sell expensive DEX → pocket spread
+RISK: Zero capital risk (atomic flash loan txs revert if unprofitable)
+RPC: Chainstack ONLY (no Alchemy)
+
+Submit both files to GPT Astra 6 at xhigh reasoning.
 ==================================================
