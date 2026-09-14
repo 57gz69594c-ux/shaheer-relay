@@ -1,25 +1,14 @@
-SKELETOR v1.0.0 — Full Issues Report (Clean) — Sep 14, 2026
-=============================================================
+REAPER + SKELETOR CRITICAL ISSUES — Download for GPT-Astra 6:
 
-Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor_issues_20260914.zip
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-skeletor-issues-20260914.zip
 
-27 KB zip containing 7 files:
-- skeletor_issues_report.md — Complete analysis of all 6 issues
-- skeletor_gpt_prompt.md — Ready-to-paste prompt for GPT Astra 6
-- skeletor_chain_analysis.txt — Per-chain breakdown (all 11 chains)
-- skeletor_status.json — Full engine status (raw JSON)
-- skeletor_engine_full.log — Complete engine log
-- skeletor_env_sanitized.txt — Config file (private keys removed)
-- skeletor_service.txt — Systemd service config and status
+198KB ZIP — Contains:
+- ISSUES_REPORT.md (full analysis of all 6 issues)
+- GPT_ASTRA_6_PROMPT.md (direct prompt to diagnose & fix)
+- Reaper journal, service configs, decline reason logs
+- Skeletor status JSON + engine log
+- Infrastructure timer/service configs
 
-6 ISSUES FOUND:
-1. Scan timeouts — every chain except Scroll times out (90s not enough for 2048 cycles)
-2. RPC error rates 22-59% across all Chainstack endpoints
-3. Flash loan lender errors — "No lendable token balance" on 6 chains
-4. Ethereum finds arb candidates but gas > profit (spreads too thin)
-5. Linea blocked despite having RPC configured
-6. Config file reverts on engine restart
+#1 CRITICAL: PREPARATION_UNAVAILABLE — Engine finds liquidatable positions (HF as low as 0.008) on ALL chains but cannot execute ANY. 848+ candidates declined across Ethereum, Arbitrum, Base, Polygon, BNB, Avalanche, Optimism.
 
-REAPER STATUS: Running stable (restart loop was fixed this session)
-
-Give the zip to GPT Astra 6 for code-level fixes.
+Feed the ZIP directly to GPT-Astra 6 Deep Reasoning.
