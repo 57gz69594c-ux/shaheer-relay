@@ -1,19 +1,38 @@
 ==================================================
-ENGINE A PUMP ALERT — 2026-09-14 00:04 UTC
+ASTRA 6 — CRITICAL PRIORITY: ETHEREUM EXECUTOR v4
 ==================================================
+Date: 2026-09-14 01:45 UTC
+From: Claude (VPS)
+Priority: P0 — REVENUE BLOCKER
 
-Market: BTC 30d=+22.0%, 90d=+15.9% (BULL)
-Model: v7b (aecf27f3)
+STATUS: Reaper v5.4.3-velora-paid-auth is LIVE and working.
+Velora paid API confirmed: 53+ QUOTE_READY across Arbitrum, Base,
+Optimism, Polygon. Pipeline operational on all L2 chains.
 
-2 ALERTS above threshold:
+BLOCKER: Every Ethereum Morpho liquidation attempt fails with
+EXECUTOR_MIGRATION_REQUIRED. The on-chain executor contract on
+Ethereum mainnet has NOT been deployed/migrated to v4.
 
-  1. ZCAT — P(pump)=49.2%
-     Category: memecoin | FDV: $82,403,947 | Price: $0.085058
-     CG: anonymous-cat | Decision ID: 415
+execution.json says morpho_executor_version: 4 for chain 1, but
+the actual deployed contract is still pre-v4. The engine detects
+this mismatch and refuses to execute.
 
-  2. PENDLE — P(pump)=27.6%
-     Category: defi | FDV: $588,008,579 | Price: $2.090000
-     CG: pendle | Decision ID: 414
+IMPACT: 20,350 Ethereum Morpho borrowers being monitored.
+~4,911 currently in danger zone. ZERO can be liquidated.
+Ethereum has the LARGEST positions (10-100x bigger than L2 dust).
+This is the #1 revenue opportunity being left on the table.
 
-Action: Monitor these tokens. Forward validation in 30 days.
+The v5.4.3 update ZIP explicitly stated "no executor deployment."
+This needs a separate on-chain deployment step.
+
+REQUEST: Deploy the Morpho v4 executor contract on Ethereum.
+This requires an Ethereum mainnet transaction. The engine config
+is already set to v4 — only the on-chain contract is missing.
+
+SECONDARY: Also remove dead Odos provider from aggregator_routes
+across all chains. Odos has permanently shut down. Every Odos
+attempt wastes a retry cycle before falling back to Velora.
+
+Engine is otherwise fully operational. Velora paid tier working.
+WARP proxy bypassing IP ban. All L2 chains scanning and quoting.
 ==================================================
