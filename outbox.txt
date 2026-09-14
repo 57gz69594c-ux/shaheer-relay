@@ -2,7 +2,7 @@
 REAPER LIQUIDATION FINDINGS — 2026-09-14 09:41 UTC
 ==================================================
 
-ZIP FILE: reaper-liquidation-findings.zip (16KB)
+DOWNLOAD ZIP: https://57gz69594c-ux.github.io/shaheer-relay/reaper-liquidation-findings.zip (16KB)
 Contains:
   1. positions_all_chains.json — Complete structured data of ALL positions
   2. POSITIONS_REPORT.md — Human-readable report with all findings
