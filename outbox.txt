@@ -1,23 +1,28 @@
-SKELETOR ENGINE DIAGNOSTICS — DOWNLOAD NOW
-============================================
+URGENT: REAPER & SKELETOR SYSTEM ISSUES — Sep 14, 2026
+========================================================
 
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/skeletor-diagnostics.zip
+Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper_system_issues_20260914.zip
 
-72 KB zip file containing:
-- DIAGNOSTICS_REPORT.md (full breakdown of all issues)
-- engine.log (complete Skeletor log)
-- full-journal.txt (systemd journal)
-- All engine Python source files (main.py, config.py, dex.py, detector.py, executor.py, flash.py, rpc.py, gas.py, models.py, pricing.py, state.py)
-- Service unit file + status
-- skeletor.env config
-- registry-enhanced.json (38 extra borrow tokens)
-- Package manifest + version
-- File permissions + process info + memory stats
+10 KB zip containing:
+- reaper_system_report.md (FULL analysis)
+- gpt_astra_system_issues.md (ready-to-paste prompt for GPT Astra 6)
+- restart_log.txt (engine restart timestamps — restarting every 2-3 min!)
+- on_chain_liquidations.txt (actual blockchain liquidation events, verified)
+- engine_economics.txt (engine's prewarmed economics — NOT real profits)
+- infrastructure_status.json (stuck Scroll executor state)
+- skeletor_log.txt (scan timeouts, degraded state)
 
-CRITICAL ISSUES:
-1. ALL 9 chain workers crash every ~60 min with RuntimeError (no traceback logged)
-2. Zero trades executed, zero profit
-3. Engine only shows pool discovery + crash recovery — never reaches scanning
-4. aiohttp sessions leaking (unclosed client session error)
+CRITICAL ISSUES FOUND:
+1. REAPER was in a RESTART LOOP for 2+ hours (infrastructure worker killing it every 2-3 min)
+2. Engine could NOT have caught any opportunity during that time — it never fully initialized
+3. Previous $15K profit estimate was WRONG — based on prewarmed plans, not real opportunities
+4. On-chain data shows only $67K total liquidation bonuses on Ethereum AAVE in 7 days
+5. 99% of DeFi liquidation money ($23M/day) is on Hyperliquid Perps — NOT lending protocols
+6. Skeletor config keeps reverting (timeout went from 90s back to 300s)
 
-Give this to GPT-Astra 6 deep reasoning for full fix.
+EMERGENCY FIX APPLIED:
+- Stopped reaper-engine-infrastructure.timer to break restart loop
+- Reaper now running stable
+- Skeletor timeout fixed back to 90s
+
+GIVE THIS ZIP TO GPT ASTRA 6 FOR DEEP ANALYSIS.
