@@ -1,51 +1,169 @@
-REAPER v5.4.9 → v5.5.0 — ALL ISSUES FOR ASTRA 6 — 2026-09-15 00:37 UTC
-=========================================================================
+ADDITIONAL REQUIREMENTS FOR ASTRA 6 — EXOTIC COLLATERAL ROUTES — 2026-09-15 00:50 UTC
+======================================================================================
 
-DOWNLOAD THE DIAGNOSTIC ZIP:
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v550-requirements.zip
-(86 KB — contains 17 diagnostic files + full PROMPT_FOR_ASTRA6.md)
+Shaheer here. Claude found dozens of liquidatable positions across our chains that
+NO OTHER BOT is touching because the collateral tokens require special redemption
+routes — not standard DEX swaps. We need v5.5.0 to support these collateral types.
+Add these to the upgrade you're already building.
 
-Open PROMPT_FOR_ASTRA6.md from the ZIP and paste it into Astra 6.
-The ZIP also contains engine state, wallet balances, logs, configs (keys redacted).
+======================================================================================
+REQUIREMENT 1: ERC4626 VAULT TOKEN REDEMPTION (CRITICAL — multiple chains)
+======================================================================================
 
-=========================================================================
-QUICK SUMMARY — PASTE THIS INTO ASTRA 6 (ChatGPT):
-=========================================================================
+These are yield-bearing vault tokens that wrap a base asset. They CANNOT be swapped
+on DEXes. The ONLY way to convert them is calling vault.redeem() or vault.withdraw()
+on the ERC4626 vault contract to get the underlying asset back.
 
-I'm attaching a diagnostic ZIP from REAPER v5.4.9 (execution-recovery).
-9 chains LIVE, 0 liquidations, 0 profits. $830 position sitting on Optimism
-that we can't touch. I need v5.5.0 that fixes ALL of these:
+v5.4.9 already has erc4626_routes_enabled=true but it only works for sUSDC on
+Optimism (which is blocked). We need it working for ALL ERC4626 vault tokens:
 
-CRITICAL — OPTIMISM DEFERRED ($830 blocked):
-- v5.4.9 converted 5 readiness warnings into hard gates, blocking Optimism
-- funded_native_policy: vault has 0 ETH but keeper has 0.00243 ETH (above low water)
-- fee_policy: WalletHistoryError at startup — can't verify gas wallet state
-- keeper_funding: vault empty so can't refill, but keeper is funded enough to operate
-- treasury_configuration: config IS correct but gate fails anyway (cascading?)
-- route_and_prices: sUSDC vault swap target not approved despite on-chain tx confirmed
-- In v5.4.8 this same setup was LIVE. v5.4.9 broke it.
+LIVE POSITIONS RIGHT NOW:
 
-CRITICAL — INFRASTRUCTURE WORKER STUCK:
-- Optimism route permission tx confirmed on-chain but worker shows broadcasts=0
-- Worker won't send follow-up tx for sUSDC vault (0xCF9326e24EBfFBEF22ce1050007A43A3c0B6DB55)
-- Arbitrum and Base also stuck PENDING
-- Ethereum and Polygon BLOCKED with Web3RPCError
-- Polygon REGRESSED from ALREADY_APPROVED to BLOCKED
+  Chain: Optimism
+  - sUSDC/USDC | 1 borrower | HF 0.9970 | $49,486 debt | ~$830 profit
+    Vault: 0xCF9326e24EBfFBEF22ce1050007A43A3c0B6DB55 (Spark sUSDC)
+    Redemption: sUSDC.redeem() → USDC
 
-HIGH — NO PROFITABLE ROUTES ON ANY CHAIN:
-- KyberSwap: ALL quotes fail (flags=0x200 unknown=0x200 — KYBERSWAP_FLAGS_UNSUPPORTED)
-- Velora: working but many NO_LIQUIDITY_ROUTE responses
-- Scroll: ROUTES_NOT_CONFIGURED (no aggregator configured for chain 534352)
-- Every position hits NO_PROFITABLE_ROUTE or NO_PROFITABLE_DIRECT_ROUTE
+  Chain: Arbitrum
+  - PT-sUSDai-19FEB2026/USDC | 3 borrowers | HF 0.39 | ~$5,000 debt
+    This is a Pendle PT wrapping sUSDai which is itself an ERC4626 vault.
+    Needs: Pendle redeem PT → sUSDai → sUSDai.redeem() → USDai → swap to USDC
 
-MEDIUM — Mantle also deferred (4 failed gates), Scroll Aave/Layerbank blocked
-on executor_and_treasury configuration
+  - stUSD/USDC | 1 borrower | HF 0.23 | ~$1,012 debt
+    stUSD = Angle staked USD vault token
+    Redemption: stUSD.redeem() → USDC
 
-Full details, wallet balances, all logs, and configs in the ZIP.
-Package v5.5.0 as a complete ZIP with INSTALL.sh like v5.4.9.
+  - stUSD/USDT0 | 1 borrower | HF 0.22 | similar
+    Same token, different loan asset
 
-=========================================================================
-END OF PROMPT
-=========================================================================
+  - vyUSD/USDC | 1 borrower | HF 0.03 | ~$500 debt
+    vyUSD = vault yield USD
+    Redemption: vyUSD.redeem() → USDC
 
-— Claude, Sep 15 2026 00:37 UTC
+  - sSuperUSD/USDC | 1 borrower | HF 0.09 | ~$500 debt
+    sSuperUSD = SuperOETH staked USD
+    Redemption: sSuperUSD.redeem() → USDC or underlying
+
+WHAT THE ENGINE NEEDS:
+- Generic ERC4626 redemption route: detect any ERC4626 collateral → call
+  vault.redeem(shares, receiver, owner) → receive underlying → swap or deliver
+- The engine must call vault.asset() to discover the underlying token
+- Then either deliver directly (if underlying = loan token) or DEX-swap
+- Already partially built in v5.4.9 for sUSDC — generalize it
+
+======================================================================================
+REQUIREMENT 2: PENDLE EXPIRED PT REDEMPTION (HIGH — Arbitrum)
+======================================================================================
+
+Pendle Principal Tokens (PTs) represent a claim on underlying assets after maturity.
+Once EXPIRED, they redeem 1:1 for the underlying via Pendle's Router contract.
+Standard bots don't integrate Pendle so these sit untouched.
+
+LIVE POSITIONS:
+
+  Chain: Arbitrum
+  - PT-USDai-20NOV2025/USDC | 4 borrowers | HF 0.98 | ~$3,000 debt
+    EXPIRED (Nov 2025). Redeems for USDai via Pendle Router.
+
+  - PT-USDai-19FEB2026/USDT0 | 2 borrowers | HF 0.42 | ~$2,000 debt
+    EXPIRED (Feb 2026). Redeems for USDai.
+
+  - PT-sUSDai-19FEB2026/USDC | 3 borrowers | HF 0.39 | ~$5,000 debt
+    EXPIRED. Redeems for sUSDai (then ERC4626 redeem to USDai).
+
+  - PT-syrupUSDC-29JAN2026/USDT0 | 1 borrower | HF 0.10 | ~$1,000 debt
+    EXPIRED. Redeems for syrupUSDC (then ERC4626 redeem to USDC).
+
+  - PT-thBILL-27NOV2025/USDC | 1 borrower | HF 0.49 | ~$500 debt
+    EXPIRED. Redeems for thBILL (illiquid underlying though).
+
+WHAT THE ENGINE NEEDS:
+- Pendle Router integration for expired PT redemption
+- Pendle Router on Arbitrum: 0x888888888889758F76e7103c6CbF23ABbF58F946
+- Call: router.redeemPyToToken(receiver, YT_address, amount, tokenOut, minOut)
+- For expired PTs: redeemPyToSy() then redeemSyToToken()
+- v5.4.9 has a Pendle adapter installed — extend it to handle liquidation routes
+- Chain: seize PT collateral → Pendle redeem → get underlying → if ERC4626, redeem
+  again → swap to loan token if needed → repay flash loan
+
+======================================================================================
+REQUIREMENT 3: LIQUID STAKING TOKEN UNWRAP ROUTES (MEDIUM — Arbitrum)
+======================================================================================
+
+Wrapped liquid staking tokens can be unwrapped to the base asset. DEX routes exist
+but may have slippage on large amounts. Direct unwrap is more efficient.
+
+LIVE POSITIONS:
+
+  Chain: Arbitrum
+  - wstETH/USDT0 | 1 borrower | HF 0.01 | ~$667,902 total market borrow
+    wstETH → unwrap to stETH → swap stETH to WETH → swap to USDT0
+    wstETH unwrap contract: 0x5979D7b546E38E9Ab8E801a78b3Ce8a69153E677 (Arbitrum)
+
+  - rETH/WETH | 1 borrower | HF 0.23 | ~$157 debt
+    rETH → Rocket Pool unwrap or DEX swap to WETH
+
+  - rsETH/WETH | 1 borrower | HF 0.23 | ~$157 debt
+    rsETH → Kelp DAO unwrap or DEX swap to WETH
+
+WHAT THE ENGINE NEEDS:
+- wstETH.unwrap() → stETH, then swap stETH→WETH (1:~1 ratio)
+- rETH and rsETH: DEX swap fallback (these have DEX liquidity)
+- Priority: wstETH is the big one ($667K market)
+
+======================================================================================
+REQUIREMENT 4: GMX RLP REDEMPTION (HIGH VALUE — Arbitrum)
+======================================================================================
+
+RLP (GMX Receivable LP) is a GMX-specific token representing LP positions.
+8 borrowers, all deeply underwater (HF 0.05), $1.5M total debt, 4.4% bonus.
+That's potentially ~$66,000 in profit.
+
+  Chain: Arbitrum
+  - RLP/USDC | 8 borrowers | HF 0.05 | $1,510,864 total debt | ~$66K profit
+    RLP token: 0x35E5dB674D8e93a03d814FA0ADa70731efe8a4b9
+    Needs GMX's GlpManager or RewardRouter to redeem RLP → USDC/ETH
+
+WHAT THE ENGINE NEEDS:
+- GMX GlpManager.unstakeAndRedeemGlp() integration
+- Or GMX RewardRouterV2 for RLP → underlying asset conversion
+- This is a specialized integration but worth ~$66K
+
+======================================================================================
+REQUIREMENT 5: GVLT VAULT REDEMPTION (MASSIVE IF REAL — Arbitrum)
+======================================================================================
+
+GVLT/USDC — 1 borrower at HF 0.18, $32.7M debt, 12.7% bonus = $4.1M profit.
+BUT: 100% utilization, likely bad debt. Need to verify if GVLT collateral is
+actually redeemable and worth anything.
+
+  Chain: Arbitrum
+  - GVLT/USDC | 1 borrower | HF 0.18 | $32,682,836 debt
+    GVLT token: 0x57587e47A0aF9d1BB93c0D4B3df671B053aB4366
+    If GVLT is an ERC4626 vault: vault.redeem() → USDC
+    If GVLT is protocol-specific: needs investigation
+
+WHAT THE ENGINE NEEDS:
+- First: verify if GVLT has actual redemption value (check oracle, check vault)
+- If redeemable: add vault redemption route
+- Massive payoff if real, but could also be worthless bad debt
+
+======================================================================================
+SUMMARY — PRIORITY ORDER FOR v5.5.0
+======================================================================================
+
+1. FIX OPTIMISM DEFERRED (from the ZIP I already sent you) — $830 ready NOW
+2. GENERIC ERC4626 VAULT REDEMPTION — unlocks sUSDC + stUSD + vyUSD + sSuperUSD
+3. PENDLE EXPIRED PT REDEMPTION — unlocks 11+ positions on Arbitrum
+4. RLP/GMX INTEGRATION — $66K potential on Arbitrum
+5. LIQUID STAKING UNWRAP ROUTES — wstETH, rETH, rsETH
+6. GVLT INVESTIGATION — $4.1M if real (verify first)
+
+All of these positions are sitting there RIGHT NOW because standard liquidation
+bots only know how to DEX-swap collateral. They see "no route" and skip.
+Our engine already has the ERC4626 and Pendle adapter framework from v5.4.9 —
+we just need to generalize and configure the routes.
+
+======================================================================================
+END — Claude, Sep 15 2026 00:50 UTC
+======================================================================================
