@@ -1,52 +1,176 @@
-REAPER v5.6.0 REQUIREMENTS FOR ASTRA 6 — 2026-09-15 07:50 UTC
-================================================================
+CRITICAL ADDITION TO v5.6.0 REQUIREMENTS — SPEED — 2026-09-15 08:15 UTC
+=========================================================================
 
-v5.5.0 ran for 5+ hours on 9 chains. Zero executions. Zero profit.
-280 positions passed economic filters. 13 reached contract simulation on
-Ethereum. All 13 reverted. Full data is in the attached ZIP.
+ZIP already uploaded: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v560-requirements.zip
 
-PLEASE BUILD v5.6.0 WITH THESE PRIORITIES:
+This is the missing piece. Our engine is too slow. Here are the exact numbers.
 
-1. FIX SIMULATION REVERTS — Borrower 0x9FAF5B90 has been sitting untouched
-   for 4+ hours, reverting on our simulation. No other bot is taking it.
-   Decode revert reasons and fix whatever is preventing execution.
+=========================================================================
+OUR CURRENT SPEED (measured from v5.5.0 live logs)
+=========================================================================
 
-2. GAS OPTIMIZATION — 137 positions had valid routes, output covered
-   repayment, but gas exceeded profit. These should execute on L2s.
+Oracle price detection:     5,000–9,000 ms per cycle
+  Ethereum:                 8,291 ms
+  Arbitrum:                 6,498 ms
+  Base:                     8,248 ms
+  Polygon:                  7,640 ms
+  BNB:                      5,104 ms
+  Avalanche:                9,243 ms
 
-3. DIRECT DEX POOL ROUTING — 5,859 positions failed because aggregator APIs
-   couldn't quote them. Route through on-chain pools directly via multicall
-   (Uniswap, PancakeSwap, TraderJoe) to eliminate API dependencies.
+Aggregator quote request:   1,000–10,000+ ms (frequent timeouts beyond 10s)
+Transaction build:          1,000–2,000 ms
+EVM simulation:             1,000–2,000 ms
+Mempool submission:         1,000–2,000 ms
 
-4. RATE LIMIT MANAGEMENT — 3,289 events rate-limited. Prioritize large
-   positions first. Cache quotes. Don't burn API quota on dust.
+TOTAL PIPELINE:             10,000–25,000 ms (10–25 seconds)
 
-5. SPEED — 1,328 positions expired during preparation. Parallel quote
-   fetching, cached routes, fewer RPC round-trips.
+We are detecting a liquidation opportunity 10–25 SECONDS after it appears.
+By then, it's already gone.
 
-6. PRIVATE SUBMISSION — Flashbots/MEV-Share for Ethereum. Sequencer direct
-   for L2s.
+=========================================================================
+WHAT THE FASTEST MEV BOTS ACHIEVE
+=========================================================================
 
-7. PENDLE EXPANSION — 1,332 unsupported Pendle positions.
+Oracle detection:           0 ms — they subscribe to pending transactions
+                            in the mempool and see the oracle price update
+                            BEFORE it's even mined into a block.
 
-8. PRICE FEEDS — 353 positions with missing/stale USD feeds.
+Route computation:          0 ms — pre-computed. They maintain a live
+                            routing table of every major DEX pool, updated
+                            every block. No external API call needed.
 
-9. OPTIMISM — Still deferred after 5 hours. Fix gas history deadline.
+Transaction construction:   < 10 ms — pre-built transaction templates with
+                            only the variable parameters filled in.
 
-DOWNLOAD ZIP: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v560-requirements.zip
-Baseline manifest: 103a639603b8e4817fb413c4c30db5de7ce0d229c66dba95f805246b8bbf2d17
+Simulation:                 < 50 ms — running against a local fork of the
+                            blockchain state on bare metal hardware, not a
+                            remote RPC endpoint.
 
-Previous exotic collateral requirements (below) are STILL VALID — v5.5.0
-addressed some but the positions in FINDINGS.md need correction verification.
+Submission:                 0 ms latency advantage — they use Flashbots
+                            bundles to include their liquidation transaction
+                            IN THE SAME BLOCK as the oracle update that
+                            creates the opportunity. The liquidation and the
+                            price change are mined atomically together.
 
-================================================================
-END v5.6.0 REQUIREMENTS
-================================================================
+TOTAL PIPELINE:             < 100 ms, often SAME-BLOCK (0 effective delay)
 
----
+=========================================================================
+THE SPEED GAP
+=========================================================================
 
-PREVIOUS: EXOTIC COLLATERAL ROUTES (from 2026-09-15 00:50 UTC — still valid)
-================================================================
+Us:    10,000–25,000 ms
+Them:  < 100 ms (or same-block)
 
-[See REQUIREMENTS_V560.md in the ZIP for the full overnight analysis data,
-decline reason breakdowns, and specific borrower/market identifiers.]
+We are 100–250x SLOWER than the fastest bots.
+
+=========================================================================
+WHAT v5.6.0 MUST DO TO CLOSE THIS GAP
+=========================================================================
+
+TIER 1 — Eliminate external API dependency (biggest single improvement):
+
+  Current bottleneck: Every liquidation attempt queries Kyberswap or Velora
+  over HTTP. Each call takes 1–10+ seconds and we're rate-limited to a few
+  hundred per minute.
+
+  Solution: DIRECT ON-CHAIN DEX POOL ROUTING. Read Uniswap V3/V2,
+  SushiSwap, PancakeSwap, Curve pool states via multicall in a single RPC
+  batch. Compute the swap output locally using the constant-product or
+  concentrated-liquidity formula. No HTTP API. No rate limits. No timeouts.
+
+  Target: Quote any token pair in < 50 ms via RPC multicall.
+
+TIER 2 — WebSocket oracle subscription (detect opportunities instantly):
+
+  Current: We poll oracle prices every 5–9 seconds per chain.
+
+  Solution: Subscribe to Chainlink oracle Update events and Morpho/Aave
+  oracle calls via WebSocket. The moment a price update transaction is
+  confirmed, we know about it in < 500 ms instead of waiting for the next
+  poll cycle.
+
+  Target: Oracle detection in < 500 ms after block confirmation.
+
+  BEYOND THAT: Subscribe to the MEMPOOL (pending transactions). See oracle
+  updates BEFORE they're mined. This is how MEV bots achieve same-block
+  execution — they see the price change in the mempool, build a liquidation
+  transaction, and bundle both together via Flashbots.
+
+  Target: Oracle detection BEFORE block confirmation (0 ms effective).
+
+TIER 3 — Pre-computed routing table (zero-latency route lookup):
+
+  Current: We discover the route after finding the opportunity.
+
+  Solution: Maintain a hot routing table for every collateral→debt token
+  pair across all monitored markets. Update it every block using the
+  on-chain pool state reads from Tier 1. When a position becomes
+  liquidatable, the route is already known.
+
+  Target: Route lookup in < 1 ms (memory read, no computation needed).
+
+TIER 4 — Local simulation (eliminate RPC round-trip for simulation):
+
+  Current: We simulate via remote Chainstack RPC. Each call adds 1–2
+  seconds of network latency.
+
+  Solution: Run a local execution client (Reth or Geth) on the VPS. Fork
+  the latest state locally. Simulate the liquidation transaction against
+  the local fork in < 50 ms with zero network latency.
+
+  Target: Simulation in < 50 ms.
+
+TIER 5 — Private transaction submission (prevent frontrunning):
+
+  Current: We submit to the public mempool. MEV bots see our transaction
+  and can frontrun it.
+
+  Solution:
+  - Ethereum: Flashbots eth_sendPrivateTransaction or MEV-Share bundles.
+    Our tx never enters the public mempool. Block builders include it
+    directly. We can even bundle our liquidation with the oracle update.
+  - Arbitrum/Base/Optimism: Submit directly to the sequencer endpoint.
+    L2 sequencers process transactions in order of arrival — first in,
+    first executed. Latency to the sequencer is everything.
+
+  Target: Private submission with < 100 ms to block builder/sequencer.
+
+TIER 6 — Same-block execution (the ultimate edge):
+
+  Combine all tiers:
+  1. See oracle update in mempool (before it's mined)
+  2. Route already pre-computed
+  3. Build liquidation tx in < 10 ms
+  4. Simulate locally in < 50 ms
+  5. Bundle with Flashbots: oracle update + our liquidation = same block
+
+  Target: SAME-BLOCK execution. The opportunity never exists publicly
+  because we execute it in the same block it's created.
+
+=========================================================================
+REALISTIC TARGET FOR v5.6.0
+=========================================================================
+
+We don't need same-block execution to start making money. We need to be
+faster than the SECOND-FASTEST bot, not the fastest. The fastest bot takes
+the big Ethereum L1 positions. We target:
+
+  L2 chains (Arbitrum, Base, Polygon, Scroll):
+  - Oracle detection: < 500 ms (WebSocket)
+  - Route: < 50 ms (pre-computed + direct pool reads)
+  - Build + simulate: < 200 ms (local or fast RPC)
+  - Submit to sequencer: < 100 ms (direct endpoint)
+  - TOTAL: < 1 second on L2s
+
+  Ethereum L1:
+  - Flashbots bundle submission for any position > $50 profit
+  - Mempool monitoring for oracle updates
+  - TOTAL: Same-block or next-block
+
+  Current: 10,000–25,000 ms
+  v5.6.0 target: < 1,000 ms on L2s, same-block on L1
+  Improvement needed: 10–25x minimum
+
+=========================================================================
+END SPEED REQUIREMENTS
+=========================================================================
