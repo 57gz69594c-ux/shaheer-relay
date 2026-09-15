@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-15T17:54:01Z",
-  "epoch": 1789494841,
+  "updated": "2026-09-15T17:56:01Z",
+  "epoch": 1789494961,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 54.5,
   "chains": {
@@ -13,7 +13,7 @@
     "scroll": {"markets":13,"borrowers":11,"danger":1,"block":35043764}
   },
   "liquidatable_markets": [
-    {"chain":"scroll","market":"SCR/USDC","detections":5},
+    {"chain":"scroll","market":"SCR/USDC","detections":4},
 {"chain":"Sep","market":"","detections":1},
 {"chain":"Sep","market":"","detections":1},
 {"chain":"Sep","market":"","detections":1},
