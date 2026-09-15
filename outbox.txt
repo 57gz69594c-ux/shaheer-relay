@@ -18,3 +18,8 @@ THE SHORT VERSION FOR ASTRA (priority order)
 Package must install over v5.6.1 with INSTALL.sh --apply, full tests, no secrets, config-driven.
 
 ALREADY DONE ON THE VPS TODAY (v5.7 must stay compatible): full-history borrower backfill merged into engine state (ETH 4,215→5,080, Base 1,636→2,744, other chains running), REAPER_CANDIDATE_WORKERS=4, Velora 8 rps, RPC backups pinned to Chainstack, Robinhood node deleted (disk 93%→28%).
+
+ADDENDUM 16:10 UTC (found after the zip was built — please include in v5.7):
+6. HEAD-AGE BOUND IS HARD-CAPPED: aave_drone.py:1185-1187 forces prepared_plan_max_blocks ≤ 2 for every chain (config values >2 are rejected as INVALID_PREPARED_PLAN_HEAD_AGE). On BNB (~1 s blocks) 76 of 83 Aave preparations die as WARM_REFRESH_HEAD_AGE_EXCEEDED; on Arbitrum 2 blocks = 0.5 s. Make the bound per chain, scaled to block time (BNB 12, Base/Polygon/Avax 6, Arbitrum 40, ETH 2), and keep the submission-time exact eth_call re-verification.
+7. Morpho drones report "Danger: 362 | Warm plans: 0" on Base 20 min after start — danger-zone prewarm offers go through the same saturated FIFO preparation queue and expire; the $339K USDe/USDC whale (HF 1.0043) never got a plan after a restart. Pin warm plans for the top-N danger positions by expected value outside the FIFO queue.
+8. Fee policy note: Claude runs a local shim that answers eth_maxPriorityFeePerGas with a floor (Base 1.0 gwei, ETH 2.0, Polygon 120 measured from winners) — a proper config-driven tip policy in v5.7 should replace it; do not stack both.
