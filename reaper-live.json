@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-15T15:34:01Z",
-  "epoch": 1789486441,
+  "updated": "2026-09-15T15:36:01Z",
+  "epoch": 1789486561,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 52.2,
   "chains": {
@@ -10,21 +10,15 @@
     "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
     "optimism": {"markets":9,"borrowers":138,"danger":8,"block":156872788},
     "bnb": {"markets":87,"borrowers":37,"danger":0,"block":122054313},
-    "scroll": {"markets":13,"borrowers":11,"danger":1,"block":35042051}
+    "scroll": {"markets":0,"borrowers":0,"danger":0,"block":0}
   },
   "liquidatable_markets": [
     {"chain":"scroll","market":"SCR/USDC","detections":11},
 {"chain":"polygon","market":"WETH/WPOL","detections":8},
-{"chain":"polygon","market":"test-collateral-usdc/test-loan-semi","detections":4},
 {"chain":"polygon","market":"vQATCHNO/USDC","detections":3},
+{"chain":"polygon","market":"test-collateral-usdc/test-loan-semi","detections":3},
 {"chain":"polygon","market":"WPOL/USDT0","detections":3},
-{"chain":"polygon","market":"/USDC","detections":3},
-{"chain":"base","market":"USDS/USDC","detections":3},
-{"chain":"arbitrum","market":"wstUSR/USDC","detections":3},
-{"chain":"base","market":"cCOLL/cLOAN","detections":2},
-{"chain":"base","market":"PT-USR-24APR2025/USDC","detections":2},
-{"chain":"ethereum","market":"wstUSR/AUSD","detections":1},
-{"chain":"base","market":"BondETH/WETH","detections":1}
+{"chain":"polygon","market":"/USDC","detections":3}
   ],
   "top_targets": [
     {
