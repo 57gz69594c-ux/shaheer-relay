@@ -1,8 +1,8 @@
 {
-  "updated": "2026-09-15T05:52:01Z",
-  "epoch": 1789451521,
+  "updated": "2026-09-15T05:54:01Z",
+  "epoch": 1789451641,
   "engine": "Reaper v5.4.3-velora-paid-auth",
-  "uptime_hours": 54.1,
+  "uptime_hours": 42.6,
   "chains": {
     "ethereum": {"markets":1012,"borrowers":20350,"danger":4911,"block":25970240},
     "arbitrum": {"markets":110,"borrowers":3600,"danger":308,"block":504836409},
@@ -10,24 +10,24 @@
     "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
     "optimism": {"markets":9,"borrowers":138,"danger":8,"block":156872788},
     "bnb": {"markets":76,"borrowers":37,"danger":0,"block":121976521},
-    "scroll": {"markets":0,"borrowers":0,"danger":0,"block":0}
+    "scroll": {"markets":13,"borrowers":11,"danger":1,"block":35036637}
   },
   "liquidatable_markets": [
-    {"chain":"arbitrum","market":"K/USDC","detections":94},
-{"chain":"polygon","market":"WETH/WPOL","detections":8},
+    {"chain":"arbitrum","market":"thBILL/USDC","detections":235},
+{"chain":"arbitrum","market":"K/USDC","detections":94},
+{"chain":"base","market":"stEUR/jEUR","detections":12},
 {"chain":"base","market":"RLP/USDC","detections":8},
 {"chain":"arbitrum","market":"RLP/USDC","detections":8},
-{"chain":"polygon","market":"/USDC","detections":6},
-{"chain":"polygon","market":"WPOL/USDC","detections":4},
-{"chain":"polygon","market":"WETH/USDC","detections":4},
+{"chain":"polygon","market":"WETH/WPOL","detections":4},
+{"chain":"base","market":"wbCOIN/USDC","detections":4},
 {"chain":"base","market":"WETH/wUSDM","detections":4},
 {"chain":"arbitrum","market":"xUSD/USDC","detections":4},
 {"chain":"arbitrum","market":"wstUSR/USDC","detections":4},
 {"chain":"arbitrum","market":"PT-USDai-20NOV2025/USDC","detections":4},
-{"chain":"optimism","market":"sUSDC/USDC","detections":3},
+{"chain":"polygon","market":"/USDC","detections":3},
+{"chain":"base","market":"sAMM-USDC/cUSDO/USDC","detections":3},
 {"chain":"arbitrum","market":"PT-sUSDai-19FEB2026/USDC","detections":3},
-{"chain":"polygon","market":"vQATCHNO/USDC","detections":2},
-{"chain":"polygon","market":"vBELEGYYES/USDC","detections":2}
+{"chain":"polygon","market":"WPOL/USDC","detections":2}
   ],
   "top_targets": [
     {
@@ -94,6 +94,6 @@
   "total_liquidations": 0,
   "total_profit_usd": 0,
   "recent_events": [
-    "2026-09-15 05:51:56,581 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: wstUSR/USDC | Borrower: 0x05444b883b... | HF: 0.0258", "2026-09-15 05:51:56,589 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0xecAD6A588E... | HF: 0.0477", "2026-09-15 05:51:56,590 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: wstUSR/USDC | Borrower: 0x351aE3Dc26... | HF: 0.4760", "2026-09-15 05:51:56,601 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x76C72DAe7d... | HF: 0.0467", "2026-09-15 05:51:56,608 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x84Ecf15af6... | HF: 0.0447", "2026-09-15 05:51:56,630 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x4CD8876cbF... | HF: 0.5304", "2026-09-15 05:51:56,630 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x639dB3FBF6... | HF: 0.1792", "2026-09-15 05:51:56,634 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0xfdDe9Ca1b6... | HF: 0.0724", "2026-09-15 05:51:58,255 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: PT-USDai-19FEB2026/USDT0 | Borrower: 0x47a4a2A138... | HF: 0.4246", "2026-09-15 05:51:58,272 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: PT-USDai-19FEB2026/USDT0 | Borrower: 0xeC5660E891... | HF: 0.6868", "2026-09-15 05:51:59,730 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDC/LCAP | Borrower: 0xEB04b07a60... | HF: 0.0004", "2026-09-15 05:51:59,733 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDC/LCAP | Borrower: 0x69b235c1c3... | HF: 0.0515", "2026-09-15 05:52:00,103 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: GM/USDC | Borrower: 0xB47f11484e... | HF: 0.0083", "2026-09-15 05:52:00,902 [reaper.morpho] WARNING [optimism] WS-SCAN LIQUIDATABLE: sUSDC/USDC | Borrower: 0xBA705cF0De... | HF: 0.9970", "2026-09-15 05:52:01,090 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: sSuperUSD/USDC | Borrower: 0x6539519E69... | HF: 0.0908", "2026-09-15 05:52:01,299 [reaper.morpho] INFO [base] PLAN stage=route_declined reason=RATE_LIMIT_COOLDOWN count=115 borrower=0x77892dD52b43Bec99d47D3E7E58c553AD3156979 market=0x144bf18d6bf4c59602548a825034f73bf1d20177fc5f975fc69d5a5eba929b45 debt_token=0x4200000000000000000000000000000000000006 provider=velora causes=", "2026-09-15 05:52:01,907 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0x278d7d0Bed... | HF: 0.0019", "2026-09-15 05:52:01,912 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0x6148C40d83... | HF: 0.2870", "2026-09-15 05:52:01,914 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0xaE45Cc4dE5... | HF: 0.0000", "2026-09-15 05:52:01,923 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0x860067643c... | HF: 0.2857"
+    "2026-09-15 05:53:36,077 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x2F0bb65CC5... | HF: 0.9802", "2026-09-15 05:53:36,078 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x61b566a7b2... | HF: 0.9338", "2026-09-15 05:53:36,078 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x1E887Ed677... | HF: 0.9819", "2026-09-15 05:53:36,078 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x979139e0AE... | HF: 0.9765", "2026-09-15 05:53:36,078 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x7Eb1230044... | HF: 0.9831", "2026-09-15 05:53:36,078 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x943f6C5d30... | HF: 0.9339", "2026-09-15 05:53:36,078 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x167c14708c... | HF: 0.9421", "2026-09-15 05:53:36,091 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0xC5BEb27744... | HF: 0.9761", "2026-09-15 05:53:36,091 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x09e15CAe19... | HF: 0.9763", "2026-09-15 05:53:36,091 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0xD25D4b4E2A... | HF: 0.9762", "2026-09-15 05:53:36,092 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: stEUR/jEUR | Borrower: 0x90350244C3... | HF: 0.9376", "2026-09-15 05:53:38,273 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: mwUSDC/USDA | Borrower: 0x1F8EE6393A... | HF: 0.3051", "2026-09-15 05:53:38,277 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: mwUSDC/USDA | Borrower: 0x4bd080e13b... | HF: 0.3002", "2026-09-15 05:53:43,175 [reaper.morpho] INFO [arbitrum] PLAN stage=route_declined reason=RATE_LIMIT_COOLDOWN count=744 borrower=0xf199d4cc7eFa9Dbe94F0A01578C64472f1F4783D market=0xc7670063349ac19dfa324ead7bd7da2985ae931e1b09fb0e31b62c6486b730bd debt_token=0xaf88d065e77c8cC2239327C5EDb3A432268e5831 provider=velora causes=", "2026-09-15 05:53:47,595 [reaper.morpho] INFO [scroll] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=1443 borrower=0xcB5F154178C35ECDa35A560EbFD964D9b6494A43 market=0x7514c69d6d827d829b2655a6f13f0e6841d28eece3294141039f81dbefec3fdc debt_token=0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4 provider= causes=", "2026-09-15 05:53:47,925 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: sAMM-USDC/cUSDO/USDC | Borrower: 0xdc2dA4E1a8... | HF: 0.0698", "2026-09-15 05:53:47,996 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: sAMM-USDC/cUSDO/USDC | Borrower: 0xCed68b6f61... | HF: 0.8739", "2026-09-15 05:53:47,999 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: sAMM-USDC/cUSDO/USDC | Borrower: 0xb4722f0753... | HF: 0.2399", "2026-09-15 05:53:53,689 [reaper.morpho] INFO [arbitrum] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=552 borrower=0x6539519E69343535a2aF6583D9BAE3AD74c6A293 market=0x0eedc5ee101e262ed96d49d66ff7099b1b9d996ac8007b44a6925b2f8c0626ed debt_token=0xaf88d065e77c8cC2239327C5EDb3A432268e5831 provider= causes=", "2026-09-15 05:53:56,723 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wsrUSD/USDC | Borrower: 0xfeed46c11F... | HF: 0.9557"
   ]
 }
