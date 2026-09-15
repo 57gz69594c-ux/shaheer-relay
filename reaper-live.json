@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-15T20:26:01Z",
-  "epoch": 1789503961,
+  "updated": "2026-09-15T20:28:01Z",
+  "epoch": 1789504081,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 57.1,
   "chains": {
@@ -9,15 +9,15 @@
     "base": {"markets":340,"borrowers":24772,"danger":16,"block":51269605},
     "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
     "optimism": {"markets":9,"borrowers":138,"danger":8,"block":156872788},
-    "bnb": {"markets":87,"borrowers":37,"danger":0,"block":122093313},
+    "bnb": {"markets":87,"borrowers":37,"danger":0,"block":122093527},
     "scroll": {"markets":0,"borrowers":0,"danger":0,"block":0}
   },
   "liquidatable_markets": [
-    {"chain":"scroll","market":"SCR/USDC","detections":22},
-{"chain":"polygon","market":"test-collateral-usdc/test-loan-semi","detections":8},
-{"chain":"optimism","market":"sUSDC/USDC","detections":3},
-{"chain":"polygon","market":"vQATCHNO/USDC","detections":2},
-{"chain":"polygon","market":"WPOL/USDT0","detections":1},
+    {"chain":"scroll","market":"SCR/USDC","detections":19},
+{"chain":"Sep","market":"","detections":1},
+{"chain":"Sep","market":"","detections":1},
+{"chain":"Sep","market":"","detections":1},
+{"chain":"Sep","market":"","detections":1},
 {"chain":"Sep","market":"","detections":1},
 {"chain":"Sep","market":"","detections":1},
 {"chain":"Sep","market":"","detections":1},
@@ -94,6 +94,6 @@
   "total_liquidations": 0,
   "total_profit_usd": 0,
   "recent_events": [
-    "2026-09-15 20:25:44,915 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0x18da074c4F... | HF: 0.9829 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:45,853 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xDfC4beCA2f... | HF: 0.6225 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:46,249 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xCa3BaAdA7E... | HF: 0.8940 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:47,247 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xa5473814dE... | HF: 0.6531 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:48,308 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xBd5cfC2b7B... | HF: 0.6610 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:48,597 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xBf395EcCed... | HF: 0.6869 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:48,819 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xC9014DAcd1... | HF: 0.9819 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:50,161 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xaA4c835b01... | HF: 0.7237 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:52,143 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0x7bDa96D36B... | HF: 0.2497 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:52,576 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xBF652eC8a5... | HF: 0.8884 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:53,054 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xaafc3e3C8B... | HF: 0.6289 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:54,566 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xF92fb61743... | HF: 0.9130 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:55,243 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xe1B1F3BF98... | HF: 0.7142 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:55,631 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xb8Fa33651B... | HF: 0.8562 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:55,918 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xc491D4F5DD... | HF: 0.6421 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:57,089 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xa59e87F9FF... | HF: 0.9281 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:57,404 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xBa703dcb1b... | HF: 0.7802 | Debt: $0 | Cache: MISS", "2026-09-15 20:25:59,253 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xDf49cc5A7c... | HF: 0.6565 | Debt: $0 | Cache: MISS", "2026-09-15 20:26:00,254 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xD6Fb6e75D7... | HF: 0.6589 | Debt: $0 | Cache: MISS", "2026-09-15 20:26:01,354 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xF414cBe771... | HF: 0.6754 | Debt: $0 | Cache: MISS"
+    "2026-09-15 20:27:49,493 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xF675c2d0Bb... | HF: 0.8870 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:50,203 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xF83107D137... | HF: 0.6898 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:51,010 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xBE0D9eCC8a... | HF: 0.9665 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:51,433 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xDDaeA2Ee09... | HF: 0.7713 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:51,806 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xaa67117Cf6... | HF: 0.9493 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:52,012 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xE5e38c3db0... | HF: 0.7590 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:52,356 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xF82C52E970... | HF: 0.6732 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:52,995 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0x8Be30EeAD4... | HF: 0.5334 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:53,101 [reaper.morpho] WARNING [scroll] WS-SCAN LIQUIDATABLE: SCR/USDC | Borrower: 0xcB5F154178... | HF: 0.9658", "2026-09-15 20:27:53,369 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xca47A53CE1... | HF: 0.8682 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:54,227 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xC20c98Dc3E... | HF: 0.7318 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:55,088 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xe89075BC6B... | HF: 0.6461 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:55,650 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xC646547D8B... | HF: 0.6960 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:57,376 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0x60bb95F024... | HF: 0.1004 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:58,184 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xdA068fC9B3... | HF: 0.6978 | Debt: $0 | Cache: MISS", "2026-09-15 20:27:59,436 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xBD7AF6f536... | HF: 0.6517 | Debt: $0 | Cache: MISS", "2026-09-15 20:28:00,016 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xc93884750b... | HF: 0.7537 | Debt: $0 | Cache: MISS", "2026-09-15 20:28:00,718 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0x4A41A52A7a... | HF: 0.9818 | Debt: $0 | Cache: MISS", "2026-09-15 20:28:01,160 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0xbAa787A61f... | HF: 0.7527 | Debt: $0 | Cache: MISS", "2026-09-15 20:28:01,908 [reaper.aave] WARNING [scroll] \ud83c\udfaf WS-SCAN LIQUIDATABLE: 0x832bfa2778... | HF: 0.9514 | Debt: $0 | Cache: MISS"
   ]
 }
