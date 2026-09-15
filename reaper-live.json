@@ -1,10 +1,10 @@
 {
-  "updated": "2026-09-15T18:10:01Z",
-  "epoch": 1789495801,
+  "updated": "2026-09-15T18:12:01Z",
+  "epoch": 1789495921,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 54.8,
   "chains": {
-    "ethereum": {"markets":1018,"borrowers":10370,"danger":485,"block":25984414},
+    "ethereum": {"markets":1012,"borrowers":20350,"danger":4911,"block":25970240},
     "arbitrum": {"markets":100,"borrowers":1808,"danger":0,"block":505497901},
     "base": {"markets":340,"borrowers":24772,"danger":16,"block":51269605},
     "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
