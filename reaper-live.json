@@ -1,19 +1,19 @@
 {
-  "updated": "2026-09-15T15:28:01Z",
-  "epoch": 1789486081,
+  "updated": "2026-09-15T15:30:01Z",
+  "epoch": 1789486201,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 52.1,
   "chains": {
-    "ethereum": {"markets":200,"borrowers":10356,"danger":0,"block":25983615},
+    "ethereum": {"markets":1012,"borrowers":20350,"danger":4911,"block":25970240},
     "arbitrum": {"markets":110,"borrowers":1808,"danger":168,"block":505455983},
     "base": {"markets":340,"borrowers":24772,"danger":16,"block":51269605},
-    "polygon": {"markets":98,"borrowers":682,"danger":0,"block":93852895},
+    "polygon": {"markets":82,"borrowers":652,"danger":25,"block":93780897},
     "optimism": {"markets":9,"borrowers":138,"danger":8,"block":156872788},
     "bnb": {"markets":87,"borrowers":37,"danger":0,"block":122053208},
     "scroll": {"markets":13,"borrowers":11,"danger":1,"block":35042051}
   },
   "liquidatable_markets": [
-    {"chain":"scroll","market":"SCR/USDC","detections":13}
+    {"chain":"scroll","market":"SCR/USDC","detections":9}
   ],
   "top_targets": [
     {
