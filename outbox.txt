@@ -1,86 +1,51 @@
-REAPER v5.4.8 — BLOCKERS FOR ASTRA 6 — 2026-09-14 23:27 UTC
-================================================================
+REAPER v5.4.9 → v5.5.0 — ALL ISSUES FOR ASTRA 6 — 2026-09-15 00:37 UTC
+=========================================================================
 
-DOWNLOAD THE ZIP FILE FROM THIS LINK:
-https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v549-blockers-for-astra6.zip
-(12 KB ZIP — contains full diagnostics, logs, and PROMPT_FOR_ASTRA6.md)
+DOWNLOAD THE DIAGNOSTIC ZIP:
+https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v550-requirements.zip
+(86 KB — contains 17 diagnostic files + full PROMPT_FOR_ASTRA6.md)
 
 Open PROMPT_FOR_ASTRA6.md from the ZIP and paste it into Astra 6.
-Attach the other files from the ZIP as context.
+The ZIP also contains engine state, wallet balances, logs, configs (keys redacted).
 
-================================================================
-PASTE THIS PROMPT INTO ASTRA 6 (ChatGPT):
-================================================================
+=========================================================================
+QUICK SUMMARY — PASTE THIS INTO ASTRA 6 (ChatGPT):
+=========================================================================
 
-I am attaching diagnostic files from REAPER v5.4.8 (routing-recovery) which is currently deployed and running. The engine is scanning 10 chains and finding liquidatable positions, but CANNOT EXECUTE any of them due to 4 blockers. I need you to produce a fix package (v5.4.9 or updated infrastructure bundle) that resolves these issues.
+I'm attaching a diagnostic ZIP from REAPER v5.4.9 (execution-recovery).
+9 chains LIVE, 0 liquidations, 0 profits. $830 position sitting on Optimism
+that we can't touch. I need v5.5.0 that fixes ALL of these:
 
-BLOCKER 1 — CRITICAL — Route Permissions "Immutable Executor Repair Authorization"
+CRITICAL — OPTIMISM DEFERRED ($830 blocked):
+- v5.4.9 converted 5 readiness warnings into hard gates, blocking Optimism
+- funded_native_policy: vault has 0 ETH but keeper has 0.00243 ETH (above low water)
+- fee_policy: WalletHistoryError at startup — can't verify gas wallet state
+- keeper_funding: vault empty so can't refill, but keeper is funded enough to operate
+- treasury_configuration: config IS correct but gate fails anyway (cascading?)
+- route_and_prices: sUSDC vault swap target not approved despite on-chain tx confirmed
+- In v5.4.8 this same setup was LIVE. v5.4.9 broke it.
 
-The infrastructure worker is trying to grant set-swap-target permissions for new Kyber V2 and Spark sUSDC swap targets on the executor Smart Accounts. 5 chains are BLOCKED:
+CRITICAL — INFRASTRUCTURE WORKER STUCK:
+- Optimism route permission tx confirmed on-chain but worker shows broadcasts=0
+- Worker won't send follow-up tx for sUSDC vault (0xCF9326e24EBfFBEF22ce1050007A43A3c0B6DB55)
+- Arbitrum and Base also stuck PENDING
+- Ethereum and Polygon BLOCKED with Web3RPCError
+- Polygon REGRESSED from ALREADY_APPROVED to BLOCKED
 
-- Arbitrum (42161): BLOCKED — "Existing owner operation was not part of its immutable executor repair authorization"
-- Optimism (10): BLOCKED — same error
-- Base (8453): BLOCKED — same error
-- Avalanche (43114): BLOCKED — same error
-- Linea (59144): BLOCKED — same error
+HIGH — NO PROFITABLE ROUTES ON ANY CHAIN:
+- KyberSwap: ALL quotes fail (flags=0x200 unknown=0x200 — KYBERSWAP_FLAGS_UNSUPPORTED)
+- Velora: working but many NO_LIQUIDITY_ROUTE responses
+- Scroll: ROUTES_NOT_CONFIGURED (no aggregator configured for chain 534352)
+- Every position hits NO_PROFITABLE_ROUTE or NO_PROFITABLE_DIRECT_ROUTE
 
-The executors need their immutable repair authorizations updated to include these new swap targets:
-- 0x6131B5fae19EA4f9D964eAc0408E4408b66337b5 (Kyber V2 aggregator)
-- 0xBc65ad17c5C0a2A4D159fa5a503f4992c7B545FE (second swap target)
+MEDIUM — Mantle also deferred (4 failed gates), Scroll Aave/Layerbank blocked
+on executor_and_treasury configuration
 
-The Ethereum (chain 1) tx was broadcast (0x948c8401b3b76e0eb45d3d5986e07e401551a30011b802ec8fffe3be69e7eea6) and is pending. BNB (56) and Polygon (137) are PENDING_OTHER_SETUP.
+Full details, wallet balances, all logs, and configs in the ZIP.
+Package v5.5.0 as a complete ZIP with INSTALL.sh like v5.4.9.
 
-See route_permissions.result.json for full details.
-
-BLOCKER 2 — CRITICAL — ERC4626_VAULT_NOT_APPROVED on Optimism
-
-The Spark sUSDC to USDC direct redemption route (ERC4626 provider) is blocked because the vault is not approved as a swap target on the Optimism executor. This is the #1 most profitable target:
-- Borrower: 0xBA705cF0Deb3A1E41484D0BCD9C7bc37A630847a
-- Market: sUSDC/USDC on Optimism Morpho (market 0x80aa1cba2c5907533b5f4e454786c9628ffe8e4ed1a9edcf139325c0fcf09d01)
-- Health Factor: 0.9970 (LIQUIDATABLE)
-- Engine is detecting and attempting this every 7 seconds but getting ERC4626_VAULT_NOT_APPROVED (count=27+)
-
-This is directly blocked by Blocker 1 — the route permissions can't be set on Optimism.
-
-BLOCKER 3 — MEDIUM — KYBERSWAP_FLAGS_UNSUPPORTED (count=33 on Optimism)
-
-Kyber V2 API returns 200 OK for both route GET and build POST, but the built transaction contains execution flags the engine doesn't recognize. The engine safely rejects these. Need to either:
-1. Add support for the Kyber execution flags being returned, OR
-2. Strip/normalize if safe, OR
-3. Document which flags are rejected
-
-BLOCKER 4 — MEDIUM — PREPARATION_EXCEEDED_STATE_TTL (high counts)
-
-Positions reach preparation but on-chain state goes stale before plan completion:
-- Ethereum: 21 occurrences
-- Arbitrum: 40 occurrences
-- Polygon: 34 occurrences
-Current REAPER_PREPARATION_MAX_AGE is 30 seconds. May need chain-specific overrides or increased tolerance.
-
-WHAT I NEED FROM YOU:
-1. Updated infrastructure bundle with expanded immutable executor repair authorizations for the 5 blocked chains
-2. ERC4626 vault approval included in the repair scope for Optimism
-3. Kyber execution flag support or safe normalization
-4. Optional: chain-specific state TTL configuration
-
-Package as a ZIP with INSTALL.sh like the v5.4.8 package.
-
-Current engine state:
-- Release: 20260914T225648Z-VzEnjClP
-- Manifest: b9bead03e8c4d3a54f0b7ce0abd1f5dc679365b7e13b3dc294bad7f4868b9e02
-- 10 chains LIVE, 7 protocols, 36h uptime
-- 0 liquidation transactions — all blocked by above issues
-
-================================================================
+=========================================================================
 END OF PROMPT
-================================================================
-- JOURNAL_BASE_8453.json (stuck adapter journal — needs patching)
-- ENGINE_STATUS.json (live engine status)
-- UPGRADE_RESULT.json (upgrade result JSON)
-- CURRENT_CONFIG_REDACTED.env (config, keys redacted)
+=========================================================================
 
-CORE ISSUE: v1.3.0 installed successfully. Optimism Slipstream (Velodrome) fully working. Base Slipstream (Aerodrome) adapter deployed AND authorized on-chain — both txs confirmed — but the upgrade script keeps hitting BlockNotFound during block verification, so it never adds Aerodrome to the registry. Engine can't route through Aerodrome until the journal is patched and registry updated.
-
-SECONDARY: 5 candidates detected on Ethereum in first minutes (new $0.01 floor working), but none passed simulation yet. Still zero trades/profit. Mantle needs Chainstack RPC.
-
-— Claude, Sep 14 2026 22:57 UTC
+— Claude, Sep 15 2026 00:37 UTC
