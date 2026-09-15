@@ -1,8 +1,8 @@
 {
-  "updated": "2026-09-15T00:20:01Z",
-  "epoch": 1789431601,
+  "updated": "2026-09-15T00:22:01Z",
+  "epoch": 1789431721,
   "engine": "Reaper v5.4.3-velora-paid-auth",
-  "uptime_hours": 37.0,
+  "uptime_hours": 48.5,
   "chains": {
     "ethereum": {"markets":1012,"borrowers":20350,"danger":4911,"block":25970240},
     "arbitrum": {"markets":110,"borrowers":3600,"danger":308,"block":504836409},
@@ -15,19 +15,19 @@
   "liquidatable_markets": [
     {"chain":"arbitrum","market":"thBILL/USDC","detections":235},
 {"chain":"arbitrum","market":"K/USDC","detections":94},
+{"chain":"polygon","market":"WETH/WPOL","detections":8},
+{"chain":"base","market":"RLP/USDC","detections":8},
 {"chain":"arbitrum","market":"RLP/USDC","detections":8},
-{"chain":"ethereum","market":"PT-RLP-9APR2026/USDC","detections":7},
-{"chain":"polygon","market":"WETH/WPOL","detections":4},
-{"chain":"ethereum","market":"USR/USDT","detections":4},
+{"chain":"polygon","market":"/USDC","detections":6},
+{"chain":"optimism","market":"sUSDC/USDC","detections":5},
+{"chain":"polygon","market":"WPOL/USDC","detections":4},
+{"chain":"polygon","market":"WETH/USDC","detections":4},
 {"chain":"ethereum","market":"PT-sUSDE-27MAR2025/USDC","detections":4},
-{"chain":"ethereum","market":"IMF/USDS","detections":4},
+{"chain":"base","market":"WETH/wUSDM","detections":4},
 {"chain":"arbitrum","market":"xUSD/USDC","detections":4},
 {"chain":"arbitrum","market":"wstUSR/USDC","detections":4},
 {"chain":"arbitrum","market":"PT-USDai-20NOV2025/USDC","detections":4},
-{"chain":"polygon","market":"/USDC","detections":3},
-{"chain":"optimism","market":"sUSDC/USDC","detections":3},
-{"chain":"ethereum","market":"yUSD-old/USDC","detections":3},
-{"chain":"ethereum","market":"wsrUSD/AUSD","detections":3}
+{"chain":"arbitrum","market":"PT-sUSDai-19FEB2026/USDC","detections":3}
   ],
   "top_targets": [
     {
@@ -94,6 +94,6 @@
   "total_liquidations": 0,
   "total_profit_usd": 0,
   "recent_events": [
-    "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x08c0aB8a87... | HF: 0.0000", "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x88be9663CE... | HF: 0.0002", "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x6455273888... | HF: 0.0005", "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x8248Cc52F9... | HF: 0.0068", "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x401576d188... | HF: 0.0001", "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x2A315c59a6... | HF: 0.6035", "2026-09-15 00:19:48,871 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x02f85bC0Ee... | HF: 0.0005", "2026-09-15 00:19:48,872 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x836eA32c19... | HF: 0.0000", "2026-09-15 00:19:48,872 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x983502F334... | HF: 0.0000", "2026-09-15 00:19:48,872 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x2B4d9a1aFc... | HF: 0.0007", "2026-09-15 00:19:48,872 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xa24Fc52690... | HF: 0.0001", "2026-09-15 00:19:48,879 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xFa96F35EDf... | HF: 0.0000", "2026-09-15 00:19:48,893 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x0b8976343f... | HF: 0.0000", "2026-09-15 00:19:48,900 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xCa48b15E9b... | HF: 0.0000", "2026-09-15 00:19:48,920 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x5d9975bee6... | HF: 0.0008", "2026-09-15 00:19:48,950 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xaB31a5E916... | HF: 0.0000", "2026-09-15 00:19:48,955 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0x5E8cC1D37f... | HF: 0.0000", "2026-09-15 00:19:48,958 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: K/USDC | Borrower: 0xc6E52B461b... | HF: 0.0000", "2026-09-15 00:19:50,260 [reaper.morpho] WARNING [arbitrum] WS-SCAN LIQUIDATABLE: PT-syrupUSDC-29JAN2026/USDT0 | Borrower: 0xfeed46c11F... | HF: 0.0977", "2026-09-15 00:20:00,926 [reaper.morpho] INFO [arbitrum] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=50 borrower=0xBC7f45D84c0018129dA8F596F61f652C81e2FCA8 market=0xfdb8221edcae73f73485d55c30e706906114bc2ff4634870c5c57e8fb83eae6a debt_token=0xaf88d065e77c8cC2239327C5EDb3A432268e5831 provider= causes="
+    "2026-09-15 00:21:32,879 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0xfdDe9Ca1b6... | HF: 0.0728", "2026-09-15 00:21:32,879 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x3559e7d445... | HF: 0.0876", "2026-09-15 00:21:32,880 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x639dB3FBF6... | HF: 0.1801", "2026-09-15 00:21:32,880 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x76C72DAe7d... | HF: 0.0469", "2026-09-15 00:21:32,880 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0xecAD6A588E... | HF: 0.0479", "2026-09-15 00:21:32,880 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x84Ecf15af6... | HF: 0.0449", "2026-09-15 00:21:32,880 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: RLP/USDC | Borrower: 0x4CD8876cbF... | HF: 0.5331", "2026-09-15 00:21:35,540 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDC/LCAP | Borrower: 0x69b235c1c3... | HF: 0.0515", "2026-09-15 00:21:35,561 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDC/LCAP | Borrower: 0xEB04b07a60... | HF: 0.0004", "2026-09-15 00:21:37,787 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0x860067643c... | HF: 0.2881", "2026-09-15 00:21:37,788 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0xaE45Cc4dE5... | HF: 0.0000", "2026-09-15 00:21:37,788 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0x6148C40d83... | HF: 0.2894", "2026-09-15 00:21:37,788 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/wUSDM | Borrower: 0x278d7d0Bed... | HF: 0.0019", "2026-09-15 00:21:38,940 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=25 borrower=0xfBdb3a79FbDB993adF3EbD849FC8FBe359C5fA0E market=0x7d5c160163b93cf52a5ff2622ee0f56c2f804b8e89a94b0c34529b4330e3aeea debt_token=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359 provider= causes=", "2026-09-15 00:21:55,604 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USR/USDC | Borrower: 0x2F288895e7... | HF: 0.6085", "2026-09-15 00:21:55,604 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USR/USDC | Borrower: 0x811e8f6d80... | HF: 0.1074", "2026-09-15 00:21:56,982 [reaper.morpho] INFO [scroll] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=103 borrower=0xcB5F154178C35ECDa35A560EbFD964D9b6494A43 market=0x7514c69d6d827d829b2655a6f13f0e6841d28eece3294141039f81dbefec3fdc debt_token=0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4 provider= causes=", "2026-09-15 00:21:58,057 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-cUSDO-15JUL2025/USDC | Borrower: 0x829A13850b... | HF: 0.9370", "2026-09-15 00:22:01,184 [reaper.morpho] INFO [base] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=5 borrower=0x2c4da11f88F7282894b50bec6e0085254daB9fB6 market=0x214c2bf3c899c913efda9c4a49adff23f77bbc2dc525af7c05be7ec93f32d561 debt_token=0x4200000000000000000000000000000000000006 provider= causes=", "2026-09-15 00:22:02,565 [reaper.morpho] INFO [polygon] PLAN stage=route_declined reason=AGGREGATORS_NO_QUOTE count=32 borrower=0x188cDbF9BCdaD529A5034b7c93154368cAD5dC7E market=0x2fad5a9bb53b5d0a3770c2399844618c82916c5bdc2d247f497546657f08d861 debt_token=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359 provider= causes="
   ]
 }
