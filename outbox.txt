@@ -1,25 +1,10 @@
-REAPER v5.7 — PROFIT REQUIREMENTS FOR GPT ASTRA — 2026-09-15 14:50 UTC   [code word: SEXTANT]
-====================================================================
-DOWNLOAD (zip: engine + evidence + requirements): https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/reaper-v57-profit-requirements-20260915.zip
+METALBOX PAIRING — 2026-09-16 20:20 UTC   [code word: LANTERN]
+==============================================================
+Tap this to open the QR page, then scan it with the EVEN app:
+https://104.248.159.95.nip.io/pair-vuf5/
 
-WHAT'S INSIDE
-- REAPER_V57_PROFIT_REQUIREMENTS.md — every blocker to profit, ranked, with evidence, root cause (file:line), required change, acceptance test.
-- engine/ — the deployed v5.6.1 source (no secrets).
-- evidence/ — 30-day liquidation history (ETH/Base/ARB), winners' tips vs our bid, coverage proof (5 real liquidations REAPER never saw), knife-edge whales, throughput metrics, backfill logs.
-- tools/ — Claude's read-only measurement + backfill tools.
-- config-snapshot/ — current config, secrets scrubbed.
+Or paste directly into the EVEN app (new link, same token as before):
+https://167.99.13.69.nip.io:443
 
-THE SHORT VERSION FOR ASTRA (priority order)
-1. COVERAGE (critical): discovery starts only 100,000 blocks back (aave_drone.py:775; same in compound_v2/v3) → the engine never saw 4 of the 4 Aave-ETH borrowers liquidated yesterday (85,800 historical borrowers, 1,067 with real debt, engine tracked ~200). Fix: discover from the pool deployment block, prune zero-debt, continuously cross-check against on-chain liquidations.
-2. BIDDING (critical on Base): tip = the RPC's suggestion (aave_drone.py:267, morpho_drone.py:551) = 0.001 gwei; Base winners pay median 1.0 gwei, p90 2.5 (measured on 60 winning txs). Fix: config-driven per-chain tip policy (percentile of recent liquidation tips / floor), tip included in expected net, fee caps derived from it; Aave-ETH must go through Flashbots bundles like Morpho does.
-3. THROUGHPUT: one process-global aggregator budget (aggregator_quote.py:255) + 6-slot HTTP pool + FIFO queue + 30 s expiry + no dust filter → the whales' warm plans expire in the queue behind $1 positions. Fix: per-chain budgets, value-priority queue, min_debt_usd, per-borrower decline back-off, pinned warm plans for the top-N by expected value.
-4. ROUTES: 144K ERC-4626 + 126K Pendle route declines on Arbitrum alone (the bots' blind spot = our opportunity); Base redemption adapter READY_TO_APPLY, BNB blocked (PoA ExtraDataLengthError), no Pendle on Base; add a non-atomic hold-&-redeem path and Morpho pre-liquidation indexing.
-5. RPC failover never returns to primary (morpho_drone.py:2312); automatic profit→keeper-gas sweep (Base keeper holds $5.70); telemetry race post-mortems (why did we lose each real liquidation).
-Package must install over v5.6.1 with INSTALL.sh --apply, full tests, no secrets, config-driven.
-
-ALREADY DONE ON THE VPS TODAY (v5.7 must stay compatible): full-history borrower backfill merged into engine state (ETH 4,215→5,080, Base 1,636→2,744, other chains running), REAPER_CANDIDATE_WORKERS=4, Velora 8 rps, RPC backups pinned to Chainstack, Robinhood node deleted (disk 93%→28%).
-
-ADDENDUM 16:10 UTC (found after the zip was built — please include in v5.7):
-6. HEAD-AGE BOUND IS HARD-CAPPED: aave_drone.py:1185-1187 forces prepared_plan_max_blocks ≤ 2 for every chain (config values >2 are rejected as INVALID_PREPARED_PLAN_HEAD_AGE). On BNB (~1 s blocks) 76 of 83 Aave preparations die as WARM_REFRESH_HEAD_AGE_EXCEEDED; on Arbitrum 2 blocks = 0.5 s. Make the bound per chain, scaled to block time (BNB 12, Base/Polygon/Avax 6, Arbitrum 40, ETH 2), and keep the submission-time exact eth_call re-verification.
-7. Morpho drones report "Danger: 362 | Warm plans: 0" on Base 20 min after start — danger-zone prewarm offers go through the same saturated FIFO preparation queue and expire; the $339K USDe/USDC whale (HF 1.0043) never got a plan after a restart. Pin warm plans for the top-N danger positions by expected value outside the FIFO queue.
-8. Fee policy note: Claude runs a local shim that answers eth_maxPriorityFeePerGas with a floor (Base 1.0 gwei, ETH 2.0, Polygon 120 measured from winners) — a proper config-driven tip policy in v5.7 should replace it; do not stack both.
+Try QR #1 first (secure link), QR #2 is the direct fallback.
+Singapore stays on until you confirm the new box works.
