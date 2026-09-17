@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-17T04:12:01Z",
-  "epoch": 1789618321,
+  "updated": "2026-09-17T04:14:01Z",
+  "epoch": 1789618441,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 88.8,
   "chains": {
@@ -13,21 +13,21 @@
     "scroll": {"markets":0,"borrowers":0,"danger":0,"block":0}
   },
   "liquidatable_markets": [
-    {"chain":"base","market":"wbCOIN/USDC","detections":76},
-{"chain":"base","market":"RLP/USDC","detections":40},
-{"chain":"base","market":"WETH/wUSDM","detections":20},
-{"chain":"base","market":"stEUR/jEUR","detections":11},
-{"chain":"base","market":"USDC/LCAP","detections":10},
-{"chain":"base","market":"USR/USDC","detections":8},
-{"chain":"base","market":"wstETH/USDC","detections":5},
-{"chain":"base","market":"cbETH/USDC","detections":5},
-{"chain":"base","market":"cCOLL/cLOAN","detections":5},
-{"chain":"base","market":"USDS/USDC","detections":5},
-{"chain":"base","market":"REIT/USDC","detections":5},
-{"chain":"base","market":"PT-USR-24APR2025/USDC","detections":5},
-{"chain":"base","market":"LP-USR-24APR2025/USR","detections":5},
-{"chain":"base","market":"BondETH/WETH","detections":5},
-{"chain":"base","market":"WETH/USDA","detections":4}
+    {"chain":"base","market":"wbCOIN/USDC","detections":133},
+{"chain":"base","market":"RLP/USDC","detections":56},
+{"chain":"base","market":"stEUR/jEUR","detections":33},
+{"chain":"base","market":"WETH/wUSDM","detections":28},
+{"chain":"base","market":"USR/USDC","detections":14},
+{"chain":"base","market":"USDC/LCAP","detections":14},
+{"chain":"base","market":"wstETH/USDC","detections":7},
+{"chain":"base","market":"cbETH/USDC","detections":7},
+{"chain":"base","market":"cCOLL/cLOAN","detections":7},
+{"chain":"base","market":"WETH/USDA","detections":7},
+{"chain":"base","market":"USDS/USDC","detections":7},
+{"chain":"base","market":"REIT/USDC","detections":7},
+{"chain":"base","market":"PT-cUSDO-15JUL2025/USDC","detections":7},
+{"chain":"base","market":"PT-USR-24APR2025/USDC","detections":7},
+{"chain":"base","market":"LP-USR-24APR2025/USR","detections":7}
   ],
   "top_targets": [
     {
@@ -94,6 +94,6 @@
   "total_liquidations": 0,
   "total_profit_usd": 0,
   "recent_events": [
-    "2026-09-17 04:12:00,099 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xADDde11267... | HF: 0.8913", "2026-09-17 04:12:00,123 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xAAE415992E... | HF: 0.8940", "2026-09-17 04:12:00,169 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xa4f5d2175A... | HF: 0.8739", "2026-09-17 04:12:00,170 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x69218c6f10... | HF: 0.9086", "2026-09-17 04:12:00,179 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xE87Ce56091... | HF: 0.8607", "2026-09-17 04:12:00,193 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xAF297816aB... | HF: 0.9625", "2026-09-17 04:12:00,194 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x7780A4F274... | HF: 0.8996", "2026-09-17 04:12:00,194 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x728bE20851... | HF: 0.8922", "2026-09-17 04:12:00,195 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x2B3A8F2550... | HF: 0.8736", "2026-09-17 04:12:00,196 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xdb18C06F8d... | HF: 0.8538", "2026-09-17 04:12:00,196 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xf19C272482... | HF: 0.8944", "2026-09-17 04:12:00,196 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xdDf795aB48... | HF: 0.8572", "2026-09-17 04:12:00,197 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x577F647826... | HF: 0.8660", "2026-09-17 04:12:00,197 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xCe029f6EE3... | HF: 0.8770", "2026-09-17 04:12:00,197 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x70d57Ad16c... | HF: 0.8990", "2026-09-17 04:12:00,197 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x96fb3Ffbf2... | HF: 0.8757", "2026-09-17 04:12:00,198 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x1051ae5a41... | HF: 0.8740", "2026-09-17 04:12:00,198 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x2178FD1899... | HF: 0.8746", "2026-09-17 04:12:00,198 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xD687E1010e... | HF: 0.8736", "2026-09-17 04:12:00,198 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/USDA | Borrower: 0x278d7d0Bed... | HF: 0.0083"
+    "2026-09-17 04:13:47,707 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xa4f5d2175A... | HF: 0.8739", "2026-09-17 04:13:47,710 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x69218c6f10... | HF: 0.9086", "2026-09-17 04:13:47,712 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xE87Ce56091... | HF: 0.8607", "2026-09-17 04:13:47,712 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xAF297816aB... | HF: 0.9625", "2026-09-17 04:13:47,712 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x7780A4F274... | HF: 0.8996", "2026-09-17 04:13:47,713 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x728bE20851... | HF: 0.8922", "2026-09-17 04:13:47,713 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x2B3A8F2550... | HF: 0.8736", "2026-09-17 04:13:47,721 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xdb18C06F8d... | HF: 0.8538", "2026-09-17 04:13:47,723 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xf19C272482... | HF: 0.8944", "2026-09-17 04:13:47,723 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xdDf795aB48... | HF: 0.8572", "2026-09-17 04:13:47,724 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x577F647826... | HF: 0.8660", "2026-09-17 04:13:47,724 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xCe029f6EE3... | HF: 0.8770", "2026-09-17 04:13:47,724 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x70d57Ad16c... | HF: 0.8990", "2026-09-17 04:13:47,724 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x96fb3Ffbf2... | HF: 0.8757", "2026-09-17 04:13:47,725 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x1051ae5a41... | HF: 0.8740", "2026-09-17 04:13:47,725 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0x2178FD1899... | HF: 0.8746", "2026-09-17 04:13:47,725 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: wbCOIN/USDC | Borrower: 0xD687E1010e... | HF: 0.8736", "2026-09-17 04:13:47,726 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: WETH/USDA | Borrower: 0x278d7d0Bed... | HF: 0.0083", "2026-09-17 04:13:51,491 [reaper.engine] INFO [base] Candidate pipeline | workers=7/7 preparing=6 queued_prepare=152 submitting=0 queued_submit=0 | outcomes={\"admission_declined\":6863,\"cold_submission_deferred\":4697,\"expired\":1,\"preparation_active_coalesced\":2276,\"preparation_admission_declined\":692669,\"preparation_coalesced\":30189,\"preparation_completed\":6426,\"preparation_declined\":19124,\"preparation_evicted\":6085,\"preparation_expired\":5090,\"preparation_queued\":36883,\"preparation_retry_pending\":57510,\"preparation_saturated\":393,\"preparation_started\":25556,\"preparation_superseded\":482,\"prepared_economics\":6403,\"queued\":4698,\"ready_hint_hit\":6824,\"reserved_preparation\":16624,\"retry_pending\":1161,\"sniper_prewarm\":32456} | reasons={\"DEBT_USD_FEED_MISSING\":722,\"MIN_DEBT_USD\":699532,\"NO_PROFITABLE_DIRECT_ROUTE\":1004,\"NO_PROFITABLE_ROUTE\":4515,\"OUTSIDE_DANGER_ZONE\":4,\"PREPARATION_DEADLINE_EXPIRED\":136,\"RPC_TIMEOUT\":26,\"RPC_UNAVAILABLE\":33,\"UNCLASSIFIED_AAVE_PREPARATION_ERROR\":1,\"UNCLASSIFIED_PLANNER_ERROR\":12649,\"WARM_REFRESH_HEAD_AGE_EXCEEDED\":34}", "2026-09-17 04:13:52,493 [reaper.morpho] INFO [base] PLAN stage=route_declined reason=UNISWAP_NO_POOL count=16764 borrower=0xAd597Bf4D4D15FA8D328DCA6684830BC6F544Dcf market=0x45f3b5688e7ba25071f78d1ce51d1b893faa3c86897b12204cdff3af6b3611f8 debt_token=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 provider=uniswap_v3 causes="
   ]
 }
