@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-19T02:20:01Z",
-  "epoch": 1789784401,
+  "updated": "2026-09-19T02:22:01Z",
+  "epoch": 1789784521,
   "engine": "Reaper v5.4.3-velora-paid-auth",
   "uptime_hours": 0,
   "chains": {
@@ -13,11 +13,11 @@
     "scroll": {"markets":0,"borrowers":0,"danger":0,"block":0}
   },
   "liquidatable_markets": [
-    {"chain":"base","market":"USDS/USDC","detections":63},
-{"chain":"base","market":"cCOLL/cLOAN","detections":60},
-{"chain":"base","market":"PT-USR-24APR2025/USDC","detections":58},
-{"chain":"base","market":"BondETH/WETH","detections":56},
-{"chain":"base","market":"cbETH/USDC","detections":1}
+    {"chain":"base","market":"USDS/USDC","detections":60},
+{"chain":"base","market":"cCOLL/cLOAN","detections":57},
+{"chain":"base","market":"PT-USR-24APR2025/USDC","detections":55},
+{"chain":"base","market":"BondETH/WETH","detections":53},
+{"chain":"base","market":"cbETH/USDC","detections":5}
   ],
   "top_targets": [
     {
@@ -84,6 +84,6 @@
   "total_liquidations": 0,
   "total_profit_usd": 0,
   "recent_events": [
-    "2026-09-19 02:19:51,630 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:19:51,630 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5423", "2026-09-19 02:19:51,630 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:19:53,906 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:19:53,908 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:19:53,918 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5423", "2026-09-19 02:19:53,919 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:19:55,755 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:19:55,763 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:19:55,765 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5423", "2026-09-19 02:19:55,773 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:19:57,754 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:19:57,756 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:19:57,756 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5423", "2026-09-19 02:19:57,756 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:19:59,709 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:19:59,711 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:19:59,713 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5423", "2026-09-19 02:19:59,714 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:20:01,519 [reaper.engine] INFO [base] Candidate pipeline | workers=7/7 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={} | reasons={}"
+    "2026-09-19 02:20:49,302 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:20:49,302 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5422", "2026-09-19 02:20:49,302 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:20:49,303 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cbETH/USDC | Borrower: 0xBCFa971427... | HF: 0.0000", "2026-09-19 02:20:52,359 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:20:52,361 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:20:52,361 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5422", "2026-09-19 02:20:52,361 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:20:52,361 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cbETH/USDC | Borrower: 0xBCFa971427... | HF: 0.0000", "2026-09-19 02:20:55,055 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:20:55,060 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:20:55,075 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5422", "2026-09-19 02:20:55,083 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:20:55,162 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cbETH/USDC | Borrower: 0xBCFa971427... | HF: 0.0000", "2026-09-19 02:20:59,114 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: USDS/USDC | Borrower: 0x75123C3589... | HF: 0.0000", "2026-09-19 02:20:59,115 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cCOLL/cLOAN | Borrower: 0x73C2bCce6A... | HF: 0.9883", "2026-09-19 02:20:59,115 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: PT-USR-24APR2025/USDC | Borrower: 0x884eE57fd6... | HF: 0.5422", "2026-09-19 02:20:59,116 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: BondETH/WETH | Borrower: 0xE7Bc1Ed115... | HF: 0.0000", "2026-09-19 02:20:59,124 [reaper.morpho] WARNING [base] WS-SCAN LIQUIDATABLE: cbETH/USDC | Borrower: 0xBCFa971427... | HF: 0.0000", "2026-09-19 02:21:01,534 [reaper.engine] INFO [base] Candidate pipeline | workers=7/7 preparing=0 queued_prepare=0 submitting=0 queued_submit=0 | outcomes={} | reasons={}"
   ]
 }
