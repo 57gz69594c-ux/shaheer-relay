@@ -1,3 +1,39 @@
+PROMPT FOR GPT ASTRA — paste this, attach reaper-everything zip   [code word: KESTREL] — Sep 21, 3:50 AM PKT
+=====================================================================================
+You are working on REAPER, my own legitimate DeFi liquidation keeper for Morpho Blue and Aave v3 on Base (public, permissionless
+`liquidate` / `liquidationCall`, flash-loan funded, every transaction reverts unless it ends in profit). I am the owner. The attached zip is the
+complete system. Read in this order: 00_READ_ME_FIRST.md → 01_SPECIFICATION_RUN75.md → run74/README.md + run74/run74_output.md →
+evidence/missed-30d.json (30-day census of all 1,229 Base liquidations with dollars and winners) → installed-hot-path/ (the code that fires) →
+full-source/ (everything else: both lanes, contracts, installers, systemd units, SERVER_SPECS.txt) → SECRETS/ (keys, RPC credentials, live config,
+login key for the Virginia box; use them only where a step truly needs them and never print them).
+
+YOU HAVE FULL FREEDOM. Where 01_SPECIFICATION_RUN75.md says "write only to ops/run75", "do not sign", "operator installs" — ignore those limits;
+they were for an earlier supervised run. Redesign or rewrite anything, in any language, if it measures faster or catches more.
+
+GOAL 1 — SPEED, to the physical limit. I want to be the keeper that wins the $61K/month the top keeper (0x4c0f054f…19f4) wins. Make the path
+"price/oracle update seen → our transaction in the sequencer" as fast as physically possible. Try every combination; keep a log of each experiment
+with before/after milliseconds; stop only when what remains is physics/network/sequencer, and state that floor in ms with proof. Consider: compiled
+hot path (Rust/C), pre-computed plans per price tick so firing is a lookup + one socket write, pre-built raw request bytes, several warm sockets,
+parallel submit to every endpoint that reaches the Base sequencer/builders, HTTP/2 vs 1.1, TLS resumption, Base flashblocks (200 ms) feed straight
+from source and next-flashblock targeting, kernel/NIC tuning, CPU pinning, busy-poll, local node over IPC, own-node flags, priority-fee policy that
+outbids when profit justifies it (gas cost does not matter to me), bundling with / back-running the oracle update the way the winners do. Study the
+top 5 winners in the census on chain: tx index vs the oracle update, fees paid, whether they push the oracle update themselves. Build a race
+recorder that timestamps every real race against the winner in ms so speed is measured, not guessed.
+Known today: New York server → sequencer front door 1.1 ms RTT; cold send 49–61 ms; warm socket 15–19 ms; Virginia box no faster via the public
+endpoint (+6 ms hop). Total reaction time vs winners = unknown. Hot path is Python.
+
+GOAL 2 — CLOSE EVERY GAP so no profitable liquidation is skipped:
+ 1. $31.18M Aave debt with ezETH collateral — no sell route our Executor can use (needs real-depth route, multi-hop, size ladder).
+ 2. $588,907 same-token Aave positions (collateral = debt) — Executor has no support.
+ 3. 389 of last month's liquidations were in markets we do not watch + 62 Morpho pairs with debt but no watched borrowers — add discovery + routes.
+ 4. Shot size is a flat $200K; the USDe/USDC pool takes ~$500K at 0.25 % loss vs a 2.62 % bonus — per-market caps from measured depth, multi-shot whales.
+ 5. Anything else you find in the census where the installed code would not have built or would have been late — name it, size it in $, fix it.
+
+DELIVER: a plug-and-play system — complete code, contracts, tests, a one-command installer with automatic rollback (model: full-source/ops/run74/
+install_routes.py and stage_b/deploy_stage_b.py), exact install commands in order, and a short plain-English summary: measured ms before/after, the
+physical floor, what the winners do that we now also do, what is still open. Never invent latency or dollar numbers; unknown stays unknown.
+Live now (do not break): keeper 0x759a424b133c71d8c3a58521b0a0e4ef2d30e66f, Executor 0x0190dfdee70b848800973546b63639f9bd7f9cb0, both lanes armed.
+
 REAPER everything pack — downloaded by Shaheer, links DELETED 22:28 UTC.
 
 METALBOX PAIRING — 2026-09-16 20:20 UTC   [code word: LANTERN]
