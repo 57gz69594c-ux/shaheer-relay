@@ -1,17 +1,8 @@
-=== CODE WORD: OSPREY — RIVAL TIMING FACTS (paste to Astra together with the KESTREL prompt) ===
-Nobody has measured rival speed in milliseconds (field actual_our_minus_winner_ms is empty in all 1,229 rows of evidence/missed-30d.json). What the census DOES show is where each winner lands relative to the price update that made the position eligible (653 events have an identified trigger):
-- 254 of 653 were won INSIDE THE SAME TRANSACTION as the price update; 526 of 653 inside the same block (Base block = 2 s, flashblocks = 200 ms).
-- Money split (30 days, winner gross bonus, total ~$233K): ~$105K taken in the same tx as the update (not raceable by latency at all), ~$87K taken AFTER the update (raceable), ~$41K with no trigger identified.
-- #1 0x4c0f054ff82accb847d59e3b6b3d46f1ceef19f4 (~$61K): 98 of 98 same transaction as the price update, 0 positions behind. ~$57K of it is ONE Morpho market 0xd4a903dc6d... (collateral 0xcb585250..., loan USDC). Sample txs: 0xb7a80c22a2215b48b5c402d156246deb93e4261a992c58dcb27964ff44ec25a5, 0x1ce33bd254df452362f9abec97f112734206513e25a7bf7ca362146118de1789, 0x4c9b855742a54d93e6b995ba0010ac3496f5a78d17f24b03f8305cdfe29c19ad. It carries the price update and the liquidation atomically in one tx. To beat it you must do the same (deliver the signed price report yourself + liquidate in one tx) and get it in earlier — decode these txs first.
-- #4 0x2ea89fc4...907f (~$20K): also same-tx, 3 of 3.
-- #2 0x8cc0204e...16e5 (~$47K): never same-tx; same block 41 of 45, usually 5+ positions behind the update; 4 times one block later. Beatable on latency.
-- #3 0xcee74050...863d (~$26K): same block only 5 of 26; the rest a full block (2 s) later. Slow.
-- #5 0x48630e57...6e7a (~$13K): same block 16 of 28; the rest a block later. Slow.
-Our own measured numbers: warm persistent TLS socket to mainnet-sequencer.base.org, pre-signed tx, single send; NY box ping to sequencer front door 1.1 ms; cold send 49-61 ms (16-19 ms after TLS); Virginia box no better (12-19 ms after TLS, +6 ms hop from NY).
-Target: (a) same-tx atomic path for pull-oracle markets, (b) land in the first flashblock after the update for everything else.
-
-PROMPT FOR GPT ASTRA — paste this, attach reaper-everything zip   [code word: KESTREL] — Sep 21, 3:50 AM PKT
+MESSAGE FOR GPT ASTRA — paste all of this, attach the reaper-everything zip   [code word: HARRIER] — Sep 21 PKT
 =====================================================================================
+IMPORTANT, READ FIRST: SPEED ALONE IS NOT ENOUGH. The biggest winner does not win by being faster — it wins by putting the price update and the
+liquidation inside ONE transaction. We need BOTH things: (A) that same-transaction method, and (B) raw speed to the physical limit. Details below.
+
 You are working on REAPER, my own legitimate DeFi liquidation keeper for Morpho Blue and Aave v3 on Base (public, permissionless
 `liquidate` / `liquidationCall`, flash-loan funded, every transaction reverts unless it ends in profit). I am the owner. The attached zip is the
 complete system. Read in this order: 00_READ_ME_FIRST.md → 01_SPECIFICATION_RUN75.md → run74/README.md + run74/run74_output.md →
@@ -34,7 +25,29 @@ recorder that timestamps every real race against the winner in ms so speed is me
 Known today: New York server → sequencer front door 1.1 ms RTT; cold send 49–61 ms; warm socket 15–19 ms; Virginia box no faster via the public
 endpoint (+6 ms hop). Total reaction time vs winners = unknown. Hot path is Python.
 
-GOAL 2 — CLOSE EVERY GAP so no profitable liquidation is skipped:
+
+GOAL 2 — THE SAME-TRANSACTION METHOD (this is NOT in the zip's documents; I computed it from evidence/missed-30d.json — verify it yourself).
+Nobody has measured rival speed in milliseconds: the field actual_our_minus_winner_ms is empty in all 1,229 rows. What the census DOES show is where
+each winner lands relative to the price update that made the position eligible (653 events have an identified trigger):
+ - 254 of 653 were won INSIDE THE SAME TRANSACTION as the price update; 526 of 653 inside the same block (Base block 2 s, flashblock 200 ms).
+ - Money, 30 days, winner gross bonus, total ~$233K: ~$105K taken in the same tx as the update (latency cannot win this at all), ~$87K taken AFTER
+   the update (winnable by speed), ~$41K with no trigger identified.
+ - #1 0x4c0f054ff82accb847d59e3b6b3d46f1ceef19f4 (~$61K): 98 of 98 in the same transaction as the price update, 0 positions behind. ~$57K of it is
+   ONE Morpho market, id starting 0xd4a903dc6d (collateral token starting 0xcb585250, loan USDC). Sample txs to decode first:
+   0xb7a80c22a2215b48b5c402d156246deb93e4261a992c58dcb27964ff44ec25a5
+   0x1ce33bd254df452362f9abec97f112734206513e25a7bf7ca362146118de1789
+   0x4c9b855742a54d93e6b995ba0010ac3496f5a78d17f24b03f8305cdfe29c19ad
+ - #4 0x2ea89fc4…907f (~$20K): also same-tx, 3 of 3.
+ - #2 0x8cc0204e…16e5 (~$47K): never same-tx; same block 41 of 45, usually 5+ positions behind the update; 4 times one block later. Beatable by speed.
+ - #3 0xcee74050…863d (~$26K): same block only 5 of 26, the rest a full block (2 s) later. Slow.
+ - #5 0x48630e57…6e7a (~$13K): same block 16 of 28, the rest a block later. Slow.
+WHAT TO BUILD: decode those transactions and find out exactly how the price update is delivered (signed price report pushed by the caller, oracle
+"update then act" call, or other). Then give our Executor + keeper the same path: obtain the fresh signed price report from its source ourselves,
+and send ONE transaction that applies the update and liquidates atomically, profit-or-revert. Find every market in the census whose oracle works
+this way and cover all of them. For every other market: land in the first flashblock after the update. Say plainly which part of the $105K becomes
+reachable, and what decides who wins when two keepers both use the same-tx method (fee? arrival order at the sequencer?) — then win that too.
+
+GOAL 3 — CLOSE EVERY GAP so no profitable liquidation is skipped:
  1. $31.18M Aave debt with ezETH collateral — no sell route our Executor can use (needs real-depth route, multi-hop, size ladder).
  2. $588,907 same-token Aave positions (collateral = debt) — Executor has no support.
  3. 389 of last month's liquidations were in markets we do not watch + 62 Morpho pairs with debt but no watched borrowers — add discovery + routes.
@@ -46,15 +59,3 @@ install_routes.py and stage_b/deploy_stage_b.py), exact install commands in orde
 physical floor, what the winners do that we now also do, what is still open. Never invent latency or dollar numbers; unknown stays unknown.
 Live now (do not break): keeper 0x759a424b133c71d8c3a58521b0a0e4ef2d30e66f, Executor 0x0190dfdee70b848800973546b63639f9bd7f9cb0, both lanes armed.
 
-REAPER everything pack — downloaded by Shaheer, links DELETED 22:28 UTC.
-
-METALBOX PAIRING — 2026-09-16 20:20 UTC   [code word: LANTERN]
-==============================================================
-Tap this to open the QR page, then scan it with the EVEN app:
-https://104.248.159.95.nip.io/pair-vuf5/
-
-Or paste directly into the EVEN app (new link, same token as before):
-https://167.99.13.69.nip.io:443
-
-Try QR #1 first (secure link), QR #2 is the direct fallback.
-Singapore stays on until you confirm the new box works.
