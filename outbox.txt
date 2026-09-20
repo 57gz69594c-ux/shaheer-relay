@@ -1,3 +1,15 @@
+=== CODE WORD: OSPREY — RIVAL TIMING FACTS (paste to Astra together with the KESTREL prompt) ===
+Nobody has measured rival speed in milliseconds (field actual_our_minus_winner_ms is empty in all 1,229 rows of evidence/missed-30d.json). What the census DOES show is where each winner lands relative to the price update that made the position eligible (653 events have an identified trigger):
+- 254 of 653 were won INSIDE THE SAME TRANSACTION as the price update; 526 of 653 inside the same block (Base block = 2 s, flashblocks = 200 ms).
+- Money split (30 days, winner gross bonus, total ~$233K): ~$105K taken in the same tx as the update (not raceable by latency at all), ~$87K taken AFTER the update (raceable), ~$41K with no trigger identified.
+- #1 0x4c0f054ff82accb847d59e3b6b3d46f1ceef19f4 (~$61K): 98 of 98 same transaction as the price update, 0 positions behind. ~$57K of it is ONE Morpho market 0xd4a903dc6d... (collateral 0xcb585250..., loan USDC). Sample txs: 0xb7a80c22a2215b48b5c402d156246deb93e4261a992c58dcb27964ff44ec25a5, 0x1ce33bd254df452362f9abec97f112734206513e25a7bf7ca362146118de1789, 0x4c9b855742a54d93e6b995ba0010ac3496f5a78d17f24b03f8305cdfe29c19ad. It carries the price update and the liquidation atomically in one tx. To beat it you must do the same (deliver the signed price report yourself + liquidate in one tx) and get it in earlier — decode these txs first.
+- #4 0x2ea89fc4...907f (~$20K): also same-tx, 3 of 3.
+- #2 0x8cc0204e...16e5 (~$47K): never same-tx; same block 41 of 45, usually 5+ positions behind the update; 4 times one block later. Beatable on latency.
+- #3 0xcee74050...863d (~$26K): same block only 5 of 26; the rest a full block (2 s) later. Slow.
+- #5 0x48630e57...6e7a (~$13K): same block 16 of 28; the rest a block later. Slow.
+Our own measured numbers: warm persistent TLS socket to mainnet-sequencer.base.org, pre-signed tx, single send; NY box ping to sequencer front door 1.1 ms; cold send 49-61 ms (16-19 ms after TLS); Virginia box no better (12-19 ms after TLS, +6 ms hop from NY).
+Target: (a) same-tx atomic path for pull-oracle markets, (b) land in the first flashblock after the update for everything else.
+
 PROMPT FOR GPT ASTRA — paste this, attach reaper-everything zip   [code word: KESTREL] — Sep 21, 3:50 AM PKT
 =====================================================================================
 You are working on REAPER, my own legitimate DeFi liquidation keeper for Morpho Blue and Aave v3 on Base (public, permissionless
