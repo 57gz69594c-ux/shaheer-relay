@@ -4,7 +4,7 @@ This is an ADDITION to your current workflow. Do not stop or restart what you ar
 keep all of that. Add the following as one more goal, and include it in the same final plug-and-play deliverable and installer.
 
 NEW GOAL — MOONWELL (Base) as a third live lane beside Morpho and Aave.
-Extra zip with all earlier Moonwell work (no secrets inside): https://167.99.13.69.nip.io/preview/moonwell-pack-709de69ead17.zip
+Extra zip with all earlier Moonwell work: moonwell-pack zip (given to you directly by the owner; public link removed).
 Read 00_MOONWELL_READ_ME.md in it first. MoonwellLiquidator.sol is also in the main zip under full-source/contracts-run68/src/.
 
 WHY: 34-day census of all protocols (in the extra zip, census/): Moonwell = 1,208 liquidations, marked bonus $125,424, winners kept ≈ $50,997
