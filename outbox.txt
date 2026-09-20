@@ -1,74 +1,30 @@
-MESSAGE FOR GPT ASTRA — paste all of this, attach BOTH zips (reaper-everything + moonwell-pack)   [code word: MERLIN] — Sep 21 PKT
+ADD-ON MESSAGE FOR GPT ASTRA — MOONWELL   [code word: PEREGRINE]
 =====================================================================================
-IMPORTANT, READ FIRST: SPEED ALONE IS NOT ENOUGH. The biggest winner does not win by being faster — it wins by putting the price update and the
-liquidation inside ONE transaction. We need THREE things: (A) that same-transaction method, (B) raw speed to the physical limit, and (C) MOONWELL — a whole protocol worth ~$44.6K/month
-that we do not cover at all, where the most frequent winner is SLOW (median 147 blocks ≈ 5 minutes late). Details below.
+This is an ADDITION to your current workflow. Do not stop or restart what you are doing on speed, the same-transaction method and the gaps —
+keep all of that. Add the following as one more goal, and include it in the same final plug-and-play deliverable and installer.
 
-You are working on REAPER, my own legitimate DeFi liquidation keeper for Morpho Blue and Aave v3 on Base (public, permissionless
-`liquidate` / `liquidationCall`, flash-loan funded, every transaction reverts unless it ends in profit). I am the owner. The attached zip is the
-complete system. Read in this order: 00_READ_ME_FIRST.md → 01_SPECIFICATION_RUN75.md → run74/README.md + run74/run74_output.md →
-evidence/missed-30d.json (30-day census of all 1,229 Base liquidations with dollars and winners) → installed-hot-path/ (the code that fires) →
-full-source/ (everything else: both lanes, contracts, installers, systemd units, SERVER_SPECS.txt) → SECRETS/ (keys, RPC credentials, live config,
-login key for the Virginia box; use them only where a step truly needs them and never print them).
+NEW GOAL — MOONWELL (Base) as a third live lane beside Morpho and Aave.
+Extra zip with all earlier Moonwell work (no secrets inside): https://167.99.13.69.nip.io/preview/moonwell-pack-709de69ead17.zip
+Read 00_MOONWELL_READ_ME.md in it first. MoonwellLiquidator.sol is also in the main zip under full-source/contracts-run68/src/.
 
-YOU HAVE FULL FREEDOM. Where 01_SPECIFICATION_RUN75.md says "write only to ops/run75", "do not sign", "operator installs" — ignore those limits;
-they were for an earlier supervised run. Redesign or rewrite anything, in any language, if it measures faster or catches more.
+WHY: 34-day census of all protocols (in the extra zip, census/): Moonwell = 1,208 liquidations, marked bonus $125,424, winners kept ≈ $50,997
+(≈ $1,486/day ≈ $44.6K/month). The most frequent winner 0x8407… = 590 wins, kept ≈ $21,192, and lands a MEDIAN OF 147 BLOCKS (about 5 minutes)
+AFTER the trigger. It wins by COVERAGE, not speed — we beat it simply by being there on time. 99 events ≥ $100 = $42,022; top events $4,604 /
+$3,472 / $3,472 / $2,811.
 
-GOAL 1 — SPEED, to the physical limit. I want to be the keeper that wins the $61K/month the top keeper (0x4c0f054f…19f4) wins. Make the path
-"price/oracle update seen → our transaction in the sequencer" as fast as physically possible. Try every combination; keep a log of each experiment
-with before/after milliseconds; stop only when what remains is physics/network/sequencer, and state that floor in ms with proof. Consider: compiled
-hot path (Rust/C), pre-computed plans per price tick so firing is a lookup + one socket write, pre-built raw request bytes, several warm sockets,
-parallel submit to every endpoint that reaches the Base sequencer/builders, HTTP/2 vs 1.1, TLS resumption, Base flashblocks (200 ms) feed straight
-from source and next-flashblock targeting, kernel/NIC tuning, CPU pinning, busy-poll, local node over IPC, own-node flags, priority-fee policy that
-outbids when profit justifies it (gas cost does not matter to me), bundling with / back-running the oracle update the way the winners do. Study the
-top 5 winners in the census on chain: tx index vs the oracle update, fees paid, whether they push the oracle update themselves. Build a race
-recorder that timestamps every real race against the winner in ms so speed is measured, not guessed.
-Known today: New York server → sequencer front door 1.1 ms RTT; cold send 49–61 ms; warm socket 15–19 ms; Virginia box no faster via the public
-endpoint (+6 ms hop). Total reaction time vs winners = unknown. Hot path is Python.
+STATE TODAY: REAPER has NO live Moonwell path. Earlier work (runs 33, 45, 47, 48 — code, contract, reviews, all in the extra zip) never proved
+income: "$0 sequential income proved, incomplete borrower coverage" — 13 markets with incomplete borrower snapshots; the 8 pairs lacked redemption
+cash at test time; small full-route tests failed on gas. Review run 48 = REVISE (CRIT 0 / HIGH 0 / MED 1 / LOW 3). To get Morpho live the lane was
+switched OFF: live config has `moonwell_pairs: []`, comptroller 0xfbb21d0380bee3312b33c4353c8936a0f13ef26c. The 30-day census in the main zip
+(missed-30d.json) counts ONLY Morpho + Aave — Moonwell is missing from it, so do not read its absence as "no money there".
 
-
-GOAL 2 — THE SAME-TRANSACTION METHOD (this is NOT in the zip's documents; I computed it from evidence/missed-30d.json — verify it yourself).
-Nobody has measured rival speed in milliseconds: the field actual_our_minus_winner_ms is empty in all 1,229 rows. What the census DOES show is where
-each winner lands relative to the price update that made the position eligible (653 events have an identified trigger):
- - 254 of 653 were won INSIDE THE SAME TRANSACTION as the price update; 526 of 653 inside the same block (Base block 2 s, flashblock 200 ms).
- - Money, 30 days, winner gross bonus, total ~$233K: ~$105K taken in the same tx as the update (latency cannot win this at all), ~$87K taken AFTER
-   the update (winnable by speed), ~$41K with no trigger identified.
- - #1 0x4c0f054ff82accb847d59e3b6b3d46f1ceef19f4 (~$61K): 98 of 98 in the same transaction as the price update, 0 positions behind. ~$57K of it is
-   ONE Morpho market, id starting 0xd4a903dc6d (collateral token starting 0xcb585250, loan USDC). Sample txs to decode first:
-   0xb7a80c22a2215b48b5c402d156246deb93e4261a992c58dcb27964ff44ec25a5
-   0x1ce33bd254df452362f9abec97f112734206513e25a7bf7ca362146118de1789
-   0x4c9b855742a54d93e6b995ba0010ac3496f5a78d17f24b03f8305cdfe29c19ad
- - #4 0x2ea89fc4…907f (~$20K): also same-tx, 3 of 3.
- - #2 0x8cc0204e…16e5 (~$47K): never same-tx; same block 41 of 45, usually 5+ positions behind the update; 4 times one block later. Beatable by speed.
- - #3 0xcee74050…863d (~$26K): same block only 5 of 26, the rest a full block (2 s) later. Slow.
- - #5 0x48630e57…6e7a (~$13K): same block 16 of 28, the rest a block later. Slow.
-WHAT TO BUILD: decode those transactions and find out exactly how the price update is delivered (signed price report pushed by the caller, oracle
-"update then act" call, or other). Then give our Executor + keeper the same path: obtain the fresh signed price report from its source ourselves,
-and send ONE transaction that applies the update and liquidates atomically, profit-or-revert. Find every market in the census whose oracle works
-this way and cover all of them. For every other market: land in the first flashblock after the update. Say plainly which part of the $105K becomes
-reachable, and what decides who wins when two keepers both use the same-tx method (fee? arrival order at the sequencer?) — then win that too.
-
-GOAL 3 — CLOSE EVERY GAP so no profitable liquidation is skipped:
- 1. $31.18M Aave debt with ezETH collateral — no sell route our Executor can use (needs real-depth route, multi-hop, size ladder).
- 2. $588,907 same-token Aave positions (collateral = debt) — Executor has no support.
- 3. 389 of last month's liquidations were in markets we do not watch + 62 Morpho pairs with debt but no watched borrowers — add discovery + routes.
- 4. Shot size is a flat $200K; the USDe/USDC pool takes ~$500K at 0.25 % loss vs a 2.62 % bonus — per-market caps from measured depth, multi-shot whales.
- 5. Anything else you find in the census where the installed code would not have built or would have been late — name it, size it in $, fix it.
-
-GOAL 4 — MOONWELL (Base). SECOND ZIP: https://167.99.13.69.nip.io/preview/moonwell-pack-709de69ead17.zip (read 00_MOONWELL_READ_ME.md first).
-34-day census (all protocols, in that zip): Moonwell = 1,208 liquidations, marked bonus $125,424, winners kept ≈ $50,997 (≈ $1,486/day ≈ $44.6K/month).
-The most frequent winner 0x8407… = 590 wins, kept ≈ $21,192, and lands a MEDIAN OF 147 BLOCKS AFTER the trigger — it wins by COVERAGE, not speed;
-we can beat it by simply being there on time. 99 events ≥ $100 = $42,022; top events $4,604 / $3,472 / $3,472 / $2,811.
-State: REAPER has NO live Moonwell path. Earlier work (runs 33, 45, 47, 48 — code, MoonwellLiquidator.sol, reviews, all in the zip) never proved income:
-"$0 sequential income proved, incomplete borrower coverage" (13 markets with incomplete borrower snapshots; the 8 pairs lacked redemption cash at
-test time; small full-route tests failed on gas). To get Morpho live, the lane was switched OFF (live config `moonwell_pairs: []`, comptroller
-0xfbb21d0380bee3312b33c4353c8936a0f13ef26c). The 30-day census in the main zip counts ONLY Morpho + Aave — Moonwell is missing from it.
-BUILD: complete Moonwell borrower discovery (every market, every borrower), seize mToken → redeem → sell route (handle low redemption cash: partial
-redeem, sell the mToken elsewhere, or pick a different seize asset), flash-funded, profit-or-revert, in the same Executor or a sibling contract, as a
-third live lane beside Morpho and Aave. Prove it on a fork against real past Moonwell liquidations from the census, and state $/month reachable.
-
-DELIVER: a plug-and-play system — complete code, contracts, tests, a one-command installer with automatic rollback (model: full-source/ops/run74/
-install_routes.py and stage_b/deploy_stage_b.py), exact install commands in order, and a short plain-English summary: measured ms before/after, the
-physical floor, what the winners do that we now also do, what is still open. Never invent latency or dollar numbers; unknown stays unknown.
-Live now (do not break): keeper 0x759a424b133c71d8c3a58521b0a0e4ef2d30e66f, Executor 0x0190dfdee70b848800973546b63639f9bd7f9cb0, both lanes armed.
-
+BUILD:
+ 1. Complete Moonwell borrower discovery — every market, every borrower, kept fresh, shortfall computed the way the comptroller computes it.
+ 2. Execution: flash-funded liquidateBorrow → seize mToken → redeem → sell → repay, profit-or-revert, in the same Executor or a sibling contract.
+    Handle low redemption cash (partial redeem, sell the mToken elsewhere, or choose a different seize asset). Respect close factor and
+    liquidation incentive per market.
+ 3. Decode what 0x8407… and the top dollar winners on Moonwell actually do (contracts called, routes, sizes, fees) and match or beat it.
+ 4. Prove it on a fork by replaying real past Moonwell liquidations from the census; report how many we would have won and $/month reachable.
+    Never invent numbers; unknown stays unknown.
+ 5. Ship it in the same one-command installer with automatic rollback, as a third armed lane, without disturbing the live Morpho and Aave lanes
+    (keeper 0x759a424b133c71d8c3a58521b0a0e4ef2d30e66f, Executor 0x0190dfdee70b848800973546b63639f9bd7f9cb0).
