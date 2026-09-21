@@ -1,3 +1,10 @@
+🔴 REAPER ALERT — 12:10 PM PKT Sep 21  [code word: KESTREL]
+Morpho lane is UNARMED since about 12:02 PM (Aave lane armed and fine). Nothing was signed, restarted or changed by the alert session.
+Cause found: about 50 always-failing rows (39 unreviewed-oracle) sit closest to the line and eat every build turn since the 11:42 AM scheduler change; Morpho signed life is still 60 s; candidate list grew 2,082 -> 11,693 after the backfill. So the ready bank expires.
+Operator session a3800303 no longer exists, so nobody is fixing it right now. Fix = skip failing rows for 10 min + longer Morpho signed life + reseal + restart the Morpho lane. Open a session and say "fix the Morpho unarmed alert" — notes are in ops/operator/ALERT-morpho-unarmed-20260921-1210PM.md.
+
+=====================================================================================
+
 ADD-ON FOR GPT ASTRA — SPEED CHECK   [code word: GOSHAWK] — Sep 21, 4:45 AM PKT
 =====================================================================================
 This adds to your current REAPER workflow (speed + gaps + Moonwell). Nothing earlier is cancelled.
