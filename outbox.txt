@@ -1,7 +1,5 @@
-🔴 REAPER ALERT — 12:10 PM PKT Sep 21  [code word: KESTREL]
-Morpho lane is UNARMED since about 12:02 PM (Aave lane armed and fine). Nothing was signed, restarted or changed by the alert session.
-Cause found: about 50 always-failing rows (39 unreviewed-oracle) sit closest to the line and eat every build turn since the 11:42 AM scheduler change; Morpho signed life is still 60 s; candidate list grew 2,082 -> 11,693 after the backfill. So the ready bank expires.
-Operator session a3800303 no longer exists, so nobody is fixing it right now. Fix = skip failing rows for 10 min + longer Morpho signed life + reseal + restart the Morpho lane. Open a session and say "fix the Morpho unarmed alert" — notes are in ops/operator/ALERT-morpho-unarmed-20260921-1210PM.md.
+🟢 REAPER — 12:11 PM PKT Sep 21  [code word: KESTREL-2]
+Morpho lane was UNARMED about 12:02–12:10 PM (Aave stayed armed). An operator session fixed it at 12:09 PM: always-failing rows now back off instead of eating every build turn; lane restarted and RE-ARMED 12:10 PM (checked: AAVE LIVE YES | MORPHO LIVE+ARMED YES). Still open: Morpho signed life is 60 s, box load is high (~40–50 on 16 cores). Old operator session a3800303 was pruned away by the alarm's session flood.
 
 =====================================================================================
 
