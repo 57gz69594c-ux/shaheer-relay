@@ -1,30 +1,59 @@
-🟢 REAPER — 12:11 PM PKT Sep 21  [code word: KESTREL-2]
-Morpho lane was UNARMED about 12:02–12:10 PM (Aave stayed armed). An operator session fixed it at 12:09 PM: always-failing rows now back off instead of eating every build turn; lane restarted and RE-ARMED 12:10 PM (checked: AAVE LIVE YES | MORPHO LIVE+ARMED YES). Still open: Morpho signed life is 60 s, box load is high (~40–50 on 16 cores). Old operator session a3800303 was pruned away by the alarm's session flood.
-
+🔴 REAPER — INCIDENT REPORT (defensive)  [code word: AEGIS]  — Sep 27, 2026, 11:20 PM PKT
+WHAT HAPPENED ON ROBINHOOD TODAY — wsNET/USDG market, and how to never be the victim
 =====================================================================================
 
-ADD-ON FOR GPT ASTRA — SPEED CHECK   [code word: GOSHAWK] — Sep 21, 4:45 AM PKT
+PLAIN-ENGLISH SUMMARY
+- One operator (one contract, ~20 wallets feeding it) liquidated ~32 borrowers on the RH
+  wsNET/USDG market and walked away with roughly $13K of liquidation bonus in a few hours.
+- Our engine did NOT fire on these, and that was CORRECT: at the moment each victim was hit,
+  the loan was still healthy on paper (health factor ~1.00001 to ~1.03). A normal liquidate
+  call from us would have reverted and cost gas. They were not "missed" — they were not
+  liquidatable by real market movement.
+
+WHY THIS MARKET WAS VULNERABLE (the root cause, no recipe)
+- The wsNET collateral was priced by a THIN on-chain oracle: it reads the spot price out of a
+  small liquidity pool. Small pool = the price is cheap to move and moves a lot per dollar in.
+- When the number a lending market trusts for "what is your collateral worth" comes from a
+  place that one trader can shove around, the market itself is the weak point — not the borrower.
+- The attacker exploited the ORACLE, not a bug in the borrower's wallet. The borrowers did
+  nothing wrong except post collateral into a market that trusted a shovable price.
+
+WHAT THE ATTACK LOOKED LIKE FROM THE OUTSIDE (outcome, not instructions)
+- Everything the attacker needed happened inside a SINGLE transaction, at the very top of a
+  block, so no one — including us — could react between the steps.
+- For that one instant the market believed the collateral was worth less than the debt, so the
+  liquidation was "legal" by the contract's rules. Then the price snapped back the same block.
+- To any outside observer (and to our health checks a block earlier and a block later) the loan
+  looked perfectly healthy. That is the whole trick: the underwater moment never exists on a
+  normal, settled price — it is manufactured and erased in the same breath.
+- I am deliberately NOT writing the sizing, ordering, or call sequence that manufactures it.
+  That is an attack playbook and we do not build or hand out attacks. This report is defense only.
+
+HOW MUCH / IS IT ILLEGAL (for your knowledge)
+- Take: ~$13K bonus across 32 hits, before their gas and trading costs (net kept: unmeasured).
+- Legality: in the US this can be charged as market manipulation / fraud (faking a price to take
+  others' funds). Closest precedent is the 2022 Mango Markets case ($110M) — a 2024 conviction
+  that a judge vacated in 2025, so the law here is genuinely unsettled.
+- At ~$13K with anonymous wallets, prosecution is very unlikely. Realistic outcome: the market/
+  oracle gets patched. Not legal advice.
+
+HOW YOU AND YOUR FRIENDS STAY SAFE (the part that matters)
+1. Before borrowing, ask ONE question: where does this market get my collateral's price? If the
+   answer is a single small pool / spot AMM oracle — treat that market as unsafe to borrow in.
+   Safe markets use deep aggregated feeds (e.g. Chainlink-style) with wide liquidity behind them.
+2. Thin-oracle markets are fine to LEND stable into and fine to trade, but do not post volatile
+   collateral and borrow against it there — that is exactly the position that got hit today.
+3. Keep a fat buffer. Every victim today sat at health factor ~1.00–1.03. A loan run at 1.5–2.0+
+   is far more expensive to force under and usually not worth an attacker's capital.
+4. Prefer large, deep markets. The attack only pays when the pool is small enough to move cheaply.
+5. If you must be in a thin market, watch it and be ready to add collateral or exit — these hits
+   cluster fast once someone finds the market (32 in a few hours today).
+
+OUR SIDE (already handled)
+- Engine behaved correctly (did not fire on manufactured-underwater healthy loans).
+- Separate real bug found & assigned: signed plans were being silently dropped by a policy/RPC
+  error on 8 of these borrowers (run220). Fix in progress; it does NOT and will not manipulate any
+  price — it only makes us fire cleanly when a loan genuinely crosses on real market/interest.
+
 =====================================================================================
-This adds to your current REAPER workflow (speed + gaps + Moonwell). Nothing earlier is cancelled.
-
-You reported the local firing path went 0.430 ms -> 0.109 ms. Good — that part is DONE, stop optimising it. It is ~1% of the real path:
-our measured send to the Base sequencer front door is 15–19 ms warm, 49–61 ms cold. Judge the work ONLY on the full path below.
-
-FACTS FROM THE 30-DAY CENSUS (evidence/missed-30d.json, 653 Morpho liquidations matched to their price update):
- - 254 of 653 were won INSIDE THE SAME TRANSACTION as the price update; 526 of 653 inside the same block.
- - Money (~$233K/30d winner bonus): ~$105K taken in the same tx as the update (speed cannot win this at all), ~$87K taken after the
-   update (raceable), ~$41K unknown.
- - #1 0x4c0f054ff82accb847d59e3b6b3d46f1ceef19f4 (~$61K, ~$57K of it cbXRP/USDC): 98 of 98 same-tx, 0 positions behind.
- - #4 0x2ea89fc4… (~$20K): same-tx too.   #2 0x8cc0204e… (~$47K): never same-tx, same block but usually 5+ positions behind = beatable.
- - #3 and #5: often a full block (2 s) late = beatable.
-
-REPORT THESE FOUR THINGS, MEASURED, NEVER ESTIMATED:
- 1. End-to-end ms: "price/oracle update first seen" -> "our signed tx accepted by the sequencer". Before and after. Target: under 25 ms.
- 2. What triggers us: the 200 ms flashblock feed straight from source (required) or finished 2 s blocks (not acceptable)? Do we land in
-    the FIRST flashblock after the update?
- 3. Same-transaction method: find how #1 and #4 do it (do they push the oracle update themselves? which oracle types allow it?), build
-    one atomic profit-or-revert tx that applies the update and liquidates, list every census market where it works, and say what decides
-    the winner when two keepers both do it (fee? arrival order?). State how much of the $105K becomes reachable.
- 4. Race recorder: every real liquidation we were eligible for -> winner, our ms ahead/behind, tx index vs the update. Speed is proven
-    by this log, not by micro-benchmarks.
-If any of the four is not built yet, say so plainly and build it next.
+END — defensive report only. No manipulation method is included by design.
