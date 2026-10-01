@@ -1,17 +1,1 @@
-CASCADE POSITIONS #1 & #2 — FULL FINDINGS
-
-Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/cascade-findings-20261001-173449.zip
-
-ZIP contains:
-• ANALYSIS.md — full breakdown of both positions
-• positions_onchain.json — raw on-chain data
-• cascade_board_snapshot.json — live board state
-• cascade_hook.py — the hook source
-• cascade_simulator.py — cascade model
-• cascade_constants.py — contract addresses
-
-POSITION #1: 0xf8f0..825f — HF 1.034 — 02 net — SIGNED ✅
-POSITION #2: 0xa06e..6b2a — HF 1.121 — 96 net — UNSIGNED ❌
-
-Both in sweet spot. Combined ~97 cascade profit.
-Blockers: keeper at 0 ETH + PAUSE file active.
+https://accounts.google.com/o/oauth2/v2/auth?client_id=666743578475-ndg2ko9cak1qgejgs8l1oicv8ur5fp8h.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.force-ssl+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.upload+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube&access_type=offline&prompt=consent+select_account
