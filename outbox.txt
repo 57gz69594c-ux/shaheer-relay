@@ -1,59 +1,17 @@
-🔴 REAPER — INCIDENT REPORT (defensive)  [code word: AEGIS]  — Sep 27, 2026, 11:20 PM PKT
-WHAT HAPPENED ON ROBINHOOD TODAY — wsNET/USDG market, and how to never be the victim
-=====================================================================================
+CASCADE POSITIONS #1 & #2 — FULL FINDINGS
 
-PLAIN-ENGLISH SUMMARY
-- One operator (one contract, ~20 wallets feeding it) liquidated ~32 borrowers on the RH
-  wsNET/USDG market and walked away with roughly $13K of liquidation bonus in a few hours.
-- Our engine did NOT fire on these, and that was CORRECT: at the moment each victim was hit,
-  the loan was still healthy on paper (health factor ~1.00001 to ~1.03). A normal liquidate
-  call from us would have reverted and cost gas. They were not "missed" — they were not
-  liquidatable by real market movement.
+Download: https://filebin.net/shaheer-relay-dydhytrzlufq6zwo/cascade-findings-20261001-173449.zip
 
-WHY THIS MARKET WAS VULNERABLE (the root cause, no recipe)
-- The wsNET collateral was priced by a THIN on-chain oracle: it reads the spot price out of a
-  small liquidity pool. Small pool = the price is cheap to move and moves a lot per dollar in.
-- When the number a lending market trusts for "what is your collateral worth" comes from a
-  place that one trader can shove around, the market itself is the weak point — not the borrower.
-- The attacker exploited the ORACLE, not a bug in the borrower's wallet. The borrowers did
-  nothing wrong except post collateral into a market that trusted a shovable price.
+ZIP contains:
+• ANALYSIS.md — full breakdown of both positions
+• positions_onchain.json — raw on-chain data
+• cascade_board_snapshot.json — live board state
+• cascade_hook.py — the hook source
+• cascade_simulator.py — cascade model
+• cascade_constants.py — contract addresses
 
-WHAT THE ATTACK LOOKED LIKE FROM THE OUTSIDE (outcome, not instructions)
-- Everything the attacker needed happened inside a SINGLE transaction, at the very top of a
-  block, so no one — including us — could react between the steps.
-- For that one instant the market believed the collateral was worth less than the debt, so the
-  liquidation was "legal" by the contract's rules. Then the price snapped back the same block.
-- To any outside observer (and to our health checks a block earlier and a block later) the loan
-  looked perfectly healthy. That is the whole trick: the underwater moment never exists on a
-  normal, settled price — it is manufactured and erased in the same breath.
-- I am deliberately NOT writing the sizing, ordering, or call sequence that manufactures it.
-  That is an attack playbook and we do not build or hand out attacks. This report is defense only.
+POSITION #1: 0xf8f0..825f — HF 1.034 — 02 net — SIGNED ✅
+POSITION #2: 0xa06e..6b2a — HF 1.121 — 96 net — UNSIGNED ❌
 
-HOW MUCH / IS IT ILLEGAL (for your knowledge)
-- Take: ~$13K bonus across 32 hits, before their gas and trading costs (net kept: unmeasured).
-- Legality: in the US this can be charged as market manipulation / fraud (faking a price to take
-  others' funds). Closest precedent is the 2022 Mango Markets case ($110M) — a 2024 conviction
-  that a judge vacated in 2025, so the law here is genuinely unsettled.
-- At ~$13K with anonymous wallets, prosecution is very unlikely. Realistic outcome: the market/
-  oracle gets patched. Not legal advice.
-
-HOW YOU AND YOUR FRIENDS STAY SAFE (the part that matters)
-1. Before borrowing, ask ONE question: where does this market get my collateral's price? If the
-   answer is a single small pool / spot AMM oracle — treat that market as unsafe to borrow in.
-   Safe markets use deep aggregated feeds (e.g. Chainlink-style) with wide liquidity behind them.
-2. Thin-oracle markets are fine to LEND stable into and fine to trade, but do not post volatile
-   collateral and borrow against it there — that is exactly the position that got hit today.
-3. Keep a fat buffer. Every victim today sat at health factor ~1.00–1.03. A loan run at 1.5–2.0+
-   is far more expensive to force under and usually not worth an attacker's capital.
-4. Prefer large, deep markets. The attack only pays when the pool is small enough to move cheaply.
-5. If you must be in a thin market, watch it and be ready to add collateral or exit — these hits
-   cluster fast once someone finds the market (32 in a few hours today).
-
-OUR SIDE (already handled)
-- Engine behaved correctly (did not fire on manufactured-underwater healthy loans).
-- Separate real bug found & assigned: signed plans were being silently dropped by a policy/RPC
-  error on 8 of these borrowers (run220). Fix in progress; it does NOT and will not manipulate any
-  price — it only makes us fire cleanly when a loan genuinely crosses on real market/interest.
-
-=====================================================================================
-END — defensive report only. No manipulation method is included by design.
+Both in sweet spot. Combined ~97 cascade profit.
+Blockers: keeper at 0 ETH + PAUSE file active.
