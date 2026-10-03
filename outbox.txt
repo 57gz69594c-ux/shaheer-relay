@@ -1,9 +1,6 @@
-EMAIL RECONNECT (2 sign-ins)
+SHOPIFY: INSTALL THE LOBBY APP (1 tap)
 
-1) Hotmail (shaheerkhanmysteryperformer@hotmail.com):
-https://57gz69594c-ux.github.io/shaheer-relay/mail1.html
+Open this in Safari (logged in to your Shopify admin):
+https://57gz69594c-ux.github.io/shaheer-relay/shop.html
 
-2) Partnerships (partnerships@shaheerknows.com):
-https://57gz69594c-ux.github.io/shaheer-relay/mail2.html
-
-After each sign-in the page says "can't reach localhost". Copy that page's address and send it on the relay Send tab. Do it within a few minutes; the code expires.
+Tap Install on the page that opens. Done. The server connects by itself.
