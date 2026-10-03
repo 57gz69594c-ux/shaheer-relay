@@ -1,6 +1,15 @@
-SHOPIFY: INSTALL THE LOBBY APP (1 tap)
+SHOPIFY: GIVE LOBBY ACCESS TO THE WEBSITE DESIGN (about 2 minutes)
 
-Open this in Safari (logged in to your Shopify admin):
+STEP 1. Open this in Safari:
+https://57gz69594c-ux.github.io/shaheer-relay/dev.html
+Tap the app "Lobby", then "Versions", then "Create version".
+
+STEP 2. In the "Scopes" box, delete what's there and type this exactly (one line, commas, no spaces):
+read_customers,read_orders,write_products,write_content,read_themes,write_themes,read_online_store_navigation,write_online_store_navigation,read_online_store_pages,write_online_store_pages
+
+Leave everything else the same. Tap "Release".
+
+STEP 3. Open this in Safari and tap "Update" or "Install":
 https://57gz69594c-ux.github.io/shaheer-relay/shop.html
 
-Tap Install on the page that opens. Done. The server connects by itself.
+Then tell me "done" in chat.
