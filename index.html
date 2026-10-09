@@ -442,7 +442,7 @@
     <button id="send">Send</button>
     <div id="status"></div>
     <p class="sub" style="margin:18px 0 6px;">— or send a file/image —</p>
-    <input type="file" id="fileInput" accept="image/*,video/*,.pdf,.zip,.tar.gz,.7z,.rar,.py,.js,.json,.txt,.md,.sol,application/zip,application/x-zip-compressed" multiple style="width:100%;max-width:480px;color:#e8e8ec;">
+    <input type="file" id="fileInput" accept="image/*,video/*,audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac,audio/mpeg,.pdf,.zip,.tar.gz,.7z,.rar,.py,.js,.json,.txt,.md,.sol,application/zip,application/x-zip-compressed" multiple style="width:100%;max-width:480px;color:#e8e8ec;">
     <button id="sendFile" class="secondary">Send Files</button>
     <div id="file-status"></div>
     <div id="file-progress" style="width:100%;max-width:480px;margin-top:8px;display:none;">
@@ -624,7 +624,7 @@ sendFileBtn.addEventListener('click', async () => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
       xhr.setRequestHeader('Content-Type', 'text/plain');
-      xhr.timeout = 120000;
+      xhr.timeout = 900000;
       await new Promise((resolve, reject) => {
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) progressBar.style.width = ((i + e.loaded / e.total) / total * 100) + '%';
