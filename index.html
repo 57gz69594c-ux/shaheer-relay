@@ -2,862 +2,305 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Claude Relay v86</title>
+<title>Claude Relay</title>
 <style>
-  :root { color-scheme: dark; }
-  * { box-sizing: border-box; }
+  :root {
+    color-scheme: dark;
+    --g: #33ff66;
+    --g-hi: #b8ffcf;
+    --g-dim: #1f9e48;
+    --g-faint: #0f5226;
+    --g-bg: #062b14;
+    --amber: #ffb43d;
+    --red: #ff5a4d;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #000; }
   body {
-    margin: 0;
-    font-family: -apple-system, system-ui, sans-serif;
-    background: #111318;
-    color: #e8e8ec;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0 auto;
+    max-width: 560px;
     min-height: 100vh;
-    padding: 24px 16px;
+    min-height: 100dvh;
+    padding: calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 24px);
+    color: var(--g);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.45;
   }
-  h1 { font-size: 1.2rem; font-weight: 600; margin: 0 0 4px; }
-  p.sub { color: #9a9aa5; font-size: 0.85rem; margin: 0 0 20px; text-align: center; }
-  .tabs {
+
+  header {
     display: flex;
-    width: 100%;
-    max-width: 480px;
-    margin-bottom: 18px;
-    border: 1px solid #2e323d;
-    border-radius: 10px;
-    overflow: hidden;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--g-faint);
   }
+  .led {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--g);
+    box-shadow: 0 0 8px var(--g);
+  }
+  h1 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--g-hi);
+    text-shadow: 0 0 10px rgba(51, 255, 102, .35);
+  }
+
+  .tabs { display: flex; gap: 8px; margin: 16px 0; }
   .tab {
     flex: 1;
-    padding: 12px;
-    text-align: center;
-    cursor: pointer;
-    background: #1b1e26;
-    color: #9a9aa5;
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-  .tab.active { background: #4f7cff; color: white; }
-  .panel { width: 100%; max-width: 480px; display: none; flex-direction: column; align-items: center; }
-  .panel.active { display: flex; }
-  textarea {
-    width: 100%;
-    max-width: 480px;
-    min-height: 200px;
-    background: #1b1e26;
-    color: #e8e8ec;
-    border: 1px solid #2e323d;
-    border-radius: 10px;
-    padding: 14px;
-    font-size: 1rem;
-    font-family: ui-monospace, monospace;
-    box-sizing: border-box;
-    resize: vertical;
-  }
-  #recv-text {
-    min-height: 50vh;
-    font-size: 1.15rem;
-    word-break: break-all;
-    line-height: 1.5;
-  }
-  button {
-    margin-top: 14px;
-    width: 100%;
-    max-width: 480px;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: #4f7cff;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  button.secondary { background: #2e323d; color: #e8e8ec; }
-  button:disabled { background: #333844; color: #888; }
-  #status, #recv-status {
-    margin-top: 14px;
-    font-size: 0.9rem;
-    min-height: 1.2em;
-    text-align: center;
-  }
-  .ok { color: #6ee08a; }
-  .err { color: #ff6e6e; }
-  .recv-meta { color: #9a9aa5; font-size: 0.75rem; margin-top: 8px; text-align: center; }
-
-  .clip-card {
-    width: 100%;
-    max-width: 480px;
-    background: #1b1e26;
-    border: 1px solid #2e323d;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-  .clip-video {
-    width: 100%;
-    max-height: 65vh;
-    background: #000;
-    display: block;
-  }
-  .clip-info { padding: 14px; }
-  .clip-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 6px;
-  }
-  .clip-meta {
-    font-size: 0.78rem;
-    color: #9a9aa5;
-    margin-bottom: 10px;
-  }
-  .section-label {
-    width: 100%;
-    max-width: 480px;
-    text-align: center;
-    padding: 14px 0 8px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  .section-label.tarot { color: #9B59B6; }
-  .section-label.podcast { color: #E74C3C; }
-  .time-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    margin-left: 6px;
-    vertical-align: middle;
-  }
-  .time-badge.tarot { background: #9B59B6; color: #fff; }
-  .time-badge.podcast { background: #E74C3C; color: #fff; }
-  .empty-clips {
-    text-align: center;
-    padding: 40px 20px;
-    color: #9a9aa5;
-  }
-
-  /* ── REAPER LIVE TAB ── */
-  .reaper-header {
-    width: 100%; max-width: 480px;
-    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 14px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .reaper-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #ff4444, #ff8844, #ffaa00, #44ff44, #4488ff);
-    animation: reaper-glow 3s linear infinite;
-  }
-  @keyframes reaper-glow {
-    0% { opacity: 0.4; }
-    50% { opacity: 1; }
-    100% { opacity: 0.4; }
-  }
-  .reaper-title {
-    font-size: 1.1rem;
-    font-weight: 800;
-    letter-spacing: 3px;
-    color: #ff6b6b;
-    text-shadow: 0 0 12px rgba(255,107,107,0.4);
-  }
-  .reaper-sub {
-    font-size: 0.7rem;
-    color: #8b949e;
-    margin-top: 4px;
-    letter-spacing: 1px;
-  }
-  .reaper-pulse {
-    display: inline-block;
-    width: 8px; height: 8px;
-    background: #3fb950;
-    border-radius: 50%;
-    margin-right: 6px;
-    animation: pulse-dot 2s ease-in-out infinite;
-    vertical-align: middle;
-  }
-  @keyframes pulse-dot {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(63,185,80,0.6); }
-    50% { box-shadow: 0 0 0 6px rgba(63,185,80,0); }
-  }
-  .reaper-stats-row {
-    display: flex;
-    gap: 8px;
-    width: 100%; max-width: 480px;
-    margin-bottom: 10px;
-  }
-  .reaper-stat {
-    flex: 1;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 10px;
-    padding: 12px 8px;
-    text-align: center;
-  }
-  .reaper-stat-value {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #e6edf3;
-    font-family: ui-monospace, monospace;
-  }
-  .reaper-stat-value.profit { color: #3fb950; }
-  .reaper-stat-value.danger { color: #ff6b6b; }
-  .reaper-stat-value.watching { color: #ffaa00; }
-  .reaper-stat-label {
-    font-size: 0.6rem;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-top: 4px;
-  }
-
-  .reaper-section {
-    width: 100%; max-width: 480px;
-    margin-bottom: 12px;
-  }
-  .reaper-section-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #8b949e;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    padding-left: 4px;
-  }
-  .target-card {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s;
-  }
-  .target-card.hot {
-    border-color: #ff6b6b;
-  }
-  .target-card.hot::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 3px;
-    background: #ff6b6b;
-  }
-  .target-card.warm {
-    border-color: #ffaa00;
-  }
-  .target-card.warm::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 3px;
-    background: #ffaa00;
-  }
-  .target-card.blocked {
-    border-color: #f85149;
-    opacity: 0.7;
-  }
-  .target-card.blocked::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 3px;
-    background: #f85149;
-  }
-  .target-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .target-market {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #e6edf3;
-  }
-  .target-chain {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-left: 6px;
-  }
-  .chain-base { background: #1a3a5c; color: #58a6ff; }
-  .chain-arbitrum { background: #28394b; color: #79c0ff; }
-  .chain-ethereum { background: #2a2444; color: #a78bfa; }
-  .chain-polygon { background: #2a1f3d; color: #b07bfa; }
-  .chain-optimism { background: #3d1f1f; color: #fa7b7b; }
-  .chain-scroll { background: #1f2d1f; color: #7bfa7b; }
-
-  .target-profit {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #3fb950;
-    font-family: ui-monospace, monospace;
-  }
-  .target-detail {
-    font-size: 0.72rem;
-    color: #8b949e;
-    margin-top: 4px;
-  }
-  .target-detail span { color: #c9d1d9; font-weight: 600; }
-  .target-status {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-top: 6px;
-  }
-  .status-watching { background: rgba(255,170,0,0.15); color: #ffaa00; }
-  .status-knife { background: rgba(255,107,107,0.15); color: #ff6b6b; animation: pulse-text 2s ease-in-out infinite; }
-  .status-blocked { background: rgba(248,81,73,0.15); color: #f85149; }
-  @keyframes pulse-text {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
-  .chain-row {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    font-size: 0.78rem;
-  }
-  .chain-name {
-    width: 80px;
-    font-weight: 700;
-    color: #e6edf3;
-    text-transform: capitalize;
-  }
-  .chain-stats {
-    flex: 1;
-    display: flex;
-    gap: 12px;
-    color: #8b949e;
-    font-family: ui-monospace, monospace;
-    font-size: 0.7rem;
-  }
-  .chain-stats .val { color: #c9d1d9; font-weight: 600; }
-  .chain-stats .danger-val { color: #ff6b6b; font-weight: 700; }
-
-  .event-feed {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 10px;
+    min-height: 44px;
+    margin: 0;
     padding: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    font-family: ui-monospace, monospace;
-    font-size: 0.62rem;
-    line-height: 1.6;
-    color: #8b949e;
-    width: 100%; max-width: 480px;
-  }
-  .event-feed .ev-liq { color: #ff6b6b; }
-  .event-feed .ev-route { color: #ffaa00; }
-  .event-feed .ev-pipe { color: #58a6ff; }
-  .event-feed .ev-time { color: #484f58; }
-
-  .reaper-refresh-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%; max-width: 480px;
-    margin-bottom: 12px;
-    font-size: 0.7rem;
-    color: #484f58;
-  }
-  .reaper-refresh-bar .countdown { font-family: ui-monospace, monospace; color: #8b949e; }
-
-  .liq-market-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
-    background: #161b22;
-    border: 1px solid #21262d;
+    background: transparent;
+    color: var(--g-dim);
+    border: 1px solid var(--g-faint);
     border-radius: 6px;
-    margin-bottom: 4px;
-    font-size: 0.75rem;
+    font-size: 14px;
   }
-  .liq-market-name { color: #e6edf3; font-weight: 600; }
-  .liq-market-chain { color: #8b949e; font-size: 0.65rem; text-transform: capitalize; }
-  .liq-market-count { color: #ff6b6b; font-weight: 700; font-family: ui-monospace, monospace; }
+  .tab.active { background: var(--g-bg); color: var(--g-hi); border-color: var(--g-dim); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  textarea {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: var(--g-hi);
+    caret-color: var(--g);
+    border: 1px solid var(--g-faint);
+    border-radius: 6px;
+    outline: none;
+    resize: vertical;
+    font-family: var(--mono);
+    font-size: 16px; /* 16px or more: iOS never zooms on focus */
+    line-height: 1.45;
+  }
+  textarea:focus { border-color: var(--g-dim); }
+  textarea::placeholder { color: var(--g-dim); opacity: 1; }
+  #note { min-height: 34vh; }
+  #recv-text { min-height: 56vh; overflow-wrap: anywhere; }
+
+  button, .pick {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 10px;
+    padding: 12px;
+    background: #000;
+    color: var(--g);
+    border: 1px solid var(--g-dim);
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 15px;
+    text-align: center;
+    cursor: pointer;
+  }
+  button:active, .pick:active { background: var(--g-bg); color: var(--g-hi); }
+  button.main { background: var(--g-bg); color: var(--g-hi); }
+  button:disabled { color: var(--g-faint); border-color: var(--g-faint); background: #000; }
+
+  .row { display: flex; gap: 8px; }
+  .row button { flex: 1; }
+
+  .rule { margin: 22px 0 12px; border: 0; border-top: 1px solid var(--g-faint); }
+
+  #fileInput {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #fileInput:focus-visible + .pick { border-color: var(--g-hi); }
+  .pick { color: var(--g-dim); border-style: dashed; margin-top: 0; }
+  .pick.has { color: var(--g-hi); border-color: var(--g-dim); overflow-wrap: anywhere; }
+
+  .msg { min-height: 1.45em; margin-top: 10px; font-size: 13px; text-align: center; color: var(--g-dim); }
+  .ok { color: var(--g); }
+  .err { color: var(--red); }
+
+  #file-progress { display: none; margin-top: 10px; }
+  .bar { height: 6px; border: 1px solid var(--g-faint); border-radius: 3px; overflow: hidden; }
+  #progress-bar { width: 0; height: 100%; background: var(--g); transition: width .3s; }
+  #progress-text { margin-top: 6px; font-size: 12px; text-align: center; color: var(--g-dim); overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
-  <h1>Claude Relay</h1>
-  <p class="sub">Aug 30 — Dual-Mind Conductor LIVE</p>
-
-  <a href="https://104.248.159.95.nip.io/conductor/" target="_blank" style="display:block;width:100%;max-width:480px;margin:0 auto 10px;padding:18px;background:#0d1017;border:2px solid #8b5cf6;border-radius:10px;text-align:center;text-decoration:none;font-family:monospace;">
-    <div style="color:#8b5cf6;font-size:1.3rem;letter-spacing:3px;text-shadow:0 0 10px #8b5cf6;">DUAL-MIND CONDUCTOR</div>
-    <div style="color:#6d4aad;font-size:0.75rem;margin-top:5px;">CLAUDE + CODEX PRIVATE AUTOMATION SYSTEM</div>
-  </a>
-
-  <a href="https://104.248.159.95.nip.io/codex-auth/" target="_blank" style="display:block;width:100%;max-width:480px;margin:0 auto 10px;padding:14px;background:#0d1017;border:2px solid #f59e0b;border-radius:10px;text-align:center;text-decoration:none;font-family:monospace;">
-    <div style="color:#f59e0b;font-size:1rem;letter-spacing:2px;">⚡ CODEX AUTH — ACTION NEEDED</div>
-    <div style="color:#d97706;font-size:0.7rem;margin-top:4px;">TAP TO LOG IN WITH CHATGPT</div>
-  </a>
-
-  <a href="https://104.248.159.95.nip.io/fieldstation42/" target="_blank" style="display:block;width:100%;max-width:480px;margin:0 auto 18px;padding:18px;background:#0a0a0f;border:2px solid #33ff33;border-radius:10px;text-align:center;text-decoration:none;font-family:monospace;">
-    <div style="color:#33ff33;font-size:1.3rem;letter-spacing:3px;text-shadow:0 0 10px #33ff33;">FIELDSTATION42 ARCHIVE</div>
-    <div style="color:#1a8a1a;font-size:0.75rem;margin-top:5px;">RETRO TELEVISION MEDIA ACQUISITION SYSTEM</div>
-  </a>
+  <header>
+    <span class="led"></span>
+    <h1>CLAUDE RELAY</h1>
+  </header>
 
   <div class="tabs">
-    <div class="tab active" id="tab-send">Send</div>
-    <div class="tab" id="tab-recv">From Claude</div>
-    <div class="tab" id="tab-reaper" style="color:#ff6b6b;">Reaper</div>
+    <button type="button" class="tab active" id="tab-send">Send</button>
+    <button type="button" class="tab" id="tab-recv">From Claude</button>
   </div>
-
-  <!-- SEND TAB (default active) -->
 
   <div class="panel active" id="panel-send">
-    <textarea id="note" placeholder="Paste text, keys, links here..." autofocus></textarea>
-    <button id="send">Send</button>
-    <div id="status"></div>
-    <p class="sub" style="margin:18px 0 6px;">— or send a file/image —</p>
-    <input type="file" id="fileInput" accept="image/*,video/*,audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac,audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac,audio/mpeg,.pdf,.zip,.tar.gz,.7z,.rar,.py,.js,.json,.txt,.md,.sol,application/zip,application/x-zip-compressed" multiple style="width:100%;max-width:480px;color:#e8e8ec;">
-    <button id="sendFile" class="secondary">Send Files</button>
-    <div id="file-status"></div>
-    <div id="file-progress" style="width:100%;max-width:480px;margin-top:8px;display:none;">
-      <div style="background:#2e323d;border-radius:6px;overflow:hidden;height:8px;">
-        <div id="progress-bar" style="background:#4f7cff;height:100%;width:0%;transition:width 0.3s;border-radius:6px;"></div>
-      </div>
-      <div id="progress-text" style="font-size:0.78rem;color:#9a9aa5;margin-top:4px;text-align:center;"></div>
+    <textarea id="note" placeholder="Paste text, keys, links here..."></textarea>
+    <button type="button" id="send" class="main">Send</button>
+    <div class="msg" id="status"></div>
+
+    <hr class="rule">
+
+    <input type="file" id="fileInput" multiple>
+    <label class="pick" id="pick" for="fileInput">Choose files</label>
+    <button type="button" id="sendFile">Send Files</button>
+    <div class="msg" id="file-status"></div>
+    <div id="file-progress">
+      <div class="bar"><div id="progress-bar"></div></div>
+      <div id="progress-text"></div>
     </div>
   </div>
 
-  <!-- RECEIVE TAB -->
   <div class="panel" id="panel-recv">
-    <div id="tricorder-sounds" style="width:100%;max-width:480px;margin:0 0 14px;padding:12px;border:1px solid #35ff6b;border-radius:10px;background:#000;">
-      <div style="color:#e6e9ec;font-weight:700;letter-spacing:3px;font-size:0.8rem;margin-bottom:10px;text-align:center;">TRICORDER &mdash; 9 BUTTON SOUNDS</div>
-      <button type="button" class="snd" data-src="./tricorder/01-low-double.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">1. Low double</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">like the space key</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/02-rising-double.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">2. Rising double</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">like the send key</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/03-falling-double.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">3. Falling double</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">like the hide key</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/04-steady-double.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">4. Steady double</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">two even beeps</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/05-startup-sequence.mp3?v=3" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">5. Startup sequence</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">long, 14 seconds, opening beeps, in-between pitch and softness, no fan</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/06-bell-double.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">6. Bell double</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">two soft bell pings</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/07-scan-and-confirm.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">7. Scan and confirm</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">short run up, then a double</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/08-tile-calibration.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">8. Tile calibration</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">longer, like the 6 top-left tiles</span></span></button>
-      <button type="button" class="snd" data-src="./tricorder/09-keyboard-calibration.mp3?v=1" style="margin:0 0 8px;padding:12px 14px;background:#14181f;border:1px solid #35ff6b;text-align:left;display:flex;align-items:center;gap:12px;"><span style="color:#35ff6b;font-size:1.2rem;">&#9654;</span><span><span style="display:block;color:#fff;">9. Keyboard calibration</span><span style="display:block;color:#9aa3ab;font-size:0.75rem;font-weight:400;">longer, like the keyboard droplets</span></span></button>
+    <textarea id="recv-text" placeholder="Nothing loaded yet." readonly></textarea>
+    <div class="row">
+      <button type="button" id="refresh" class="main">Refresh</button>
+      <button type="button" id="copy">Copy</button>
     </div>
-    <script>(function(){var a=new Audio(),on=null;function off(){if(on){on.style.background='#14181f';on=null;}}a.addEventListener('ended',off);document.querySelectorAll('#tricorder-sounds .snd').forEach(function(b){b.addEventListener('click',function(){off();a.src=b.getAttribute('data-src');on=b;b.style.background='#1d4d2c';var p=a.play();if(p&&p.catch)p.catch(off);});});})();</script>
-    <div style="width:100%;max-width:480px;margin:0 0 14px;padding:10px;border:1px solid #c0c6cc;border-radius:10px;background:#000;text-align:center;">
-      <div style="color:#e6e9ec;font-weight:700;letter-spacing:4px;font-size:0.8rem;margin-bottom:8px;">SPACE DECK &mdash; CEO MOCKUP</div>
-      <a href="./space-deck-ceo.jpg?v=1" target="_blank"><img src="./space-deck-ceo.jpg?v=1" alt="Space Deck CEO dashboard mockup" style="width:100%;height:auto;border-radius:6px;display:block;"></a>
-      <div style="color:#9aa3ab;font-size:0.7rem;letter-spacing:1px;margin-top:6px;">TAP TO OPEN FULL SIZE</div>
-    </div>
-    <div style="width:100%;max-width:480px;text-align:right;font-size:0.7rem;color:#FF8647;font-weight:700;letter-spacing:2px;margin-bottom:6px;">CODEWORD: ENDOR</div>
-    <div style="width:100%;max-width:480px;margin:0 0 14px;padding:12px;border:1px solid #35ff6b;border-radius:10px;background:#000;text-align:center;font-family:'Courier New',monospace;">
-      <div style="color:#fff;font-weight:700;letter-spacing:3px;font-size:0.85rem;margin-bottom:8px;">REAPER &mdash; R1 CREATION</div>
-      <img src="./reaper_r1_qr.png?v=2" alt="Reaper R1 creation QR" style="width:100%;max-width:300px;height:auto;border-radius:8px;display:block;margin:0 auto;">
-      <div style="color:#35ff6b;font-size:0.7rem;letter-spacing:1px;margin-top:8px;">ON THE R1: CREATIONS &rarr; ADD VIA QR &rarr; SCAN</div>
-    </div>
-    <textarea id="recv-text" placeholder="Tap Refresh to load the latest from Claude..." readonly></textarea>
-    <button id="refresh">Refresh</button>
-    <button id="copy" class="secondary">Copy</button>
-    <div id="recv-status"></div>
-    <div class="recv-meta" id="recv-meta"></div>
+    <div class="msg" id="recv-status"></div>
   </div>
-
-  <!-- REAPER LIVE TAB -->
-  <div class="panel" id="panel-reaper">
-
-    <div class="reaper-header">
-      <div class="reaper-title"><span class="reaper-pulse"></span> REAPER ENGINE LIVE</div>
-      <div class="reaper-sub" id="reaper-update-time">Loading...</div>
-    </div>
-
-    <div class="reaper-refresh-bar">
-      <span>Auto-refresh: <span class="countdown" id="reaper-countdown">30s</span></span>
-      <button id="reaper-refresh-btn" style="margin:0;width:auto;padding:6px 14px;font-size:0.75rem;border-radius:6px;">Refresh Now</button>
-    </div>
-
-    <!-- Stats Row -->
-    <div class="reaper-stats-row">
-      <div class="reaper-stat">
-        <div class="reaper-stat-value profit" id="rs-profit">$0</div>
-        <div class="reaper-stat-label">Total Profit</div>
-      </div>
-      <div class="reaper-stat">
-        <div class="reaper-stat-value danger" id="rs-danger">0</div>
-        <div class="reaper-stat-label">Danger Zone</div>
-      </div>
-      <div class="reaper-stat">
-        <div class="reaper-stat-value watching" id="rs-potential">$0</div>
-        <div class="reaper-stat-label">Potential</div>
-      </div>
-    </div>
-    <div class="reaper-stats-row">
-      <div class="reaper-stat">
-        <div class="reaper-stat-value" id="rs-markets">0</div>
-        <div class="reaper-stat-label">Markets</div>
-      </div>
-      <div class="reaper-stat">
-        <div class="reaper-stat-value" id="rs-borrowers">0</div>
-        <div class="reaper-stat-label">Borrowers</div>
-      </div>
-      <div class="reaper-stat">
-        <div class="reaper-stat-value" id="rs-uptime">0h</div>
-        <div class="reaper-stat-label">Uptime</div>
-      </div>
-    </div>
-
-    <!-- Top Targets -->
-    <div class="reaper-section">
-      <div class="reaper-section-title">🎯 Top Targets — Potential Profit</div>
-      <div id="reaper-targets"></div>
-    </div>
-
-    <!-- Chain Status -->
-    <div class="reaper-section">
-      <div class="reaper-section-title">⛓ Chain Status</div>
-      <div id="reaper-chains"></div>
-    </div>
-
-    <!-- Active Liquidatable Markets -->
-    <div class="reaper-section">
-      <div class="reaper-section-title">🔴 Liquidatable Now (last 5 min)</div>
-      <div id="reaper-liquidatable"></div>
-    </div>
-
-    <!-- Event Feed -->
-    <div class="reaper-section">
-      <div class="reaper-section-title">📡 Live Event Feed</div>
-      <div class="event-feed" id="reaper-events">Loading events...</div>
-    </div>
-
-  </div>
-
-  <p id="build" style="margin-top:24px;color:#4a4d57;font-size:0.7rem;">build: relay-v87 — REAPER LIVE DASHBOARD — Sep 14 2026</p>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v90')) {
-  sessionStorage.setItem('relay_cache_bust_v90', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v91')) {
+  sessionStorage.setItem('relay_cache_bust_v91', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
-const IN_BIN = "shaheer-relay-dydhytrzlufq6zwo";
+(function () {
+  const IN_BIN = 'shaheer-relay-dydhytrzlufq6zwo';
+  const $ = (id) => document.getElementById(id);
 
-// --- Tab switching ---
-var tabNames = ['send','recv','reaper'];
-tabNames.forEach(function(t) {
-  var tabEl = document.getElementById('tab-' + t);
-  var panelEl = document.getElementById('panel-' + t);
-  if (!tabEl || !panelEl) return;
-  tabEl.addEventListener('click', function() {
-    tabNames.forEach(function(x) {
-      var xTab = document.getElementById('tab-' + x);
-      var xPanel = document.getElementById('panel-' + x);
-      if (xTab) xTab.classList.toggle('active', x === t);
-      if (xPanel) xPanel.classList.toggle('active', x === t);
-    });
-    if (t === 'recv') loadLatest();
-    if (t === 'reaper') loadReaperData();
-  });
-});
-
-const btn = document.getElementById('send');
-const status = document.getElementById('status');
-const note = document.getElementById('note');
-
-btn.addEventListener('click', async () => {
-  const text = note.value.trim();
-  if (!text) return;
-  btn.disabled = true;
-  status.textContent = 'Sending...';
-  status.className = '';
-  const filename = 'note-' + Date.now() + '.txt';
-  try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
-    xhr.setRequestHeader('Content-Type', 'text/plain');
-    xhr.timeout = 30000;
-    await new Promise((resolve, reject) => {
-      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
-      xhr.onerror = () => reject(new Error('network error'));
-      xhr.ontimeout = () => reject(new Error('timeout'));
-      xhr.send(new Blob([text], { type: 'text/plain' }));
-    });
-    status.textContent = 'Sent. Claude will see it next.';
-    status.className = 'ok';
-    note.value = '';
-  } catch (e) {
-    status.textContent = 'Failed: ' + e.message;
-    status.className = 'err';
-  } finally {
-    btn.disabled = false;
+  function say(el, text, cls) {
+    el.textContent = text;
+    el.className = 'msg' + (cls ? ' ' + cls : '');
   }
-});
 
-const fileInput = document.getElementById('fileInput');
-const sendFileBtn = document.getElementById('sendFile');
-const fileStatus = document.getElementById('file-status');
+  // Tabs
+  ['send', 'recv'].forEach((t) => {
+    $('tab-' + t).addEventListener('click', () => {
+      ['send', 'recv'].forEach((x) => {
+        $('tab-' + x).classList.toggle('active', x === t);
+        $('panel-' + x).classList.toggle('active', x === t);
+      });
+      if (t === 'recv') loadLatest();
+    });
+  });
 
-sendFileBtn.addEventListener('click', async () => {
-  const files = fileInput.files;
-  if (!files.length) { fileStatus.textContent = 'Choose files first.'; fileStatus.className = 'err'; return; }
-  sendFileBtn.disabled = true;
-  const progressDiv = document.getElementById('file-progress');
-  const progressBar = document.getElementById('progress-bar');
-  const progressText = document.getElementById('progress-text');
-  progressDiv.style.display = 'block';
-  const total = files.length;
-  let done = 0, failed = 0;
-  fileStatus.textContent = `Uploading ${total} file${total > 1 ? 's' : ''}...`;
-  fileStatus.className = '';
-  for (let i = 0; i < total; i++) {
-    const file = files[i];
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const filename = 'file-' + Date.now() + '-' + i + '-' + safeName;
-    progressText.textContent = `${i + 1} of ${total}: ${file.name}`;
-    try {
-      const safeBlob = new Blob([file], { type: 'text/plain' });
+  // Upload one blob to the relay bin
+  function upload(filename, blob, timeout, onProgress) {
+    return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
       xhr.setRequestHeader('Content-Type', 'text/plain');
-      xhr.timeout = 900000;
-      await new Promise((resolve, reject) => {
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) progressBar.style.width = ((i + e.loaded / e.total) / total * 100) + '%';
-        };
-        xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
-        xhr.onerror = () => reject(new Error('network error'));
-        xhr.ontimeout = () => reject(new Error('timeout'));
-        xhr.send(safeBlob);
-      });
-      done++;
-    } catch (e) { failed++; }
-    progressBar.style.width = ((i + 1) / total * 100) + '%';
+      xhr.timeout = timeout;
+      if (onProgress) xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(e.loaded / e.total); };
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
+      xhr.onerror = () => reject(new Error('network error'));
+      xhr.ontimeout = () => reject(new Error('timeout'));
+      xhr.send(blob);
+    });
   }
-  fileStatus.textContent = failed === 0 ? `All ${done} sent.` : `${done} sent, ${failed} failed.`;
-  fileStatus.className = failed === total ? 'err' : 'ok';
-  progressText.textContent = 'Done.';
-  fileInput.value = '';
-  sendFileBtn.disabled = false;
-});
 
-const recvText = document.getElementById('recv-text');
-const recvStatus = document.getElementById('recv-status');
-const recvMeta = document.getElementById('recv-meta');
-const refreshBtn = document.getElementById('refresh');
-const copyBtn = document.getElementById('copy');
-
-async function loadLatest() {
-  refreshBtn.disabled = true;
-  recvStatus.textContent = 'Loading...';
-  try {
-    const resp = await fetch('./outbox.txt?t=' + Date.now(), { cache: 'no-store' });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const text = await resp.text();
-    if (/^\s*<(!DOCTYPE|html)/i.test(text)) throw new Error('got a webpage');
-    recvText.value = text;
-    recvStatus.textContent = 'Loaded.';
-    recvStatus.className = 'ok';
-    recvMeta.textContent = 'updated just now';
-  } catch (e) {
-    recvStatus.textContent = 'Failed: ' + e.message;
-    recvStatus.className = 'err';
-  } finally { refreshBtn.disabled = false; }
-}
-refreshBtn.addEventListener('click', loadLatest);
-copyBtn.addEventListener('click', async () => {
-  if (!recvText.value) return;
-  try { await navigator.clipboard.writeText(recvText.value); } catch(e) { recvText.select(); document.execCommand('copy'); }
-  recvStatus.textContent = 'Copied.'; recvStatus.className = 'ok';
-});
-
-// ── REAPER LIVE DASHBOARD ──
-let reaperTimer = null;
-let reaperCountdown = 30;
-let reaperInterval = null;
-
-function chainBadge(chain) {
-  const cls = 'target-chain chain-' + chain.toLowerCase();
-  return '<span class="' + cls + '">' + chain + '</span>';
-}
-
-function formatUSD(n) {
-  if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000) return '$' + (n / 1000).toFixed(1) + 'K';
-  return '$' + n.toLocaleString();
-}
-
-function statusBadge(status) {
-  let cls = 'status-watching';
-  if (status.includes('KNIFE')) cls = 'status-knife';
-  else if (status.includes('BLOCK')) cls = 'status-blocked';
-  return '<span class="target-status ' + cls + '">' + status + '</span>';
-}
-
-function renderTargets(targets) {
-  const el = document.getElementById('reaper-targets');
-  if (!targets || !targets.length) { el.innerHTML = '<div style="color:#484f58;text-align:center;padding:20px;">No targets</div>'; return; }
-  el.innerHTML = targets.map(t => {
-    let cardClass = 'target-card';
-    if (t.status.includes('KNIFE')) cardClass += ' hot';
-    else if (t.status.includes('BLOCK')) cardClass += ' blocked';
-    else if (t.potential_profit >= 1000) cardClass += ' warm';
-    return '<div class="' + cardClass + '">' +
-      '<div class="target-row">' +
-        '<div><span class="target-market">' + t.market + '</span>' + chainBadge(t.chain) + '</div>' +
-        '<div class="target-profit">+' + formatUSD(t.potential_profit) + '</div>' +
-      '</div>' +
-      '<div class="target-detail">' +
-        'Borrower: <span>' + t.borrower + '</span> · ' +
-        'Borrow: <span>' + formatUSD(t.borrow_usd) + '</span> · ' +
-        'HF: <span>' + t.health_factor.toFixed(4) + '</span> · ' +
-        'Drop: <span>' + t.drop_needed + '</span>' +
-      '</div>' +
-      statusBadge(t.status) +
-    '</div>';
-  }).join('');
-}
-
-function renderChains(chains) {
-  const el = document.getElementById('reaper-chains');
-  if (!chains) { el.innerHTML = ''; return; }
-  const order = ['ethereum','arbitrum','base','polygon','optimism','bnb','scroll'];
-  el.innerHTML = order.map(name => {
-    const c = chains[name] || {markets:0,borrowers:0,danger:0,block:0};
-    const active = (c.markets > 0 || c.block > 0);
-    return '<div class="chain-row" style="opacity:' + (active ? '1' : '0.4') + '">' +
-      '<div class="chain-name">' +
-        '<span style="color:' + (active ? '#3fb950' : '#484f58') + ';margin-right:4px;">●</span>' +
-        name +
-      '</div>' +
-      '<div class="chain-stats">' +
-        '<span><span class="val">' + c.markets + '</span> mkt</span>' +
-        '<span><span class="val">' + c.borrowers.toLocaleString() + '</span> bor</span>' +
-        '<span><span class="' + (c.danger > 0 ? 'danger-val' : 'val') + '">' + c.danger + '</span> dgr</span>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-function renderLiquidatable(markets) {
-  const el = document.getElementById('reaper-liquidatable');
-  if (!markets || !markets.length) { el.innerHTML = '<div style="color:#484f58;text-align:center;padding:14px;font-size:0.75rem;">None detected in last 5 min</div>'; return; }
-  el.innerHTML = markets.map(m => {
-    return '<div class="liq-market-row">' +
-      '<div><span class="liq-market-name">' + m.market + '</span> <span class="liq-market-chain">' + m.chain + '</span></div>' +
-      '<div class="liq-market-count">' + m.detections + 'x</div>' +
-    '</div>';
-  }).join('');
-}
-
-function renderEvents(events) {
-  const el = document.getElementById('reaper-events');
-  if (!events || !events.length) { el.innerHTML = '<span style="color:#484f58;">No events yet</span>'; return; }
-  el.innerHTML = events.slice().reverse().map(e => {
-    // Clean up escaped quotes
-    let text = e.replace(/\\\\/g, '').replace(/\\"/g, '"');
-    // Colorize
-    let cls = 'ev-pipe';
-    if (text.includes('LIQUIDATABLE')) cls = 'ev-liq';
-    else if (text.includes('route_declined') || text.includes('NO_QUOTE') || text.includes('PROFIT_BELOW')) cls = 'ev-route';
-    // Extract time
-    const timeMatch = text.match(/(\d{2}:\d{2}:\d{2})/);
-    const time = timeMatch ? timeMatch[1] : '';
-    // Shorten the line
-    let short = text.replace(/^.*\[reaper\.\w+\]\s*(INFO|WARNING)\s*/, '');
-    if (short.length > 120) short = short.substring(0, 117) + '...';
-    return '<div><span class="ev-time">' + time + '</span> <span class="' + cls + '">' + short + '</span></div>';
-  }).join('');
-}
-
-async function loadReaperData() {
-  try {
-    const resp = await fetch('./reaper-live.json?t=' + Date.now(), { cache: 'no-store' });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const data = await resp.json();
-
-    // Update time
-    const updatedDate = new Date(data.updated);
-    const ago = Math.floor((Date.now() - updatedDate.getTime()) / 1000);
-    document.getElementById('reaper-update-time').innerHTML =
-      data.engine + ' · <span style="color:#3fb950;">Uptime ' + data.uptime_hours + 'h</span> · Updated ' + (ago < 60 ? ago + 's ago' : Math.floor(ago/60) + 'm ago');
-
-    // Stats
-    let totalMarkets = 0, totalBorrowers = 0, totalDanger = 0;
-    if (data.chains) {
-      Object.values(data.chains).forEach(c => {
-        totalMarkets += c.markets || 0;
-        totalBorrowers += c.borrowers || 0;
-        totalDanger += c.danger || 0;
-      });
+  // Send text
+  const sendBtn = $('send'), note = $('note'), sendStatus = $('status');
+  sendBtn.addEventListener('click', async () => {
+    const text = note.value.trim();
+    if (!text) return;
+    sendBtn.disabled = true;
+    say(sendStatus, 'Sending...');
+    try {
+      await upload('note-' + Date.now() + '.txt', new Blob([text], { type: 'text/plain' }), 30000);
+      say(sendStatus, 'Sent. Claude will see it next.', 'ok');
+      note.value = '';
+    } catch (e) {
+      say(sendStatus, 'Failed: ' + e.message, 'err');
+    } finally {
+      sendBtn.disabled = false;
     }
-    let totalPotential = 0;
-    if (data.top_targets) data.top_targets.forEach(t => totalPotential += t.potential_profit || 0);
+  });
 
-    document.getElementById('rs-profit').textContent = '$' + (data.total_profit_usd || 0).toLocaleString();
-    document.getElementById('rs-danger').textContent = totalDanger.toLocaleString();
-    document.getElementById('rs-potential').textContent = formatUSD(totalPotential);
-    document.getElementById('rs-markets').textContent = totalMarkets.toLocaleString();
-    document.getElementById('rs-borrowers').textContent = totalBorrowers.toLocaleString();
-    document.getElementById('rs-uptime').textContent = data.uptime_hours + 'h';
+  // Send files
+  const fileInput = $('fileInput'), pick = $('pick'), sendFileBtn = $('sendFile'), fileStatus = $('file-status');
+  const progress = $('file-progress'), progressBar = $('progress-bar'), progressText = $('progress-text');
 
-    // Render sections
-    renderTargets(data.top_targets);
-    renderChains(data.chains);
-    renderLiquidatable(data.liquidatable_markets);
-    renderEvents(data.recent_events);
-
-  } catch (e) {
-    document.getElementById('reaper-update-time').textContent = 'Error: ' + e.message;
+  function showPicked() {
+    const n = fileInput.files.length;
+    pick.textContent = n === 0 ? 'Choose files' : n === 1 ? fileInput.files[0].name : n + ' files chosen';
+    pick.classList.toggle('has', n > 0);
   }
-}
+  fileInput.addEventListener('change', showPicked);
 
-// Auto-refresh countdown
-function startReaperRefresh() {
-  if (reaperInterval) clearInterval(reaperInterval);
-  reaperCountdown = 30;
-  reaperInterval = setInterval(() => {
-    reaperCountdown--;
-    const cdEl = document.getElementById('reaper-countdown');
-    if (cdEl) cdEl.textContent = reaperCountdown + 's';
-    if (reaperCountdown <= 0) {
-      reaperCountdown = 30;
-      // Only auto-refresh if the reaper tab is active
-      if (document.getElementById('panel-reaper').classList.contains('active')) {
-        loadReaperData();
-      }
+  sendFileBtn.addEventListener('click', async () => {
+    const files = fileInput.files;
+    if (!files.length) { say(fileStatus, 'Choose files first.', 'err'); return; }
+    sendFileBtn.disabled = true;
+    progress.style.display = 'block';
+    progressBar.style.width = '0';
+    const total = files.length;
+    let done = 0, failed = 0;
+    say(fileStatus, 'Uploading ' + total + ' file' + (total > 1 ? 's' : '') + '...');
+    for (let i = 0; i < total; i++) {
+      const file = files[i];
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      progressText.textContent = (i + 1) + ' of ' + total + ': ' + file.name;
+      try {
+        await upload('file-' + Date.now() + '-' + i + '-' + safeName, new Blob([file], { type: 'text/plain' }), 900000,
+          (part) => { progressBar.style.width = ((i + part) / total * 100) + '%'; });
+        done++;
+      } catch (e) { failed++; }
+      progressBar.style.width = ((i + 1) / total * 100) + '%';
     }
-  }, 1000);
-}
+    say(fileStatus, failed === 0 ? 'All ' + done + ' sent.' : done + ' sent, ' + failed + ' failed.', failed === total ? 'err' : 'ok');
+    progressText.textContent = 'Done.';
+    fileInput.value = '';
+    showPicked();
+    sendFileBtn.disabled = false;
+  });
 
-document.getElementById('reaper-refresh-btn').addEventListener('click', () => {
-  loadReaperData();
-  reaperCountdown = 30;
-});
+  // From Claude
+  const recvText = $('recv-text'), recvStatus = $('recv-status'), refreshBtn = $('refresh');
 
-startReaperRefresh();
+  async function loadLatest() {
+    refreshBtn.disabled = true;
+    say(recvStatus, 'Loading...');
+    try {
+      const resp = await fetch('./outbox.txt?t=' + Date.now(), { cache: 'no-store' });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const text = await resp.text();
+      if (/^\s*<(!DOCTYPE|html)/i.test(text)) throw new Error('got a webpage');
+      recvText.value = text;
+      say(recvStatus, 'Updated just now.', 'ok');
+    } catch (e) {
+      say(recvStatus, 'Failed: ' + e.message, 'err');
+    } finally {
+      refreshBtn.disabled = false;
+    }
+  }
+  refreshBtn.addEventListener('click', loadLatest);
+
+  $('copy').addEventListener('click', async () => {
+    if (!recvText.value) return;
+    try { await navigator.clipboard.writeText(recvText.value); }
+    catch (e) { recvText.select(); document.execCommand('copy'); }
+    say(recvStatus, 'Copied.', 'ok');
+  });
+})();
 </script>
 </body>
 </html>
