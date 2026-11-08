@@ -11,185 +11,286 @@
 <style>
   :root {
     color-scheme: dark;
-    --g: #33ff66;
-    --g-hi: #b8ffcf;
-    --g-dim: #1f9e48;
-    --g-faint: #0f5226;
-    --g-bg: #062b14;
-    --amber: #ffb43d;
-    --red: #ff5a4d;
+    --g: #3dff7a; --r: #ff2a1f; --a: #ffb02e; --b: #1f47ff; --err: #ff4a3a;
     --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, "Helvetica Neue", Arial, sans-serif;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { background: #000; }
-  body {
-    margin: 0 auto;
-    max-width: 560px;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 24px);
-    color: var(--g);
-    font-family: var(--mono);
-    font-size: 15px;
-    line-height: 1.45;
+  html, body { margin: 0; background: #000; }
+  body { font-family: var(--sans); -webkit-text-size-adjust: 100%; }
+
+  /* The case: same dark shell as the Duo Even keyboard deck */
+  .deck {
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: 760px; min-height: 100vh; min-height: 100dvh; margin: 0 auto;
+    padding: calc(env(safe-area-inset-top) + 10px) calc(env(safe-area-inset-right) + 10px) calc(env(safe-area-inset-bottom) + 12px) calc(env(safe-area-inset-left) + 10px);
+    background: linear-gradient(#1c1b1d, #161517 30%, #121113 85%, #0d0c0e);
+    border: 1px solid #2a282b; border-bottom: 0;
+    border-radius: 14px 14px 0 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 -2px 0 #0b0a0c;
   }
 
-  header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--g-faint);
-  }
-  .led {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--g);
-    box-shadow: 0 0 8px var(--g);
+  /* Upper bar: the banks of lights */
+  .strip { display: flex; align-items: stretch; gap: 8px; height: 40px; }
+  .pan {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    padding: 0 8px; background: #0a0a0b; border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.05);
   }
   h1 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: var(--g-hi);
-    text-shadow: 0 0 10px rgba(51, 255, 102, .35);
+    margin: 0; white-space: nowrap;
+    font: 700 11px/1 var(--sans); letter-spacing: .06em;
+    color: #ff3a2c; text-shadow: 0 0 6px rgba(255,42,31,.65);
   }
+  .vent { display: none; flex: 0 1 60px; min-width: 0; border-radius: 2px; margin: 8px 0;
+    background: repeating-linear-gradient(90deg, #2a292b 0 2px, #0c0b0d 2px 3px, #1f1e20 3px 5px); }
 
-  .tabs { display: flex; gap: 8px; margin: 16px 0; }
-  .tab {
-    flex: 1;
-    min-height: 44px;
-    margin: 0;
-    padding: 10px;
-    background: transparent;
-    color: var(--g-dim);
-    border: 1px solid var(--g-faint);
-    border-radius: 6px;
-    font-size: 14px;
+  #hled { display: grid; grid-template-columns: repeat(3, 15px); grid-template-rows: repeat(2, 9px); gap: 5px; }
+  #hled i { border-radius: 2px; background: var(--c); opacity: .12; }
+  #hled i.on { opacity: 1; box-shadow: 0 0 6px var(--c), 0 0 12px var(--c); }
+  #hled i:nth-child(1), #hled i:nth-child(6) { --c: var(--r); }
+  #hled i:nth-child(2) { --c: var(--b); }
+  #hled i:nth-child(3), #hled i:nth-child(4) { --c: var(--a); }
+  #hled i:nth-child(5) { --c: var(--g); }
+
+  .rd { display: flex; gap: 5px; }
+  .rd i { width: 11px; height: 11px; border-radius: 50%; background: var(--c); box-shadow: 0 0 6px var(--c), 0 0 12px var(--c); opacity: .15; animation: trico var(--d) steps(1) var(--o) infinite; }
+  .rd i:nth-child(1) { --c: var(--r); --d: 3.9s; --o: 0s; }
+  .rd i:nth-child(2) { --c: var(--a); --d: 5.1s; --o: -1.7s; }
+  .rd i:nth-child(3) { --c: var(--b); --d: 4.6s; --o: -3.2s; }
+
+  .trico { display: grid; grid-template-columns: repeat(4, 6px); gap: 3px 4px; }
+  .trico i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); box-shadow: 0 0 4px var(--c), 0 0 8px var(--c); opacity: .15; animation: trico var(--d) steps(1) var(--o) infinite; }
+  .trico i:nth-child(1) { --c: var(--r); --d: 4.2s; --o: 0s; }
+  .trico i:nth-child(2) { --c: var(--a); --d: 6.3s; --o: -1.4s; }
+  .trico i:nth-child(3) { --c: var(--g); --d: 3.6s; --o: -2.2s; }
+  .trico i:nth-child(4) { --c: var(--b); --d: 5.4s; --o: -3.1s; }
+  .trico i:nth-child(5) { --c: var(--b); --d: 7.2s; --o: -4.9s; }
+  .trico i:nth-child(6) { --c: var(--g); --d: 4.8s; --o: -.6s; }
+  .trico i:nth-child(7) { --c: var(--a); --d: 5.9s; --o: -3.8s; }
+  .trico i:nth-child(8) { --c: var(--r); --d: 6.8s; --o: -5.3s; }
+  @keyframes trico { 0% { opacity: .15; } 30% { opacity: 1; } 62% { opacity: .15; } }
+
+  /* Red sweeping bar */
+  .hkr { position: relative; flex: 1 1 60px; min-width: 40px; height: 26px; align-self: center; overflow: hidden; border-radius: 4px;
+    background: #0b0101 repeating-linear-gradient(90deg, rgba(255,42,31,.26) 0 9px, transparent 9px 12px);
+    border: 1px solid rgba(255,42,31,.55); box-shadow: inset 0 0 6px #000, 0 0 5px rgba(255,42,31,.25); }
+  .hkr s { position: absolute; top: 3px; bottom: 3px; left: 3px; right: 17px; animation: hkr 3.4s ease-in-out infinite; will-change: transform; }
+  .hkr s i { position: absolute; top: 0; bottom: 0; left: 0; width: 14px; border-radius: 2px; background: #ff3a2a; box-shadow: 0 0 6px #ff2a1f, 0 0 14px #ff2a1f, 0 0 24px rgba(255,42,31,.6); }
+  @keyframes hkr { 0%, 7.5% { transform: translateX(0); } 50%, 57.5% { transform: translateX(100%); } 100% { transform: translateX(0); } }
+
+  /* LCD strip: the real status line */
+  .lcd, .screen {
+    background: linear-gradient(#0b120c, #070b08); border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.9), inset 0 0 12px rgba(40,255,100,.06), 0 0 0 2px #2e2b2f, 0 1px 0 3px rgba(255,255,255,.25);
+    color: var(--g); font-family: var(--mono); font-weight: 600;
+    text-shadow: 0 0 4px rgba(61,255,122,.55);
   }
-  .tab.active { background: var(--g-bg); color: var(--g-hi); border-color: var(--g-dim); }
+  .lcd { display: flex; align-items: center; gap: 10px; height: 30px; margin: 3px 3px 5px; padding: 0 9px; font-size: 13px; letter-spacing: .08em; }
+  .lcd.err { color: var(--err); text-shadow: 0 0 4px rgba(255,74,58,.55); }
+  .lcd-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 6px currentColor; }
+  #lcd-st { flex: 1 1 auto; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lcd-lt { flex: none; display: flex; gap: 5px; }
+  .lcd-lt i { width: 13px; height: 8px; border-radius: 1px; background: var(--c); box-shadow: 0 0 5px var(--c); animation: lcdlt 3.2s steps(1) var(--o) infinite; }
+  .lcd-lt i:nth-child(1) { --c: var(--r); --o: 0s; }
+  .lcd-lt i:nth-child(2) { --c: var(--a); --o: -1.6s; }
+  .lcd-lt i:nth-child(3) { --c: var(--b); --o: -.8s; }
+  .lcd-lt i:nth-child(4) { --c: var(--g); --o: -2.4s; }
+  @keyframes lcdlt { 0% { opacity: 1; } 50% { opacity: .15; } }
+  .lx-grid { display: none; flex: none; grid-template-columns: repeat(6, 6px); grid-auto-rows: 6px; gap: 2px; }
+  .lx-grid i { border-radius: 1px; background: var(--c); box-shadow: 0 0 3px var(--c); opacity: .15; animation: trico var(--d) steps(1) var(--o) infinite; }
+  .lx-kitt { flex: none; position: relative; width: 66px; height: 10px; border-radius: 1px; overflow: hidden; background: rgba(255,176,46,.1); box-shadow: inset 0 0 0 1px rgba(255,176,46,.3); }
+  .lx-kitt i { position: absolute; top: 0; bottom: 0; left: 0; width: 16px; background: var(--a); box-shadow: 0 0 6px var(--a); animation: kitt 2.2s ease-in-out infinite alternate; will-change: transform; }
+  @keyframes kitt { to { transform: translateX(50px); } }
+  .lcd-tr { display: none; flex: none; grid-template-columns: repeat(3, 6px); }
 
-  .panel { display: none; }
-  .panel.active { display: block; }
-
-  textarea {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background: #000;
-    color: var(--g-hi);
-    caret-color: var(--g);
-    border: 1px solid var(--g-faint);
-    border-radius: 6px;
-    outline: none;
-    resize: vertical;
-    font-family: var(--mono);
-    font-size: 16px; /* 16px or more: iOS never zooms on focus */
-    line-height: 1.45;
+  /* Well: the sunken bay the keys sit in */
+  .well {
+    flex: 1 1 auto; display: flex; flex-direction: column; gap: 10px; min-height: 0;
+    margin: 3px; padding: 10px 8px 12px; background: #050506; border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.8), 0 0 0 2px #1a191b, 0 0 0 3px #262427;
   }
-  textarea:focus { border-color: var(--g-dim); }
-  textarea::placeholder { color: var(--g-dim); opacity: 1; }
-  #note { min-height: 34vh; }
-  #recv-text { min-height: 56vh; overflow-wrap: anywhere; }
-
-  button, .pick {
-    display: block;
-    width: 100%;
-    min-height: 48px;
-    margin-top: 10px;
-    padding: 12px;
-    background: #000;
-    color: var(--g);
-    border: 1px solid var(--g-dim);
-    border-radius: 6px;
-    font-family: var(--mono);
-    font-size: 15px;
-    text-align: center;
-    cursor: pointer;
-  }
-  button:active, .pick:active { background: var(--g-bg); color: var(--g-hi); }
-  button.main { background: var(--g-bg); color: var(--g-hi); }
-  button:disabled { color: var(--g-faint); border-color: var(--g-faint); background: #000; }
-
   .row { display: flex; gap: 8px; }
-  .row button { flex: 1; }
 
-  .rule { margin: 22px 0 12px; border: 0; border-top: 1px solid var(--g-faint); }
-
-  #fileInput {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
+  /* Keycaps */
+  .k {
+    appearance: none; -webkit-appearance: none; position: relative; flex: 1 1 0; min-width: 0;
+    display: flex; align-items: center; justify-content: center;
+    height: 56px; margin: 0 0 4px; padding: 0 0 6px;
+    background: #121113; border: 0; border-radius: 6px; cursor: pointer; color: #fff;
+    box-shadow: 0 3px 0 #000, 0 4px 4px rgba(0,0,0,.7), 0 0 0 1px #1f1e21;
+    font: 600 15px/1 var(--sans); user-select: none; -webkit-user-select: none; touch-action: manipulation;
   }
-  #fileInput:focus-visible + .pick { border-color: var(--g-hi); }
-  .pick { color: var(--g-dim); border-style: dashed; margin-top: 0; }
-  .pick.has { color: var(--g-hi); border-color: var(--g-dim); overflow-wrap: anywhere; }
+  .k::before { content: ''; position: absolute; inset: 3px 5px 9px; border-radius: 4px;
+    background: linear-gradient(#1d1c1f, #161518); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 1px 2px rgba(0,0,0,.5); }
+  .k:active, .k.tab.active { transform: translateY(2px); box-shadow: 0 1px 0 #000, 0 2px 2px rgba(0,0,0,.7), 0 0 0 1px #1f1e21; }
+  .k .lg { position: relative; max-width: 100%; padding: 14px 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: #fff; text-shadow: 0 0 1px #fff, 0 0 5px rgba(255,255,255,.85), 0 0 11px rgba(255,255,255,.4); }
+  .k.tab.active .lg, .k.has .lg { color: var(--g); text-shadow: 0 0 1px var(--g), 0 0 5px var(--g), 0 0 11px rgba(61,255,122,.55); }
+  .k:disabled { cursor: default; }
+  .k:disabled .lg { color: #57555a; text-shadow: none; }
+  .k:focus { outline: none; }
+  .k:focus-visible, #fileInput:focus-visible + .k { outline: 1px solid var(--g); outline-offset: 1px; }
+  .k.kf-on .lg { color: var(--kf) !important; text-shadow: 0 0 1px var(--kf), 0 0 2px var(--kf), 0 0 6px var(--kf), 0 0 12px var(--kf), 0 0 20px var(--kf) !important; }
+  .k.kf-fade .lg { animation: kfFade .24s ease-out; }
+  @keyframes kfFade { from { color: var(--kf); text-shadow: 0 0 1px var(--kf), 0 0 2px var(--kf), 0 0 6px var(--kf), 0 0 12px var(--kf), 0 0 20px var(--kf); } }
 
-  .msg { min-height: 1.45em; margin-top: 10px; font-size: 13px; text-align: center; color: var(--g-dim); }
-  .ok { color: var(--g); }
-  .err { color: var(--red); }
+  .panel { display: none; flex: 1 1 auto; flex-direction: column; gap: 10px; min-height: 0; }
+  .panel.active { display: flex; }
 
-  #file-progress { display: none; margin-top: 10px; }
-  .bar { height: 6px; border: 1px solid var(--g-faint); border-radius: 3px; overflow: hidden; }
-  #progress-bar { width: 0; height: 100%; background: var(--g); transition: width .3s; }
-  #progress-text { margin-top: 6px; font-size: 12px; text-align: center; color: var(--g-dim); overflow-wrap: anywhere; }
+  /* Big green screen, same glass as the LCD strip */
+  .screen {
+    display: block; flex: 1 1 auto; width: calc(100% - 6px); min-height: 170px; margin: 3px;
+    padding: 12px; border: 0; outline: none; resize: none; caret-color: var(--g);
+    font-size: 16px; line-height: 1.45; letter-spacing: .02em; overflow-wrap: anywhere;
+  }
+  .screen::placeholder { color: rgba(61,255,122,.5); opacity: 1; }
+
+  #fileInput { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+  /* LED segments, only while files are going up */
+  .seg { display: flex; gap: 3px; height: 9px; padding: 0 3px; }
+  .seg[hidden] { display: none; }
+  .seg i { flex: 1; border-radius: 1px; background: var(--g); opacity: .12; }
+  .seg i.on { opacity: 1; box-shadow: 0 0 5px var(--g); }
+
+  @media (max-width: 439px) {
+    .lcd.err .lx-kitt, .lcd.err .lcd-lt { display: none; }
+  }
+  @media (min-width: 440px) { .vent { display: block; } .strip { gap: 10px; } }
+  @media (min-width: 560px) {
+    .lx-grid, .lcd-tr { display: grid; }
+    h1 { font-size: 12px; }
+    .k { height: 62px; font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rd i, .trico i, .lcd-lt i, .lx-grid i, .lx-kitt i, .hkr s, .k.kf-fade .lg { animation: none; }
+    .rd i, .trico i, .lcd-lt i, .lx-grid i { opacity: .7; }
+  }
 </style>
 </head>
 <body>
-  <header>
-    <span class="led"></span>
-    <h1>CLAUDE RELAY</h1>
-  </header>
-
-  <div class="tabs">
-    <button type="button" class="tab active" id="tab-send">Send</button>
-    <button type="button" class="tab" id="tab-recv">From Claude</button>
-  </div>
-
-  <div class="panel active" id="panel-send">
-    <textarea id="note" placeholder="Paste text, keys, links here..."></textarea>
-    <button type="button" id="send" class="main">Send</button>
-    <div class="msg" id="status"></div>
-
-    <hr class="rule">
-
-    <input type="file" id="fileInput" multiple>
-    <label class="pick" id="pick" for="fileInput">Choose files</label>
-    <button type="button" id="sendFile">Send Files</button>
-    <div class="msg" id="file-status"></div>
-    <div id="file-progress">
-      <div class="bar"><div id="progress-bar"></div></div>
-      <div id="progress-text"></div>
+  <div class="deck">
+    <div class="strip" aria-hidden="false">
+      <div class="pan" aria-hidden="true"><span id="hled"><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+      <div class="pan" aria-hidden="true"><span class="rd"><i></i><i></i><i></i></span></div>
+      <div class="pan"><h1>CLAUDE RELAY</h1></div>
+      <span class="hkr" aria-hidden="true"><s><i></i></s></span>
+      <span class="vent" aria-hidden="true"></span>
+      <div class="pan" aria-hidden="true"><span class="trico"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
     </div>
-  </div>
 
-  <div class="panel" id="panel-recv">
-    <textarea id="recv-text" placeholder="Nothing loaded yet." readonly></textarea>
-    <div class="row">
-      <button type="button" id="refresh" class="main">Refresh</button>
-      <button type="button" id="copy">Copy</button>
+    <div class="lcd" id="lcd" role="status" aria-live="polite">
+      <i class="lcd-dot" aria-hidden="true"></i>
+      <b id="lcd-st">READY</b>
+      <span class="lcd-lt" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="lx-grid" id="grid" aria-hidden="true"></span>
+      <span class="lx-kitt" aria-hidden="true"><i></i></span>
+      <span class="trico lcd-tr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
     </div>
-    <div class="msg" id="recv-status"></div>
+
+    <div class="well">
+      <div class="row">
+        <button type="button" class="k tab active" id="tab-send"><span class="lg">Send</span></button>
+        <button type="button" class="k tab" id="tab-recv"><span class="lg">From Claude</span></button>
+      </div>
+
+      <div class="panel active" id="panel-send">
+        <textarea class="screen" id="note" placeholder="Paste text, keys, links here..."></textarea>
+        <div class="row"><button type="button" class="k" id="send"><span class="lg">Send</span></button></div>
+        <div class="seg" id="seg" hidden aria-hidden="true"></div>
+        <div class="row">
+          <input type="file" id="fileInput" multiple>
+          <label class="k" id="pick" for="fileInput"><span class="lg" id="pick-t">Choose files</span></label>
+          <button type="button" class="k" id="sendFile"><span class="lg">Send Files</span></button>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-recv">
+        <textarea class="screen" id="recv-text" placeholder="Nothing loaded yet." readonly></textarea>
+        <div class="row">
+          <button type="button" class="k" id="refresh"><span class="lg">Refresh</span></button>
+          <button type="button" class="k" id="copy"><span class="lg">Copy</span></button>
+        </div>
+      </div>
+    </div>
   </div>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v91')) {
-  sessionStorage.setItem('relay_cache_bust_v91', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v92')) {
+  sessionStorage.setItem('relay_cache_bust_v92', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
 (function () {
   const IN_BIN = 'shaheer-relay-dydhytrzlufq6zwo';
   const $ = (id) => document.getElementById(id);
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function say(el, text, cls) {
-    el.textContent = text;
-    el.className = 'msg' + (cls ? ' ' + cls : '');
+  // LCD status line. While files are going up, nothing else may take it over.
+  const lcdBox = $('lcd'), lcdText = $('lcd-st');
+  let busy = 0;
+  function lcd(text, err) {
+    lcdText.textContent = text.toUpperCase();
+    lcdBox.classList.toggle('err', !!err);
   }
+  const quiet = (text, err) => { if (!busy) lcd(text, err); };
+
+  // 12-tile grid on the LCD
+  const COLS = ['--r', '--a', '--g', '--b'], grid = $('grid');
+  for (let i = 0; i < 12; i++) {
+    const t = document.createElement('i');
+    t.style.setProperty('--c', 'var(' + COLS[i % 4] + ')');
+    t.style.setProperty('--d', (2.7 + (i * 7 % 12) * .26).toFixed(2) + 's');
+    t.style.setProperty('--o', (-(i * 5 % 12) * .4).toFixed(2) + 's');
+    grid.appendChild(t);
+  }
+
+  // Top-left tile bank: rests off, 1 to 4 lit (mostly 2 or 3), now and then one blinks slowly
+  const tiles = Array.from(document.querySelectorAll('#hled i'));
+  let blinkT;
+  function setLit(n) {
+    const order = tiles.slice().sort(() => Math.random() - .5);
+    tiles.forEach((t) => t.classList.toggle('on', order.indexOf(t) < n));
+  }
+  function blink(t, left) {
+    if (left <= 0) return;
+    t.classList.toggle('on');
+    blinkT = setTimeout(() => blink(t, left - 1), rnd(320, 580));
+  }
+  function tick() {
+    clearTimeout(blinkT);
+    const r = Math.random();
+    setLit(r < .12 ? 1 : r < .5 ? 2 : r < .88 ? 3 : 4);
+    const lit = tiles.filter((t) => t.classList.contains('on'));
+    if (lit.length > 1 && Math.random() < .3) blink(lit[Math.floor(Math.random() * lit.length)], 4);
+    setTimeout(tick, rnd(1500, 3200));
+  }
+  if (calm) setLit(3); else tick();
+
+  // Key press flash: a random calibration colour, never the same twice running
+  const PAL = ['#ff2a1f', '#1f47ff', '#ffb02e', '#3dff7a'];
+  const timers = new WeakMap();
+  let lastCol = -1;
+  document.querySelectorAll('.k').forEach((k) => {
+    k.addEventListener('pointerdown', () => {
+      if (k.disabled) return;
+      let c;
+      do { c = Math.floor(Math.random() * PAL.length); } while (c === lastCol);
+      lastCol = c;
+      clearTimeout(timers.get(k));
+      k.style.setProperty('--kf', PAL[c]);
+      k.classList.remove('kf-fade');
+      k.classList.add('kf-on');
+      timers.set(k, setTimeout(() => {
+        k.classList.add('kf-fade');
+        k.classList.remove('kf-on');
+        timers.set(k, setTimeout(() => { k.classList.remove('kf-fade'); k.style.removeProperty('--kf'); }, 260));
+      }, 230));
+    });
+  });
+  document.addEventListener('touchstart', () => {}, { passive: true }); // lets :active press the key on iPhone
 
   // Tabs
   ['send', 'recv'].forEach((t) => {
@@ -198,7 +299,7 @@ if (!sessionStorage.getItem('relay_cache_bust_v91')) {
         $('tab-' + x).classList.toggle('active', x === t);
         $('panel-' + x).classList.toggle('active', x === t);
       });
-      if (t === 'recv') loadLatest();
+      if (t === 'recv') loadLatest(); else quiet('Ready');
     });
   });
 
@@ -218,76 +319,81 @@ if (!sessionStorage.getItem('relay_cache_bust_v91')) {
   }
 
   // Send text
-  const sendBtn = $('send'), note = $('note'), sendStatus = $('status');
+  const sendBtn = $('send'), note = $('note');
   sendBtn.addEventListener('click', async () => {
     const text = note.value.trim();
     if (!text) return;
     sendBtn.disabled = true;
-    say(sendStatus, 'Sending...');
+    busy++;
+    lcd('Sending');
     try {
       await upload('note-' + Date.now() + '.txt', new Blob([text], { type: 'text/plain' }), 30000);
-      say(sendStatus, 'Sent. Claude will see it next.', 'ok');
+      lcd('Sent to Claude');
       note.value = '';
     } catch (e) {
-      say(sendStatus, 'Failed: ' + e.message, 'err');
+      lcd('Failed: ' + e.message, true);
     } finally {
+      busy--;
       sendBtn.disabled = false;
     }
   });
 
   // Send files
-  const fileInput = $('fileInput'), pick = $('pick'), sendFileBtn = $('sendFile'), fileStatus = $('file-status');
-  const progress = $('file-progress'), progressBar = $('progress-bar'), progressText = $('progress-text');
+  const fileInput = $('fileInput'), pick = $('pick'), pickText = $('pick-t'), sendFileBtn = $('sendFile'), seg = $('seg');
+  for (let i = 0; i < 24; i++) seg.appendChild(document.createElement('i'));
+  const cells = Array.from(seg.children);
+  const fill = (part) => { const n = Math.round(part * cells.length); cells.forEach((c, i) => c.classList.toggle('on', i < n)); };
 
   function showPicked() {
     const n = fileInput.files.length;
-    pick.textContent = n === 0 ? 'Choose files' : n === 1 ? fileInput.files[0].name : n + ' files chosen';
+    pickText.textContent = n === 0 ? 'Choose files' : n === 1 ? fileInput.files[0].name : n + ' files chosen';
     pick.classList.toggle('has', n > 0);
   }
   fileInput.addEventListener('change', showPicked);
 
   sendFileBtn.addEventListener('click', async () => {
     const files = fileInput.files;
-    if (!files.length) { say(fileStatus, 'Choose files first.', 'err'); return; }
+    if (!files.length) { lcd('Choose files first', true); return; }
     sendFileBtn.disabled = true;
-    progress.style.display = 'block';
-    progressBar.style.width = '0';
+    busy++;
+    fill(0);
+    seg.hidden = false;
     const total = files.length;
     let done = 0, failed = 0;
-    say(fileStatus, 'Uploading ' + total + ' file' + (total > 1 ? 's' : '') + '...');
     for (let i = 0; i < total; i++) {
       const file = files[i];
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      progressText.textContent = (i + 1) + ' of ' + total + ': ' + file.name;
+      lcd('Uploading ' + (i + 1) + ' of ' + total);
       try {
         await upload('file-' + Date.now() + '-' + i + '-' + safeName, new Blob([file], { type: 'text/plain' }), 900000,
-          (part) => { progressBar.style.width = ((i + part) / total * 100) + '%'; });
+          (part) => fill((i + part) / total));
         done++;
       } catch (e) { failed++; }
-      progressBar.style.width = ((i + 1) / total * 100) + '%';
+      fill((i + 1) / total);
     }
-    say(fileStatus, failed === 0 ? 'All ' + done + ' sent.' : done + ' sent, ' + failed + ' failed.', failed === total ? 'err' : 'ok');
-    progressText.textContent = 'Done.';
+    busy--;
+    lcd(failed === 0 ? (done === 1 ? 'Sent to Claude' : 'All ' + done + ' sent') : done + ' sent, ' + failed + ' failed', failed > 0);
+    seg.hidden = true;
     fileInput.value = '';
     showPicked();
     sendFileBtn.disabled = false;
   });
 
   // From Claude
-  const recvText = $('recv-text'), recvStatus = $('recv-status'), refreshBtn = $('refresh');
+  const recvText = $('recv-text'), refreshBtn = $('refresh');
 
   async function loadLatest() {
     refreshBtn.disabled = true;
-    say(recvStatus, 'Loading...');
+    quiet('Loading');
     try {
       const resp = await fetch('./outbox.txt?t=' + Date.now(), { cache: 'no-store' });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const text = await resp.text();
       if (/^\s*<(!DOCTYPE|html)/i.test(text)) throw new Error('got a webpage');
       recvText.value = text;
-      say(recvStatus, 'Updated just now.', 'ok');
+      quiet('Updated');
     } catch (e) {
-      say(recvStatus, 'Failed: ' + e.message, 'err');
+      quiet('Failed: ' + e.message, true);
     } finally {
       refreshBtn.disabled = false;
     }
@@ -298,7 +404,7 @@ if (!sessionStorage.getItem('relay_cache_bust_v91')) {
     if (!recvText.value) return;
     try { await navigator.clipboard.writeText(recvText.value); }
     catch (e) { recvText.select(); document.execCommand('copy'); }
-    say(recvStatus, 'Copied.', 'ok');
+    quiet('Copied');
   });
 })();
 </script>
