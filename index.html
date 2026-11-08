@@ -163,6 +163,32 @@
     h1 { font-size: 12px; }
     .k { height: 62px; font-size: 16px; }
   }
+  /* Sideways on the Duo (outer and inner): one solid screen, nothing scrolls but the text inside the green glass */
+  @media (orientation: landscape) and (max-height: 700px) {
+    html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+    body { position: fixed; inset: 0; width: 100%; }
+    .deck { max-width: none; height: 100vh; height: var(--app-h, 100dvh); min-height: 0; overflow: hidden; }
+    .strip, .lcd { flex: none; }
+    .well {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 34%);
+      grid-template-rows: minmax(0, 62px) minmax(0, 1fr) minmax(0, 62px) minmax(0, 62px);
+      gap: 8px 12px; overflow: hidden;
+    }
+    .well:has(#panel-recv.active) { grid-template-rows: minmax(0, 62px) minmax(0, 1fr) minmax(0, 62px); }
+    .panel.active { display: contents; }
+    .screen { grid-column: 1; grid-row: 1 / -1; width: auto; height: auto; min-height: 0; }
+    .row { grid-column: 2; min-height: 0; }
+    .well > .row { grid-row: 1; }
+    #panel-send > .row:nth-of-type(n), #panel-recv > .row { grid-row: 3; }
+    #panel-send > .row:last-child { grid-row: 4; }
+    .seg { grid-column: 2; grid-row: 2; align-self: center; }
+    .k { height: auto; min-height: 0; }
+    .k .lg { padding: 8px; }
+  }
+  /* Keyboard up on the outer screen: drop the light bar so the keys stay full size */
+  @media (orientation: landscape) and (max-height: 700px) {
+    .deck.short .strip { display: none; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .rd i, .trico i, .lcd-lt i, .lx-grid i, .lx-kitt i, .hkr s, .k.kf-fade .lg { animation: none; }
     .rd i, .trico i, .lcd-lt i, .lx-grid i { opacity: .7; }
@@ -217,8 +243,8 @@
   </div>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v92')) {
-  sessionStorage.setItem('relay_cache_bust_v92', '1');
+if (!sessionStorage.getItem('relay_cache_bust_v93')) {
+  sessionStorage.setItem('relay_cache_bust_v93', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -227,6 +253,25 @@ if (!sessionStorage.getItem('relay_cache_bust_v92')) {
   const $ = (id) => document.getElementById(id);
   const rnd = (a, b) => a + Math.random() * (b - a);
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Sideways: the deck always fits exactly what is visible, even with the keyboard up
+  const sideways = matchMedia('(orientation: landscape) and (max-height: 700px)');
+  const deck = document.querySelector('.deck');
+  function fitDeck() {
+    const root = document.documentElement;
+    if (sideways.matches && window.visualViewport) {
+      root.style.setProperty('--app-h', Math.round(visualViewport.height) + 'px');
+      deck.classList.toggle('short', visualViewport.height < 300);
+      window.scrollTo(0, 0);
+    } else {
+      root.style.removeProperty('--app-h');
+      deck.classList.remove('short');
+    }
+  }
+  if (window.visualViewport) visualViewport.addEventListener('resize', fitDeck);
+  window.addEventListener('orientationchange', fitDeck);
+  sideways.addEventListener('change', fitDeck);
+  fitDeck();
 
   // LCD status line. While files are going up, nothing else may take it over.
   const lcdBox = $('lcd'), lcdText = $('lcd-st');
