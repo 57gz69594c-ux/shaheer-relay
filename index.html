@@ -193,6 +193,31 @@
     .rd i, .trico i, .lcd-lt i, .lx-grid i, .lx-kitt i, .hkr s, .k.kf-fade .lg { animation: none; }
     .rd i, .trico i, .lcd-lt i, .lx-grid i { opacity: .7; }
   }
+  /* Inside the Duo Even app (inner screen sideways, right half of the upper screen): ?embed=1. The frame is the screen. */
+  html.embed, html.embed body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  html.embed body { position: fixed; inset: 0; width: 100%; }
+  html.embed .deck { max-width: none; height: 100%; min-height: 0; overflow: hidden; gap: 6px; padding: 8px 8px 9px;
+    border-bottom: 1px solid #2a282b; border-radius: 12px; }
+  html.embed .strip { flex: none; height: 30px; gap: 6px; }
+  html.embed .lcd { flex: none; height: 26px; margin: 2px 3px 3px; font-size: 12px; }
+  html.embed .well { padding: 8px 7px 10px; }
+  html.embed .screen { min-height: 0; }
+  html.embed .k { height: 50px; font-size: 15px; }
+  @media (orientation: landscape) {
+    html.embed .well { display: grid; grid-template-columns: minmax(0, 1fr) minmax(170px, 48%);
+      grid-template-rows: minmax(0, 58px) minmax(0, 1fr) minmax(0, 58px) minmax(0, 58px); gap: 7px 10px; overflow: hidden; }
+    html.embed .well:has(#panel-recv.active) { grid-template-rows: minmax(0, 58px) minmax(0, 1fr) minmax(0, 58px); }
+    html.embed .panel.active { display: contents; }
+    html.embed .screen { grid-column: 1; grid-row: 1 / -1; width: auto; height: auto; }
+    html.embed .row { grid-column: 2; min-height: 0; }
+    html.embed .well > .row { grid-row: 1; }
+    html.embed #panel-send > .row:nth-of-type(n), html.embed #panel-recv > .row { grid-row: 3; }
+    html.embed #panel-send > .row:last-child { grid-row: 4; }
+    html.embed .seg { grid-column: 2; grid-row: 2; align-self: center; }
+    html.embed .k { height: auto; min-height: 0; font-size: 14px; }
+    html.embed .k .lg { padding: 4px 6px; white-space: normal; line-height: 1.15; text-align: center; }
+  }
+  @media (max-height: 260px) { html.embed .strip { display: none; } }
 </style>
 </head>
 <body>
@@ -243,8 +268,10 @@
   </div>
 
 <script>
-if (!sessionStorage.getItem('relay_cache_bust_v93')) {
-  sessionStorage.setItem('relay_cache_bust_v93', '1');
+const EMBED = /[?&]embed=1/.test(location.search);   // shown inside the Duo Even app (it loads us fresh itself)
+if (EMBED) document.documentElement.classList.add('embed');
+else if (!sessionStorage.getItem('relay_cache_bust_v94')) {
+  sessionStorage.setItem('relay_cache_bust_v94', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -258,6 +285,7 @@ if (!sessionStorage.getItem('relay_cache_bust_v93')) {
   const sideways = matchMedia('(orientation: landscape) and (max-height: 700px)');
   const deck = document.querySelector('.deck');
   function fitDeck() {
+    if (EMBED) return;   // inside the Even app the frame already has the right size
     const root = document.documentElement;
     if (sideways.matches && window.visualViewport) {
       root.style.setProperty('--app-h', Math.round(visualViewport.height) + 'px');
@@ -272,6 +300,15 @@ if (!sessionStorage.getItem('relay_cache_bust_v93')) {
   window.addEventListener('orientationchange', fitDeck);
   sideways.addEventListener('change', fitDeck);
   fitDeck();
+
+  // Inside the Even app: tell it when the note box has the iPhone keyboard, so the app makes room for it
+  if (EMBED && window.parent !== window) {
+    const tell = (on) => { try { parent.postMessage({ relay: 'typing', on }, '*'); } catch (_) {} };
+    const note = $('note');
+    note.addEventListener('focus', () => tell(true));
+    note.addEventListener('blur', () => tell(false));
+    window.addEventListener('blur', () => tell(false));
+  }
 
   // LCD status line. While files are going up, nothing else may take it over.
   const lcdBox = $('lcd'), lcdText = $('lcd-st');
