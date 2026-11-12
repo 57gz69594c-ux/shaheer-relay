@@ -217,7 +217,22 @@
     html.embed .k { height: auto; min-height: 0; font-size: 14px; }
     html.embed .k .lg { padding: 4px 6px; white-space: normal; line-height: 1.15; text-align: center; }
   }
+  html.embed .strip .hkr { cursor: pointer; touch-action: manipulation; }
   @media (max-height: 260px) { html.embed .strip { display: none; } }
+  /* short frames (Duo outer screen, panel stacked or sideways): one-line labels, tighter grid, so nothing overlaps */
+  @media (max-height: 240px) {
+    html.embed .deck { gap: 4px; padding: 5px 6px 6px; }
+    html.embed .lcd { height: 22px; margin: 1px 2px 2px; font-size: 11px; }
+    html.embed .well { padding: 5px 6px 6px; gap: 4px 8px; }
+    html.embed .k { font-size: 12px; }
+    html.embed .k .lg { white-space: nowrap; padding: 2px 5px; line-height: 1.1; }
+  }
+  @media (orientation: landscape) and (max-height: 240px) { html.embed .well { grid-template-columns: minmax(0, 1fr) minmax(0, 62%); } }
+  @media (orientation: landscape) and (max-height: 240px) and (max-width: 340px) {
+    html.embed .well { grid-template-columns: minmax(0, 1fr) minmax(0, 68%); gap: 4px 6px; }
+    html.embed .k { font-size: 11px; }
+    html.embed .k .lg { padding: 1px 2px; letter-spacing: -0.2px; }
+  }
 </style>
 </head>
 <body>
@@ -270,8 +285,8 @@
 <script>
 const EMBED = /[?&]embed=1/.test(location.search);   // shown inside the Duo Even app (it loads us fresh itself)
 if (EMBED) document.documentElement.classList.add('embed');
-else if (!sessionStorage.getItem('relay_cache_bust_v94')) {
-  sessionStorage.setItem('relay_cache_bust_v94', '1');
+else if (!sessionStorage.getItem('relay_cache_bust_v95')) {
+  sessionStorage.setItem('relay_cache_bust_v95', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -308,6 +323,17 @@ else if (!sessionStorage.getItem('relay_cache_bust_v94')) {
     note.addEventListener('focus', () => tell(true));
     note.addEventListener('blur', () => tell(false));
     window.addEventListener('blur', () => tell(false));
+    // Shaheer 12 Nov: a tap on our Knight Rider bar (44px-tall hit area round it) hides this panel in the Even app
+    const kr = document.querySelector('.strip .hkr'); let down = null;
+    const hit = (e) => { if (!kr || !kr.offsetParent) return false; const b = kr.getBoundingClientRect(), cy = b.top + b.height / 2;
+      return e.clientX >= b.left - 6 && e.clientX <= b.right + 6 && e.clientY >= cy - 22 && e.clientY <= cy + 22; };
+    document.addEventListener('pointerdown', (e) => { down = hit(e) ? { x: e.clientX, y: e.clientY, t: performance.now() } : null; }, true);
+    document.addEventListener('pointercancel', () => { down = null; }, true);
+    document.addEventListener('pointerup', (e) => {
+      const d = down; down = null;
+      if (!d || !hit(e) || Math.abs(e.clientX - d.x) > 14 || Math.abs(e.clientY - d.y) > 14 || performance.now() - d.t > 700) return;
+      try { parent.postMessage({ relay: 'close' }, '*'); } catch (_) {}
+    }, true);
   }
 
   // LCD status line. While files are going up, nothing else may take it over.
