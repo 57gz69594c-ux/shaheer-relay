@@ -285,8 +285,8 @@
 <script>
 const EMBED = /[?&]embed=1/.test(location.search);   // shown inside the Duo Even app (it loads us fresh itself)
 if (EMBED) document.documentElement.classList.add('embed');
-else if (!sessionStorage.getItem('relay_cache_bust_v95')) {
-  sessionStorage.setItem('relay_cache_bust_v95', '1');
+else if (!sessionStorage.getItem('relay_cache_bust_v96')) {
+  sessionStorage.setItem('relay_cache_bust_v96', '1');
   location.replace(location.pathname + '?v=' + Date.now());
 }
 
@@ -411,12 +411,13 @@ else if (!sessionStorage.getItem('relay_cache_bust_v95')) {
     });
   });
 
-  // Upload one blob to the relay bin
-  function upload(filename, blob, timeout, onProgress) {
+  // Upload one blob: our own server drop box first (18 Nov: filebin.net ran out of storage), filebin only as a backup
+  const DROP = 'https://relay.40.160.65.103.nip.io/up/', DROP_KEY = 'skrelay-7Qm2vX9p';
+  function post(url, headers, blob, timeout, onProgress) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://filebin.net/' + IN_BIN + '/' + filename);
-      xhr.setRequestHeader('Content-Type', 'text/plain');
+      xhr.open('POST', url);
+      Object.keys(headers).forEach((h) => xhr.setRequestHeader(h, headers[h]));
       xhr.timeout = timeout;
       if (onProgress) xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(e.loaded / e.total); };
       xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve() : reject(new Error('HTTP ' + xhr.status));
@@ -424,6 +425,14 @@ else if (!sessionStorage.getItem('relay_cache_bust_v95')) {
       xhr.ontimeout = () => reject(new Error('timeout'));
       xhr.send(blob);
     });
+  }
+  async function upload(filename, blob, timeout, onProgress) {
+    try {
+      await post(DROP + filename, { 'Content-Type': 'application/octet-stream', 'X-Relay-Key': DROP_KEY }, blob, timeout, onProgress);
+    } catch (e) {
+      if (onProgress) onProgress(0);
+      await post('https://filebin.net/' + IN_BIN + '/' + filename, { 'Content-Type': 'text/plain' }, blob, timeout, onProgress);
+    }
   }
 
   // Send text
